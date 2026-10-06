@@ -240,3 +240,53 @@ The host side is now complete. What is still missing is on the target:
 
 Planned: a minimal TX-only write from the BDS EUD block (fixed string), then a
 proper SerialPortLib so DEBUG() output goes out over COM14.
+
+## EDK2 side: DEBUG over EUD COM (verified 2026-10-07)
+
+EudSerialPortLib (Platform/Realme/sm8150/Library/EudSerialPortLib) implements
+SerialPortLib by writing DEBUG() output into the EUD COM TX FIFO.
+
+Wiring (samurai.dsc): SerialPortLib is overridden only for the module-type
+scopes DXE_DRIVER, DXE_RUNTIME_DRIVER, UEFI_DRIVER and UEFI_APPLICATION.
+PrePI/PEI/SEC and DXE_CORE keep FrameBufferSerialPortLib.  That matters:
+
+  * PrePI/PEI run before the EUD block is enabled;
+  * DxeCore owns the page tables and must not run extra MMIO/delay code early.
+
+Frame format (verified on hardware):
+
+    [ID=0x90][LEN][DATA...]
+
+  * TX_ID   0x088E0000 <- 0x90 (UART_ID)
+  * TX_LEN  0x088E0004 <- payload length of this frame
+  * TX_DAT  0x088E0008 <- payload byte
+
+A whole string written in one go is truncated by the TX FIFO after ~7 payload
+bytes, so the library sends it in 6-byte frames (200 us between bytes, 2 ms
+between frames).  The host must reassemble the frames.
+
+Gate: SerialPortWrite() only transmits once CSR_EUD_EN (0x1014) low byte is 1,
+i.e. after the BDS block enabled EUD.  It re-checks the gate every 256 calls so
+the pre-BDS cost stays at zero.
+
+Host-side capture (verified):
+
+    E:\eud-host\eudtool.exe com-up
+    E:\eud-host\comlog.exe COM14 600 E:\eud-host\eud-com.log
+
+Result: "[SAMURAI-EUD-COM] SerialPortLib test 29" was reassembled from COM14,
+proving EDK2 -> EUD COM 9505 -> qcusbser -> COMx -> host log.
+
+### Crash lesson (2026-10-06, build with PcdDebugPrintErrorLevel=0x800B05C7)
+
+Enabling full DEBUG globally while the library was also assigned to DXE_CORE
+crashed the boot in DxeCore/CpuDxe:
+
+    ReplaceTableEntry: splitting block entry with MMU disabled
+    Synchronous Exception at ArmCpuDxe.dll+0x34B8
+    (ELR 0x...F4B8, LR 0x...F518, ESR 0x02000000, stack corrupted)
+
+Fix: keep the platform default PcdDebugPrintErrorLevel (0x80000000, ERROR only)
+and never override SerialPortLib for DXE_CORE.  To get INFO-level logs later,
+raise the level per module (component <PcdsFixedAtBuild>) rather than globally,
+or make the library non-blocking (ring buffer drained by a timer event).

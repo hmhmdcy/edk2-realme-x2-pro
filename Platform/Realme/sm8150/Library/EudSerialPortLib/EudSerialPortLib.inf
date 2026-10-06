@@ -1,0 +1,23 @@
+## @file
+# EUD (Embedded USB Debug) COM SerialPortLib for the realme X2 Pro (samurai).
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+[Defines]
+  INF_VERSION    = 0x00010005
+  BASE_NAME      = EudSerialPortLib
+  FILE_GUID      = 7F3C1E64-2B7A-4E6D-9A15-58C4D2E0B7A3
+  MODULE_TYPE    = BASE
+  VERSION_STRING = 1.0
+  LIBRARY_CLASS  = SerialPortLib
+
+[Sources.common]
+  EudSerialPortLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+
+[LibraryClasses]
+  BaseLib
+  IoLib
+  TimerLib

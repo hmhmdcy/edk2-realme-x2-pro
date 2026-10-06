@@ -18,8 +18,10 @@
 #include <Library/CapsuleLib.h>
 #include <Library/DevicePathLib.h>
 #include <Library/HobLib.h>
+#include <Library/DebugLib.h>
 #include <Library/IoLib.h>
 #include <Library/PcdLib.h>
+#include <Library/PrintLib.h>
 #include <Library/UefiBootManagerLib.h>
 #include <Library/UefiLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
@@ -602,6 +604,64 @@ VOID HandleCapsules(VOID)
 
 #define VERSION_STRING_PREFIX L"Tianocore/EDK2 firmware version "
 
+#ifdef SAMURAI_ENABLE_EUD
+/**
+  SAMURAI: write an ASCII string to the EUD COM TX FIFO so the host can read
+  it on the "Qualcomm EUD Port 9505 (COMx)" port.  Register map taken from
+  the stock kernel driver drivers/soc/qcom/eud.c:
+    +0x0000 TX_ID  (must read back as UART_ID 0x90)
+    +0x0008 TX_DAT (one byte per write, same as eud_uart_tx())
+**/
+STATIC
+VOID
+SamuraiEudComPuts (
+  IN CONST CHAR8  *Msg
+  )
+{
+  UINTN  Index;
+  UINTN  Len;
+  UINTN  Offset;
+  UINTN  Chunk;
+  UINT32 Reg;
+
+  if (Msg == NULL) {
+    return;
+  }
+
+  MmioWrite32 (0x088E0000U + 0x0000U, 0x90U);
+  Reg = MmioRead32 (0x088E0000U + 0x0000U);
+  //
+  // NOTE: the EUD register block replicates the low byte into all four lanes
+  // (writing 1 reads back 0x01010101).  The TX_ID readback is therefore only
+  // informational - hardware status bits may also be ORed in (0x90 -> 0x99).
+  // Never gate the data writes on an exact match.
+  //
+  (VOID)Reg;
+
+  Len = 0;
+  while (Msg[Len] != 0) {
+    Len++;
+  }
+
+  //
+  // The EUD COM TX FIFO is tiny: sending a whole string in one go truncates it
+  // after a few payload bytes (observed: [ID][LEN] + 7 data bytes).  Send the
+  // string in small chunks, each with its own [TX_ID][TX_LEN][DATA...] frame,
+  // with generous gaps so the FIFO can drain.
+  //
+  for (Offset = 0; Offset < Len; Offset += 6) {
+    Chunk = ((Len - Offset) > 6) ? 6 : (Len - Offset);
+    MmioWrite32 (0x088E0000U + 0x0000U, 0x90U);
+    MmioWrite32 (0x088E0000U + 0x0004U, (UINT32)Chunk);
+    for (Index = 0; Index < Chunk; Index++) {
+      MmioWrite32 (0x088E0000U + 0x0008U, (UINT32)(UINT8)Msg[Offset + Index]);
+      gBS->Stall (10000);
+    }
+    gBS->Stall (50000);
+  }
+}
+#endif
+
 /**
   Do the platform specific action after the console is ready
   Possible things that can be done in PlatformBootManagerAfterConsole:
@@ -721,6 +781,14 @@ VOID EFIAPI PlatformBootManagerAfterConsole(VOID)
       MmioRead32 (0x088E0000U + 0x0024U)
       );
   }
+
+    SamuraiEudComPuts ("[SAMURAI-EUD-COM] direct FIFO path\r\n");
+
+    //
+    // From here on DEBUG() flows over the EUD COM SerialPortLib.  Emit one
+    // marker so the host can confirm the channel is alive.
+    //
+    DEBUG ((DEBUG_ERROR, "[SAMURAI-EUD-COM] SerialPortLib ready\n"));
 #endif
 
   PlatformSetup();
@@ -734,6 +802,16 @@ VOID EFIAPI PlatformBootManagerAfterConsole(VOID)
 **/
 VOID EFIAPI PlatformBootManagerWaitCallback(UINT16 TimeoutRemain)
 {
+#ifdef SAMURAI_ENABLE_EUD
+  {
+    STATIC UINT32  EudComTick = 0;
+    CHAR8          EudComBuf[64];
+
+    AsciiSPrint (EudComBuf, sizeof (EudComBuf), "[SAMURAI-EUD-COM] tick %u\r\n", EudComTick++);
+    SamuraiEudComPuts (EudComBuf);
+  }
+#endif
+
   EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION Black;
   EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION White;
   UINT16                              Timeout;

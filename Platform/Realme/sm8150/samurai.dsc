@@ -30,3 +30,17 @@
   gRenegadePkgTokenSpaceGuid.PcdDeviceVendor|"Realme"
   gRenegadePkgTokenSpaceGuid.PcdDeviceProduct|"X2 Pro"
   gRenegadePkgTokenSpaceGuid.PcdDeviceCodeName|"samurai"
+
+
+[LibraryClasses.common.DXE_DRIVER]
+  SerialPortLib|Platform/Realme/sm8150/Library/EudSerialPortLib/EudSerialPortLib.inf
+
+[LibraryClasses.common.DXE_RUNTIME_DRIVER]
+  SerialPortLib|Platform/Realme/sm8150/Library/EudSerialPortLib/EudSerialPortLib.inf
+
+[LibraryClasses.common.UEFI_DRIVER]
+  SerialPortLib|Platform/Realme/sm8150/Library/EudSerialPortLib/EudSerialPortLib.inf
+
+[LibraryClasses.common.UEFI_APPLICATION]
+  SerialPortLib|Platform/Realme/sm8150/Library/EudSerialPortLib/EudSerialPortLib.inf
+
