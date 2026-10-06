@@ -5,15 +5,26 @@ this repository: they belong to the `Platform/EFI_Binaries` submodule, which is
 an upstream project we do not own. This page lists exactly which blobs the port
 needs, where to get each one, and how to install them.
 
-## Quick install
+## How the blobs ship
+
+`Platform/EFI_Binaries` is a submodule. This fork points it at
+**`hmhmdcy/edk2-msm-binary`**, branch **`samurai-blobs`** (commit `2420ecf`),
+which carries the samurai device blobs - so a recursive clone is all you need:
 
 ```bash
-# from the repository root
-./Platform/Realme/sm8150/fetch-binaries.sh     # downloads + patches everything
+git clone --recursive https://github.com/hmhmdcy/edk2-realme-x2-pro.git
 ```
 
-The script pulls the files from public mirrors of the stock firmware and then
-applies the `ButtonsDxe.depex` patch (see below). Manual instructions follow.
+Already have a clone? Just re-sync the submodule:
+
+```bash
+git submodule sync Platform/EFI_Binaries
+git submodule update --init Platform/EFI_Binaries
+```
+
+`fetch-binaries.sh` is kept as a fallback: it re-downloads the same files from
+public mirrors of the stock firmware and re-applies the `ButtonsDxe.depex` patch
+(see below).
 
 ## Files and sources
 

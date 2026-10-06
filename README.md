@@ -61,32 +61,28 @@ Platform/Realme/sm8150/README.md                 device-level notes
 
 Nothing else in the upstream tree is modified - no patches to PEI/DXE core, no BootShim changes.
 
-### Device-specific files you must supply yourself
+### Device blobs
 
-The per-device DXE drivers are Qualcomm/realme firmware and are **not** included here.
-Dump them from your own stock `xbl.img` and place them in
-`Platform/EFI_Binaries/Drivers/Devices/samurai/` (that directory is part of the
-`Platform/EFI_Binaries` submodule):
+The per-device DXE drivers are Qualcomm/realme firmware. They ship with this
+fork: the `Platform/EFI_Binaries` submodule points at
+`hmhmdcy/edk2-msm-binary` branch `samurai-blobs`, so a recursive clone is enough:
 
-```
-DALSys/DALSys.efi + DALSys/DALSys.depex              (upstream: DALSYSDxe/DALSYSDxe.*)
-UsbPwrCtrlDxe/UsbPwrCtrlDxe.efi + UsbPwrCtrlDxe.depex
-ButtonsDxe/ButtonsDxe.efi                            factory realme/OPPO build (see note 4)
-ButtonsDxe/ButtonsDxe.depex                          stock, then patched (fix-buttons-depex.py)
-TLMMDxe/TLMMDxe.efi + TLMMDxe.depex
-ResetRuntimeDxe/ResetRuntimeDxe.efi + ResetRuntimeDxe.depex
-OcdtDxe/OppoProject.efi + OppoProject.depex          OPPO project protocol provider
+```bash
+git clone --recursive https://github.com/hmhmdcy/edk2-realme-x2-pro.git
 ```
 
-The easy way is `./Platform/Realme/sm8150/fetch-binaries.sh`, which downloads all of the
-above and applies the DEPEX patch - see `Platform/Realme/sm8150/BINARIES.md`.
+They live in `Platform/EFI_Binaries/Drivers/Devices/samurai/`:
 
-Useful references:
-- [Project-Aloha/UEFIFirmwareBackup — `realme-rmx1931`](https://github.com/Project-Aloha/UEFIFirmwareBackup/tree/main/realme-rmx1931)
-  (factory XBL dump, `Binaries/RawFiles/uefiplat.cfg`, panel XMLs)
-- the factory `uefiplat.cfg` for the memory map / `ConfigParameters` reference
+```
+DALSys/DALSys.{efi,depex}                 UsbPwrCtrlDxe/UsbPwrCtrlDxe.{efi,depex}
+ButtonsDxe/ButtonsDxe.{efi,depex}         TLMMDxe/TLMMDxe.{efi,depex}
+ResetRuntimeDxe/ResetRuntimeDxe.{efi,depex}
+OcdtDxe/OppoProject.{efi,depex}
+```
 
----
+`Platform/Realme/sm8150/fetch-binaries.sh` can re-create the same set from public
+mirrors if you prefer to extract them yourself; `Platform/Realme/sm8150/BINARIES.md`
+documents the sources and the required DEPEX patch.
 
 ## Building
 

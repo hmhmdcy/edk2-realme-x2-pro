@@ -30,10 +30,11 @@
 | `Platform/Realme/sm8150/EUD.md` | new: EUD reference |
 | `Platform/Realme/sm8150/README.md`, root `README.md` | updated (buttons fixed, EUD) |
 
-The vendor firmware blobs themselves are **not** in git (the
-`Platform/EFI_Binaries` submodule is an upstream project). Reproduce them with
-`./Platform/Realme/sm8150/fetch-binaries.sh`, or locally from
-`E:\edk2-samurai-out\samurai-binaries.zip`.
+The vendor firmware blobs now ship with the fork: `Platform/EFI_Binaries`
+points at `hmhmdcy/edk2-msm-binary` branch `samurai-blobs` (commit `2420ecf`), so
+`git clone --recursive https://github.com/hmhmdcy/edk2-realme-x2-pro.git`
+produces a tree that builds as-is. `fetch-binaries.sh` remains as a fallback and
+`E:\edk2-samurai-out\samurai-binaries.zip` is a local copy.
 
 ## Verified facts worth keeping
 
@@ -89,8 +90,10 @@ The vendor firmware blobs themselves are **not** in git (the
    * `USE_DISPLAYDXE` + factory panel XML;
    * a RAM log ring buffer written by the firmware, so the full DEBUG log can be
      read over OpenOCD (or via pstore) instead of photographing the screen.
-4. **Optional**: attach `samurai-binaries.zip` to a GitHub Release, or fork
-   `edk2-porting/edk2-msm-binary` and point `.gitmodules` at the fork.
+4. ~~Binary distribution~~ **done**: the submodule fork
+   (`hmhmdcy/edk2-msm-binary` @ `samurai-blobs`) now carries the blobs, so
+   `git clone --recursive` is self-contained. A GitHub Release asset is still an
+   option if a downloadable bundle is wanted.
 
 ## Useful paths
 

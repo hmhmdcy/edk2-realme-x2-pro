@@ -9,14 +9,21 @@ Status: **boots to the UEFI Boot Manager and EFI Shell on real hardware**
 - UFS storage, no persistent UEFI variable store (variables are lost on reboot)
 - 1080x2400 AMOLED panel; the framebuffer is left initialised by ABL/XBL
 
-## Required local files (NOT part of this repository)
-The device firmware blobs live in the `Platform/EFI_Binaries` submodule, which is
-an upstream project. See **[BINARIES.md](BINARIES.md)**, or simply run:
+## Required local files (shipped with the fork)
 
-    ./Platform/Realme/sm8150/fetch-binaries.sh      # from the repository root
+The device firmware blobs live in the `Platform/EFI_Binaries` submodule, which
+this fork points at `hmhmdcy/edk2-msm-binary` branch `samurai-blobs` - a
+recursive clone is enough:
 
-That downloads the stock DXE set plus `OppoProject.efi` and applies the
-`ButtonsDxe` DEPEX patch.
+    git clone --recursive https://github.com/hmhmdcy/edk2-realme-x2-pro.git
+
+Already cloned? Re-sync just that submodule:
+
+    git submodule sync Platform/EFI_Binaries && git submodule update --init Platform/EFI_Binaries
+
+See **[BINARIES.md](BINARIES.md)** for what each blob is, where it came from and
+the `ButtonsDxe.depex` patch; `fetch-binaries.sh` re-creates the set from public
+mirrors.
 
 ## Building
 
