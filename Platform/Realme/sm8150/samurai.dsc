@@ -23,6 +23,7 @@
   gQcomTokenSpaceGuid.PcdMipiFrameBufferWidth|1080
   gQcomTokenSpaceGuid.PcdMipiFrameBufferHeight|2400
   gQcomTokenSpaceGuid.PcdMipiFrameBufferAddress|0x9D000000
+  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x800B05C7
 
   # Simple Init
   gSimpleInitTokenSpaceGuid.PcdGuiDefaultDPI|400
@@ -44,3 +45,6 @@
 [LibraryClasses.common.UEFI_APPLICATION]
   SerialPortLib|Platform/Realme/sm8150/Library/EudSerialPortLib/EudSerialPortLib.inf
 
+
+[Components.common]
+  Platform/Realme/sm8150/EudLogDxe/EudLogDxe.inf

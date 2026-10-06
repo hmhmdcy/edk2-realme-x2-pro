@@ -1,21 +1,21 @@
 /** @file
   EUD (Embedded USB Debug) COM SerialPortLib for the realme X2 Pro (samurai).
 
-  Writes DEBUG()/SerialPortWrite() output into the EUD COM TX FIFO.  The host
-  reads it on "Qualcomm EUD Port 9505 (COMx)" and must reassemble the
-  [ID][LEN][DATA] frames.
+  PRODUCER SIDE ONLY.
 
-  Register map taken from the stock kernel driver drivers/soc/qcom/eud.c:
-    +0x0000 TX_ID  = 0x90 (UART_ID)
-    +0x0004 TX_LEN = payload length of this frame (6 bytes is known-good)
-    +0x0008 TX_DAT = payload byte
+  SerialPortWrite() copies bytes into a fixed-address RAM ring buffer.  It does
+  not touch the EUD hardware, it does not delay and it does not use gBS.  That
+  makes the call safe from any DXE context, which is exactly what the earlier
+  blocking implementation was not: with the debug level raised globally the
+  inline MMIO and MicroSecondDelay() calls crashed the boot in
+  DxeCore/CpuDxe with
 
-  Notes learned on hardware (2026-10-06):
-    * the EUD register block replicates the low byte into all four lanes on
-      reads (writing 1 reads back 0x01010101); never gate on readback values;
-    * one big write is truncated by the TX FIFO after ~7 payload bytes, so the
-      data must be split into small frames;
-    * only transmit once the firmware set CSR_EUD_EN (0x1014) low byte to 1.
+      ReplaceTableEntry: splitting block entry with MMU disabled
+      Synchronous Exception at ArmCpuDxe.dll+0x34B8
+
+  A single consumer (Platform/Realme/sm8150/EudLogDxe) drains the ring into the
+  EUD COM TX FIFO once a host PC has opened the port.  See EudLog.h for the
+  ring layout and the memory region that holds it.
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -23,34 +23,44 @@
 #include <Base.h>
 #include <Library/BaseLib.h>
 #include <Library/SerialPortLib.h>
-#include <Library/IoLib.h>
-#include <Library/TimerLib.h>
+#include <Library/SynchronizationLib.h>
+#include "EudLog.h"
 
-#define EUD_BASE             0x088E0000U
-#define EUD_REG_CSR_EUD_EN   0x1014U
-#define EUD_REG_COM_TX_ID    0x0000U
-#define EUD_REG_COM_TX_LEN   0x0004U
-#define EUD_REG_COM_TX_DAT   0x0008U
-#define EUD_COM_UART_ID      0x90U
-#define EUD_COM_CHUNK        6U
-#define EUD_COM_BYTE_DELAY   200U      /* microseconds between payload bytes */
-#define EUD_COM_FRAME_DELAY  2000U     /* microseconds between frames */
+/**
+  Make sure the shared ring header is usable.
 
-STATIC BOOLEAN  mEudComActive = FALSE;
-STATIC UINTN    mEudComGateSkip = 0;
-
+  Called from every module that links this library (about 160 of them) through
+  BaseDebugLibSerialPortConstructor() -> SerialPortInitialize().  Module
+  constructors run one after another at TPL_APPLICATION during DXE dispatch, so
+  a plain store sequence is enough.  Magic is written last so a half-built
+  header is never accepted.
+**/
 STATIC
-BOOLEAN
-EudComIsEnabled (
+VOID
+EudLogHeaderInit (
   VOID
   )
 {
-  return (BOOLEAN)((MmioRead32 (EUD_BASE + EUD_REG_CSR_EUD_EN) & 0xFFU) == 1U);
+  EUD_LOG_HEADER  *Hdr;
+
+  Hdr = (EUD_LOG_HEADER *)(UINTN)EUD_LOG_BASE;
+  if (Hdr->Magic == EUD_LOG_MAGIC) {
+    return;
+  }
+
+  Hdr->Size       = EUD_LOG_DATA_SIZE;
+  Hdr->Head       = 0;
+  Hdr->Tail       = 0;
+  Hdr->Drops      = 0;
+  Hdr->DropEvents = 0;
+  Hdr->Version    = EUD_LOG_VERSION;
+  MemoryFence ();
+  Hdr->Magic      = EUD_LOG_MAGIC;
 }
 
 /**
-  Initialize the serial device hardware.  Nothing to do here; the EUD block is
-  enabled later by the platform (BDS).  SerialPortWrite() re-checks the gate.
+  Initialize the serial device hardware.  There is no hardware to initialise:
+  the EUD block is enabled later by the platform (BDS).
 **/
 RETURN_STATUS
 EFIAPI
@@ -58,12 +68,15 @@ SerialPortInitialize (
   VOID
   )
 {
-  mEudComActive = EudComIsEnabled ();
+  EudLogHeaderInit ();
   return RETURN_SUCCESS;
 }
 
 /**
-  Write data to the EUD COM TX FIFO as a sequence of [ID][LEN][DATA] frames.
+  Append bytes to the shared log ring.
+
+  A write that does not fit is dropped as a whole, so that DEBUG() lines stay
+  readable and the loss is visible in the Drops counter.
 **/
 UINTN
 EFIAPI
@@ -72,45 +85,61 @@ SerialPortWrite (
   IN UINTN  NumberOfBytes
   )
 {
-  UINTN  Index;
-  UINTN  Chunk;
-  UINTN  Byte;
+  EUD_LOG_HEADER  *Hdr;
+  UINT8           *Data;
+  UINT32          Head;
+  UINT32          Tail;
+  UINT32          Count;
+  UINT32          Index;
 
   if ((Buffer == NULL) || (NumberOfBytes == 0)) {
     return 0;
   }
 
-  if (!mEudComActive) {
+  Hdr = (EUD_LOG_HEADER *)(UINTN)EUD_LOG_BASE;
+  if (Hdr->Magic != EUD_LOG_MAGIC) {
     //
-    // Avoid hammering the EUD register before BDS enables it: only re-check
-    // the gate every 256 write calls.
+    // Only modules that run before any constructor could get here, and those
+    // use FrameBufferSerialPortLib.  Re-check anyway so that a late writer can
+    // never scribble into an uninitialised header.
     //
-    if ((mEudComGateSkip++ & 0xFFU) != 0) {
-      return NumberOfBytes;
-    }
-
-    mEudComActive = EudComIsEnabled ();
-    if (!mEudComActive) {
+    EudLogHeaderInit ();
+    if (Hdr->Magic != EUD_LOG_MAGIC) {
       return NumberOfBytes;
     }
   }
 
-  for (Index = 0; Index < NumberOfBytes; Index += EUD_COM_CHUNK) {
-    Chunk = NumberOfBytes - Index;
-    if (Chunk > EUD_COM_CHUNK) {
-      Chunk = EUD_COM_CHUNK;
-    }
-
-    MmioWrite32 (EUD_BASE + EUD_REG_COM_TX_ID, EUD_COM_UART_ID);
-    MmioWrite32 (EUD_BASE + EUD_REG_COM_TX_LEN, (UINT32)Chunk);
-    for (Byte = 0; Byte < Chunk; Byte++) {
-      MmioWrite32 (EUD_BASE + EUD_REG_COM_TX_DAT, (UINT32)Buffer[Index + Byte]);
-      MicroSecondDelay (EUD_COM_BYTE_DELAY);
-    }
-
-    MicroSecondDelay (EUD_COM_FRAME_DELAY);
+  if (NumberOfBytes > EUD_LOG_DATA_SIZE) {
+    Hdr->Drops      += EUD_LOG_DATA_SIZE;
+    Hdr->DropEvents += 1;
+    return NumberOfBytes;
   }
 
+  Count = (UINT32)NumberOfBytes;
+  Data  = (UINT8 *)Hdr + EUD_LOG_DATA_OFFSET;
+
+  //
+  // Reserve space.  Producers can call this from different TPLs, so Head has
+  // to be advanced with a compare-exchange.  A producer that is preempted
+  // between the reservation and the copy can leave a partially written region
+  // at the very end of the ring; the drainer is far behind whenever there is
+  // real traffic, so this is accepted for a best-effort debug log.
+  //
+  do {
+    Head = Hdr->Head;
+    Tail = Hdr->Tail;
+    if (((Head - Tail) + Count) > EUD_LOG_DATA_SIZE) {
+      Hdr->Drops      += Count;
+      Hdr->DropEvents += 1;
+      return NumberOfBytes;
+    }
+  } while (InterlockedCompareExchange32 (&Hdr->Head, Head, Head + Count) != Head);
+
+  for (Index = 0; Index < Count; Index++) {
+    Data[(Head + Index) % EUD_LOG_DATA_SIZE] = Buffer[Index];
+  }
+
+  MemoryFence ();
   return NumberOfBytes;
 }
 

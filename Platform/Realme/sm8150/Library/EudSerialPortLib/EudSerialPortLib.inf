@@ -1,6 +1,11 @@
 ## @file
 # EUD (Embedded USB Debug) COM SerialPortLib for the realme X2 Pro (samurai).
 #
+# Producer side of the EUD log ring buffer: SerialPortWrite() only copies bytes
+# into RAM (see EudLog.h).  The EUD hardware is driven exclusively by
+# Platform/Realme/sm8150/EudLogDxe, so this library needs no IoLib/TimerLib and
+# is safe to call from any DXE context.
+#
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 ##
 [Defines]
@@ -13,11 +18,11 @@
 
 [Sources.common]
   EudSerialPortLib.c
+  EudLog.h
 
 [Packages]
   MdePkg/MdePkg.dec
 
 [LibraryClasses]
   BaseLib
-  IoLib
-  TimerLib
+  SynchronizationLib

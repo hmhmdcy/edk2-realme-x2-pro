@@ -60,3 +60,8 @@ FILE DRIVER = 8681CC5B-0DF6-441E-B4B8-E915C538F067 {
     SECTION PE32 = Platform/EFI_Binaries/Drivers/Devices/samurai/TLMMDxe/TLMMDxe.efi
     SECTION UI = "TLMMDxe"
 }
+
+  // EUD log drainer: replays the fixed-address ring buffer declared in
+  // Platform/Realme/sm8150/Library/EudSerialPortLib/EudLog.h into the EUD COM
+  // TX FIFO once a host PC has attached.
+  INF Platform/Realme/sm8150/EudLogDxe/EudLogDxe.inf
