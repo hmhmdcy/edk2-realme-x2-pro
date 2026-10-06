@@ -210,4 +210,96 @@ SerialPortLib scoping in samurai.dsc (important, do not widen casually):
 * Does the EUD COM drain need to be faster once full DEBUG is on?  (Step 2)
 * Why did EUD SWD 9504 not enumerate after CTLOUT_SET 0x645 + attach?
 * Can the log channel survive the UEFI -> OS handoff (useful for Linux boot
-  debugging), and what does the Android kernel's ttyEUD see at that point?
+  debugging), and what does the Android kernel's ttyEUD see at that point?﻿
+---
+
+## 8. Linux boot path and persistent variables - decision (2026-10-07)
+
+Both items are OFF the firmware critical path.  Community practice and the
+reasoning are recorded here so this does not get re-analysed every session.
+
+### What the firmware already provides
+
+* Disk stack is in the FV: DiskIoDxe, PartitionDxe, EnhancedFatDxe,
+  FvSimpleFileSystem (Apriori.fdf.inc:109-124), so UEFI can read FAT partitions
+  and load an EFI application from \EFI\BOOT\BOOTAA64.EFI.
+* UFS through the vendor UFSDxe (Shell map/blk shows all six LUNs).
+* The platform already runs a Linux kernel as a UEFI application
+  (LinuxSimpleMassStorage, MODULE_TYPE = UEFI_APPLICATION).
+* The mainline DTB is handed to Linux through the EFI configuration table
+  (FdtBlob/<device>/); FdtBlob_compat/<device>.dtb is the vendor DTB appended
+  to the boot image so ABL can build the runtime DTB.
+
+### How other phone ports do it (references)
+
+* Renegade / edk2-msm: SimpleInit is only a boot manager - the OS is loaded by
+  GRUB or Windows Boot Manager as an EFI application.  Boot menu settings live
+  in a config file on a partition (e.g. simpleinit.static.uefi.cfg on the logfs
+  partition), NOT in UEFI variables.
+    https://renegade-project.tech/en/config/bootmenu
+    https://github.com/edk2-porting/edk2-msm
+    https://github.com/edk2-porting/renegade-project.org/blob/master/en/multiboot.md
+* postmarketOS dual boot on SDM845-class phones: repartition with TWRP/sgdisk,
+  create an ESP (set N esp on), pmbootstrap install --split, then boot through
+  Renegade UEFI + GRUB.
+    https://wiki.postmarketos.org/wiki/Dual_Booting
+    https://gist.github.com/raihan2000/70dd18a4022cab8f3411e5665fea5902
+* Phones with an SD card slot can boot entirely from SD with no GPT changes;
+  the X2 Pro has no card slot, so that escape hatch does not exist here.
+
+### Decision
+
+* initrd / distro boot: NOT implemented in firmware, on purpose.  initrd and
+  DTB handoff are the OS loader's job (GRUB publishes LINUX_EFI_INITRD_MEDIA_GUID
+  and passes the DTB via devicetree or the EFI config table).  The firmware
+  prerequisite - loading an EFI application from a FAT partition - already works.
+* Persistent UEFI variables: NOT implemented; accepted as optional.  Variables
+  stay emulated (PcdEmuVariableNvModeEnable=TRUE, QcomCommonDsc.inc:92) and are
+  lost on reboot.  This only matters for Windows/WoA installers; for the Boot
+  Manager / Shell / UFS / EUD-debug goals it is irrelevant.
+* Do NOT repartition the phone just to tick the checklist.  If a distro is ever
+  wanted, a full GPT backup plus a verified EDL/9008 rescue path must come first.
+
+### If someone wants it later (deferred plan)
+
+1. Back up the GPT (sgdisk --backup) and the partition headers; confirm an
+   EDL/9008 rescue path.
+2. Shrink userdata with TWRP and create a FAT32 ESP (512 MB - 1 GB), optionally
+   a Linux rootfs partition.  Never touch modem / persist / op1 / op2 / super.
+3. Put grubaa64.efi as EFI/BOOT/BOOTAA64.EFI plus kernel, initrd, DTB and
+   grub.cfg on the ESP:
+
+       menuentry "Linux" {
+         devicetree /samurai.dtb
+         linux     /kernel.efi console=tty0 root=PARTUUID=<rootfs> rw
+         initrd    /initrd.img
+       }
+
+   SimpleInit will discover it; if not, register a boot option in PlatformBm.c
+   the same way the UAS entry is registered.
+4. Minimal proof without a distro: put kernel.efi + initrd.img + startup.nsh on
+   the ESP and run it from the Shell (the Shell has no letter input, so
+   startup.nsh is mandatory):
+
+       fs0:\kernel.efi console=tty0 initrdfile=fs0:\initrd.img
+
+   (older kernels accept initrd= instead of initrdfile=)
+5. A file-backed variable store already exists in the tree if ever needed:
+   Common/edk2/OvmfPkg/Library/NvVarsFileLib (OVMF model: keep emulated mode,
+   read \NvVars early, save it at ExitBootServices).  Not needed now.
+
+## 9. Port checklist status (2026-10-07)
+
+| Item | Status | Note |
+|---|---|---|
+| Stable boot | ✅ | PEI -> DXE -> BDS -> Boot Manager -> EFI Shell, verified on hardware |
+| Memory | ✅ | 8 GiB profile: -DHAS_MLVM + ABL-patched runtime DTB |
+| GOP / display | ✅ | framebuffer text console 1080x2400; optional DisplayDxe not enabled |
+| Buttons | ✅ | Vol-Up / Vol-Down / Power (factory ButtonsDxe + OppoProject + ResetRuntimeDxe) |
+| Select / load Linux | 🟡 | delegated: SimpleInit + GRUB.  Firmware can load EFI apps; no distro installed |
+| DTB passed | ✅ | mainline DTB via EFI configuration table; vendor DTB appended for ABL |
+| initrd passed | 🟡 | delegated to GRUB; firmware side intentionally not implemented |
+| UFS | ✅ | six LUNs, GPT, Shell map/blk; raw LUNs via the UAS boot option |
+| USB for debugging | ✅ | EUD CTL + EUD COM + DEBUG over EUD (host qcser driver needed); SWD/JTAG not yet |
+| Persistent variables | ❌ | not implemented, optional; only needed for Windows/WoA |
+| Windows on Arm | ❌ | DSDT still borrowed from cepheus |
