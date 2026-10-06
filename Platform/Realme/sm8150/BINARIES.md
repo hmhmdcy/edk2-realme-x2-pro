@@ -97,6 +97,7 @@ AND AND AND AND END
 
 ## Offline copy
 
-If you cannot reach GitHub, keep a private copy of the `Devices/samurai` tree (a
-small zip is enough) and unpack it into
-`Platform/EFI_Binaries/Drivers/Devices/samurai/` on the other machine.
+`E:\edk2-samurai-out\samurai-binaries.zip` (15 files, ~144 KB) is a local copy of
+the same tree; unpack it into
+`Platform/EFI_Binaries/Drivers/Devices/samurai/` on a machine without network
+access.
