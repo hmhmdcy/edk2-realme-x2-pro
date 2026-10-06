@@ -729,9 +729,22 @@ VOID EFIAPI PlatformBootManagerAfterConsole(VOID)
   HandleCapsules();
 
   //
-  // Enumerate all possible boot options.
+  // SAMURAI: do NOT enumerate every device as a boot option.
   //
-  EfiBootManagerRefreshAllBootOption();
+  // EfiBootManagerRefreshAllBootOption() creates an option for every handle that
+  // has a device path, including devices that cannot be booted.  On this port that
+  // produced eight entries ("UEFI Misc Device" x6 for the UFS LUNs and "UEFI
+  // Non-Block Boot Device" x2).  BDS then tried each one, failed to load it, and
+  // reported EFI_SW_DXE_BS_EC_BOOT_OPTION_LOAD_ERROR / BOOT_OPTION_FAILED about
+  // nine times per boot.  Those records are only visible now that the EUD log ring
+  // captures full DEBUG, but the load attempts always cost boot time.
+  //
+  // The menu entries this platform wants are registered explicitly below, and
+  // SimpleInit enumerates partitions itself; anything else can be started from the
+  // UEFI Shell (also registered below).  Uncommenting the call restores the stock
+  // behaviour, which also auto-exposes every UFS LUN in the boot menu.
+  //
+  // EfiBootManagerRefreshAllBootOption();
 
   //
   // Register UEFI Shell
