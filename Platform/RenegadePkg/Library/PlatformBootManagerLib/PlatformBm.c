@@ -18,6 +18,7 @@
 #include <Library/CapsuleLib.h>
 #include <Library/DevicePathLib.h>
 #include <Library/HobLib.h>
+#include <Library/IoLib.h>
 #include <Library/PcdLib.h>
 #include <Library/UefiBootManagerLib.h>
 #include <Library/UefiLib.h>
@@ -692,6 +693,34 @@ VOID EFIAPI PlatformBootManagerAfterConsole(VOID)
   //
   PlatformRegisterFvBootOption(
       &gSwitchSlotsAppFileGuid, L"Reboot to other slot", LOAD_OPTION_ACTIVE);
+#endif
+
+#ifdef SAMURAI_ENABLE_EUD
+  //
+  // SAMURAI: enable the Qualcomm Embedded USB Debugger (EUD) so a host PC can
+  // attach OpenOCD (JTAG/SWD over USB) while UEFI is running.
+  //
+  //   EUD base = 0x088E0000          (DTB: qcom,msm-eud@88e0000)
+  //   +0x1014  = BIT(0) -> CSR_EUD_EN
+  //   +0x0024  = 0x1C   -> INT1_EN_MASK (VBUS|CHGR|SAFE_MODE)
+  //
+  // Same two writes the Linux "eud" driver performs in enable_eud(); EUD is not
+  // fused off on this device.  Note: EUD hijacks the USB port, so fastboot and
+  // USB mass-storage mode are unavailable until the next power cycle.
+  //
+  {
+    UINTN  EudTry;
+    for (EudTry = 0; EudTry < 10; EudTry++) {
+      MmioWrite32 (0x088E0000U + 0x1014U, 1U);
+      MmioWrite32 (0x088E0000U + 0x0024U, 0x1CU);
+      gBS->Stall (200000);
+    }
+    Print (
+      L"[SAMURAI-EUD] CSR_EUD_EN=0x%08x INT1_EN_MASK=0x%08x\n",
+      MmioRead32 (0x088E0000U + 0x1014U),
+      MmioRead32 (0x088E0000U + 0x0024U)
+      );
+  }
 #endif
 
   PlatformSetup();

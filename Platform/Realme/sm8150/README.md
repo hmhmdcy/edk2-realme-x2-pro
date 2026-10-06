@@ -90,6 +90,18 @@ ButtonsDxe.efi (factory)    -> needs all three; reads the SMEM project (19781),
 The ordering between `OppoProject` and `ButtonsDxe` is enforced through the
 patched `ButtonsDxe.depex`.
 
+## Debugging over USB (EUD)
+
+The SoC's Embedded USB Debug hub works on this retail unit: enabling it makes the
+host PC see a Qualcomm USB hub (`VID 0x05C6`) that `linux-msm/openocd` can drive
+as a JTAG/SWD adapter - no UART wiring, no disassembly. The EDK2 build enables it
+automatically (guarded by `-DSAMURAI_ENABLE_EUD`) once control reaches BDS, and
+prints a marker to the framebuffer console.
+
+See **[EUD.md](EUD.md)** for the registers, the Android-side test, host-side
+OpenOCD setup and the caveats (EUD occupies the USB port until the next power
+cycle).
+
 ## Open items
 - EFI Shell letter input (only Volume-Up / Volume-Down / Power are available; a
   `startup.nsh` on a FAT partition is the workaround).

@@ -186,6 +186,29 @@ this option. (On Windows you can protect yourself with
 
 ---
 
+## Debugging over USB (EUD)
+
+This SoC exposes Qualcomm's **Embedded USB Debug hub (EUD)**: once enabled, the
+host PC sees a `VID 0x05C6` USB hub that Qualcomm's OpenOCD fork can drive as a
+JTAG/SWD adapter - no UART wiring, no disassembly. On this device **EUD is not
+fused off** (verified from Android by writing `1` to
+`/sys/module/eud/parameters/enable`).
+
+EDK2 replicates the kernel's two register writes from `PlatformBootManagerAfterConsole`
+(BDS, when the USB PHY is up):
+
+```c
+MmioWrite32 (0x088E0000 + 0x1014, 1);     /* EUD_REG_CSR_EUD_EN              */
+MmioWrite32 (0x088E0000 + 0x0024, 0x1C);  /* INT1_EN_MASK: VBUS|CHGR|SAFE_MODE */
+```
+
+The block is guarded by `-DSAMURAI_ENABLE_EUD` (set in `samurai.dsc`) so it does
+not affect other devices, and it prints `[SAMURAI-EUD] ...` to the framebuffer.
+While EUD is active the USB port is dedicated to it, so fastboot and the U-disk
+mode are unavailable until the next **full power cycle**.
+
+Registers, caveats and host-side OpenOCD setup: `Platform/Realme/sm8150/EUD.md`.
+
 ## Known issues / TODO
 
 - **Volume-Down is now fixed.** It used to fail because the shared `ButtonsDxe` reads `VOL-`
