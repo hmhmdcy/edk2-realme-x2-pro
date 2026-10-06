@@ -429,11 +429,13 @@ EFI_SW_DXE_BS_EC_BOOT_OPTION_LOAD_ERROR (V03051002), plus one
 BOOT_OPTION_FAILED (V03051003).  Benign noise from non-bootable devices, but it
 is what made BDS report an error about nine times per boot.
 
-### Applying the ArmMmuLib patch
+### Where the ArmMmuLib fix lives
 
-Common/edk2 is a submodule whose only remote is upstream, so the fix above is
-shipped as a patch instead of a submodule commit (a commit that exists only
-locally would make a fresh recursive clone unreproducible):
+Common/edk2 is pinned to the fork https://github.com/hmhmdcy/edk2, branch
+samurai-armmmulib, which carries exactly this one commit on top of the previous
+revision, so a plain recursive clone gets the fix with no extra step.  The same
+change is also kept as a patch for anyone building against the upstream
+submodule URL:
 
     git -C Common/edk2 apply Platform/Realme/sm8150/patches/armmmulib-no-debug-in-mmu-off-path.patch
 
