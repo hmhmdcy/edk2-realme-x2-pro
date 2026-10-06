@@ -22,7 +22,7 @@ Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager
 | Display | ✅ works | framebuffer text console, 5x12 font (`FrameBufferSerialPortLib`), 1080x2400 |
 | Volume-Up button | ✅ works | `SCAN_UP` |
 | Power button | ✅ works | |
-| **Volume-Down button** | ❌ **broken** | shared `ButtonsDxe` polls it through the PMIC PON RT IRQ, but on samurai it is wired to a GPIO (see Known issues) |
+| **Volume-Down button** | ✅ works | factory realme `ButtonsDxe` + `OppoProject` + `ResetRuntimeDxe` (see `Platform/Realme/sm8150/BINARIES.md`) |
 | UFS / block devices | ✅ works | 6 LUNs, GPT, `BLK*` devices in the shell |
 | USB mass storage mode (phone as a USB disk) | ✅ works | via the built-in `LinuxSimpleMassStorage` kernel (see below) |
 | USB keyboard / host mode | ❓ untested | no OTG device was available during development |
@@ -69,10 +69,17 @@ Dump them from your own stock `xbl.img` and place them in
 `Platform/EFI_Binaries` submodule):
 
 ```
-DALSys/DALSys.efi            DALSys/DALSys.depex
-UsbPwrCtrlDxe/UsbPwrCtrlDxe.efi   UsbPwrCtrlDxe/UsbPwrCtrlDxe.depex
-ButtonsDxe/ButtonsDxe.efi    ButtonsDxe/ButtonsDxe.depex      (not used, see gotcha 4)
+DALSys/DALSys.efi + DALSys/DALSys.depex              (upstream: DALSYSDxe/DALSYSDxe.*)
+UsbPwrCtrlDxe/UsbPwrCtrlDxe.efi + UsbPwrCtrlDxe.depex
+ButtonsDxe/ButtonsDxe.efi                            factory realme/OPPO build (see note 4)
+ButtonsDxe/ButtonsDxe.depex                          stock, then patched (fix-buttons-depex.py)
+TLMMDxe/TLMMDxe.efi + TLMMDxe.depex
+ResetRuntimeDxe/ResetRuntimeDxe.efi + ResetRuntimeDxe.depex
+OcdtDxe/OppoProject.efi + OppoProject.depex          OPPO project protocol provider
 ```
+
+The easy way is `./Platform/Realme/sm8150/fetch-binaries.sh`, which downloads all of the
+above and applies the DEPEX patch - see `Platform/Realme/sm8150/BINARIES.md`.
 
 Useful references:
 - [Project-Aloha/UEFIFirmwareBackup — `realme-rmx1931`](https://github.com/Project-Aloha/UEFIFirmwareBackup/tree/main/realme-rmx1931)
@@ -139,9 +146,16 @@ To enter fastboot when the phone is stuck: hold **Power** for ~15 s to force pow
    **`0x9D000000`**, so with the default value the log is written into invisible memory: the
    screen keeps showing the bootloader logo and the boot looks exactly like a hang.
    `samurai.dsc` therefore sets `PcdMipiFrameBufferAddress|0x9D000000`.
-4. **`ButtonsDxe`.** Use the shared `Drivers/sm8150/ButtonsDxe` (same as cepheus). The vendor
-   extracted `ButtonsDxe` has a satisfiable DEPEX but fails during initialisation here
-   (it additionally needs vendor TLMM handling) and is unloaded - with it no key works at all.
+4. **`ButtonsDxe` needs three extra blobs.** The port uses the *factory* realme/OPPO
+   `ButtonsDxe` (the only build with a correct key map for this board), but it is not
+   self-contained: at run time it additionally wants `EFI_QCOM_TLMM_PROTOCOL` (`TLMMDxe`), the
+   **OPPO project protocol** (`903C579D-...`, installed by `OcdtDxe/OppoProject.efi`) and the
+   **reset-reason protocol** (`A022155A-...`, installed by `ResetRuntimeDxe`). It also reads the
+   SMEM project entry (`Project:19781`) to select the per-project key map. Any missing piece makes
+   it return `EFI_NOT_FOUND` and get unloaded - and then *no* side button works at all.
+   Because it locates the OPPO project protocol only at run time (that GUID is not in its DEPEX),
+   run `fix-buttons-depex.py` so the dispatcher guarantees `OppoProject` is installed first.
+   See `Platform/Realme/sm8150/BINARIES.md`.
 5. **DTB roles.** `FdtBlob/<device>/<device>.dtb` is the **mainline** DTB (published to the OS
    through the EFI configuration table); `FdtBlob_compat/<device>.dtb` is the **vendor/Android**
    DTB appended to the boot image. Do not swap them: with a vendor DTB in `FdtBlob`, the built-in
@@ -174,11 +188,10 @@ this option. (On Windows you can protect yourself with
 
 ## Known issues / TODO
 
-- **Volume-Down does not work.** The shared `ButtonsDxe` reads `VOL-` through the PMIC PON
-  real-time IRQ; on samurai the key is wired to a GPIO.
-  (Details: the vendor `ButtonsDxe` maps `VOL+`/`VOL-` through GPIO, which is correct for this
-  board, but it fails to initialise even after adding the vendor `TLMMDxe` - the actual error
-  still has to be captured from the framebuffer log.)
+- **Volume-Down is now fixed.** It used to fail because the shared `ButtonsDxe` reads `VOL-`
+  through the PMIC PON real-time IRQ while on samurai the key is wired to a GPIO. The port now
+  uses the factory realme `ButtonsDxe` together with `OppoProject` + `ResetRuntimeDxe` and a
+  patched DEPEX; verified on hardware (`SCAN_UP` / `SCAN_DOWN`). See note 4 above.
 - No letter input: the EFI Shell cannot be typed into with the volume keys alone; a USB keyboard
   (host mode) is untested.
 - A samurai-specific DSDT is required for Windows-on-ARM.
@@ -203,6 +216,7 @@ this option. (On Windows you can protect yourself with
 - [edk2-porting/edk2-msm](https://github.com/edk2-porting/edk2-msm) (Renegade Project) - the framework this port is built on, and SimpleInit
 - [BigfootACA/linux-simple-mass-storage](https://github.com/BigfootACA/linux-simple-mass-storage) - the built-in mass-storage kernel
 - [Project-Aloha/UEFIFirmwareBackup](https://github.com/Project-Aloha/UEFIFirmwareBackup) - factory firmware dumps (`realme-rmx1931`)
+- [Project-Aloha/mu_aloha_platforms](https://github.com/Project-Aloha/mu_aloha_platforms) - source of the `OppoProject.efi` (OcdtDxe) blob
 - [edk2-porting/edk2-msm device sources](https://github.com/edk2-porting/edk2-msm/tree/master/Platform) - cepheus (Mi 9) was used as the working SM8150 reference
 
 ## License
@@ -216,14 +230,15 @@ Same as upstream edk2-msm (BSD-2-Clause-Patent for EDK2 code). Device firmware b
 
 **realme X2 Pro（RMX1931 / 代号 samurai）的 EDK2/UEFI 移植**，基于 `edk2-porting/edk2-msm`。
 
-已在真机验证：UEFI 可启动到 Boot Manager 与 EFI Shell，framebuffer 文本控制台、音量上/电源键、
-UFS 分区枚举、以及"把手机当 U 盘"的 USB 大容量存储模式都可用。**已知缺陷：音量下键无效**；
+已在真机验证：UEFI 可启动到 Boot Manager 与 EFI Shell，framebuffer 文本控制台、**音量上 / 音量下 / 电源键全部可用**、
+UFS 分区枚举、以及"把手机当 U 盘"的 USB 大容量存储模式都可用。Windows 化还需专属 DSDT。
+UFS 分区枚举、以及"把手机当 U 盘"的 USB 大容量存储模式都可用。**音量下键也已修复**；
 Windows 化还需专属 DSDT。
 
 关键坑（详见上文）：
 1. boot 镜像必须保持项目默认布局（v1 + gzip(BootShim+FD) + 尾部追加 `FdtBlob_compat` 的安卓 DTB）；
 2. `PcdMipiFrameBufferAddress` 必须改成 **0x9D000000**，否则 edk2 日志"静默"、看起来就是卡死；
-3. 按键驱动要用共享版 `Drivers/sm8150/ButtonsDxe`；
+3. 按键驱动用**原厂 realme ButtonsDxe**，并需同时引入 `OppoProject`（OPPO project 协议）与 `ResetRuntimeDxe`（reset reason 协议），且要给 ButtonsDxe 的 DEPEX 加上 `903C579D`（详见 `Platform/Realme/sm8150/BINARIES.md`）；
 4. `FdtBlob` 放主线 DTB、`FdtBlob_compat` 放安卓 DTB，别放反（放反会导致 U 盘模式失效）。
 
 ⚠️ **安全**：只刷 `boot` 分区，先备份；U 盘模式会暴露原始分区，切勿让 PC 端格式化/初始化。
