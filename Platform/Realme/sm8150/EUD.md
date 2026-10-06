@@ -290,3 +290,141 @@ Fix: keep the platform default PcdDebugPrintErrorLevel (0x80000000, ERROR only)
 and never override SerialPortLib for DXE_CORE.  To get INFO-level logs later,
 raise the level per module (component <PcdsFixedAtBuild>) rather than globally,
 or make the library non-blocking (ring buffer drained by a timer event).
+
+## Firmware log ring buffer over EUD COM (2026-10-07)
+
+Problem: the host cannot open the EUD COM port until it has run eudtool com-up,
+so every DEBUG() line printed before that (all of PEI, DXE and the start of BDS)
+was lost.
+
+Solution: a fixed-address RAM ring buffer that the firmware fills, plus a single
+drainer that replays it once the host is listening.
+
+  shared ring   Platform/Realme/sm8150/Library/EudSerialPortLib/EudLog.h
+  producer      Platform/Realme/sm8150/Library/EudSerialPortLib/EudSerialPortLib.c
+  consumer      Platform/Realme/sm8150/EudLogDxe/EudLogDxe.c
+
+Design points (do not undo them casually):
+
+* SerialPortWrite() must never touch EUD MMIO.  The library is a BASE library
+  linked into about 160 modules, so every module gets its own copy of the
+  library variables; a per-module buffer plus a per-module drainer cannot work.
+  The ring therefore lives at a fixed address shared by all copies: 0x9FFE3000,
+  80 KB, the platform memory map entry that used to be called RSRV2 and is now
+  called "EUD Log" (EfiReservedMemoryType: not given to the pool and not handed
+  to the OS as free memory).
+* Producers reserve space with InterlockedCompareExchange32 (SynchronizationLib).
+  GCC lowers both __atomic_* and __sync_* to out-of-line __aarch64_cas* helpers
+  which EDK2 does not link, so the raw builtins cannot be used here.
+* The drainer gates on CTL_OUT_1 bit5 (COM_PERIPH_EN) or bit12 (VBUS_ATTACH),
+  which is exactly what eudtool com-up sets.  Replaying before that would only
+  throw away the oldest and most interesting lines.  If the readback cannot be
+  trusted on this unit the gate opens after 15 s (EUD_HOST_WAIT_MS).
+* The drain is rate limited: EUD_DRAIN_FRAMES_TICK frames of EUD_COM_CHUNK (6)
+  bytes per EUD_DRAIN_TICK_MS (10 ms) tick, using the hardware-proven timing of
+  200 us between bytes and 2 ms between frames.  That is about 1.2 KB/s, so a
+  full 80 KB ring needs roughly a minute to replay while the boot menu stays
+  usable, because each tick blocks for at most a few milliseconds.
+
+Testing: flash boot-samurai-eudlog.img, let the phone reach the boot menu, then
+on the PC run eudtool.exe com-up and comlog.exe COM14 600 eud-com.log.
+
+The Drops and DropEvents counters are reported once, on screen and in the log,
+if the ring overflows.
+
+Known follow-ups:
+
+* Measure the real replay rate.  If it is too slow, replace the fixed 2 ms frame
+  gap with the TX flow control the stock kernel driver uses (EUD_INT_STATUS_1
+  bit1, eud_tx_empty()), and/or raise EUD_COM_CHUNK towards the 14 byte FIFO
+  depth.  Both need a hardware measurement first.
+* A producer that is preempted between its reservation and its copy can leave a
+  partially written region at the very end of the ring.  The drainer is far
+  behind whenever there is real traffic, so this is accepted for a best-effort
+  debug log.
+
+## Log ring verified on hardware (2026-10-07)
+
+Image boot-samurai-eudlog2.img (sha256 cf2364723022b2491bf763d5359547fc6226518829c119539b2d5153ec0e71a8)
+was flashed and verified:
+
+  * EUD CTL 9501 appears about 3.5 s after reboot (BDS enables EUD in the boot).
+  * eudtool com-up -> "Qualcomm EUD Port 9505 (COM14)" appears immediately.
+  * comlog.exe COM14 30 -> raw 12523 bytes, 1571 frames, 12 complete passes.
+  * The capture contains DEBUG lines produced long before the host attached
+    ("SimpleFbDxe: Retrieve MIPI FrameBuffer parameters from PCD"), which is
+    exactly what used to be lost.  No drops (no overflow marker) at ERROR level.
+
+Design change made after the first hardware test: the drainer no longer gates on
+CTL_OUT_1.  That readback proved not dependable, and the 15 s fallback fired long
+before a human runs com-up, so the buffer was replayed into the void and the host
+captured 0 bytes ("no host attach seen, replaying anyway" was on the screen).
+
+The drainer now loops instead: it rewinds the consumer tail to the oldest byte
+still in the ring and replays everything, pausing EUD_REPLAY_PAUSE_MS (2 s)
+between passes, for EUD_REPLAY_WINDOW_MS (120 s) after EUD is first seen enabled.
+After that it switches to plain pass-through so a long-lived boot menu does not
+keep busy waiting in a timer callback.  A host that attaches at any time inside
+the window receives a complete copy, and no guess about host state is needed.
+
+Consequences and follow-ups:
+
+  * The capture holds several complete copies (a pass every ~2.5 s at the
+    default ERROR level).  That is intended; a per-pass marker line would make
+    the boundaries easier to read.
+  * With PcdDebugPrintErrorLevel raised to full DEBUG the ring fills up, so a
+    pass takes about 68 s at the current ~1.2 KB/s drain rate.  The loop still
+    guarantees a complete copy, but the timer callback would then be busy for
+    most of each pass, which is worth tuning (TX flow control polling or larger
+    frames) before raising the level.
+  * The first capture already shows a real firmware error that was invisible
+    before: "ERROR: C40000002:V03051003/V03051002 I0 6D33944A-EC75-4855-A54D-809C75241F6C 9FFCF718"
+    (BdsDxe GUID, reported 9-11 times per pass).  Worth investigating next.
+
+## Full DEBUG achieved; real cause of the +0x34B8 crash (2026-10-07)
+
+The crash at ArmCpuDxe + 0x34B8 that killed every full DEBUG build (and that the
+earlier handover blamed on the serial writer) is NOT caused by SerialPortLib.
+The instruction at that offset, disassembled from the build, is
+
+    34b8:  a94153f3   ldp  x19, x20, [sp, #16]
+
+which is the epilogue of ReplaceTableEntry() in
+ArmPkg/Library/ArmMmuLib/AArch64/ArmMmuLibCore.c.  It is a stack access fault:
+the attribute update just performed (the live-block break-before-make path, with
+the MMU temporarily disabled) leaves the stack page inaccessible, and the very
+next stack access faults.
+
+The message "splitting block entry with MMU disabled" is printed by that same
+branch, which is why its text was found on the stack - it is a symptom, not the
+cause.  The old MMIO writer and the new RAM ring writer crashed at the same
+instruction because the crash happens after the serial write returns.
+
+Fix applied: the DEBUG() call in that branch is removed, with a note in
+ArmMmuLibCore.c.  Printing from a path that is about to disable the MMU is unsafe
+on this platform.  With that change a full DEBUG build
+(PcdDebugPrintErrorLevel = 0x800B05C7, set in samurai.dsc) boots to BDS in ~4 s.
+
+Verified capture (boot-samurai-eudlog5.img, sha256
+5a0aab582df3f1382b6b7cae6fd58568930a50b2a80dd5ab3013c265d8837d82):
+
+  * EUD CTL 9501 appears 4 s after reboot with full DEBUG.
+  * comlog.exe COM14 90 -> 138501 bytes, 2099 lines, 12 identical passes.
+  * Pass marker: "--- pass N: 10214 byte(s) in 8510 ms ---" => about 1.2 KB/s.
+  * No overflow: the complete boot log is only about 10 KB, far below the 80 KB
+    ring, so full DEBUG does not need a bigger ring today.
+
+Two previously invisible firmware bugs are now in the log:
+
+  * "SetCPUFreqDxeMain: CPU 1 Now running at -1875767296 Hz" (CPU 2 likewise):
+    negative/garbage frequency values.
+  * "SetCPUFreqDxeMain: Failed to get the maximum performance level for CPU 4,
+    Status: Protocol Error" and "This CPU may not exist on current platform":
+    only CPUs 0-3 are set up on a platform that has 8.
+
+The earlier BdsDxe status code error is explained by the boot option dump:
+the auto enumerated "UEFI Misc Device 1-6" (the six UFS LUNs) and
+"UEFI Non-Block Boot Device 1-2" are attempted and fail to load, which is exactly
+EFI_SW_DXE_BS_EC_BOOT_OPTION_LOAD_ERROR (V03051002), plus one
+BOOT_OPTION_FAILED (V03051003).  Benign noise from non-bootable devices, but it
+is what made BDS report an error about nine times per boot.
