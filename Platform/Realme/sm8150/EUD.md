@@ -428,3 +428,14 @@ the auto enumerated "UEFI Misc Device 1-6" (the six UFS LUNs) and
 EFI_SW_DXE_BS_EC_BOOT_OPTION_LOAD_ERROR (V03051002), plus one
 BOOT_OPTION_FAILED (V03051003).  Benign noise from non-bootable devices, but it
 is what made BDS report an error about nine times per boot.
+
+### Applying the ArmMmuLib patch
+
+Common/edk2 is a submodule whose only remote is upstream, so the fix above is
+shipped as a patch instead of a submodule commit (a commit that exists only
+locally would make a fresh recursive clone unreproducible):
+
+    git -C Common/edk2 apply Platform/Realme/sm8150/patches/armmmulib-no-debug-in-mmu-off-path.patch
+
+Without it a build with PcdDebugPrintErrorLevel = 0x800B05C7 dies at
+ArmCpuDxe + 0x34B8 before reaching BDS.
