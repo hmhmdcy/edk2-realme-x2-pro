@@ -1,0 +1,40 @@
+#!/bin/sh
+# rmx1931/samurai 主线诊断 initramfs 的 init。
+# 目标：开机后把关键信息打到控制台（tty0 / EUD earlycon 已经由内核负责），
+# 然后挂起而不是退出，方便从屏幕或串口抄日志。
+mount -t proc     proc /proc 2>/dev/null
+mount -t sysfs   sysfs /sys  2>/dev/null
+mount -t devtmpfs dev  /dev  2>/dev/null
+mount -t configfs configfs /sys/kernel/config 2>/dev/null
+
+echo
+echo "=============================================="
+echo " rmx1931-mainline initramfs reached userspace"
+echo "=============================================="
+echo "[kernel] $(cat /proc/version 2>/dev/null)"
+echo "[cmdline] $(cat /proc/cmdline 2>/dev/null)"
+echo
+echo "[cpu] $(grep -c ^processor /proc/cpuinfo 2>/dev/null) processors"
+grep -m1 -E 'Hardware|machine' /proc/cpuinfo 2>/dev/null
+echo
+echo "--- /proc/iomem (前 40 行) ---"
+head -40 /proc/iomem 2>/dev/null
+echo
+echo "--- 块设备 ---"
+ls /sys/class/block 2>/dev/null | tr '\n' ' '; echo
+echo "--- UFS ---"
+ls /sys/bus/platform/drivers/ufshcd-qcom 2>/dev/null | tr '\n' ' '; echo
+echo "--- USB gadget ---"
+ls /sys/class/udc 2>/dev/null | tr '\n' ' '; echo
+echo "--- framebuffer ---"
+ls /sys/class/graphics 2>/dev/null | tr '\n' ' '; echo
+for f in /sys/class/graphics/fb0/virtual_size /sys/class/graphics/fb0/bits_per_pixel; do
+	[ -r "$f" ] && echo "$f = $(cat $f 2>/dev/null)"
+done
+echo
+echo "--- dmesg 末尾 ---"
+dmesg 2>/dev/null | tail -30
+echo
+echo "=== 诊断结束，保持在用户态（不会自动重启）==="
+# 不退出：init 退出会导致 panic，保留现场
+exec sleep 100000
