@@ -280,3 +280,20 @@ Windows 化还需专属 DSDT。
      Symlinks are relative now and the cpio is rebuilt.
 * Test image: Image-rmx1931-samurai-initfix (RPMh + initramfs fix).
   Full story and hashes: HANDOVER-NEXT.md section 26.
+
+## Status update 2026-10-08 (userspace reached; what is a shortcut and what is not)
+
+* The kernel now reaches userspace on hardware: "Run /init as init process", all
+  six UFS LUNs enumerated, no panic - and the initramfs banner reaches the EUD
+  COM console after the init script was changed to write to /dev/kmsg.  Writing
+  to /dev/console does not work yet, because the console has no tty binding, so
+  those writes land on the VT (screen only).
+* The phone reboots shortly after the diagnostic dump.  The panic text has to be
+  read from /sys/fs/pstore/console-ramoops (ramoops@0xb7e00000 is in the DTB).
+* HANDOVER-NEXT.md section 27 records, for the first time, which parts of the
+  current setup are temporary information-gathering shortcuts (S1-S13: the
+  /dev/kmsg dump on every boot, the sleep-forever init, the kernel store in the
+  logdump partition, the RPMh SoC quirk, the missing tty layer, ...) and which
+  are the proper goals (a real tty console, a reviewable DTS, ESP + GRUB, a real
+  root filesystem, pstore as the durable log channel, upstreamable patches).
+  Read that section before building anything on top of this setup.
