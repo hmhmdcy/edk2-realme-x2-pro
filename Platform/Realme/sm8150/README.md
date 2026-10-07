@@ -33,6 +33,15 @@ mirrors.
 Output: `boot-samurai.img` (flashable Android boot image) and
 `workspace/Build/samurai/RELEASE_GCC5/FV/SM8150_UEFI.fd`.
 
+**Mainline Linux**: the firmware now embeds a mainline kernel (EFI stub, built-in
+diagnostic initramfs, EUD earlycon) and boots it as a UEFI application named
+"Linux (mainline samurai)", with a real device tree in `FdtBlob/samurai/`.
+State and next steps: `HANDOVER-NEXT.md` section 18.
+
+`Platform/Realme/sm8150/LinuxKernel/Image` is a build product and is not
+committed: put it back (or rebuild it with the linux-port scripts) before
+building, otherwise `./build.sh` fails on the missing file.
+
 Host toolchain note: on very new GCC (e.g. GCC 15) BaseTools/Pccts need
 `-std=gnu17`; it is already appended to `GCC_AARCH64_CC_FLAGS` in
 `tools/tools_def.txt` (that file is copied into `Common/edk2/Conf/` by `build.sh`).
