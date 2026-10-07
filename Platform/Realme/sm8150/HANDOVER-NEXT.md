@@ -957,3 +957,17 @@ Windows 上**，本地没有 git 仓库；WSL 的 `~/x2pro-linux/linux` 也没�
 目录（合计约 300 KB，不含 30 MB 的 `Image` 和 `artifacts/`）镜像进
 `Platform/Realme/sm8150/linux-port/`，保持引用路径可解。本轮没动，因为它会改变仓库
 结构，先留给人确认。
+
+
+### 19.8 真机测试脚本（写好但没跑过）
+
+`E:\eud-host\flash-and-capture-linux.ps1`：刷 `boot-samurai-linux-cmdline.img` →
+轮询 `VID_05C6&PID_9501` → 一出现就 `eudtool.exe com-up` → 等 9505 的 `(COMxx)`
+枚举出来 → 用这个端口号跑 `comlog.exe`，最后自动打印日志开头与
+`Booting Linux on physical CPU` 之类的标记；找不到设备时给出明确的分支提示。
+
+它解决的正是 §12 里那个"时隙"：EUD 只在固件走到 BDS 之后才出现，而 comlog 必须在
+内核打第一行之前就已经在跑，靠人手掐表很容易又拿到 0 字节。
+
+**本轮只做了冒烟测试**（没有手机，走的是 "No fastboot device" 那条分支：报错信息、
+镜像哈希都正常）。第一次真机跑请盯着屏幕，别盲信脚本；手动版本仍是 §18.3 A / §19.6。
