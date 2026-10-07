@@ -934,12 +934,16 @@ libstub 的 `efi_convert_cmdline()` 把 LoadOptions 当 **UTF-16** 读（`efi_ch
 `boot-samurai-linux.img`），其余步骤与 §18.3 A 完全相同：
 
 ```powershell
-E:\eud-host\eudtool.exe com-up
-E:\eud-host\comlog.exe COM14 600 E:\eud-host\samurai-linux.log
-# 重启后 9501 出现时执行上面两行，再：
+# 1) 刷入并重启，手机会先起 UEFI
 fastboot flash boot E:\edk2-samurai-out\boot-samurai-linux-cmdline.img
 fastboot reboot
-# 菜单里音量键选 "Linux (mainline samurai)"，电源键确认
+
+# 2) 重启后约 3.5 s 出现 9501 控制设备；这步必须赶在内核打第一行之前
+E:\eud-host\eudtool.exe com-up
+E:\eud-host\comlog.exe COM14 600 E:\eud-host\samurai-linux.log
+
+# 3) 屏幕出现 UEFI 菜单后：音量键选 "Linux (mainline samurai)"，电源键确认
+#    或者用 §19.8 的 flash-and-capture-linux.ps1，它自己处理这个时隙
 ```
 
 本轮之所以没做：手机没有连接（`adb devices` 为空，Windows 上没有 `VID_05C6`）。
