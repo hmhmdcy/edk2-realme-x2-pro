@@ -1,0 +1,15 @@
+# Mainline Linux kernel for realme X2 Pro (samurai), built with the EFI stub and
+# a built-in diagnostic initramfs.  Embedded in the firmware volume as a UEFI
+# application, exactly like LinuxSimpleMassStorage.efi, so BDS can start it
+# after having enabled EUD (the host PC can then already have the COM port open
+# and capture the full earlycon log).
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = SamuraiLinuxKernel
+  FILE_GUID                      = 7a3c1e42-9d55-4c8b-b621-0f8a442e913d
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+
+[Binaries.AARCH64]
+  PE32|Image|RELEASE

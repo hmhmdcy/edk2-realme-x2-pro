@@ -65,3 +65,6 @@ FILE DRIVER = 8681CC5B-0DF6-441E-B4B8-E915C538F067 {
   // Platform/Realme/sm8150/Library/EudSerialPortLib/EudLog.h into the EUD COM
   // TX FIFO once a host PC has attached.
   INF Platform/Realme/sm8150/EudLogDxe/EudLogDxe.inf
+
+// SAMURAI: mainline Linux kernel (EFI stub) as a UEFI application in this FV.
+INF Platform/Realme/sm8150/LinuxKernel/SamuraiLinuxKernel.inf

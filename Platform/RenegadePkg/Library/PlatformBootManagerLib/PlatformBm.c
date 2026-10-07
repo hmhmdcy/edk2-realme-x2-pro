@@ -38,6 +38,17 @@
 
 #include "PlatformBm.h"
 
+#ifdef SAMURAI_LINUX_KERNEL
+//
+// SAMURAI: GUID of the mainline Linux kernel embedded in this firmware volume
+// (Platform/Realme/sm8150/LinuxKernel/SamuraiLinuxKernel.inf).  Must match the
+// FILE_GUID there.
+//
+STATIC CONST EFI_GUID  mSamuraiLinuxKernelGuid = {
+  0x7a3c1e42, 0x9d55, 0x4c8b, { 0xb6, 0x21, 0x0f, 0x8a, 0x44, 0x2e, 0x91, 0x3d }
+};
+#endif
+
 #define DP_NODE_LEN(Type)                                                      \
   {                                                                            \
     (UINT8)sizeof(Type), (UINT8)(sizeof(Type) >> 8)                            \
@@ -758,6 +769,16 @@ VOID EFIAPI PlatformBootManagerAfterConsole(VOID)
   //
   PlatformRegisterFvBootOption(
       &gLinuxSimpleMassStorageGuid, L"USB Attached SCSI (UAS) Storage", LOAD_OPTION_ACTIVE);
+#endif
+
+#ifdef SAMURAI_LINUX_KERNEL
+  //
+  // SAMURAI: the mainline Linux kernel built for this device.  BDS has already
+  // enabled EUD before the console is set up, so a host PC that ran "eudtool
+  // com-up" on the boot menu gets the complete kernel log from earlycon.
+  //
+  PlatformRegisterFvBootOption(
+      &mSamuraiLinuxKernelGuid, L"Linux (mainline samurai)", LOAD_OPTION_ACTIVE);
 #endif
 
 #ifdef AB_SLOTS_SUPPORT
