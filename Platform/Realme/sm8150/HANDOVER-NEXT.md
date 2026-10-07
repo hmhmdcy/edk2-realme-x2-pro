@@ -1,4 +1,4 @@
-﻿# Session handover - realme X2 Pro (samurai) EDK2/UEFI
+# Session handover - realme X2 Pro (samurai) EDK2/UEFI
 
 > Rewritten 2026-10-07 00:4x (Asia/Shanghai), at the end of the session that got
 > EDK2 DEBUG output flowing over EUD COM and verified it on real hardware.
@@ -470,3 +470,371 @@ Two complementary fixes:
 3. Optional: fix 1 (firmware-side COM enable) to shorten the gap further.
 4. Re-test with comlog.exe and PcdDebugPrintErrorLevel set to 0x800B05C7,
    keeping the SerialPortLib scoping unchanged (never DXE_CORE).
+---
+
+## 13. EUD log ring buffer implemented (2026-10-07 02:0x)
+
+The main task from section 12 (fix 2) is DONE in code and builds clean.  It is
+NOT flashed yet.
+
+New image (built, not flashed):
+    E:\edk2-samurai-out\boot-samurai-eudlog.img
+    sha256 d2fce824f9e3ac0495b85c4775f5448a917ebec4e8deeb8150d9ab55de46ae72
+    (plus SM8150_UEFI-samurai-eudlog.fd)
+
+Changed in ~/edk2-samurai/repo (all uncommitted):
+
+    Platform/Realme/sm8150/Library/EudSerialPortLib/EudLog.h            new
+    Platform/Realme/sm8150/Library/EudSerialPortLib/EudSerialPortLib.c  rewritten: producer only, no MMIO, no delays
+    Platform/Realme/sm8150/Library/EudSerialPortLib/EudSerialPortLib.inf  SynchronizationLib in, IoLib/TimerLib out
+    Platform/Realme/sm8150/EudLogDxe/EudLogDxe.c                        new (single drainer)
+    Platform/Realme/sm8150/EudLogDxe/EudLogDxe.inf                      new
+    Platform/Realme/sm8150/samurai.dsc                                  [Components.common] entry
+    Platform/Realme/sm8150/samurai.fdf.inc                              INF entry
+    Silicon/Qualcomm/sm8150/Library/PlatformMemoryMapLib/PlatformMemoryMapLib.c
+                                "RSRV2" renamed to "EUD Log" (address and size unchanged)
+    Platform/Realme/sm8150/EUD.md                                       new section
+
+Why the section 12 design had to change: EudSerialPortLib is linked into 162 of
+the 177 built modules (verified from the .map files), so a library-static ring
+buffer would exist 162 times and no single drainer could see all of them.  The
+ring is therefore at a fixed address shared by every copy.
+
+Why RSRV2 and not Log Buffer: realme own uefiplat.cfg (in
+uefifw/realme-rmx1931/Binaries/RawFiles) contains no RSRV1/2/3 at all; the vendor
+map simply leaves 0x9FFD0000 up to 0x9FFF7000 empty and the port filled that hole
+with reference names from other SoCs.  "Log Buffer" by contrast is a real vendor
+region (RtData, and the stock XBL references it), so overwriting it would destroy
+the vendor boot log.
+
+Build verification (no hardware involved):
+  * EudSerialPortLib.obj undefined symbols: InterlockedCompareExchange32 and
+    MemoryFence only; zero references to 0x088E0000 (the blocking path is gone).
+  * EudLogDxe disassembly contains both movk #0x9ffe (ring) and #0x88e0000 (EUD).
+  * FVMAIN.Fv: "RSRV2" 0 occurrences, "EUD Log" 1, 0x9FFE3000 1, EudLogDxe FFS
+    file present (GUID 2E6C5B41-9A73-4C0E-8B27-1F5D3A6E9C04).
+
+Still to do next session:
+  1. flash and verify on hardware: look for the "[EUD-LOG] host COM attach seen"
+     line, then the full DEBUG stream, and check the Drops counter.
+  2. measure the replay rate and tune (see the follow-ups in EUD.md).
+  3. optional fix 1 (firmware side COM enable) is still not done; it would remove
+     the dependence on the CTL_OUT gate.
+---
+
+## 14. EUD log ring: 真机验证通过（2026-10-07 02:45）
+
+镜像 `E:\edk2-samurai-out\boot-samurai-eudlog2.img`
+sha256 `cf2364723022b2491bf763d5359547fc6226518829c119539b2d5153ec0e71a8`，已刷机验证：
+
+- 重启后约 **3.5 秒** EUD CTL 9501 出现（BDS 里开 EUD）
+- `eudtool com-up` → `Qualcomm EUD Port 9505 (COM14)` 立即就绪
+- `comlog.exe COM14 30` → **12523 字节 / 1571 帧 / 12 遍完整回放**
+- 日志里含**主机 attach 之前**产生的早期 DXE 行
+  （`SimpleFbDxe: Retrieve MIPI FrameBuffer parameters from PCD`）——以前必丢的内容，现在拿到了
+- 无 overflow（ERROR 级别下 80KB 环远远够）
+
+**中途发现的设计缺陷（第一版 eudlog 镜像）**：排空驱动原本门控在 `CTL_OUT_1` 的读回，
+并设 15 秒兜底。实测该读回不可靠，且兜底在"人手动敲 com-up"之前就触发了，
+于是缓冲被推进真空、主机抓到 0 字节（当时屏幕上的
+`[EUD-LOG] no host attach seen, replaying anyway` 就是这条路径）。
+
+**修正**：去掉门控与兜底，改成**循环回放** —— 每遍把消费指针回卷到环内最旧字节、
+整卷重发，遍间停 2 秒；EUD 就绪后维持 120 秒，之后转为只转发新数据（避免长时间占用回调）。
+主机在任何时刻 attach 都能拿到完整一份，且不再需要猜测主机状态。
+
+**后续可做**：
+
+1. 每遍加一个分隔标记行，便于阅读（现在是 12 份副本叠在一起）。
+2. 若把 `PcdDebugPrintErrorLevel` 开到全量 DEBUG，环会填满，按当前 ~1.2KB/s 每遍约 68 秒 ——
+   循环仍保证完整，但回调占用会偏高，建议先做流控优化（TX 状态轮询 / 加大帧长）再开。
+3. **首次抓取已经暴露出一个以前看不见的真固件错误**：
+   `ERROR: C40000002:V03051003/V03051002 I0 6D33944A-EC75-4855-A54D-809C75241F6C 9FFCF718`
+   （BdsDxe 的 GUID，每遍出现 9-11 次）—— 值得下一步查。
+---
+
+## 15. 全量 DEBUG 打通 + 崩溃真因修正（2026-10-07 03:20）
+
+**镜像** `E:\edk2-samurai-out\boot-samurai-eudlog5.img`
+sha256 `5a0aab582df3f1382b6b7cae6fd58568930a50b2a80dd5ab3013c265d8837d82`，真机验证通过。
+
+### 崩溃真因（推翻了交接文档的判断）
+
+`ArmCpuDxe + 0x34B8` 反汇编后是 **`ldp x19, x20, [sp, #16]`** —— 即
+**ArmMmuLib 的 `ReplaceTableEntry()` 收尾弹栈**，是**栈访问 fault**，**不是**串口/EUD 写。
+
+- 那条 "splitting block entry with MMU disabled" 是同一分支打印的，
+  所以它的文本才会留在栈上 —— **症状而非原因**；
+- 旧版写 EUD MMIO、新版写 RAM 环形缓冲，都崩在**同一条指令**（所以偏移完全一致）；
+- 真正的问题是：更新"活动块映射"时（关 MMU 做 break-before-make），
+  **栈所在页会变得不可访问**，紧接着的弹栈就 fault；
+- 全量 DEBUG 才触发，是因为它改变了内存属性更新的数量/时机，某次更新覆盖了栈区
+  （`SP=0x9FFCF5E0`，落在 "UEFI Stack" 0x9FFB0000–0x9FFD0000）。
+
+**修复**：删掉该分支里的 `DEBUG()`（原则：绝不在"即将关 MMU"的路径上做日志输出），
+见 `Common/edk2/ArmPkg/Library/ArmMmuLib/AArch64/ArmMmuLibCore.c`。
+改后全量 DEBUG（`PcdDebugPrintErrorLevel=0x800B05C7`，加在 `samurai.dsc`）**4 秒进 BDS**。
+
+### 验收数据
+
+- `comlog COM14 90` → **138501 字节 / 2099 行 / 12 遍**
+- 每遍 `10214 byte(s) in 8510 ms` → **约 1.2 KB/s**
+- **无 overflow**：整份启动日志仅约 10KB，80KB 环绰绰有余
+- 日志覆盖：DXE 启动 → BDS → 启动项转储 → SimpleInit → 变量驱动 → CPU 频率驱动
+
+### 附带收获：两个以前看不见的真 bug
+
+1. `SetCPUFreqDxeMain: CPU 1 Now running at -1875767296 Hz`（CPU 2 同样）—— **负值/垃圾频率**
+2. `Failed to get the maximum performance level for CPU 4, Status: Protocol Error` +
+   `This CPU may not exist on current platform` —— 8 核平台只配置了 CPU 0–3
+
+### 之前那个 BdsDxe 错误，被这份日志直接证实了
+
+启动项转储显示自动枚举出 **8 个不可引导项**：
+`UEFI Misc Device 1–6`（六个 UFS LUN）+ `UEFI Non-Block Boot Device 1–2`。
+BDS 逐个尝试加载失败 → 正是
+`EFI_SW_DXE_BS_EC_BOOT_OPTION_LOAD_ERROR (V03051002)` 约 7 次 +
+`BOOT_OPTION_FAILED (V03051003)` 1 次。**属良性噪音，但确实是每次开机报 9 次错误的来源。**
+
+### 待提交（仓库当前未提交改动）
+
+- `Platform/Realme/sm8150/EudLogDxe/EudLogDxe.c`（循环回放 + 每遍标记/统计 + 时间预算）
+- `Platform/Realme/sm8150/samurai.dsc`（全量 DEBUG PCD）
+- `Common/edk2/ArmPkg/Library/ArmMmuLib/AArch64/ArmMmuLibCore.c`（移除危险 DEBUG）
+- 以及 EUD 环形缓冲相关的全部文件（EudSerialPortLib 重写、EudLog.h、内存表改名）
+---
+
+## 16. 提交、噪音消除、bug 定位（2026-10-07 03:30）
+
+### 已提交（master，5+1 个提交，尚未 push 到 fork）
+
+```
+04da4b4 samurai: EUD COM log ring + cyclic replay drainer
+1da715f samurai: do not auto-enumerate every device as a boot option
+2d26a5a SetCPUFreqDxe: print UINT32 frequencies unsigned and keep going
+a3b70b8 samurai: ship the ArmMmuLib full-DEBUG fix as a patch
+18e965b docs: EUD log ring verification, ArmMmuLib root cause, boot option noise
+(+ 后续一个 docs 补丁说明提交)
+```
+
+**重要约束**：`Common/edk2` 子模块只有 `origin = tianocore/edk2`，**没有 fork**。
+若在其中 commit，父仓库记录的指针在上游不存在 → `clone --recursive` 不可复现
+（与交接文档里"二进制传不上 GitHub"是同一个坑）。因此 ArmMmuLib 修复以补丁形式随父仓库发布：
+
+```
+git -C Common/edk2 apply Platform/Realme/sm8150/patches/armmmulib-no-debug-in-mmu-off-path.patch
+```
+
+工作区里该子模块改动保持未提交（本地构建需要它）；如需真正入库，需要先 fork edk2 并加 remote。
+
+### 启动项噪音：已消除
+
+`PlatformBm.c` 里的 `EfiBootManagerRefreshAllBootOption()` 已注释掉（附完整说明与恢复方法）。
+它曾为 6 个 UFS LUN + 2 个 FS-only 设备自动建启动项，BDS 逐个尝试加载失败 →
+每次开机 9 条 `BOOT_OPTION_LOAD_ERROR/FAILED`。菜单项改为只显示显式注册的
+（UiApp / SimpleInit / UEFI Shell / UAS Storage），其他可从 Shell 启动。
+
+### bug 定位与修复：SetCPUFreqDxe（源码就在本仓库）
+
+`Platform/RenegadePkg/Drivers/SetCPUFreqDxe/SetCPUFreqDxe.c`
+
+1. **显示 bug**：`perfLevel`/`frequencyHz` 声明为 `UINT32` 却用 `%d` 打印 →
+   2419200000 Hz（2.4192GHz，Silver）显示成 `-1875767296`，
+   2956800000 Hz（2.9568GHz，Gold+）显示成 `-1338167296`。**频率本身是对的。** 已改 `%u`。
+2. **真 bug**：循环 `for (i = 0; i < 9; i++)`（假设 4+4 CPU + L3），
+   而 `GetMaxPerfLevel` 失败时**直接 `return`** → 本机 index 4 返回 Protocol Error 后
+   整个循环中止，**Gold/Gold+ 核（4–7）从未被设置频率**。已改为 `continue` + 跳过记录。
+
+### 记忆
+
+- **Mnemon 后端在本机不可用**（`spawn mnemon ENOENT`，未安装 CLI）→ 记忆空间创建失败，
+  无法写入 Mnemon 空间。若要启用：安装 Mnemon Windows 版并把 `mnemon.exe` 加入 PATH。
+- 已改用 **host 的运行时 MEMORY.md**：新增一条 2026-10-07 摘要（3 条，6850/10240 字节），
+  记录 EUD 环、三条硬教训、崩溃真因、噪音来源、SetCPUFreqDxe 缺陷、Linux 侧 earlycon 现状。
+
+### 新镜像（待真机验证）
+
+```
+E:\edk2-samurai-out\boot-samurai-eudlog6.img
+sha256 060efe010b5a1b6a54d52927fbafcd4980bd16a51a623426d749f26fb51dbe25
+```
+
+包含：EUD 环全量 DEBUG + 启动项噪音消除 + SetCPUFreqDxe 修复 + ArmMmuLib 补丁（已应用）。
+验证要点：① 启动更快、日志里不再有那 9 条 BOOT_OPTION 错误、启动项只剩 4 个；
+② `SetCPUFreqDxeMain` 频率为正数，且 CPU 4–8 不再因 index 4 失败而中断。
+---
+
+## 17. 子模块已按方案 A 解决（2026-10-07 03:45）
+
+ArmMmuLib 修复**不再需要手工打补丁**：
+
+- 已用 `gh` 建好 fork `hmhmdcy/edk2`（fork of tianocore/edk2）
+- 子模块本地提交 `60dbefd0`「ArmMmuLib: do not print from the live block split path」
+- 已推到分支 **`samurai-armmmulib`**（远端校验：`refs/heads/samurai-armmmulib` = 60dbefd0）
+- `.gitmodules` 的 `Common/edk2` 已改为 `url = https://github.com/hmhmdcy/edk2.git` +
+  `branch = samurai-armmmulib`（与 `Platform/EFI_Binaries` 指向 `hmhmdcy/edk2-msm-binary` 同一套做法）
+- 父仓库提交 `c10cf90` 固定新指针，**已推到 fork/master**
+
+于是 `git clone --recursive https://github.com/hmhmdcy/edk2-realme-x2-pro` 直接得到带修复的树，
+零手工步骤。补丁 `Platform/Realme/sm8150/patches/armmmulib-no-debug-in-mmu-off-path.patch` 保留，
+供"使用上游 submodule URL"的人兜底。
+
+**后续维护**：若把 edk2 子模块 rebase 到更新的上游版本，需把这一行删除重放到新版本，再推同名分支
+（`git -C Common/edk2 push fork HEAD:refs/heads/samurai-armmmulib`），最后在父仓库更新指针。
+
+**网络注意**：本机 GitHub 访问走代理、**时好时坏**（`GnuTLS handshake failed` /
+`connection reset` / `via 127.0.0.1`）；push 经常要重试 2–3 次才能成功，
+且 `git ls-remote` 成功并不代表 push 一定成功。`gh` 在 WSL 与 Windows 均已登录（hmhmdcy）。
+
+### 已推送的提交（fork/master = c10cf90）
+
+```
+c10cf90 Common/edk2: pin the submodule to the fork carrying the ArmMmuLib fix
+f756f44 docs: note how to apply the ArmMmuLib patch
+18e965b docs: EUD log ring verification, ArmMmuLib root cause, boot option noise
+a3b70b8 samurai: ship the ArmMmuLib full-DEBUG fix as a patch
+2d26a5a SetCPUFreqDxe: print UINT32 frequencies unsigned and keep going
+1da715f samurai: do not auto-enumerate every device as a boot option
+04da4b4 samurai: EUD COM log ring + cyclic replay drainer
+```
+
+---
+
+## 18. 主线 Linux：内核已进固件，等真机验证（2026-10-07 14:3x）
+
+### 18.0 TL;DR
+
+固件里**第一次有了能用的主线 Linux 内核，和这台机器自己的设备树**。
+之前 `FdtBlob/samurai/sm8150-realme-samurai.dtb` 其实是小米 9（cepheus）的设备树，
+而固件里除了别人编的 pmOS 6.1 内核外没有任何可启动的内核。
+
+现在刷 `E:\edk2-samurai-out\boot-samurai-linux.img`，UEFI 菜单里会多出
+**"Linux (mainline samurai)"**，选中后内核经 EUD earlycon 打日志（同时 simpledrm
+把日志打到手机屏）。**这一步尚未上真机**——下一个会话第一件事就是它。
+
+### 18.1 本会话（Linux 主线）做了什么
+
+工作区 `E:\RealmeX2Pro edk2\linux-port`；WSL 源码树 `~/x2pro-linux/linux`
+（Linux v7.3-rc6 `a90ee4305c4a`，无 remote，本地两个提交）。
+
+1. **EUD earlycon**（提交 `e4858b30a`，补丁 `linux-port/patches/0001-*.patch`）：
+   `drivers/tty/serial/eud_earlycon.c`，命令行 `earlycon=eud,mmio,0x88e0000`。
+   **本会话修掉一个会直接崩机的 bug**：earlycon 框架对 `mmio` 形式只映射 64 字节
+   （即 FIFO 所在那一页），而 `CSR_EUD_EN` 在 `+0x1014`，属于**下一页**——照原样写会
+   缺页，内核还没输出就死。改为自己 `ioremap(mapbase + 0x1014, 4)` 再写；映射失败
+   也不影响 console 注册。
+2. **samurai 主线设备树**（提交 `0450fd895`，源 `linux-port/dts/sm8150-samurai.dts`）：
+   以 `sm8150-mtp.dts` 为底（本机原厂基础 DTB 本身就是 MTP 派生），按实机重写
+   21 个 reserved-memory、音量键（`pm8150_gpios` 6/7、`bias-disable`、
+   `power-source = <1>`）、UFS 供电（保持 MTP 的 `vreg_s4a_1p8`）；GPU/WiFi/四个
+   remoteproc/uart2/pon_resin 保持 `disabled`。`make dtbs` 通过，DTB
+   `1c760ec9cf74389c246e1b64a032c52910f6437dab29772371a506ead5d67b81`（94,623 B）。
+   `/memory` 故意保持 `0x80000000 + 0`：Android 链由 ABL 修补，EDK2/EFI 链的 RAM
+   来自 EFI memory map（已核对 `drivers/firmware/efi/efi-init.c`）。
+3. **旧工程核实**（报告 `linux-port/docs/OLD-PROJECT-VERIFICATION.md`）：
+   它的补丁可复现（重编 DTB 与产物同哈希 `f0c3a820…`），但 **3 处勿抄**：
+   UFS `vccq2` 是 `&vreg_s4a_1p8`（S4A）不是 L7A；音量键 pin 是 `bias-disable` +
+   `power-source = <1>`；ramoops 不要 `devinfo-size`（主线不解析）。其文档只记了
+   4 轮主线盲刷，实际是 6 轮（1-4/7/8），第 8 轮完全没有结果文件。
+4. **诊断内核 Image**（`linux-port/scripts/build-image.sh`）：以旧工程
+   `bringup.config` 为配置基线（补上它缺的 `CONFIG_EFI` / `EFI_STUB` /
+   `EFI_ARMSTUB_DTB_LOADER`），另开 EFI GOP 帧缓冲控制台（`SYSFB_SIMPLEFB` +
+   `DRM_SIMPLEDRM` + `FRAMEBUFFER_CONSOLE`，日志同时上屏）、`SERIAL_EUD_EARLYCON=y`、
+   `PSTORE_RAM=y`，内置 busybox 诊断 initramfs。`Image` 30,116,352 B，
+   sha256 `3d5665ab…`，`kernelrelease = 7.3.0-rc6-rmx1931-samurai+`。
+5. **内核进固件 + 换掉错误 DTB**（EDK2 提交 `47c3efb`，说明
+   `linux-port/docs/EDK2-KERNEL-EMBED.md`）：
+   - `FdtBlob/samurai/sm8150-realme-samurai.dtb` → 新的 samurai DTB；
+   - 新增 `Platform/Realme/sm8150/LinuxKernel/{Image,SamuraiLinuxKernel.inf}`
+     （`UEFI_APPLICATION`，GUID `7a3c1e42-9d55-4c8b-b621-0f8a442e913d`，写法照抄
+     `LinuxSimpleMassStorage.inf`），`samurai.fdf.inc` 加 `INF` 行；
+   - `PlatformBm.c` 在 `#ifdef SAMURAI_LINUX_KERNEL` 下注册启动项
+     `"Linux (mainline samurai)"`，`samurai.dsc` 打开该宏；
+   - **FD 从 7 MiB 涨到 20 MiB**（`configs/sm8150.conf` 的 `FD_SIZE=0x01400000`、
+     `sm8150.fdf` 的 `NumBlocks=0x1400` 和 FD 区域 `0x01400000`），原因是内核
+     压缩后约 11.7 MB，塞不进 7 MiB。
+6. **离线逐字节验证**：FD = 20,971,520 B；boot.img 解出的 BootShim+FD 与之完全一致；
+   FV 里内核 FFS 的 PE32 载荷与 `Image` **sha256 相同**；未压缩 `FVMAIN.Fv` 中
+   `realme,samurai` 出现 1 次、`xiaomi,cepheus` **0 次**、`rmx1931-samurai` 7 次。
+
+### 18.2 产物
+
+| 文件 | 大小 | sha256 |
+|---|---|---|
+| `E:\edk2-samurai-out\boot-samurai-linux.img` | 15,185,920 | `0d1ec54656fed0550a90ac8453918a8d589d93ed890914959ffba31f2b0a3439` |
+| `E:\edk2-samurai-out\SM8150_UEFI-samurai-linux.fd` | 20,971,520 | `f6a0664d6d4ce402c668fdd46fef9d49bd8e3bbabe901e55fb550c7843d58f4b` |
+| `E:\edk2-samurai-out\Image-rmx1931-samurai` | 30,116,352 | `3d5665abcf53b1b97ee5b2c32b4aaaee45265a4c45af99463b4d3c2b35427ba3` |
+| 回滚用 | — | `backup\boot_stock_RMX1931.img`（`dfe18875…`） |
+
+EDK2 提交 `47c3efb` **只在本地，尚未 push 到 fork**。内核补丁在
+`linux-port/patches/`，设备树源在 `linux-port/dts/`。
+
+### 18.3 下一步（按顺序）
+
+**A. 真机验证（最高优先；手机接上就能做）**
+
+```powershell
+# 1) 先备好 EUD 日志通道：重启后约 3.5 s 出现 9501，那时执行
+E:\eud-host\eudtool.exe com-up
+E:\eud-host\comlog.exe COM14 600 E:\eud-host\samurai-linux.log
+# 2) 刷入并重启
+fastboot flash boot E:\edk2-samurai-out\boot-samurai-linux.img
+fastboot reboot
+# 3) 屏幕出现 UEFI 菜单后：音量键选 "Linux (mainline samurai)"，电源键确认
+```
+
+验收：`samurai-linux.log` 里出现 `Booting Linux on physical CPU`、8 核、内存、
+UFS、initramfs 横幅；屏幕上同时能看到内核日志。
+
+回滚：EUD 开着时 USB 被占用，**先长按电源 15 s 彻底断电**，再 音量下+电源 进
+fastboot，`fastboot flash boot E:\edk2-samurai-out\backup\boot_stock_RMX1931.img`。
+
+**B. 如果没输出，按这三个分支排查**
+
+1. 菜单里根本没有 "Linux (mainline samurai)" → 确认 `INF` 真的编进去了
+   （grep `workspace/Build/samurai/RELEASE_GCC5/FV/FVMAIN.inf`）以及
+   `-DSAMURAI_LINUX_KERNEL` 生效。
+2. 选了之后立刻黑屏/回菜单，EUD 里什么都没有 → 最可能是内核没拿到 DTB/命令行
+   （console 与 earlycon 都来自 DTB 的 `chosen/bootargs`）。加固：给
+   `PlatformRegisterFvBootOption` 增加一个可选命令行参数，把
+   `earlycon=eud,mmio,0x88e0000 console=tty0 loglevel=7` 作为 LoadOptions 传进去
+   （EFI stub 会用 EFI 命令行覆盖 DTB 的 bootargs，两者内容一致，无副作用）。
+3. 连 UEFI 菜单都起不来 → 第一嫌疑是 FD 7 → 20 MiB 的改动。回退：把
+   `configs/sm8150.conf`、`Platform/Qualcomm/sm8150/sm8150.fdf` 三个尺寸改回
+   `0x700000`，或先把内核精简（非必需驱动改模块）再重编。
+
+**C. 起来之后**
+
+- 用 `linux-port/refs/19781/`（Android 源）继续做：面板 SOFEF03F_M（806 行 init
+  序列已存）、触控 S3706（`i2c17`/`i2c@c80000` 地址 0x20、IRQ TLMM 122、reset
+  TLMM 54、2.8 V `pm8150_l17`、1.8 V 使能 `pm8150l_gpios 5`）、WCN3990、充电、
+  传感器；
+- 决定 30 MB `Image` 怎么管：建议放二进制子模块或用脚本生成，**不要提交进父仓**；
+- 把 EDK2 提交 push 到 `hmhmdcy/edk2-realme-x2-pro`（网络不稳，通常要重试 2-3 次）。
+
+### 18.4 不要重新推导的事实
+
+- `PcdDefaultDtPref` 默认 **TRUE**（`EmbeddedPkg.dec`，本平台没有覆盖成 FALSE）
+  → `DtPlatformDxe` 选 DT 分支，把 `FdtBlob/samurai` 通过
+  `InstallConfigurationTable(gFdtTableGuid, …)` 装进 EFI 配置表；arm64 EFI stub
+  从配置表取 DTB、从 `chosen/bootargs` 取命令行。
+- 实机 `/memory` 三段：`0x80000000 + 0x3BB00000`、`0x1_80000000 + 0x1_00000000`、
+  `0xC0000000 + 0xC0000000`；EDK2 `Mem8G` 表里 `0xC0300000 + 0x7FD00000` 是 `Conv`
+  → FD 在 `0xCE000000` 扩到 20 MiB 仍在映射范围内。
+- earlycon 框架给外设只映射 64 字节（一页）；**跨页寄存器必须自己 ioremap**。
+- Android 设备树源码就在本机：下游克隆
+  `E:\Realme X2 Pro移植主线Linux\sources\realme-downstream.git` →
+  `arch/arm64/boot/dts/19781/`（`19781` = 本机 `oppo,dtsi_no`），关键文件已复制到
+  `linux-port/refs/19781/`；可用性评估见 `linux-port/docs/ANDROID-DT-REFERENCE.md`。
+  仓库本身无需联网即可 `git ls-tree` / `cat-file` 读取。
+- 旧工程 3 处错误与 6 轮盲刷记录见 §18.1 第 3 点与核实报告。
+
+### 18.5 本会话新增文档索引
+
+| 文档 | 内容 |
+|---|---|
+| `linux-port/README.md` | Linux 主线进度总览 + 真机测试步骤 |
+| `linux-port/docs/EDK2-KERNEL-EMBED.md` | 第 2 步改动清单、DTB 链路证据、风险 |
+| `linux-port/docs/OLD-PROJECT-VERIFICATION.md` | 旧工程核实：可复现、3 处错误、轮次漏记 |
+| `linux-port/docs/ANDROID-DT-REFERENCE.md` | Android 设备树可用性与映射表、坑 |
+| `linux-port/scripts/*.sh` | 可复跑脚本（编 Image、装内核进固件、核实旧工程、抓实机真值） |
