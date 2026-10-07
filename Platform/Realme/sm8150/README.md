@@ -297,3 +297,20 @@ Windows 化还需专属 DSDT。
   are the proper goals (a real tty console, a reviewable DTS, ESP + GRUB, a real
   root filesystem, pstore as the durable log channel, upstreamable patches).
   Read that section before building anything on top of this setup.
+## Status update 2026-10-08 (button-free fastboot; fastboot can write the kernel store)
+
+* Reboot into fastboot without touching the phone: the vendor DTB's PMIC PON already
+  carries mode-bootloader = <0x02>, mainline's qcom-pon.c plus the generic reboot-mode
+  framework are enabled in the build, and this board only lacks the two mode- lines in
+  its device tree.  With a ~15 line static reboot2 helper, Linux (and later EDK2) can
+  ask for fastboot by itself.
+* fastboot can write the logdump partition, i.e. the kernel store: verified
+  byte-exact, 64 MiB in 1.8 s, so the iteration loop no longer needs Android at all.
+  The Image sits contiguously at offset 90,112 and is always 30,116,352 bytes, so
+  updating it is a single in-place write, and a corrupted FAT is recoverable in 1.8 s
+  straight from fastboot.
+* The EUD COM channel has an RX half too (host to device, registers
+  0x088E000C/0x10/0x14, documented by the official QUIC host library), so a
+  "control it like adb" command channel is a software task - useful later for rescuing
+  a firmware that is stuck before BDS, where neither adb nor fastboot exists.
+* Details, evidence and the unattended flywheel plan: HANDOVER-NEXT.md section 28.
