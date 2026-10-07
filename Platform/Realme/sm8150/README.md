@@ -205,6 +205,16 @@ mode are unavailable until the next **full power cycle**.
 
 Registers, caveats and host-side OpenOCD setup: `Platform/Realme/sm8150/EUD.md`.
 
+Current status of the SWD/JTAG half (2026-10-08): the SWD (9504) and JTAG (9503)
+functions can be enabled and driven from the PC (DAP route payload 0x00100445 /
+JTAG 0x00000090), but the AP CoreSight DAP does not answer on this retail unit:
+`ack = 0`, `freezio_latch = 1`, DPIDR reads 0. The AP debug path is gated by
+the `APPS_DBGEN_DISABLE` fuse and by OPPO's signed APDP debug policy (`dpAP.mbn`
+in the F.14 package), so SWD/JTAG cannot halt this phone. EUD COM therefore
+remains the working debug channel here; the SWD/JTAG host tooling is kept for
+debug-enabled devices. Never switch the internal DAP mux while Android is
+running - it hangs the AP and needs a full power cycle. Details in EUD.md.
+
 ## Known issues / TODO
 
 - **Volume-Down is now fixed.** It used to fail because the shared `ButtonsDxe` reads `VOL-`
@@ -314,3 +324,25 @@ Windows 化还需专属 DSDT。
   "control it like adb" command channel is a software task - useful later for rescuing
   a firmware that is stuck before BDS, where neither adb nor fastboot exists.
 * Details, evidence and the unattended flywheel plan: HANDOVER-NEXT.md section 28.
+
+## Status update 2026-10-08 (SWD/JTAG transport verified; AP DAP is fused off)
+
+* Both EUD debug peripherals can be brought up from Windows: SWD 9504 with
+  `CTLOUT_CLR 0x000E0090` + `CTLOUT_SET 0x00100445` (DAP route, no VBUS pulse)
+  and JTAG 9503 with `0x00000090` + the VBUS pulse. They bind to qdbusb and
+  expose `\\.\Qualcomm EUD SWD Device 9504\DEBUG` / `... JTAG Device 9503\DEBUG`
+  (no "(0004)" suffix). SWD STATUS is `07 01`, JTAG FREQ_RD is `0F 01`.
+* The OpenOCD-equivalent DAP connect sequence (FREQ, line reset, JTAG-to-SWD
+  0xE79E, ABORT, DP CTRL/STAT = 0x50000000, read DPIDR) returns
+  `data = 0x00000000, status = 0x00010020, ack = 0, freezio_latch = 1` in
+  every state tried, including with SRST/TRST held over SWD bitbang. Switching
+  the internal DAP mux while Android runs hangs the AP (black screen).
+* Root cause: Qualcomm fuses (`APPS_DBGEN_DISABLE` disables AP invasive debug)
+  plus an OEM-signed debug policy in the `apdp` partition. This phone's F.14
+  package carries `dpAP.mbn`, a signed ELF with the OPPO CA chain, so it cannot
+  be replaced. OpenOCD's own quickstart enables EUD at the U-Boot stage and
+  expects DPIDR 0x5ba02477, i.e. it targets debug-enabled devices.
+* Consequence for this port: EUD COM stays the primary log/debug channel
+  (firmware DEBUG(), Linux `earlycon=eud`/`console=eud`, the EudLogDxe ring).
+  Keep the SWD/JTAG tooling in `E:\eud-host` for an engineering device, and try
+  `maxcpus=1` when debugging the Linux SMP bring-up.

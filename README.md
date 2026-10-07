@@ -205,6 +205,16 @@ mode are unavailable until the next **full power cycle**.
 
 Registers, caveats and host-side OpenOCD setup: `Platform/Realme/sm8150/EUD.md`.
 
+Current status of the SWD/JTAG half (2026-10-08): the SWD (9504) and JTAG (9503)
+functions can be enabled and driven from the PC (DAP route payload 0x00100445 /
+JTAG 0x00000090), but the AP CoreSight DAP does not answer on this retail unit:
+`ack = 0`, `freezio_latch = 1`, DPIDR reads 0. The AP debug path is gated by
+the `APPS_DBGEN_DISABLE` fuse and by OPPO's signed APDP debug policy (`dpAP.mbn`
+in the F.14 package), so SWD/JTAG cannot halt this phone. EUD COM therefore
+remains the working debug channel here; the SWD/JTAG host tooling is kept for
+debug-enabled devices. Never switch the internal DAP mux while Android is
+running - it hangs the AP and needs a full power cycle. Details in EUD.md.
+
 ## Known issues / TODO
 
 - **Volume-Down is now fixed.** It used to fail because the shared `ButtonsDxe` reads `VOL-`
