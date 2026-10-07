@@ -59,7 +59,7 @@
 // the device tree's bootargs.
 //
 STATIC CHAR16  mSamuraiLinuxCmdLine[] =
-  L"earlycon=eud,mmio,0x88e0000 console=tty0 loglevel=7 ignore_loglevel panic=15 clk_ignore_unused pd_ignore_unused regulator_ignore_unused";
+  L"earlycon=eud,mmio,0x88e0000 console=tty0 loglevel=7 ignore_loglevel keep_bootcon panic=15 clk_ignore_unused pd_ignore_unused regulator_ignore_unused";
 
 /**
   SAMURAI: register the mainline Linux kernel that lives on a file system.
@@ -132,7 +132,26 @@ SamuraiRegisterKernelBootOption (
       continue;
     }
 
-    File->Close (File);
+    //
+    // Do not trust the file name alone.  The FAT driver mis-binds to the modem
+    // partition on this handset and that bogus volume even exposes a \Image, and
+    // booting a kernel that is not there makes BdsDxe die with a fatal error.  A
+    // kernel image starts with the PE signature "MZ".
+    //
+    {
+      UINT8    Magic[2] = { 0, 0 };
+      UINTN    MagicSize = sizeof (Magic);
+      BOOLEAN  LooksLikeKernel;
+
+      LooksLikeKernel = !EFI_ERROR (File->Read (File, &MagicSize, Magic)) &&
+                        (MagicSize == 2) && (Magic[0] == 'M') && (Magic[1] == 'Z');
+      File->Close (File);
+      if (!LooksLikeKernel) {
+        Print (L"[SAMURAI] a file system has a \\Image that is not a kernel, skipped\n");
+        continue;
+      }
+    }
+
     DevicePath = FileDevicePath (Handles[Index], SAMURAI_KERNEL_FILE);
     if (DevicePath == NULL) {
       continue;
