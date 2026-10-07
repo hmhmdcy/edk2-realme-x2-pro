@@ -766,8 +766,15 @@ a3b70b8 samurai: ship the ArmMmuLib full-DEBUG fix as a patch
 | `E:\edk2-samurai-out\Image-rmx1931-samurai` | 30,116,352 | `3d5665abcf53b1b97ee5b2c32b4aaaee45265a4c45af99463b4d3c2b35427ba3` |
 | 回滚用 | — | `backup\boot_stock_RMX1931.img`（`dfe18875…`） |
 
-EDK2 提交 `47c3efb` **只在本地，尚未 push 到 fork**。内核补丁在
-`linux-port/patches/`，设备树源在 `linux-port/dts/`。
+EDK2 提交：`47c3efb`（内核进固件）+ `0ccd325`（本文档），**已 push 到 fork
+`hmhmdcy/edk2-realme-x2-pro` 的 master**。内核补丁在 `linux-port/patches/`，
+设备树源在 `linux-port/dts/`。
+
+⚠️ **复现注意**：`Platform/Realme/sm8150/LinuxKernel/Image` 是构建产物，**没有进
+git**（30 MB）。全新 clone 后必须先把它放回去——`E:\edk2-samurai-out\Image-rmx1931-samurai`
+或 `linux-port\artifacts\Image-rmx1931-samurai`（sha256 `3d5665ab…`），或自己按
+`linux-port/scripts/build-image.sh` 重编——否则 `./build.sh -d samurai --toolchain GCC5`
+会因为 INF 找不到 `Image` 而直接失败。
 
 ### 18.3 下一步（按顺序）
 
