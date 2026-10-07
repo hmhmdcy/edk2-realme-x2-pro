@@ -59,7 +59,7 @@
 // the device tree's bootargs.
 //
 STATIC CHAR16  mSamuraiLinuxCmdLine[] =
-  L"earlycon=eud,mmio,0x88e0000 console=tty0 loglevel=7 ignore_loglevel keep_bootcon panic=15 clk_ignore_unused pd_ignore_unused regulator_ignore_unused";
+  L"earlycon=eud,mmio,0x88e0000 console=tty0 console=eud loglevel=7 ignore_loglevel panic=15 clk_ignore_unused pd_ignore_unused regulator_ignore_unused";
 
 /**
   SAMURAI: register the mainline Linux kernel that lives on a file system.

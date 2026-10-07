@@ -44,6 +44,7 @@ $S --enable  VT
 $S --enable  VT_CONSOLE
 # 我们自己的 EUD earlycon
 $S --enable  SERIAL_EUD_EARLYCON
+$S --enable  SERIAL_EUD_CONSOLE
 # pstore/ramoops 内置（DTS 里已经声明 0xb7e00000）
 $S --enable  PSTORE
 $S --enable  PSTORE_RAM
