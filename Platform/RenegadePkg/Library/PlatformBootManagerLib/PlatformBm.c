@@ -47,6 +47,17 @@
 STATIC CONST EFI_GUID  mSamuraiLinuxKernelGuid = {
   0x7a3c1e42, 0x9d55, 0x4c8b, { 0xb6, 0x21, 0x0f, 0x8a, 0x44, 0x2e, 0x91, 0x3d }
 };
+
+//
+// SAMURAI: same string as /chosen/bootargs of the device tree in
+// FdtBlob/samurai/.  It is passed as the LoadOptions of the boot option so
+// the log channel survives even if the device tree reaches the kernel
+// without bootargs.  CHAR16 on purpose: the EFI stub reads LoadOptions as
+// UTF-16 and an ASCII buffer would be decoded into garbage that *replaces*
+// the device tree's bootargs.
+//
+STATIC CHAR16  mSamuraiLinuxCmdLine[] =
+  L"earlycon=eud,mmio,0x88e0000 console=tty0 loglevel=7 ignore_loglevel panic=15 clk_ignore_unused pd_ignore_unused regulator_ignore_unused";
 #endif
 
 #define DP_NODE_LEN(Type)                                                      \
@@ -304,7 +315,10 @@ VOID EFIAPI AddOutput(IN EFI_HANDLE Handle, IN CONST CHAR16 *ReportText)
 STATIC
 UINT16
 PlatformRegisterFvBootOption(
-    CONST EFI_GUID *FileGuid, CHAR16 *Description, UINT32 Attributes)
+    CONST EFI_GUID *FileGuid,
+    CHAR16 *Description,
+    UINT32 Attributes,
+    CHAR16 *CommandLine OPTIONAL)
 {
   EFI_STATUS                        Status;
   INTN                              OptionIndex;
@@ -315,6 +329,7 @@ PlatformRegisterFvBootOption(
   EFI_LOADED_IMAGE_PROTOCOL *       LoadedImage;
   EFI_DEVICE_PATH_PROTOCOL *        DevicePath;
   UINT16                            OptionNumber;
+  UINTN                             OptionalDataSize;
 
   Status = gBS->HandleProtocol(
       gImageHandle, &gEfiLoadedImageProtocolGuid, (VOID **)&LoadedImage);
@@ -327,9 +342,19 @@ PlatformRegisterFvBootOption(
       AppendDevicePathNode(DevicePath, (EFI_DEVICE_PATH_PROTOCOL *)&FileNode);
   ASSERT(DevicePath != NULL);
 
+  //
+  // OptionalData becomes the loaded image's LoadOptions.  A kernel command
+  // line has to be a NUL terminated CHAR16 string, because the Linux EFI
+  // stub reads LoadOptions as UTF-16.
+  //
+  OptionalDataSize = 0;
+  if (CommandLine != NULL) {
+    OptionalDataSize = (StrLen(CommandLine) + 1) * sizeof(CHAR16);
+  }
+
   Status = EfiBootManagerInitializeLoadOption(
       &NewOption, LoadOptionNumberUnassigned, LoadOptionTypeBoot, Attributes,
-      Description, DevicePath, NULL, 0);
+      Description, DevicePath, (UINT8 *)CommandLine, (UINT32)OptionalDataSize);
   ASSERT_EFI_ERROR(Status);
   FreePool(DevicePath);
 
@@ -468,7 +493,7 @@ VOID PlatformRegisterOptionsAndKeys(VOID)
   // Register Simple Init GUI APP
   //
   UINT16 OptionSimpleInit = PlatformRegisterFvBootOption(
-      &gSimpleInitFileGuid, L"Simple Init", LOAD_OPTION_ACTIVE);
+      &gSimpleInitFileGuid, L"Simple Init", LOAD_OPTION_ACTIVE, NULL);
   Status = EfiBootManagerAddKeyOptionVariable(
       NULL, (UINT16)OptionSimpleInit, 0, &UP, NULL);
 #else
@@ -761,14 +786,15 @@ VOID EFIAPI PlatformBootManagerAfterConsole(VOID)
   // Register UEFI Shell
   //
   PlatformRegisterFvBootOption(
-      &gUefiShellFileGuid, L"UEFI Shell", LOAD_OPTION_ACTIVE);
+      &gUefiShellFileGuid, L"UEFI Shell", LOAD_OPTION_ACTIVE, NULL);
 
 #ifdef ENABLE_LINUX_SIMPLE_MASS_STORAGE
   //
   // Register Built-in Linux Kernel
   //
   PlatformRegisterFvBootOption(
-      &gLinuxSimpleMassStorageGuid, L"USB Attached SCSI (UAS) Storage", LOAD_OPTION_ACTIVE);
+      &gLinuxSimpleMassStorageGuid, L"USB Attached SCSI (UAS) Storage", LOAD_OPTION_ACTIVE,
+      NULL);
 #endif
 
 #ifdef SAMURAI_LINUX_KERNEL
@@ -778,7 +804,8 @@ VOID EFIAPI PlatformBootManagerAfterConsole(VOID)
   // com-up" on the boot menu gets the complete kernel log from earlycon.
   //
   PlatformRegisterFvBootOption(
-      &mSamuraiLinuxKernelGuid, L"Linux (mainline samurai)", LOAD_OPTION_ACTIVE);
+      &mSamuraiLinuxKernelGuid, L"Linux (mainline samurai)", LOAD_OPTION_ACTIVE,
+      mSamuraiLinuxCmdLine);
 #endif
 
 #ifdef AB_SLOTS_SUPPORT
@@ -786,7 +813,7 @@ VOID EFIAPI PlatformBootManagerAfterConsole(VOID)
   // Register Switch Slots App
   //
   PlatformRegisterFvBootOption(
-      &gSwitchSlotsAppFileGuid, L"Reboot to other slot", LOAD_OPTION_ACTIVE);
+      &gSwitchSlotsAppFileGuid, L"Reboot to other slot", LOAD_OPTION_ACTIVE, NULL);
 #endif
 
 #ifdef SAMURAI_ENABLE_EUD
