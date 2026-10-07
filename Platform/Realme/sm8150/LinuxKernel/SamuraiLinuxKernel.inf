@@ -1,3 +1,11 @@
+# DO NOT ADD THIS TO samurai.fdf.inc ANY MORE.
+#
+# The kernel is 30 MiB.  FFS files cannot exceed 16 MiB (the file header has a
+# 24 bit size field), so GenFfs silently truncated the size and corrupted FVMAIN;
+# the 62 MiB uncompressed volume then did not fit the PrePi memory pool at all.
+# The kernel now lives on the FAT "logdump" partition and PlatformBm.c finds it
+# there.  See HANDOVER-NEXT.md section 20.
+#
 # Mainline Linux kernel for realme X2 Pro (samurai), built with the EFI stub and
 # a built-in diagnostic initramfs.  Embedded in the firmware volume as a UEFI
 # application, exactly like LinuxSimpleMassStorage.efi, so BDS can start it

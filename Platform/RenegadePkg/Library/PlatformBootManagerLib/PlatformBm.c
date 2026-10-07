@@ -35,18 +35,20 @@
 #include <Protocol/PciIo.h>
 #include <Protocol/PciRootBridgeIo.h>
 #include <Protocol/PlatformBootManager.h>
+#include <Protocol/SimpleFileSystem.h>
+
+#include <Library/MemoryAllocationLib.h>
 
 #include "PlatformBm.h"
 
 #ifdef SAMURAI_LINUX_KERNEL
 //
-// SAMURAI: GUID of the mainline Linux kernel embedded in this firmware volume
-// (Platform/Realme/sm8150/LinuxKernel/SamuraiLinuxKernel.inf).  Must match the
-// FILE_GUID there.
+// SAMURAI: where the mainline Linux kernel lives on a file system.  It used to be
+// an FFS file in this firmware volume; see SamuraiRegisterKernelBootOption() for why
+// that cannot work with a 30 MB kernel.  The name is 8.3 friendly on purpose, so the
+// volume does not depend on VFAT long name support.
 //
-STATIC CONST EFI_GUID  mSamuraiLinuxKernelGuid = {
-  0x7a3c1e42, 0x9d55, 0x4c8b, { 0xb6, 0x21, 0x0f, 0x8a, 0x44, 0x2e, 0x91, 0x3d }
-};
+#define SAMURAI_KERNEL_FILE  L"\\Image"
 
 //
 // SAMURAI: same string as /chosen/bootargs of the device tree in
@@ -58,6 +60,132 @@ STATIC CONST EFI_GUID  mSamuraiLinuxKernelGuid = {
 //
 STATIC CHAR16  mSamuraiLinuxCmdLine[] =
   L"earlycon=eud,mmio,0x88e0000 console=tty0 loglevel=7 ignore_loglevel panic=15 clk_ignore_unused pd_ignore_unused regulator_ignore_unused";
+
+/**
+  SAMURAI: register the mainline Linux kernel that lives on a file system.
+
+  The kernel is a plain EFI application (CONFIG_EFI_STUB), so this is a normal
+  LoadImage - no loader stub is needed.  The device tree does not have to sit
+  next to it either: DtPlatformDxe already installed FdtBlob/samurai/ as the EFI
+  configuration table and the stub takes the device tree from there.
+
+  Keeping the kernel out of the firmware volume is deliberate:
+    - an FFS file cannot exceed 16 MiB because the size field is 24 bit, and the
+      kernel is 30 MB, so embedding it silently truncated the file and
+      corrupted FVMAIN;
+    - that volume decompressed to 62 MB, which does not fit in the PrePi/DXE
+      memory pool (PcdUefiMemPoolSize), so the DXE core was never loaded.
+
+  On this handset the kernel sits on the FAT16 "logdump" partition, a 64 MiB
+  Qualcomm log partition that the Android ROM never mounts.
+**/
+STATIC
+VOID
+SamuraiRegisterKernelBootOption (
+  VOID
+  )
+{
+  EFI_STATUS                       Status;
+  EFI_HANDLE                       *Handles;
+  UINTN                            HandleCount;
+  UINTN                            Index;
+  EFI_SIMPLE_FILE_SYSTEM_PROTOCOL  *FileSystem;
+  EFI_FILE_PROTOCOL                *Root;
+  EFI_FILE_PROTOCOL                *File;
+  EFI_DEVICE_PATH_PROTOCOL         *DevicePath;
+  EFI_BOOT_MANAGER_LOAD_OPTION     NewOption;
+  EFI_BOOT_MANAGER_LOAD_OPTION     *BootOptions;
+  UINTN                            BootOptionCount;
+  INTN                             OptionIndex;
+  UINTN                            CmdLineSize;
+
+  Status = gBS->LocateHandleBuffer (
+                  ByProtocol,
+                  &gEfiSimpleFileSystemProtocolGuid,
+                  NULL,
+                  &HandleCount,
+                  &Handles
+                  );
+  if (EFI_ERROR (Status)) {
+    Print (L"[SAMURAI] no file system to look for the kernel on\n");
+    return;
+  }
+
+  for (Index = 0; Index < HandleCount; Index++) {
+    Status = gBS->HandleProtocol (
+                    Handles[Index],
+                    &gEfiSimpleFileSystemProtocolGuid,
+                    (VOID **)&FileSystem
+                    );
+    if (EFI_ERROR (Status)) {
+      continue;
+    }
+
+    Status = FileSystem->OpenVolume (FileSystem, &Root);
+    if (EFI_ERROR (Status)) {
+      continue;
+    }
+
+    Status = Root->Open (Root, &File, SAMURAI_KERNEL_FILE, EFI_FILE_MODE_READ, 0);
+    Root->Close (Root);
+    if (EFI_ERROR (Status)) {
+      continue;
+    }
+
+    File->Close (File);
+    DevicePath = FileDevicePath (Handles[Index], SAMURAI_KERNEL_FILE);
+    if (DevicePath == NULL) {
+      continue;
+    }
+
+    CmdLineSize = (StrLen (mSamuraiLinuxCmdLine) + 1) * sizeof (CHAR16);
+    Status      = EfiBootManagerInitializeLoadOption (
+                    &NewOption,
+                    LoadOptionNumberUnassigned,
+                    LoadOptionTypeBoot,
+                    LOAD_OPTION_ACTIVE,
+                    L"Linux (mainline samurai)",
+                    DevicePath,
+                    (UINT8 *)mSamuraiLinuxCmdLine,
+                    (UINT32)CmdLineSize
+                    );
+    FreePool (DevicePath);
+    if (EFI_ERROR (Status)) {
+      break;
+    }
+
+    BootOptions = EfiBootManagerGetLoadOptions (&BootOptionCount, LoadOptionTypeBoot);
+    OptionIndex = EfiBootManagerFindLoadOption (&NewOption, BootOptions, BootOptionCount);
+    if (OptionIndex == -1) {
+      EfiBootManagerAddLoadOptionVariable (&NewOption, MAX_UINTN);
+      Print (L"[SAMURAI] kernel found, registered \"Linux (mainline samurai)\"\n");
+    } else {
+      Print (L"[SAMURAI] kernel boot option is already present\n");
+    }
+
+    //
+    // SAMURAI: start it right now.  SimpleInit is the configured boot manager on this
+    // handset and its default entry fails (it points at the boot partition, which holds
+    // this firmware), after which it resets the phone about eight seconds later - so its
+    // GUI only ever loops and nothing can be selected in time.  Booting here skips the
+    // boot order altogether and is what bring-up wants anyway.  Comment the next two
+    // lines out to get the boot menu back.
+    //
+    Print (L"[SAMURAI] starting \\Image now\n");
+    EfiBootManagerBoot (&NewOption);
+    Print (L"[SAMURAI] EfiBootManagerBoot returned - the kernel did not take over\n");
+
+    EfiBootManagerFreeLoadOption (&NewOption);
+    EfiBootManagerFreeLoadOptions (BootOptions, BootOptionCount);
+    break;
+  }
+
+  if (Index == HandleCount) {
+    Print (L"[SAMURAI] no \\Image on any file system - kernel not registered\n");
+  }
+
+  FreePool (Handles);
+}
 #endif
 
 #define DP_NODE_LEN(Type)                                                      \
@@ -798,14 +926,6 @@ VOID EFIAPI PlatformBootManagerAfterConsole(VOID)
 #endif
 
 #ifdef SAMURAI_LINUX_KERNEL
-  //
-  // SAMURAI: the mainline Linux kernel built for this device.  BDS has already
-  // enabled EUD before the console is set up, so a host PC that ran "eudtool
-  // com-up" on the boot menu gets the complete kernel log from earlycon.
-  //
-  PlatformRegisterFvBootOption(
-      &mSamuraiLinuxKernelGuid, L"Linux (mainline samurai)", LOAD_OPTION_ACTIVE,
-      mSamuraiLinuxCmdLine);
 #endif
 
 #ifdef AB_SLOTS_SUPPORT
@@ -853,6 +973,15 @@ VOID EFIAPI PlatformBootManagerAfterConsole(VOID)
 #endif
 
   PlatformSetup();
+
+#ifdef SAMURAI_LINUX_KERNEL
+  //
+  // SAMURAI: find the mainline Linux kernel on a file system, register it and start it.
+  // Kept last on purpose: EUD is enabled above, so the complete earlycon log of the
+  // kernel reaches a host PC that already ran "eudtool com-up".
+  //
+  SamuraiRegisterKernelBootOption ();
+#endif
 }
 
 /**

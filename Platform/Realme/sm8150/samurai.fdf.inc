@@ -66,5 +66,8 @@ FILE DRIVER = 8681CC5B-0DF6-441E-B4B8-E915C538F067 {
   // TX FIFO once a host PC has attached.
   INF Platform/Realme/sm8150/EudLogDxe/EudLogDxe.inf
 
-// SAMURAI: mainline Linux kernel (EFI stub) as a UEFI application in this FV.
-INF Platform/Realme/sm8150/LinuxKernel/SamuraiLinuxKernel.inf
+// SAMURAI: the mainline Linux kernel is NOT in this firmware volume.  A 30 MiB
+// blob cannot be stored as an FFS file (24 bit size field) and the 62 MiB volume
+// that resulted did not fit the PrePi memory pool, so the DXE core was never
+// loaded.  The kernel lives on the FAT partition named "logdump" instead and
+// PlatformBm.c finds it there.  See HANDOVER-NEXT.md section 20.
