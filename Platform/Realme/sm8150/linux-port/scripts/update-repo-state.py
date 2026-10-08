@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Generate the Repo state block of HANDOVER-NEXT.md from git.
+"""Generate the whole Repo state block of HANDOVER-NEXT.md from git.
 
-sync-docs-to-repo.sh calls this before it copies the documents, so the block
-cannot drift.  The tip commit named in the block is the tip at generation time
-(the health check only requires it to be an ancestor of the branch head, since
-the commit that carries the block cannot name itself).
+Invoked by sync-docs-to-repo.sh before it copies the documents, so the block can
+never drift: the commit list, the "commits ahead" count and the fork remote are
+all regenerated.  The tip commit it names is the tip at generation time and the
+health check only requires it to be an ancestor of the branch head, because a
+commit cannot name itself.
 """
 import subprocess
 import sys
@@ -19,24 +20,29 @@ def git(*a):
 
 t = open(P, encoding="utf-8").read()
 i = t.find("    master = ")
-j = t.find("    fork remote:", i)
-if i < 0 or j < 0:
+k = t.find("\nDocumentation layout", i)
+if i < 0 or k < 0:
     sys.exit("update-repo-state.py: cannot find the Repo state block in HANDOVER-NEXT.md")
 
 lines = git("log", "--oneline", "-9").splitlines()
-block = ""
-for k, l in enumerate(lines):
+out = []
+for n, l in enumerate(lines):
     sha, _, subj = l.partition(" ")
-    if k == 0:
-        block += "    master = %s  %s\n" % (sha, subj)
-    else:
-        block += "             %s  %s\n" % (sha, subj)
-ahead = git("rev-list", "--count", "origin/master..master")
-block += "\n    %s commits ahead of upstream origin/master; all of them are on the fork.\n\n" % ahead
+    out.append("%s%s  %s" % ("    master = " if n == 0 else "             ", sha, subj))
+out.append("")
+out.append("    %s commits ahead of upstream origin/master; all of them are on the fork."
+           % git("rev-list", "--count", "origin/master..master"))
+out.append("")
+out.append("    fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro")
+out.append("                 push with:  git push fork master")
+out.append("                 (a plain git push goes to upstream edk2-porting/edk2-msm - never do that)")
+out.append("")
+block = "\n".join(out) + "\n"
 
-new = t[:i] + block + t[j:]
+new = t[:i] + block + t[k + 1:]
 if new != t:
     open(P, "w", encoding="utf-8", newline="\n").write(new)
-    print("  Repo state block regenerated: master = %s, %s commits ahead" % (lines[0].split()[0], ahead))
+    print("  Repo state block regenerated: master = %s, %s commits ahead"
+          % (lines[0].split()[0], git("rev-list", "--count", "origin/master..master")))
 else:
     print("  Repo state block already current")

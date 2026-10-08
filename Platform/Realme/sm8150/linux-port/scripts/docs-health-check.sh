@@ -72,6 +72,13 @@ else
   say "                (run linux-port/scripts/sync-docs-to-repo.sh - it regenerates the block)"
   fail=1
 fi
+n=$(grep -c 'commits ahead of upstream origin/master' "$W/HANDOVER-NEXT.md")
+if [ "$n" = 1 ]; then
+  say "   ok: exactly one ahead-of-upstream line"
+else
+  say "   OUT OF DATE: $n ahead-of-upstream lines in the handover (stale duplicates)"
+  fail=1
+fi
 want=$(git -C "$RK" rev-list --count origin/master..master)
 got=$(grep -m1 'commits ahead of upstream origin/master' "$W/HANDOVER-NEXT.md" | grep -o '[0-9]\+' | head -1)
 if [ "$want" = "$got" ]; then
