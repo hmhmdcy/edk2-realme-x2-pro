@@ -62,5 +62,25 @@ say "== 6. top-level duplicate headings (a sign of a second copy) =="
 grep -rh '^# ' "$P"/*.md 2>/dev/null | sort | uniq -d | sed 's/^/   /' || true
 
 say
+say "== 7. the Repo state block in the handover agrees with the repo =="
+head=$(git -C "$RK" rev-parse --short HEAD)
+doc=$(grep -m1 '^    master = ' "$W/HANDOVER-NEXT.md" | awk '{print $3}')
+if git -C "$RK" merge-base --is-ancestor "$doc" HEAD 2>/dev/null; then
+  say "   ok: the block names $doc, which is in $head"
+else
+  say "   OUT OF DATE: the block names $doc, which is not in the repo history"
+  say "                (run linux-port/scripts/sync-docs-to-repo.sh - it regenerates the block)"
+  fail=1
+fi
+want=$(git -C "$RK" rev-list --count origin/master..master)
+got=$(grep -m1 'commits ahead of upstream origin/master' "$W/HANDOVER-NEXT.md" | grep -o '[0-9]\+' | head -1)
+if [ "$want" = "$got" ]; then
+  say "   ok: $got commits ahead of upstream origin/master"
+else
+  say "   OUT OF DATE: the handover says $got, the repo says $want"
+  fail=1
+fi
+
+say
 if [ "$fail" = 0 ]; then say "RESULT: clean"; else say "RESULT: $fail problem(s) - see above"; fi
 exit $fail

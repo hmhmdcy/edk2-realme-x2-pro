@@ -9,6 +9,9 @@ RK=/home/cy122/edk2-samurai/repo
 P="$RK/Platform/Realme/sm8150"
 MSG="${1:-docs: sync the working copy into the repo}"
 
+echo "=== refresh the Repo state block from git ==="
+python3 "$W/linux-port/scripts/update-repo-state.py"
+
 echo "=== copy ==="
 for f in README.md HANDOVER-NEXT.md EUD.md BINARIES.md DOCS-INDEX.md SWD-JTAG.md RX-CONSOLE.md EVALUATION-AND-PLAN.md; do
   if [ -f "$W/$f" ]; then cp -f "$W/$f" "$P/$f" && echo "  $f"; fi

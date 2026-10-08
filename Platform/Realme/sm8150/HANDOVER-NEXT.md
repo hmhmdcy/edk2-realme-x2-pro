@@ -104,15 +104,17 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 721d2f2  docs: drop the stale DIAG-CAPTURE.md from the mirror
+    master = 47121ad  linux-port: make the push retry in sync-docs-to-repo.sh actually retry
+             b1657b2  docs: refresh the handover - current repo state and the real open questions
+             721d2f2  docs: drop the stale DIAG-CAPTURE.md from the mirror
              15f7303  docs: split EUD.md and DIAG-CAPTURE.md into single-topic files
              7ccb70e  samurai: track the disabled boot-layout include
-             f201abf  linux-port: NN-<topic> doc names, an index, guards
-             2789b41  docs: split the 109 KB handover into a slim entry + sections
-             2d0e68e  docs: index the documentation; the two 2026-10-06 records
-             2e64714  linux-port: the real-console driver and the 0003 patch
-             9923607  gitignore: keep the built kernel Image out of the tree
-             7b9dc82  docs: EUD COM is a real console now (sections 29-30)
+             f201abf  linux-port: NN-<topic> doc names, an index, and guards against re-adding sections
+             2789b41  docs: split the 109 KB handover into a slim entry plus one file per section
+             2d0e68e  docs: index the documentation; keep the two 2026-10-06 records in the repo
+             2e64714  linux-port: sync the mirror - the real-console driver and the 0003 patch
+
+    52 commits ahead of upstream origin/master; all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
                  push with:  git push fork master
