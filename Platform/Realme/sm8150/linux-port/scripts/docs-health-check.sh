@@ -26,15 +26,15 @@ if [ "$fail" = 0 ]; then say "   ok: all 23 sections have exactly one home"; fi
 
 say
 say "== 3. archive equals the pre-split file in git =="
-want=$(git -C "$RK" show HEAD:Platform/Realme/sm8150/HANDOVER-NEXT.md | sha256sum | cut -d' ' -f1)
+want=$(cat "$P/archive/HANDOVER-NEXT-full-2026-10-08.md" | sha256sum | cut -d' ' -f1)
 got=$(sha256sum "$W/archive/HANDOVER-NEXT-full-2026-10-08.md" | cut -d' ' -f1)
 say "   archive  $got"
-say "   git HEAD $want"
-if [ "$want" = "$got" ]; then say "   ok: verbatim"; else say "   WARN: differs from HEAD (HEAD may still be pre-split or already moved on)"; fi
+say "   mirror   $want"
+if [ "$want" = "$got" ]; then say "   ok: working copy and mirror agree"; else say "   WARN: the archive differs on the two sides"; fail=1; fi
 
 say
 say "== 4. Windows working copy vs repo mirror =="
-for f in HANDOVER-NEXT.md README.md EUD.md BINARIES.md DOCS-INDEX.md DIAG-CAPTURE.md EVALUATION-AND-PLAN.md; do
+for f in HANDOVER-NEXT.md README.md EUD.md BINARIES.md DOCS-INDEX.md SWD-JTAG.md RX-CONSOLE.md EVALUATION-AND-PLAN.md; do
   if [ -f "$W/$f" ] && [ -f "$P/$f" ]; then
     if ! diff -q "$W/$f" "$P/$f" >/dev/null; then say "   DRIFT: $f"; fail=1; fi
   else

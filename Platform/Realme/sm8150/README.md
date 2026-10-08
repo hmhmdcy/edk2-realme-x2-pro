@@ -213,7 +213,7 @@ the `APPS_DBGEN_DISABLE` fuse and by OPPO's signed APDP debug policy (`dpAP.mbn`
 in the F.14 package), so SWD/JTAG cannot halt this phone. EUD COM therefore
 remains the working debug channel here; the SWD/JTAG host tooling is kept for
 debug-enabled devices. Never switch the internal DAP mux while Android is
-running - it hangs the AP and needs a full power cycle. Details in EUD.md.
+running - it hangs the AP and needs a full power cycle. Details in RX-CONSOLE.md.
 
 ## Known issues / TODO
 
@@ -367,7 +367,7 @@ console, and the receive side is understood well enough to be used.
   0x02 register dump, 0x03 status).  Typing: [0x82][len][payload] is inserted
   into the tty, so a shell on /dev/ttyEUD0 can be driven from the PC.
 * The RX payload register is 0x14 (a FIFO read port); 0x0c/0x10 are latches that
-  hold the last message's header.  Details in EUD.md.
+  hold the last message's header.  Details in RX-CONSOLE.md.
 * Caveat: reading 0x14 too eagerly wedges the EUD block - the console goes
   silent until a full power cycle.  The payload read must be gated on a
   completed header.

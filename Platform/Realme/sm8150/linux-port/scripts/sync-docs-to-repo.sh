@@ -10,7 +10,7 @@ P="$RK/Platform/Realme/sm8150"
 MSG="${1:-docs: sync the working copy into the repo}"
 
 echo "=== copy ==="
-for f in README.md HANDOVER-NEXT.md EUD.md BINARIES.md DOCS-INDEX.md DIAG-CAPTURE.md EVALUATION-AND-PLAN.md; do
+for f in README.md HANDOVER-NEXT.md EUD.md BINARIES.md DOCS-INDEX.md SWD-JTAG.md RX-CONSOLE.md EVALUATION-AND-PLAN.md; do
   if [ -f "$W/$f" ]; then cp -f "$W/$f" "$P/$f" && echo "  $f"; fi
 done
 for d in archive reference sessions; do
