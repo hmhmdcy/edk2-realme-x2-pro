@@ -7,7 +7,7 @@ side of this port used to live only on one disk, with no git history at all).
 It holds everything that is small and reproducible:
 
     README.md        port status and how to build/flash
-    docs/            section 18-21 companions, old-project verification, EDK2 embed
+    docs/            NN-<topic>.md companions for handover sections 19-28
     dts/             sm8150-samurai.dts (the mainline device tree source)
     patches/         0001 EUD earlycon, 0002 samurai DTS
     scripts/         build/flash/verify helpers (incl. comlog2.cpp)

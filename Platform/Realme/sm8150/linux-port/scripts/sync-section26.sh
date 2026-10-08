@@ -2,12 +2,20 @@
 set -e
 W="/mnt/e/RealmeX2Pro edk2/linux-port"
 HW="/mnt/e/RealmeX2Pro edk2/HANDOVER-NEXT.md"
+
+# 2026-10-08: HANDOVER-NEXT.md is an index now - a section lives in exactly one
+# file (linux-port/docs/NN-<topic>.md or sessions/NN-<topic>.md).  Never append
+# a section body back into the handover.
+if grep -q '^## History index' "$HW" 2>/dev/null; then
+  echo "HANDOVER-NEXT.md is an index now - nothing to append; edit the section file instead."
+  exit 0
+fi
 RW="/mnt/e/RealmeX2Pro edk2/README.md"
 RK=/home/cy122/edk2-samurai/repo
 D="$RK/Platform/Realme/sm8150/linux-port"
 
 if grep -q '^## 26\. ' "$HW"; then echo "section 26 already present"; else
-  cat "$W/docs/section26-real-machine-review.md" >> "$HW"
+  cat "$W/docs/26-real-machine-review.md" >> "$HW"
 fi
 grep -n '^## 26\.' "$HW"
 
