@@ -92,6 +92,7 @@ DTB 的两条路径都要照顾（否则猜不准哪条生效）：
 | `parse-eud.ps1` | 把 `eud-*.log` 里的 `[id][len][payload]` 帧**重组成可读文本**（原始日志每 4 字节就被 `..` 打断，直接 grep 没用） |
 | `linux-port/scripts/eud-step.ps1` | session 32 的单步发送/抓包；finally 关端口，tty 字符可用 -Ack 在受理后停重发并继续排空 2 s |
 | `linux-port/scripts/decode-eud-capture.py` | 重组上述 .raw 抓包并保存 .txt；报告 frames / stray bytes |
+| `linux-port/scripts/eud-terminal.cmd` / `.ps1` | 临时交互终端，ASCII 输入逐字受理重试、TX 多字节帧重组；Ctrl-] 关闭端口后再发 F1。用法见 linux-port/docs/EUD-TERMINAL.md |
 
 `eudtool.exe` 命令：`list|dump|probe|ctlin|ctlout|attach|detach|com-up|com-off|swd-up|swd-gpio|swd-off|jtag-up|jtag-off|dbg-up|dbg-off|raw HEX...|rst|set|clr`
 

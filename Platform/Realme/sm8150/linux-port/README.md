@@ -8,6 +8,11 @@
 > `scripts/eud-step.ps1` 每次只操作一帧，finally 关闭串口；
 > `scripts/decode-eud-capture.py` 重组原始 `.raw` 抓包。
 
+当前交互入口：`scripts/eud-terminal.cmd`（工具副本在 `E:\eud-host\`）。
+输入自动拆成单字符帧并等受理，输出按多字节帧重组；可用 `-Command 'uname -r'`
+一次执行命令。使用方法与限制见 [临时终端指南](docs/EUD-TERMINAL.md)。
+原生多字节 RX 仍未解决，但不再要求手动为每个字符运行一次探针。
+
 全新开始，不使用 `E:\Realme X2 Pro移植主线Linux`（旧工程已废弃；它的准确性核实
 结论见 [docs/OLD-PROJECT-VERIFICATION.md](docs/OLD-PROJECT-VERIFICATION.md)，
 里面有 3 处**必须丢弃**的错误写法）。

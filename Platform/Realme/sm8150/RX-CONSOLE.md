@@ -13,6 +13,11 @@
 > [session 33](sessions/33-rx-access-and-production-policy.md)。当前恢复版是
 > `logdump-rx33-console.img`；RX 状态、头部与首次 DAT 读取共用 TX 锁。
 
+> **临时交互入口（2026-10-09）：** `linux-port/scripts/eud-terminal.cmd`，工具副本
+> 在 `E:\eud-host\`。手机 TX 已能用每帧 4 字节组成长输出；主机输入自动拆成长度 1
+> 帧、等受理后继续。见 [终端指南](linux-port/docs/EUD-TERMINAL.md)。这是绕开原生
+> 多字节 RX 的临时方案，内核无需重刷。
+
 ---
 
 ## RX side: registers, framing and the console driver (2026-10-08)

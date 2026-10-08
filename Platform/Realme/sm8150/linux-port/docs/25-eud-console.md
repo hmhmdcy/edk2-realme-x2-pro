@@ -4,6 +4,10 @@
 
 ## 25. EUD 真 console 落地 + 固件 cmdline/DTB 更新，等待真机验证（2026-10-07 18:1x）
 
+> 历史版本记录。当前 tty 和 console 已搭建并实测，单字符 RX 可用；下文
+> “TX-only”不再代表当前状态。临时交互入口见 [EUD-TERMINAL.md](EUD-TERMINAL.md)，
+> 原生多字节 RX 未决情况见顶层 RX-CONSOLE.md 与 sessions/33。
+
 ### 25.0 产物（都已离线校验）
 
 | 文件 | 大小 | sha256 | 用途 |

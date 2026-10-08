@@ -4,6 +4,11 @@
 
 ## 29. EUD COM console, tty and command channel (2026-10-08) - measured
 
+> Historical bring-up record. The current protocol is 0x90/length 1 for real
+> tty input and length 2 for F1. Consecutive payload reads remain unverified;
+> do not treat the older FIFO-pop interpretation below as the current result.
+> See sessions 32/33 and linux-port/docs/EUD-TERMINAL.md for current operation.
+
 ### 29.1 What the hardware really does
 
 Host to device framing, verified byte by byte on this unit:

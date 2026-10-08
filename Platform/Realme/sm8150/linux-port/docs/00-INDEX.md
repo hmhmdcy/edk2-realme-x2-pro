@@ -16,6 +16,7 @@
 | `26-real-machine-review.md` | real-hardware review: console works, two culprits, panic loop |
 | `27-userspace-and-shortcuts.md` | userspace reached; console to /dev/kmsg; shortcuts vs goals |
 | `28-flywheel.md` | button-free fastboot, EUD COM RX, verified fastboot write path |
+| `EUD-TERMINAL.md` | temporary interactive host terminal; one-byte RX frames with ACK/retry, decoded TX and logs |
 | `ANDROID-DT-REFERENCE.md` | where the Android downstream DTS lives and what was cherry-picked |
 | `EDK2-KERNEL-EMBED.md` | how the kernel is embedded in the firmware volume |
 | `OLD-PROJECT-VERIFICATION.md` | the earlier (2026-10-05) project: what is reusable, what is wrong |

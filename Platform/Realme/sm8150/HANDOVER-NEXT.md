@@ -59,7 +59,12 @@ before spending another hardware cycle. The downstream `drivers/soc/qcom/eud.c`
 and QUIC host library established the register layout and framing; multi-byte
 RX on this unit is still open.
 
-1. Continue the remaining multi-byte RX investigation (session 33). The original
+1. Use the temporary terminal to continue driver bring-up now:
+   `E:\eud-host\eud-terminal.cmd -Reconnect` (guide: linux-port/docs/EUD-TERMINAL.md).
+   It queues ASCII input as single-byte frames with receipt/retry and decodes
+   multi-byte TX output; it does not require another kernel flash. Native RX
+   investigation should not hold up all Linux port work.
+   Remaining multi-byte RX investigation is recorded in session 33. The original
    probe and the single-character fix are done: RX_DAT must be read before any
    printk; [90][01][char] reaches tty. The offset-2 hypothesis is unsupported.
    a. Keep len 3..14 as bounded diagnostics, buffer before printing and do not
@@ -84,7 +89,7 @@ RX on this unit is still open.
    fastboot with no key presses, and no reboot2 helper was needed (the driver is
    built in, so it calls kernel_restart("bootloader") directly).  The hands-free
    flywheel is closed - FLYWHEEL.md, sessions/31-flywheel-f1-verified.md.
-4. Then the real port work: panel SOFEF03F_M, touch S3706, WCN3990, charger,
+4. Continue the port work with that terminal: panel SOFEF03F_M, touch S3706, WCN3990, charger,
    sensors, and the device-tree clean-ups
    (`sessions/27-userspace-and-shortcuts.md`, 27.4 goal 2).
 5. Optional: a samurai DSDT for Windows, a startup.nsh for the EFI shell, a
@@ -139,7 +144,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 79b0f9d  eud: protect RX header access and record FIFO investigations
+    master = 38bf2b8  docs: mark raw EUD captures as binary fixtures
+             79b0f9d  eud: protect RX header access and record FIFO investigations
              f9b6f8a  eud: fix single-character RX and record hardware probe evidence
              649c90d  linux-port: mirror the Linux side of the port into the repo
              2184dc1  docs: anchor the Repo state count to the tip the block names
@@ -147,9 +153,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              4903417  docs: generate the handover Repo state block from git, and check it
              47121ad  linux-port: make the push retry in sync-docs-to-repo.sh actually retry
              b1657b2  docs: refresh the handover - current repo state and the real open questions
-             721d2f2  docs: drop the stale DIAG-CAPTURE.md from the mirror
 
-    58 commits ahead of upstream origin/master, as of the tip named above;
+    59 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -294,6 +299,7 @@ the only copy.
 | 31 | Flywheel F1: EUD command channel reboots Linux into fastboot; payload probe still open | `sessions/31-flywheel-f1-verified.md` |
 | 32 | RX probe 90 90; pre-read printk interferes; single-character input fixed; multi-byte advancement open | `sessions/32-rx-printk-interference.md` |
 | 33 | RX access, host/upstream audits and production-policy evidence; multi-byte advancement still open | `sessions/33-rx-access-and-production-policy.md` |
+| 34 | Temporary host terminal; multi-byte TX, single-byte RX bridge, tty/console and keyboard verification | `sessions/34-temporary-eud-terminal.md` |
 
 Rules that keep this file from growing again:
 
