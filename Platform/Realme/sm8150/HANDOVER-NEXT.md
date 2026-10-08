@@ -139,7 +139,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = f9b6f8a  eud: fix single-character RX and record hardware probe evidence
+    master = 79b0f9d  eud: protect RX header access and record FIFO investigations
+             f9b6f8a  eud: fix single-character RX and record hardware probe evidence
              649c90d  linux-port: mirror the Linux side of the port into the repo
              2184dc1  docs: anchor the Repo state count to the tip the block names
              6658232  docs: regenerate the whole Repo state block, no stale duplicate
@@ -147,9 +148,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              47121ad  linux-port: make the push retry in sync-docs-to-repo.sh actually retry
              b1657b2  docs: refresh the handover - current repo state and the real open questions
              721d2f2  docs: drop the stale DIAG-CAPTURE.md from the mirror
-             15f7303  docs: split EUD.md and DIAG-CAPTURE.md into single-topic files
 
-    57 commits ahead of upstream origin/master, as of the tip named above;
+    58 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
