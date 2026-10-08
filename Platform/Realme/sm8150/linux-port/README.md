@@ -1,5 +1,13 @@
 # Linux 移植工作区（Realme X2 Pro / RMX1931 / samurai）
 
+> 2026-10-08 session 32：本目录 `eud.c` 已更新为 WSL 实测版本，含 `[90][02]`
+> 飞轮与读取前不打印的单字符 RX 修复。旧 patches/0003 之后还需把本文件复制到
+> 内核 `drivers/tty/serial/eud.c` 再构建；旧补丁不代表目前全部 bring-up 修改。
+> 多字节 RX 仍是诊断，不向 tty 注入。证据与镜像哈希见
+> `../sessions/32-rx-printk-interference.md`，操作流程见 `../FLYWHEEL.md`。
+> `scripts/eud-step.ps1` 每次只操作一帧，finally 关闭串口；
+> `scripts/decode-eud-capture.py` 重组原始 `.raw` 抓包。
+
 全新开始，不使用 `E:\Realme X2 Pro移植主线Linux`（旧工程已废弃；它的准确性核实
 结论见 [docs/OLD-PROJECT-VERIFICATION.md](docs/OLD-PROJECT-VERIFICATION.md)，
 里面有 3 处**必须丢弃**的错误写法）。

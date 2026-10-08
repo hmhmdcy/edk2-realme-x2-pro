@@ -12,9 +12,10 @@
 | DOCS-INDEX.md | 本文：文档地图、同步方式与维护规则 |
 | EUD.md | EUD 设备事实、寄存器、CTL/COM 协议、固件日志环、ArmMmuLib 崩溃真因 |
 | SWD-JTAG.md | EUD SWD 9504 / JTAG 9503：传输层可用，AP DAP 被熔丝＋签名 debug policy 挡住 |
-| RX-CONSOLE.md | EUD RX 寄存器 0x0c/0x10/0x14、组帧、tty console 驱动、0x14 读太急会卡死 |
+| RX-CONSOLE.md | EUD RX 寄存器、组帧、tty console；最新单字符修复与多字节未决问题，保留历史探针记录 |
 | BINARIES.md | 设备 blob 来源、ButtonsDxe DEPEX 补丁 |
 | linux-port/README.md、linux-port/docs/00-INDEX.md | 主线 Linux 侧（内核、DTB、patch、脚本、参考） |
+| FLYWHEEL.md | 免按键测试飞轮：命令表、一轮流程、构建打包、硬约束与坑 |
 
 ## 2. 历史记录放在哪
 
@@ -24,6 +25,8 @@
 | sessions/NN-<topic>.md | 旧第 12–18、29、30 节：EDK2 与内核侧会话（NN = 旧节号） |
 | sessions/2026-10-06-*.md | 两篇早期记录：诊断镜像抓取、EUD 首次试水（原先拼在 DIAG-CAPTURE.md 里） |
 | linux-port/docs/NN-<topic>.md | 旧第 19–28 节：主线 Linux 侧会话，命名与索引见该目录的 00-INDEX.md |
+| sessions/31-flywheel-f1-verified.md | 旧第 31 节：飞轮 F1 打通（命令通道 `[90][02]`→fastboot、实测证据、主机端口卡死事故） |
+| sessions/32-rx-printk-interference.md | 原探针 90 90；去掉前置 printk 后单字符 RX 修复、多字节仍未解；跨机型源码与真机证据 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
@@ -49,4 +52,4 @@
 
 - HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
 - 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD 打开时占 USB，彻底断电要长按电源约 15 s。
-- 待办：HANDOVER-NEXT.md 第 1 节列的五步（EUD payload 读取加门控 → PON reboot-mode → 面板/触控/WCN/充电 → Windows DSDT 等）。
+- 待办：HANDOVER-NEXT.md 第 1 节。飞轮已可无按键迭代；原 payload 探针已跑，单字符 RX 已有真实回显，多字节推进仍待解（`RX-CONSOLE.md`、`sessions/32-rx-printk-interference.md`）。

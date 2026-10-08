@@ -28,36 +28,65 @@ EUD - the only console this board has - all verified on hardware today:
 * The firmware command line was rebuilt to
   "earlycon=eud,mmio,0x88e0000 console=tty0 console=eud ..." with keep_bootcon
   removed.
-* RX command channel [0x81][cmd] works (ping, register dump, status), and
-  [0x82][char] types into the shell on /dev/ttyEUD0.
-* The RX payload register was found: 0x14 is the FIFO read port while 0x0c/0x10
-  are latches (`sessions/29-eud-console-tty-command-channel.md`, 29.1).
-* Known problem: the first payload implementation reads 0x14 too eagerly and
-  wedges the EUD COM block - the console goes silent until a full power cycle.
-  Reading 0x14 must happen only when a complete payload is certain.
+* Current host frames use id 0x90. [90][01][char] types real payload into the
+  shell; sending i, d, then newline returned `uid=0 gid=0`. Older 0x81/0x82
+  header-only shortcuts are historical and are not the current protocol.
+* The RX payload register is 0x14 (a FIFO read port); 0x0c/0x10 are latches
+  holding the last message's header, and `EUD_INT_RX` = BIT(0) of INT_STATUS_1
+  (0x44) is the payload-available gate.  The downstream Qualcomm driver was
+  found while searching, and its receive function reads the id latch first,
+  filters on `UART_ID`, then reads `len` bytes from 0x14 (RX-CONSOLE.md).
+* The RX command channel WORKS.  id 0x90 (= the upstream UART_ID, confirmed in
+  two kernel/msm mirrors) is accepted; the length field carries the command, and
+  `[90][02]` makes Linux reboot straight into fastboot - verified on hardware,
+  no key presses.  That closes the hands-free flywheel (FLYWHEEL.md).
+* Session 32 ran the original probe: it returned 90 90. Removing printk before
+  RX_DAT exposes the real first payload byte (ABC -> 41, DEFG -> 44), and
+  [90][01][char] now reaches tty with real echo. Do not skip two header bytes.
+  Multi-byte advancement remains unresolved: burst reads repeat the first byte,
+  a buffered one-byte-per-poll probe returns 41 90 90. See RX-CONSOLE.md and
+  sessions/32-rx-printk-interference.md for hardware evidence and device references.
 
 ## 1. What to do next, in order
 
-1. Choose the phone state you want:
-     * last verified-good kernel:  fastboot flash logdump logdump-tty6.img
-       (clean console, /dev/ttyEUD0, header command channel)
-     * back to Android:            .\flash-and-test-rx.ps1 -RestoreAndroid
-2. Make the RX payload read safe (`sessions/29-eud-console-tty-command-channel.md`, 29.5): read 0x14 exactly `len` times,
-   only when the header latch changed, with `len` validated to 1..16, and never
-   touch 0x14 otherwise.  Typing over EUD then becomes a reliable interactive
-   shell - the goal "control it like adb, without Android".
-3. PON reboot-mode plus the two DT mode lines plus a reboot2 helper, so
-   "reboot bootloader / recovery / EDL" can be commanded over EUD.  Together
-   with the verified `fastboot flash logdump` (1.8 s) that closes the hands-free
-   flywheel (`sessions/28-flywheel.md`, 28.4/28.6).
+Process rule agreed on 2026-10-08: when an experiment has failed two or three
+times in a row, STOP and search for an existing implementation or document
+before spending another hardware cycle. The downstream `drivers/soc/qcom/eud.c`
+and QUIC host library established the register layout and framing; multi-byte
+RX on this unit is still open.
+
+1. Continue the remaining multi-byte RX investigation (session 32). The original
+   probe and the single-character fix are done: RX_DAT must be read before any
+   printk; [90][01][char] reaches tty. The offset-2 hypothesis is unsupported.
+   a. Keep len 3..14 as bounded diagnostics, buffer before printing and do not
+      inject repeated/stale probe bytes into tty. Length 3 is not recovery.
+   b. Investigate the actual RX completion/advance handshake and the effect of
+      TX/MMIO access, using the primary-source comparison already recorded.
+      Repeated first-byte reads survive 200 us pacing and readb; 20 ms spacing
+      alone produces 41 90 90. Do not repeat those experiments unchanged.
+   c. Only then wire more commands (recovery / EDL) into the length table.
+   Reminders that still hold: start the host capture BEFORE the kernel boots so
+   the device TX FIFO never backs up, and a silent EUD does not mean a crashed
+   kernel - try a full power cycle first.  Host writes are only staged about 1
+   time in 3, so send every command 3-5 times.
+2. Latest kernel artifact: `logdump-rx32-console.img`, with the single-character
+   RX fix and bounded multi-byte probe; older baseline `logdump-tty6.img` remains
+   available. Current measured state and hashes are in session 32. Back to Android with
+   `cd E:\edk2-samurai-out; .\flash-and-test-rx.ps1 -RestoreAndroid`.
+3. DONE 2026-10-08 evening: PON reboot-mode plus the two DT mode lines are in and
+   verified.  `[90][02]` on the EUD command channel reboots Linux straight into
+   fastboot with no key presses, and no reboot2 helper was needed (the driver is
+   built in, so it calls kernel_restart("bootloader") directly).  The hands-free
+   flywheel is closed - FLYWHEEL.md, sessions/31-flywheel-f1-verified.md.
 4. Then the real port work: panel SOFEF03F_M, touch S3706, WCN3990, charger,
-   sensors, and the device-tree clean-ups in `sessions/27-userspace-and-shortcuts.md`, 27.4 goal 2.
+   sensors, and the device-tree clean-ups
+   (`sessions/27-userspace-and-shortcuts.md`, 27.4 goal 2).
 5. Optional: a samurai DSDT for Windows, a startup.nsh for the EFI shell, a
    persistent UEFI variable store, and the ESP + GRUB end state.
 
-Every hardware step needs a full power cycle first: hold Power ~15 s (EUD keeps
-the USB port until then, and a wedged EUD block only clears that way), then
-Vol-Down + Power for fastboot.  Never flash anything but boot and logdump; see
+Normal iterations use [90][02] -> fastboot, flash logdump, then reboot. A full
+power cycle is a fallback for a wedged EUD block (hold Power ~15 s, then
+Vol-Down + Power for fastboot). Never flash anything but boot and logdump; see
 section 6 for the safety rules.
 
 ## 2. Verified hardware facts (do not re-derive)
@@ -104,17 +133,17 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 6658232  docs: regenerate the whole Repo state block, no stale duplicate
+    master = 649c90d  linux-port: mirror the Linux side of the port into the repo
+             2184dc1  docs: anchor the Repo state count to the tip the block names
+             6658232  docs: regenerate the whole Repo state block, no stale duplicate
              4903417  docs: generate the handover Repo state block from git, and check it
              47121ad  linux-port: make the push retry in sync-docs-to-repo.sh actually retry
              b1657b2  docs: refresh the handover - current repo state and the real open questions
              721d2f2  docs: drop the stale DIAG-CAPTURE.md from the mirror
              15f7303  docs: split EUD.md and DIAG-CAPTURE.md into single-topic files
              7ccb70e  samurai: track the disabled boot-layout include
-             f201abf  linux-port: NN-<topic> doc names, an index, and guards against re-adding sections
-             2789b41  docs: split the 109 KB handover into a slim entry plus one file per section
 
-    54 commits ahead of upstream origin/master, as of the tip named above;
+    56 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -176,12 +205,25 @@ overrides, PlatformBm.c, EUD.md) is in git log and in sessions/15-17.
    FVMAIN.Fv or the module .obj instead.
 5. The submodule files must be committed in the submodule repo, not just the
    parent (this is why the blobs "would not upload" earlier).
-6. While EUD is enabled the USB port is gone (no fastboot / no UMS) until a
-   full power cycle.  A warm reboot can keep EUD on.
+6. While EUD is enabled it owns the USB port. The verified [90][02] handler
+   disables EUD before restarting to bootloader; an ordinary warm reboot can
+   leave EUD on and hide fastboot. Use the flywheel first, full power cycle as
+   a fallback.
+
+7. Trial and error instead of looking it up.  The EUD RX protocol took many
+   hardware cycles of guessing (burst reads, status gating, header-change
+   gating) before a search found the answer in the downstream Qualcomm driver:
+   `EUD_INT_RX` = BIT(0) of INT_STATUS_1, the id latch is read first and
+   filtered against `UART_ID`, then the payload comes out of 0x14.  Rule agreed
+   with the user on 2026-10-08: after two or three failed experiments, stop and
+   search for an existing implementation, driver or document first.  A useful
+   technique for source that fetch tools cannot open is a quoted-string probe
+   with Exa, e.g. `"static void eud_uart_rx(struct eud_chip *chip)"`, which
+   returns a snippet from the middle of the file.
 
 ## 6. Safety
 
-* Only ever flash the boot partition.
+* Only flash boot (firmware changes) and logdump (the FAT-contained kernel).
 * Keep E:\edk2-samurai-out\backup\boot_stock_RMX1931.img - it is the only way
   back to Android.
 * The "USB Attached SCSI (UAS) Storage" boot option exposes the phone raw UFS
@@ -193,9 +235,11 @@ overrides, PlatformBm.c, EUD.md) is in git log and in sessions/15-17.
 
 * Can the log channel survive the UEFI -> OS handoff (useful for Linux boot
   debugging), and what does the Android kernel ttyEUD see at that point?
-* The RX payload read stays dangerous until step 2 of section 1 lands: 0x14 may
-  only be read exactly len times, once the header latch has changed, or the EUD
-  block wedges until a full power cycle (sessions/29-..., 29.5).
+* Multi-byte RX: id 0x90 and the first payload byte are verified. Pre-read printk
+  changes the result to 0x90; the underlying hardware mechanism and subsequent
+  byte advancement remain unproven. Current probes gate only the message start,
+  collect at most len bytes and print afterward; they never feed unverified
+  multi-byte data to tty (RX-CONSOLE.md, session 32).
 
 Answered since; kept here so nobody re-opens them:
 
@@ -240,6 +284,8 @@ the only copy.
 | 28 | Button-free fastboot and the hands-off flywheel | `linux-port/docs/28-flywheel.md` |
 | 29 | EUD COM console, tty and command channel | `sessions/29-eud-console-tty-command-channel.md` |
 | 30 | Current artifacts and how to drive the phone | `sessions/30-artifacts-and-workflow.md` |
+| 31 | Flywheel F1: EUD command channel reboots Linux into fastboot; payload probe still open | `sessions/31-flywheel-f1-verified.md` |
+| 32 | RX probe 90 90; pre-read printk interferes; single-character input fixed; multi-byte advancement open | `sessions/32-rx-printk-interference.md` |
 
 Rules that keep this file from growing again:
 

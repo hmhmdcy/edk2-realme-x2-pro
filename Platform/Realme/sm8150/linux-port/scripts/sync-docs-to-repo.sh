@@ -13,7 +13,7 @@ echo "=== refresh the Repo state block from git ==="
 python3 "$W/linux-port/scripts/update-repo-state.py"
 
 echo "=== copy ==="
-for f in README.md HANDOVER-NEXT.md EUD.md BINARIES.md DOCS-INDEX.md SWD-JTAG.md RX-CONSOLE.md EVALUATION-AND-PLAN.md; do
+for f in README.md HANDOVER-NEXT.md EUD.md BINARIES.md DOCS-INDEX.md SWD-JTAG.md RX-CONSOLE.md FLYWHEEL.md EVALUATION-AND-PLAN.md; do
   if [ -f "$W/$f" ]; then cp -f "$W/$f" "$P/$f" && echo "  $f"; fi
 done
 for d in archive reference sessions; do
