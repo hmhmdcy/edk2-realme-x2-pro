@@ -31,7 +31,7 @@ EUD - the only console this board has - all verified on hardware today:
 * RX command channel [0x81][cmd] works (ping, register dump, status), and
   [0x82][char] types into the shell on /dev/ttyEUD0.
 * The RX payload register was found: 0x14 is the FIFO read port while 0x0c/0x10
-  are latches (section 29.1).
+  are latches (`sessions/29-eud-console-tty-command-channel.md`, 29.1).
 * Known problem: the first payload implementation reads 0x14 too eagerly and
   wedges the EUD COM block - the console goes silent until a full power cycle.
   Reading 0x14 must happen only when a complete payload is certain.
@@ -42,16 +42,16 @@ EUD - the only console this board has - all verified on hardware today:
      * last verified-good kernel:  fastboot flash logdump logdump-tty6.img
        (clean console, /dev/ttyEUD0, header command channel)
      * back to Android:            .\flash-and-test-rx.ps1 -RestoreAndroid
-2. Make the RX payload read safe (section 29.5): read 0x14 exactly `len` times,
+2. Make the RX payload read safe (`sessions/29-eud-console-tty-command-channel.md`, 29.5): read 0x14 exactly `len` times,
    only when the header latch changed, with `len` validated to 1..16, and never
    touch 0x14 otherwise.  Typing over EUD then becomes a reliable interactive
    shell - the goal "control it like adb, without Android".
 3. PON reboot-mode plus the two DT mode lines plus a reboot2 helper, so
    "reboot bootloader / recovery / EDL" can be commanded over EUD.  Together
    with the verified `fastboot flash logdump` (1.8 s) that closes the hands-free
-   flywheel (sections 28.4 and 28.6).
+   flywheel (`sessions/28-flywheel.md`, 28.4/28.6).
 4. Then the real port work: panel SOFEF03F_M, touch S3706, WCN3990, charger,
-   sensors, and the device-tree clean-ups in section 27.4 goal 2.
+   sensors, and the device-tree clean-ups in `sessions/27-userspace-and-shortcuts.md`, 27.4 goal 2.
 5. Optional: a samurai DSDT for Windows, a startup.nsh for the EFI shell, a
    persistent UEFI variable store, and the ESP + GRUB end state.
 
@@ -104,24 +104,42 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 996c9a2  samurai: DEBUG over EUD COM via EudSerialPortLib
-                        (hardware verified)
-             5b7196e  samurai: EUD verified on hardware; document Windows CTL
-                        path, COM 9505 bring-up and driver
-             11a52b2  docs: fix the offline-copy section in BINARIES.md
-    fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro (push with
-                 git push fork master - plain "git push" goes to upstream!)
+    master = 721d2f2  docs: drop the stale DIAG-CAPTURE.md from the mirror
+             15f7303  docs: split EUD.md and DIAG-CAPTURE.md into single-topic files
+             7ccb70e  samurai: track the disabled boot-layout include
+             f201abf  linux-port: NN-<topic> doc names, an index, guards
+             2789b41  docs: split the 109 KB handover into a slim entry + sections
+             2d0e68e  docs: index the documentation; the two 2026-10-06 records
+             2e64714  linux-port: the real-console driver and the 0003 patch
+             9923607  gitignore: keep the built kernel Image out of the tree
+             7b9dc82  docs: EUD COM is a real console now (sections 29-30)
 
-New/changed in 996c9a2:
-    Platform/Realme/sm8150/Library/EudSerialPortLib/{EudSerialPortLib.c,.inf}
-    Platform/Realme/sm8150/samurai.dsc      (SerialPortLib scoped overrides)
-    Platform/RenegadePkg/Library/PlatformBootManagerLib/PlatformBm.c
-                                            (EUD enable + COM marker)
-    Platform/Realme/sm8150/EUD.md
+    fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
+                 push with:  git push fork master
+                 (a plain git push goes to upstream edk2-porting/edk2-msm - never do that)
+    Roughly 50 commits ahead of upstream origin/master; all of them are on the fork.
+
+Documentation layout (2026-10-08; the full map is DOCS-INDEX.md):
+    HANDOVER-NEXT.md               this file: sections 0-7 + the history index
+    DOCS-INDEX.md                  documentation map, sync commands, maintenance rules
+    reference/DECISIONS.md         former sections 8-11
+    sessions/NN-<topic>.md         former sections 12-18, 29, 30 (+ two 2026-10-06 records)
+    linux-port/docs/NN-<topic>.md  former sections 19-28, see its 00-INDEX.md
+    archive/HANDOVER-NEXT-full-2026-10-08.md   the pre-split text, verbatim
+    EUD.md, SWD-JTAG.md, RX-CONSOLE.md, BINARIES.md, README.md
+
+Editing happens in E:\RealmeX2Pro edk2 (Windows); publish with:
+    linux-port/scripts/sync-docs-to-repo.sh    top-level docs + health check + push
+    linux-port/scripts/mirror-linux-port.sh    the linux-port/ mirror
+docs-health-check.sh must print RESULT: clean before anything is pushed.
 
 SerialPortLib scoping in samurai.dsc (important, do not widen casually):
     DXE_DRIVER / DXE_RUNTIME_DRIVER / UEFI_DRIVER / UEFI_APPLICATION -> EudSerialPortLib
     PrePI / PEI / SEC and DXE_CORE keep FrameBufferSerialPortLib
+
+The per-commit detail that used to be listed here (EudSerialPortLib, the samurai.dsc
+overrides, PlatformBm.c, EUD.md) is in git log and in sessions/15-17.
+
 
 ## 4. Tools and paths
 
@@ -149,7 +167,8 @@ SerialPortLib scoping in samurai.dsc (important, do not widen casually):
        Synchronous Exception at ArmCpuDxe.dll+0x34B8
        ELR 0x13FE0F4B8, LR 0x13FE0F518, ESR 0x02000000, stack corrupted
    Keep PcdDebugPrintErrorLevel at the platform default (0x80000000) and do
-   not override SerialPortLib for DXE_CORE.  Fix = Step 2 or Step 3 above.
+   not override SerialPortLib for DXE_CORE.  The root cause and the real fix
+   (no DEBUG print in the ArmMmuLib MMU-off path) are in sessions/15.
 4. SM8150_UEFI.fd is compressed (FVMAIN_COMPACT): verifying a string with
    grep/strings on the .fd gives false negatives.  Check the uncompressed
    FVMAIN.Fv or the module .obj instead.
@@ -170,10 +189,21 @@ SerialPortLib scoping in samurai.dsc (important, do not widen casually):
 
 ## 7. Open questions
 
-* Does the EUD COM drain need to be faster once full DEBUG is on?  (Step 2)
-* Why did EUD SWD 9504 not enumerate after CTLOUT_SET 0x645 + attach?
 * Can the log channel survive the UEFI -> OS handoff (useful for Linux boot
-  debugging), and what does the Android kernel's ttyEUD see at that point?﻿
+  debugging), and what does the Android kernel ttyEUD see at that point?
+* The RX payload read stays dangerous until step 2 of section 1 lands: 0x14 may
+  only be read exactly len times, once the header latch has changed, or the EUD
+  block wedges until a full power cycle (sessions/29-..., 29.5).
+
+Answered since; kept here so nobody re-opens them:
+
+* EUD COM drain speed with full DEBUG on: fine now - paced writes, and a 210 s
+  capture reassembles with 0 resyncs (sessions/15, sessions/16).
+* Why EUD SWD 9504 did not enumerate after CTLOUT_SET 0x645 + attach: the
+  transport works, the AP DAP is unreachable on this retail unit (APPS_DBGEN_DISABLE
+  fuse + signed APDP debug policy) - see SWD-JTAG.md and Mnemon document 06827d0c.
+
+
 ---
 
 
