@@ -18,6 +18,10 @@
 > 帧、等受理后继续。见 [终端指南](linux-port/docs/EUD-TERMINAL.md)。这是绕开原生
 > 多字节 RX 的临时方案，内核无需重刷。
 
+> 下个会话继续查原生 RX 的交接与短提示词见
+> [session 35](sessions/35-rx-next-session-handoff.md)。先核实手机与端口的实时状态；
+> 临时终端成功不等于 FIFO 多字节推进问题已解决。
+
 ---
 
 ## RX side: registers, framing and the console driver (2026-10-08)

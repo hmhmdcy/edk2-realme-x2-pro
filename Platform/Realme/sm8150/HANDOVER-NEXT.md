@@ -22,7 +22,8 @@ EUD - the only console this board has - all verified on hardware today:
 * Single-writer, fully paced log channel.  The early console is retired as soon
   as our real console registers ("printk: legacy bootconsole [eud0] disabled"),
   every register write is paced (200 us) and every frame spaced (2 ms), and a
-  210 s capture reassembles with 0 resyncs and no dropped frames.
+  210 s capture reassembles with 0 resyncs. This alone does not prove no
+  complete frames were dropped; session 34 separately verifies exact TX strings.
 * /dev/ttyEUD0 exists (a real uart driver, "ttyEUD"), its TX path works end to
   end, and /dev/console is bound to it.
 * The firmware command line was rebuilt to
@@ -50,6 +51,12 @@ EUD - the only console this board has - all verified on hardware today:
   and host-path tests; none produced consecutive payload. RX pending does not
   always clear on the first read. Production debug gating is possible, but no
   evidence establishes a COM single-byte restriction.
+* The temporary host terminal is working (session 34): multi-byte TX is decoded,
+  ASCII input is sent one byte at a time with receipt/retry. id, uname, direct
+  tty/console output, keyboard editing, Ctrl-C and graceful port close were tested.
+  It is a workaround, not a native multi-byte RX fix. Last verified kernel is
+  rx33-console; session 34 changed only host tools/docs. Check the live phone
+  state and port ownership again next session rather than assuming it is unchanged.
 
 ## 1. What to do next, in order
 
@@ -59,7 +66,13 @@ before spending another hardware cycle. The downstream `drivers/soc/qcom/eud.c`
 and QUIC host library established the register layout and framing; multi-byte
 RX on this unit is still open.
 
-1. Use the temporary terminal to continue driver bring-up now:
+**Next requested session (2026-10-09): resume native RX investigation.** Read
+`sessions/35-rx-next-session-handoff.md` for the consolidated evidence, next
+experiments and a copyable prompt. The temporary terminal remains available for
+driver work; do not treat that successful workaround as closure of the RX issue.
+
+1. Resume native multi-byte RX investigation using session 35. The temporary
+   terminal remains available for driver bring-up:
    `E:\eud-host\eud-terminal.cmd -Reconnect` (guide: linux-port/docs/EUD-TERMINAL.md).
    It queues ASCII input as single-byte frames with receipt/retry and decodes
    multi-byte TX output; it does not require another kernel flash. Native RX
@@ -82,7 +95,8 @@ RX on this unit is still open.
 2. Latest kernel artifact: `logdump-rx33-console.img`, with the single-character
    RX fix, header/first-data lock, actual mapbase and bounded multi-byte probe;
    older baseline `logdump-tty6.img` remains available. Current state and hashes
-   are in session 33. Only logdump was flashed this session. Back to Android with
+   are in session 33. Only logdump was flashed in session 33; sessions 34/35 did
+   not flash any partition. Back to Android with
    `cd E:\edk2-samurai-out; .\flash-and-test-rx.ps1 -RestoreAndroid`.
 3. DONE 2026-10-08 evening: PON reboot-mode plus the two DT mode lines are in and
    verified.  `[90][02]` on the EUD command channel reboots Linux straight into
@@ -144,7 +158,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 38bf2b8  docs: mark raw EUD captures as binary fixtures
+    master = 0e4a8cc  eud: add temporary interactive terminal for single-byte RX
+             38bf2b8  docs: mark raw EUD captures as binary fixtures
              79b0f9d  eud: protect RX header access and record FIFO investigations
              f9b6f8a  eud: fix single-character RX and record hardware probe evidence
              649c90d  linux-port: mirror the Linux side of the port into the repo
@@ -152,9 +167,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              6658232  docs: regenerate the whole Repo state block, no stale duplicate
              4903417  docs: generate the handover Repo state block from git, and check it
              47121ad  linux-port: make the push retry in sync-docs-to-repo.sh actually retry
-             b1657b2  docs: refresh the handover - current repo state and the real open questions
 
-    59 commits ahead of upstream origin/master, as of the tip named above;
+    60 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -300,6 +314,7 @@ the only copy.
 | 32 | RX probe 90 90; pre-read printk interferes; single-character input fixed; multi-byte advancement open | `sessions/32-rx-printk-interference.md` |
 | 33 | RX access, host/upstream audits and production-policy evidence; multi-byte advancement still open | `sessions/33-rx-access-and-production-policy.md` |
 | 34 | Temporary host terminal; multi-byte TX, single-byte RX bridge, tty/console and keyboard verification | `sessions/34-temporary-eud-terminal.md` |
+| 35 | Next-session RX handoff: retained state, excluded paths, new evidence needed and short prompt | `sessions/35-rx-next-session-handoff.md` |
 
 Rules that keep this file from growing again:
 

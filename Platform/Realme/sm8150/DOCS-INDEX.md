@@ -29,6 +29,7 @@
 | sessions/32-rx-printk-interference.md | 原探针 90 90；去掉前置 printk 后单字符 RX 修复、多字节仍未解；跨机型源码与真机证据 |
 | sessions/33-rx-access-and-production-policy.md | 整帧锁、MMIO/读序/主机实验、上下游审查、量产权限证据边界；多字节仍未解 |
 | sessions/34-temporary-eud-terminal.md | TX/RX 区分、临时键盘/命令终端、tty/console 真机输出与退出验证 |
+| sessions/35-rx-next-session-handoff.md | 下一会话原生 RX 排查交接、已排除路径、所需新证据与短提示词 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
