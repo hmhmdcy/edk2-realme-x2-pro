@@ -32,9 +32,10 @@ git show --stat --oneline HEAD | head -12
 
 echo
 echo "=== push (retries: the local proxy is flaky) ==="
-for i in 1 2 3; do
+for i in 1 2 3 4 5; do
   echo "--- attempt $i ---"
-  if git push fork master 2>&1 | tail -3; then break; fi
-  sleep 8
+  if out=$(git push fork master 2>&1); then printf '%s\n' "$out" | tail -3; break; fi
+  printf '%s\n' "$out" | tail -3
+  sleep 10
 done
 git status --short
