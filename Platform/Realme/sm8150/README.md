@@ -350,3 +350,24 @@ Windows 化还需专属 DSDT。
   tested too - flash the firmware, let BDS enable EUD, then attach. The result is
   identical (`data = 0x00000000, status = 0x00010020, ack = 0`). The gate is in
   XBL (fuse + signed debug policy), before UEFI, so no boot stage helps.
+
+
+## Status update 2026-10-08 (EUD is a real console: ttyEUD0, /dev/console, RX commands)
+
+The EUD COM FIFO is now driven by a proper uart driver instead of a bare
+console, and the receive side is understood well enough to be used.
+
+* Single writer: the firmware command line no longer carries keep_bootcon, so
+  the early console retires when the real console registers
+  ("printk: legacy bootconsole [eud0] disabled").  Every register write is paced
+  (200 us) and every frame spaced (2 ms); a 210 s capture reassembles with zero
+  lost frames.
+* /dev/ttyEUD0 exists and works end to end, and /dev/console is bound to it.
+* Command channel: [0x81][len][payload], payload[0] is the code (0x01 ping,
+  0x02 register dump, 0x03 status).  Typing: [0x82][len][payload] is inserted
+  into the tty, so a shell on /dev/ttyEUD0 can be driven from the PC.
+* The RX payload register is 0x14 (a FIFO read port); 0x0c/0x10 are latches that
+  hold the last message's header.  Details in EUD.md.
+* Caveat: reading 0x14 too eagerly wedges the EUD block - the console goes
+  silent until a full power cycle.  The payload read must be gated on a
+  completed header.
