@@ -213,7 +213,9 @@ the `APPS_DBGEN_DISABLE` fuse and by OPPO's signed APDP debug policy (`dpAP.mbn`
 in the F.14 package), so SWD/JTAG cannot halt this phone. EUD COM therefore
 remains the working debug channel here; the SWD/JTAG host tooling is kept for
 debug-enabled devices. Never switch the internal DAP mux while Android is
-running - it hangs the AP and needs a full power cycle. Details in EUD.md.
+running - it hangs the AP and needs a full power cycle.
+Confirmed again from the EDK2/UEFI stage (BDS enables EUD there): the same
+`ack = 0`, so the AP DAP is unreachable on this retail unit. Details in EUD.md.
 
 ## Known issues / TODO
 

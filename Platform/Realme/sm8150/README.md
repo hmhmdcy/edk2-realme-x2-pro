@@ -346,3 +346,7 @@ Windows 化还需专属 DSDT。
   (firmware DEBUG(), Linux `earlycon=eud`/`console=eud`, the EudLogDxe ring).
   Keep the SWD/JTAG tooling in `E:\eud-host` for an engineering device, and try
   `maxcpus=1` when debugging the Linux SMP bring-up.
+* Final confirmation 2026-10-08, UEFI stage: the officially recommended flow was
+  tested too - flash the firmware, let BDS enable EUD, then attach. The result is
+  identical (`data = 0x00000000, status = 0x00010020, ack = 0`). The gate is in
+  XBL (fuse + signed debug policy), before UEFI, so no boot stage helps.

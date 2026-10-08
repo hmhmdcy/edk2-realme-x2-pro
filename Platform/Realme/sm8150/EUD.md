@@ -504,10 +504,13 @@ documentation, qualcomm-linux/qcom-ptool):
   with `maxcpus=1`.
 
 Conclusion for this retail unit: the EUD *transport* is usable from the host,
-but the AP CoreSight DAP is not exposed to it. One cheap final test is to repeat
-the sequence while the phone sits in the EDK2/UEFI boot menu (BDS already turns
-EUD on), where a hang costs nothing; on the evidence above it will most likely
-report the same `ack = 0`.
+but the AP CoreSight DAP is not exposed to it. This was finally confirmed at the
+officially recommended stage as well (the OpenOCD quickstart way: enable EUD from
+the firmware, not from Android): `boot-samurai-eudlogfull.img` was flashed,
+BDS enabled EUD (9501 appeared at +6 s), the DAP route was set and the same
+sequence returned `data = 0x00000000, status = 0x00010020, ack = 0` - identical
+to the Android-stage result. The gate is applied by XBL (fuse + signed debug
+policy) *before* UEFI, so no later boot stage can change it.
 
 ### Practical guidance for this port
 
