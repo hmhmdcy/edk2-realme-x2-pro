@@ -18,9 +18,12 @@
 > 帧、等受理后继续。见 [终端指南](linux-port/docs/EUD-TERMINAL.md)。这是绕开原生
 > 多字节 RX 的临时方案，内核无需重刷。
 
-> 下个会话继续查原生 RX 的交接与短提示词见
-> [session 35](sessions/35-rx-next-session-handoff.md)。先核实手机与端口的实时状态；
-> 临时终端成功不等于 FIFO 多字节推进问题已解决。
+> **session 36 新证据：** 实机 9505 为 bulk IN `0x81` / OUT `0x02`，最大包长 16，
+> 配置仅 32 字节、无 MDLM extras。旧 WDM qcusbser 有条件字节填充的描述符门槛
+> 不满足；源码版本仍与实装不同，不能代替 OUT 抓包。SM8150 时钟/PM/PHY 变更未
+> 给出额外 RX advance。USB OUT 对照待管理员 bind 9505；本轮未刷机，仍未修复。
+> 证据和下一步见 [session 36](sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md)，
+> 已排除实验见 [session 35](sessions/35-rx-next-session-handoff.md)。
 
 ---
 

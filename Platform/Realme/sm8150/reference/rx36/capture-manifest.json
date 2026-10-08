@@ -1,0 +1,42 @@
+[
+  {
+    "file": "rx36-state-ctrlc.raw",
+    "bytes": 60,
+    "sha256": "541b66c49ff4be7e3bc37ea1da009605b085220ca433c9bc989d3540019f1326"
+  },
+  {
+    "file": "rx36-state-ctrlc.txt",
+    "bytes": 42,
+    "sha256": "fdcdf6465074a960710edb81d5c191dc2b6d4cbc51a9d4d642e62dd99f3265c7"
+  },
+  {
+    "file": "rx36-clear-line.raw",
+    "bytes": 60,
+    "sha256": "4bee4019d950dbe1590484eeb6c940eb2f9972fcd9c64a18d43bc32a13e3b6d9"
+  },
+  {
+    "file": "rx36-clear-line.txt",
+    "bytes": 41,
+    "sha256": "88cfc47bfc8e25722d925c6ea2fd62cbc353ad44d7335040766e7bed8e2dd988"
+  },
+  {
+    "file": "rx36-cmdline.raw",
+    "bytes": 762,
+    "sha256": "11e7fcc36facf4a376bf0e8671ba87c1f382c1c7dc046ba61c3d6ae3c6e8c64b"
+  },
+  {
+    "file": "rx36-cmdline.txt",
+    "bytes": 494,
+    "sha256": "f2e3528dbf4fe3f94430e6609f700a9c6f661f701fd52e30066db419ddbf3803"
+  },
+  {
+    "file": "rx36-cmdline.events.txt",
+    "bytes": 1559,
+    "sha256": "b15d87020104cd3fdec6ac5a81b98bcfc606cc14fcc48f7abd3cdb3ad7245211"
+  },
+  {
+    "file": "rx36-windows-descriptors.txt",
+    "bytes": 303,
+    "sha256": "795e61622b5186d2901b548e2d92e8ff9eacf92a444cac6981d8af8ea651c954"
+  }
+]

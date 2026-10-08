@@ -118,6 +118,12 @@ DTB 的两条路径都要照顾（否则猜不准哪条生效）：
 
 ## 6. 待解：`0x14` 到底给的是什么
 
+**2026-10-09 session 36 更新：** 未刷机，仍用 rx33-console；F1 本轮未重新触发。
+实机 OUT 为 0x02 / max packet 16；旧 WDM qcusbser 与 SM8150 握手源码的新审查见
+`sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md`。USB OUT 对照待管理员绑定
+9505；新的 libusb 单步工具尚未设备验证。每步正常释放资源，detach 回 Windows、
+确认 COM14 后再用现有 F1。不要把没有受理回执的轮次当有效 payload 失败。
+
 **2026-10-09 session 33 更新：** 当前镜像为 `logdump-rx33-console.img`，单字符与
 F1 均再次验证。整帧禁止 TX、MMIO 属性/屏障、数据先于头部等实验仍未解决多字节；
 门控并非每次首次读后立即清零，量产权限假设也尚无 COM 专属证据。完整记录见

@@ -57,6 +57,12 @@ EUD - the only console this board has - all verified on hardware today:
   It is a workaround, not a native multi-byte RX fix. Last verified kernel is
   rx33-console; session 34 changed only host tools/docs. Check the live phone
   state and port ownership again next session rather than assuming it is unchanged.
+* Session 36 confirmed Linux/COM14 and measured 9505 descriptors: bulk IN 0x81,
+  OUT 0x02, max packet 16; no MDLM extras. Legacy WDM qcusbser 2.1.3.8 source
+  adds conditional byte-stuffing, but this device lacks its descriptor gate.
+  It is not the exact installed 2.1.3.5 source. USB OUT comparison remains
+  pending: usbipd bind 6-5 was denied because this token is not administrator.
+  No kernel/image changed; see session 36 and reference/rx36 for the next step.
 
 ## 1. What to do next, in order
 
@@ -66,12 +72,12 @@ before spending another hardware cycle. The downstream `drivers/soc/qcom/eud.c`
 and QUIC host library established the register layout and framing; multi-byte
 RX on this unit is still open.
 
-**Next requested session (2026-10-09): resume native RX investigation.** Read
-`sessions/35-rx-next-session-handoff.md` for the consolidated evidence, next
-experiments and a copyable prompt. The temporary terminal remains available for
-driver work; do not treat that successful workaround as closure of the RX issue.
+**Next session: continue the USB OUT comparison prepared in session 36.** Read
+`sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md` for the latest evidence
+and the outstanding administrator bind, and session 35 for excluded experiments.
+The temporary terminal remains available; native multi-byte RX is still open.
 
-1. Resume native multi-byte RX investigation using session 35. The temporary
+1. Resume native multi-byte RX investigation using sessions 35/36. The temporary
    terminal remains available for driver bring-up:
    `E:\eud-host\eud-terminal.cmd -Reconnect` (guide: linux-port/docs/EUD-TERMINAL.md).
    It queues ASCII input as single-byte frames with receipt/retry and decodes
@@ -87,6 +93,9 @@ driver work; do not treat that successful workaround as closure of the RX issue.
       200 us/2 ms/20 ms pacing, readb, nGnRnE and changed header ordering have
       already failed; do not repeat them unchanged. Installed qcusbser is older
       than the public WDF source. SWD restrictions do not establish COM gating.
+      Session 36 also audits the legacy WDM path and actual SM8150 clock/PM/PHY
+      diffs. See reference/rx36/README.md for the pending 9505-only WSL comparison;
+      the new libusb helper has passed syntax checks but has no device validation.
    c. Only then wire more commands (recovery / EDL) into the length table.
    Reminders that still hold: start the host capture BEFORE the kernel boots so
    the device TX FIFO never backs up, and a silent EUD does not mean a crashed
@@ -95,7 +104,7 @@ driver work; do not treat that successful workaround as closure of the RX issue.
 2. Latest kernel artifact: `logdump-rx33-console.img`, with the single-character
    RX fix, header/first-data lock, actual mapbase and bounded multi-byte probe;
    older baseline `logdump-tty6.img` remains available. Current state and hashes
-   are in session 33. Only logdump was flashed in session 33; sessions 34/35 did
+   are in session 33. Only logdump was flashed in session 33; sessions 34-36 did
    not flash any partition. Back to Android with
    `cd E:\edk2-samurai-out; .\flash-and-test-rx.ps1 -RestoreAndroid`.
 3. DONE 2026-10-08 evening: PON reboot-mode plus the two DT mode lines are in and
@@ -158,7 +167,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 0e4a8cc  eud: add temporary interactive terminal for single-byte RX
+    master = 1e54944  docs: hand off native EUD RX investigation
+             0e4a8cc  eud: add temporary interactive terminal for single-byte RX
              38bf2b8  docs: mark raw EUD captures as binary fixtures
              79b0f9d  eud: protect RX header access and record FIFO investigations
              f9b6f8a  eud: fix single-character RX and record hardware probe evidence
@@ -166,9 +176,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              2184dc1  docs: anchor the Repo state count to the tip the block names
              6658232  docs: regenerate the whole Repo state block, no stale duplicate
              4903417  docs: generate the handover Repo state block from git, and check it
-             47121ad  linux-port: make the push retry in sync-docs-to-repo.sh actually retry
 
-    60 commits ahead of upstream origin/master, as of the tip named above;
+    61 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -315,6 +324,7 @@ the only copy.
 | 33 | RX access, host/upstream audits and production-policy evidence; multi-byte advancement still open | `sessions/33-rx-access-and-production-policy.md` |
 | 34 | Temporary host terminal; multi-byte TX, single-byte RX bridge, tty/console and keyboard verification | `sessions/34-temporary-eud-terminal.md` |
 | 35 | Next-session RX handoff: retained state, excluded paths, new evidence needed and short prompt | `sessions/35-rx-next-session-handoff.md` |
+| 36 | Actual USB descriptors, legacy qcusbser and SM8150 source audit; USB OUT comparison awaits administrator bind | `sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md` |
 
 Rules that keep this file from growing again:
 
