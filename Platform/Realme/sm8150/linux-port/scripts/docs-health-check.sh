@@ -79,12 +79,12 @@ else
   say "   OUT OF DATE: $n ahead-of-upstream lines in the handover (stale duplicates)"
   fail=1
 fi
-want=$(git -C "$RK" rev-list --count origin/master..master)
+want=$(git -C "$RK" rev-list --count origin/master.."$doc")
 got=$(grep -m1 'commits ahead of upstream origin/master' "$W/HANDOVER-NEXT.md" | grep -o '[0-9]\+' | head -1)
 if [ "$want" = "$got" ]; then
   say "   ok: $got commits ahead of upstream origin/master"
 else
-  say "   OUT OF DATE: the handover says $got, the repo says $want"
+  say "   OUT OF DATE: the block says $got, commit $doc is $want commits ahead"
   fail=1
 fi
 

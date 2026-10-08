@@ -104,7 +104,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 4903417  docs: generate the handover Repo state block from git, and check it
+    master = 6658232  docs: regenerate the whole Repo state block, no stale duplicate
+             4903417  docs: generate the handover Repo state block from git, and check it
              47121ad  linux-port: make the push retry in sync-docs-to-repo.sh actually retry
              b1657b2  docs: refresh the handover - current repo state and the real open questions
              721d2f2  docs: drop the stale DIAG-CAPTURE.md from the mirror
@@ -112,9 +113,9 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              7ccb70e  samurai: track the disabled boot-layout include
              f201abf  linux-port: NN-<topic> doc names, an index, and guards against re-adding sections
              2789b41  docs: split the 109 KB handover into a slim entry plus one file per section
-             2d0e68e  docs: index the documentation; keep the two 2026-10-06 records in the repo
 
-    53 commits ahead of upstream origin/master; all of them are on the fork.
+    54 commits ahead of upstream origin/master, as of the tip named above;
+    all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
                  push with:  git push fork master
