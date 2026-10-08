@@ -14,3 +14,7 @@ ramdisk
 *.rej
 *.orig
 *.fd
+
+# local build artifacts - not for the repo
+Platform/Realme/sm8150/LinuxKernel/Image
+Platform/Realme/sm8150/ramdisk_samurai.img
