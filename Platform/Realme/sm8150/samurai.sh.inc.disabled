@@ -1,0 +1,24 @@
+# Override: uncompressed BootShim+UEFI payload + explicit v2 dtb section
+function platform_build_kernel(){
+    cat "${ROOTDIR}/tools/BootShim/BootShim.bin" \
+        "${WORKSPACE}/Build/${DEVICE}/${_MODE}_${TOOLCHAIN}/FV/${SOC_PLATFORM}_UEFI.fd" \
+        > "${WORKSPACE}/uefi-${DEVICE}-kernel"
+}
+
+function platform_build_bootimg(){
+    local RAMDISK=ramdisk
+    [ -f Platform/Realme/sm8150/ramdisk_samurai.img ] && RAMDISK=Platform/Realme/sm8150/ramdisk_samurai.img
+    python3 "${ROOTDIR}/tools/mkbootimg.py" \
+        --kernel "${WORKSPACE}/uefi-${DEVICE}-kernel" \
+        --ramdisk "$RAMDISK" \
+        --dtb Platform/Realme/sm8150/FdtBlob_compat/samurai.dtb \
+        --base 0x0 \
+        --pagesize 4096 \
+        --kernel_offset 0x00008000 \
+        --ramdisk_offset 0x01000000 \
+        --tags_offset 0x00000100 \
+        --os_version "${BOOTIMG_OS_VERSION}" \
+        --os_patch_level "${BOOTIMG_OS_PATCH_LEVEL}" \
+        --header_version "${BOOTIMG_HEADER_VERSION}" \
+        -o "${OUTDIR}/boot-${DEVICE}${EXT}.img"
+}
