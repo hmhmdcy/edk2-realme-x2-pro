@@ -18,7 +18,8 @@
  *    remain diagnostic probes. Read RX_DAT before any printk: a preceding
  *    console write changes the observed byte to 0x90. The first payload byte
  *    is verified; advancing through a multi-byte message is still unresolved.
- *    RX-CONSOLE.md and sessions/32-rx-printk-interference.md hold the evidence.
+ *    RX-CONSOLE.md and sessions/32 and 33 hold the evidence. Header and first
+ *    data access also share the TX lock, so a console writer cannot intervene.
  *  - Readbacks replicate the low byte into all four lanes (0x81 -> 0x81818181),
  *    so every value read back is masked with 0xff.
  *  - The console is registered only when the command line asks for it: this
@@ -422,27 +423,28 @@ static void eud_rx_work(struct work_struct *work)
         unsigned int i;
         unsigned long flags;
 
+        uart_port_lock_irqsave(&up->port, &flags);
         s1 = readl_relaxed(base + EUD_REG_INT_STATUS_1);
 
         if (!(s1 & EUD_INT_RX_PENDING)) {
                 if (up->rx_len < 3)
                         up->rx_collect = 0;
                 if (!up->rx_collect)
-                        goto out;
+                        goto unlock;
         }
 
         if (!up->rx_collect) {
                 id  = readl_relaxed(base + EUD_REG_COM_RX_ID) & 0xff;
                 len = readl_relaxed(base + EUD_REG_COM_RX_LEN) & 0xff;
                 if (id == EUD_RX_UART_ID && len == 2) {
+                        uart_port_unlock_irqrestore(&up->port, flags);
                         eud_reboot_cmd(up, len);        /* does not return */
                         goto out;
                 }
                 if ((id != EUD_RX_UART_ID && id != EUD_RX_CHAR_ID &&
                      id != EUD_RX_CHAR_ID2 && id != EUD_RX_CMD_ID) ||
                     len < 1 || len > EUD_RX_MAX_FRAME) {
-                        (void)readl_relaxed(base + EUD_REG_COM_RX_DAT);
-                        goto out;
+                        goto unlock;
                 }
                 up->rx_id    = id;
                 up->rx_len   = len;
@@ -450,12 +452,11 @@ static void eud_rx_work(struct work_struct *work)
                 up->rx_collect = 1;
         }
 
-        uart_port_lock_irqsave(&up->port, &flags);
         ch = readl(base + EUD_REG_COM_RX_DAT) & 0xff;
         up->rx_buf[up->rx_have++] = ch;
+        s2 = readl(base + EUD_REG_INT_STATUS_1);
         uart_port_unlock_irqrestore(&up->port, flags);
         if (up->rx_have == up->rx_len) {
-                s2 = readl(base + EUD_REG_INT_STATUS_1);
                 up->rx_collect = 0;
                 if (up->rx_len == 1) {
                         eud_rx_dispatch(up);
@@ -468,7 +469,10 @@ static void eud_rx_work(struct work_struct *work)
                                         up->rx_have, up->rx_buf[i]);
                 }
         }
+        goto out;
 
+unlock:
+        uart_port_unlock_irqrestore(&up->port, flags);
 out:
         up->rx_polls++;
         schedule_delayed_work(&up->rx_work, msecs_to_jiffies(EUD_RX_POLL_MS));
@@ -478,6 +482,7 @@ static int eud_probe(struct platform_device *pdev)
 {
         struct eud_port *up;
         struct uart_port *port;
+        struct resource *res;
         int ret;
 
         if (eud)
@@ -488,9 +493,10 @@ static int eud_probe(struct platform_device *pdev)
                 return -ENOMEM;
 
         port = &up->port;
-        port->membase = devm_platform_ioremap_resource(pdev, 0);
+        port->membase = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
         if (IS_ERR(port->membase))
                 return PTR_ERR(port->membase);
+        port->mapbase = res->start;
 
         port->dev      = &pdev->dev;
         port->iotype   = UPIO_MEM;

@@ -3,12 +3,15 @@
 > Split out of EUD.md on 2026-10-08; verbatim from there.  The TX side and the firmware
 > log ring are in EUD.md.
 
-> **2026-10-08 最新核对：单字符 RX 已修正，多字节仍未解。** 原探针实际读到
+> **2026-10-09 最新核对：单字符 RX 可用，多字节仍未解。** 原探针实际读到
 > `90 90`。去掉读取前的 printk 后，`ABC` 的首字节能读到 `41`，`DEFG` 的首字节
 > 能读到 `44`；因此不能按「整帧在 FIFO，payload 偏移 2」修改驱动。当前
 > `[90][01][字符]` 已有真实 tty 回显，`[90][02]` 仍是 fastboot，`len>=3` 保留
 > 有界诊断、不向 tty 注入未验证的多字节。下文旧节保留为历史观测，最新证据与
-> 跨机型源码对照见 [session 32](sessions/32-rx-printk-interference.md)。
+> 跨机型源码对照见 [session 32](sessions/32-rx-printk-interference.md)；帧内禁止 TX、
+> MMIO 属性、读序、上下游及量产权限排查见
+> [session 33](sessions/33-rx-access-and-production-policy.md)。当前恢复版是
+> `logdump-rx33-console.img`；RX 状态、头部与首次 DAT 读取共用 TX 锁。
 
 ---
 
@@ -27,7 +30,7 @@ the four lanes, so mask with 0xff):
 |---|---|
 | 0x0c | RX_ID - latch holding the id of the last message the host wrote |
 | 0x10 | RX_LEN - latch holding that message's length |
-| 0x14 | RX_DAT - FIFO read port: every read pops one payload byte |
+| 0x14 | RX_DAT - downstream treats this as a FIFO read port; advancing after the first payload byte is unverified on this unit |
 | 0x40 | INT_STATUS_0 - 0x00 idle, 0x02 while RX data is pending |
 | 0x44 | INT_STATUS_1 - 0x06 idle, 0x07 while RX data is pending (BIT(0)) |
 | 0x20 | INT0_EN_MASK - reads 0; writing 0xff reads back 0x1f (five bits) |
@@ -245,3 +248,22 @@ Write 后 Flush、最多 5 次重发、finally 关闭并 Dispose。对于 tty �
 最终单字符版真机按 `i`、`d`、回车逐个发送并等受理诊断，shell 返回完整
 `uid=0 gid=0` 和 `~ #` 提示符。对应 `rx32-final-i/d/enter.raw` 帧重组均为
 0 stray bytes；同版 `ABC` 探针三次受理均为 `41 90 90`。
+
+## 访问路径与量产权限复查（2026-10-09，session 33）
+
+帧内完全禁止 TX，200 μs/2 ms 连读仍重复首字节；20 ms 仍可出现 `41 90 90`。
+数据先于 ID/LEN 读取、实际验证为 Device-nGnRnE 的映射，以及临时改变 IRQ mask
+均未取得连续 payload。SCM 读取返回 -22，不能作为有效数据或具体熔丝状态的证明。
+RX 位也不是每次首次读后立即清零：短间隔读完可能仍为 07，较长间隔可能变 06。
+因此，前置 printk 是已证实的干扰因素，不能独自解释后续字节失败。
+
+核对同 SM8150 厂商树和当前上游后，未找到适用的 FIFO advance 修复；源码中未发现
+第二个 RX 消费者。QUIC 主机库有一个覆盖 opcode 的 WriteCommand 重载错误，
+但本项目的原始帧发送不经过它，不能归为本次根因。已安装 qcusbser 与公开 WDF
+驱动版本不同，尚缺 USB OUT 抓包，主机这一层仍未完全排除。
+
+量产调试权限可受熔丝和 OEM 签名策略限制，但未找到 COM 限为单字节的公开证据；
+此前 SWD/DAP 受限也不能直接证明 COM FIFO 同样受限。详细来源、有效/无效样本、
+哈希与下一步见 [session 33](sessions/33-rx-access-and-production-policy.md)。
+最终版再次以单字符输入执行 id，返回 `uid=0 gid=0`，F1 再次进入 fastboot；
+同版 ABC 仍为 `41 90 90`。只保留头部/首次 DAT 持锁与 mapbase 修正。

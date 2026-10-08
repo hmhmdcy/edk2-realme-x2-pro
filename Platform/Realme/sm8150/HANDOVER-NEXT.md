@@ -1,13 +1,13 @@
 # Session handover - realme X2 Pro (samurai) EDK2/UEFI
 
-> Updated 2026-10-08 (Asia/Shanghai).  Sections 0-7 below are the living part:
+> Updated 2026-10-09 (Asia/Shanghai).  Sections 0-7 below are the living part:
 > current state, next steps, repo state, tools, pitfalls, safety, open questions.
 > The history (former sections 8-30) now lives in exactly one file per section -
 > see the index at the end of this file.  Read DOCS-INDEX.md for the whole map.
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-08 evening)
+## 0. TL;DR - where the project stands (2026-10-09)
 
 Boots and runs:
 
@@ -45,7 +45,11 @@ EUD - the only console this board has - all verified on hardware today:
   [90][01][char] now reaches tty with real echo. Do not skip two header bytes.
   Multi-byte advancement remains unresolved: burst reads repeat the first byte,
   a buffered one-byte-per-poll probe returns 41 90 90. See RX-CONSOLE.md and
-  sessions/32-rx-printk-interference.md for hardware evidence and device references.
+  sessions/32-rx-printk-interference.md for the initial evidence. Session 33 adds
+  whole-frame TX exclusion, verified Device-nGnRnE mapping, data-before-header
+  and host-path tests; none produced consecutive payload. RX pending does not
+  always clear on the first read. Production debug gating is possible, but no
+  evidence establishes a COM single-byte restriction.
 
 ## 1. What to do next, in order
 
@@ -55,23 +59,25 @@ before spending another hardware cycle. The downstream `drivers/soc/qcom/eud.c`
 and QUIC host library established the register layout and framing; multi-byte
 RX on this unit is still open.
 
-1. Continue the remaining multi-byte RX investigation (session 32). The original
+1. Continue the remaining multi-byte RX investigation (session 33). The original
    probe and the single-character fix are done: RX_DAT must be read before any
    printk; [90][01][char] reaches tty. The offset-2 hypothesis is unsupported.
    a. Keep len 3..14 as bounded diagnostics, buffer before printing and do not
       inject repeated/stale probe bytes into tty. Length 3 is not recovery.
-   b. Investigate the actual RX completion/advance handshake and the effect of
-      TX/MMIO access, using the primary-source comparison already recorded.
-      Repeated first-byte reads survive 200 us pacing and readb; 20 ms spacing
-      alone produces 41 90 90. Do not repeat those experiments unchanged.
+   b. Obtain USB OUT evidence or a controlled host-path comparison, then actual
+      SM8150 RX completion/advance and clock documentation. TX exclusion,
+      200 us/2 ms/20 ms pacing, readb, nGnRnE and changed header ordering have
+      already failed; do not repeat them unchanged. Installed qcusbser is older
+      than the public WDF source. SWD restrictions do not establish COM gating.
    c. Only then wire more commands (recovery / EDL) into the length table.
    Reminders that still hold: start the host capture BEFORE the kernel boots so
    the device TX FIFO never backs up, and a silent EUD does not mean a crashed
    kernel - try a full power cycle first.  Host writes are only staged about 1
    time in 3, so send every command 3-5 times.
-2. Latest kernel artifact: `logdump-rx32-console.img`, with the single-character
-   RX fix and bounded multi-byte probe; older baseline `logdump-tty6.img` remains
-   available. Current measured state and hashes are in session 32. Back to Android with
+2. Latest kernel artifact: `logdump-rx33-console.img`, with the single-character
+   RX fix, header/first-data lock, actual mapbase and bounded multi-byte probe;
+   older baseline `logdump-tty6.img` remains available. Current state and hashes
+   are in session 33. Only logdump was flashed this session. Back to Android with
    `cd E:\edk2-samurai-out; .\flash-and-test-rx.ps1 -RestoreAndroid`.
 3. DONE 2026-10-08 evening: PON reboot-mode plus the two DT mode lines are in and
    verified.  `[90][02]` on the EUD command channel reboots Linux straight into
@@ -133,7 +139,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 649c90d  linux-port: mirror the Linux side of the port into the repo
+    master = f9b6f8a  eud: fix single-character RX and record hardware probe evidence
+             649c90d  linux-port: mirror the Linux side of the port into the repo
              2184dc1  docs: anchor the Repo state count to the tip the block names
              6658232  docs: regenerate the whole Repo state block, no stale duplicate
              4903417  docs: generate the handover Repo state block from git, and check it
@@ -141,9 +148,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              b1657b2  docs: refresh the handover - current repo state and the real open questions
              721d2f2  docs: drop the stale DIAG-CAPTURE.md from the mirror
              15f7303  docs: split EUD.md and DIAG-CAPTURE.md into single-topic files
-             7ccb70e  samurai: track the disabled boot-layout include
 
-    56 commits ahead of upstream origin/master, as of the tip named above;
+    57 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -239,7 +245,8 @@ overrides, PlatformBm.c, EUD.md) is in git log and in sessions/15-17.
   changes the result to 0x90; the underlying hardware mechanism and subsequent
   byte advancement remain unproven. Current probes gate only the message start,
   collect at most len bytes and print afterward; they never feed unverified
-  multi-byte data to tty (RX-CONSOLE.md, session 32).
+  multi-byte data to tty (RX-CONSOLE.md, sessions 32/33). Whole-frame TX
+  exclusion still fails; production COM gating remains an unproven hypothesis.
 
 Answered since; kept here so nobody re-opens them:
 
@@ -286,6 +293,7 @@ the only copy.
 | 30 | Current artifacts and how to drive the phone | `sessions/30-artifacts-and-workflow.md` |
 | 31 | Flywheel F1: EUD command channel reboots Linux into fastboot; payload probe still open | `sessions/31-flywheel-f1-verified.md` |
 | 32 | RX probe 90 90; pre-read printk interferes; single-character input fixed; multi-byte advancement open | `sessions/32-rx-printk-interference.md` |
+| 33 | RX access, host/upstream audits and production-policy evidence; multi-byte advancement still open | `sessions/33-rx-access-and-production-policy.md` |
 
 Rules that keep this file from growing again:
 

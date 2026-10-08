@@ -27,6 +27,7 @@
 | linux-port/docs/NN-<topic>.md | 旧第 19–28 节：主线 Linux 侧会话，命名与索引见该目录的 00-INDEX.md |
 | sessions/31-flywheel-f1-verified.md | 旧第 31 节：飞轮 F1 打通（命令通道 `[90][02]`→fastboot、实测证据、主机端口卡死事故） |
 | sessions/32-rx-printk-interference.md | 原探针 90 90；去掉前置 printk 后单字符 RX 修复、多字节仍未解；跨机型源码与真机证据 |
+| sessions/33-rx-access-and-production-policy.md | 整帧锁、MMIO/读序/主机实验、上下游审查、量产权限证据边界；多字节仍未解 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
@@ -52,4 +53,4 @@
 
 - HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
 - 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD 打开时占 USB，彻底断电要长按电源约 15 s。
-- 待办：HANDOVER-NEXT.md 第 1 节。飞轮已可无按键迭代；原 payload 探针已跑，单字符 RX 已有真实回显，多字节推进仍待解（`RX-CONSOLE.md`、`sessions/32-rx-printk-interference.md`）。
+- 待办：HANDOVER-NEXT.md 第 1 节。飞轮已可无按键迭代；单字符 RX 可用，多字节推进仍待解，后续优先取得 USB OUT 与芯片握手的新证据（`RX-CONSOLE.md`、`sessions/33-rx-access-and-production-policy.md`）。
