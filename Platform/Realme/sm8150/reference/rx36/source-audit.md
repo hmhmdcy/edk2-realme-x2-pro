@@ -48,13 +48,15 @@ OnePlus SM8150 源树固定到 `1dd473abda05a72f6978c47b2a7d80828db6b426`。
 * [ef3c7d92895e](https://github.com/OnePlusOSS/android_kernel_oneplus_sm8150/commit/ef3c7d92895e54245b7d9601ebe49d0696dd16bf)：QUSB PHY 的 eud_connected 电源/TCSR 保护，未改 COM FIFO。
 
 审查范围内没有取得 SM8150 COM FIFO read-pointer / ACK 硬件文档。这不证明硬件
-没有额外要求，更不证明量产熔丝限制了多字节 COM。仍应优先取得受理成功的 USB
-OUT 对照，再决定设备侧新实验；不盲写未知位或其他 SoC 的时钟地址。
+没有额外要求，更不证明量产熔丝限制了多字节 COM。不盲写未知位或其他 SoC 的时钟地址。
+本轮已完成同内核 libusb/WSL 对照，受理的 ABC/DEFG 仍失败，详见 session 36.5；qcusbser
+不是触发条件的必要部分，下一步应继续设备侧或共同路径的具体依据。
 
 ## USB 路径的工具文档
 
 [usbipd WSL support](https://github.com/dorssel/usbipd-win/wiki/WSL-support) 说明
 bind 需要管理员、attach/detach 的用法；
 [Troubleshooting](https://github.com/dorssel/usbipd-win/wiki/Troubleshooting)
-用于确认过滤器和 usbipd 自身抓包的边界。当前 bind 确实被系统拒绝，未转交设备。
-usbmon 后续只能提供 WSL 虚拟主控 URB，不能代替旧 qcusbser 的抓包或物理 ACK。
+用于确认过滤器和 usbipd 自身抓包的边界。本进程 bind 被拒绝后，用户已完成管理员
+bind；正常 attach 成功，实验后 detach。usbmon 提供 WSL 虚拟主控 URB，不能代替
+旧 qcusbser 的抓包或物理 ACK。

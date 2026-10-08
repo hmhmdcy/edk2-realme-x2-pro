@@ -77,6 +77,9 @@ def main():
              paths[1].open('xb') as raw, paths[2].open('x', encoding='utf-8') as events, \
              paths[3].open('xb') as trace, paths[4].open('x', encoding='utf-8') as decoded, \
              ExitStack() as cleanup:
+            # usbmon readiness does not guarantee a blocking read can return;
+            # keep reads nonblocking so stop/join works even on an idle bus.
+            os.set_blocking(mon.fileno(), False)
             monitor_errors = []
 
             def capture():
@@ -85,7 +88,10 @@ def main():
                     while not stop.is_set():
                         if not select.select([mon], [], [], 0.05)[0]:
                             continue
-                        chunk = os.read(mon.fileno(), 65536)
+                        try:
+                            chunk = os.read(mon.fileno(), 65536)
+                        except BlockingIOError:
+                            continue
                         if not chunk:
                             break
                         pending += chunk
@@ -179,7 +185,8 @@ def main():
             stop.set()
             if monitor is not None:
                 monitor.join(timeout=1)
-            print('USB resources disposed; usbmon closed', flush=True)
+            print('USB resources disposed; usbmon_thread_alive=' +
+                  str(monitor is not None and monitor.is_alive()), flush=True)
     if args.ack and acked is None:
         raise SystemExit('No fresh device receipt; do not classify as an accepted probe')
 

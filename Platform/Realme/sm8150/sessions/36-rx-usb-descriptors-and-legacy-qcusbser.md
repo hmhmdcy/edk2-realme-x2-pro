@@ -7,6 +7,8 @@
 
 **原生多字节 RX 仍未修复。本轮没有构建或刷写任何镜像，也未修改内核/DTB。**
 保留 rx33 的 console、单字符输入和 F1；F1 本轮未触发，不能记为重新验证。
+**已完成绕开 qcusbser 的受理成功对照：ABC → 41 90 90，DEFG → 44 90 90 90。**
+因此 qcusbser 不是触发该故障的必要条件；仍不能直接确定设备侧根因。
 
 开始时 Windows 枚举：9501 正常；9505 为 COM14，正常；未发现临时终端或抓包进程。
 单步发送 `[90][01][03]`（Ctrl-C），第 2 次发送后取得 `tty byte=03` 与 shell 提示符，
@@ -97,32 +99,67 @@ SM8150 EUD 节点在 0x88e0000 / 0x2000、IRQ 492，没有 secure-eud 或 clock-
 不移植其他 SoC 的 mode-manager/clock 地址；也没有新证据建立量产 COM 单字节限制。
 本地 DTS 有 clk_ignore_unused 等参数，但本轮未读到实时 cmdline，不能混为实测。
 
-## 36.5 USB OUT 对照准备完毕，管理员绑定仍待执行
+## 36.5 已完成 USB OUT 对照：绕开 qcusbser 仍失败
 
 现有 Windows usbipd 为 **5.3.0**；WSL 内核为 **6.18.40.1-microsoft-standard-WSL2**。
 WSL root 成功 modprobe usbmon，现有 libusb 可用；本轮安装了 usbutils 与 python3-usb。
 Windows 未找到已安装的 Wireshark/USBPcap。不能把 usbipd 的 pcapng 功能误认为能
 在未转交设备时抓到旧 qcusbser 流量；它记录的是自身转发路径。
 
-usbipd list 中 9505 为 **6-5 / Not shared**；9501 为 6-1，不共享控制接口。
-执行 `usbipd bind --busid 6-5` 被系统返回 **Access denied; requires administrator privileges**。
-已请用户在管理员 PowerShell 执行这个具体命令，尚未收到成功反馈；本轮没有 attach、
-没有替换驱动、没有使用 --force。列表还报告 hrdevmon 过滤器兼容性警告，不能据此
-擅自卸载安全软件或强制换驱动。
+初始 9505 为 **6-5 / Not shared**；9501 为 6-1，不共享控制接口。
+本进程执行 bind 被系统以需要管理员权限拒绝；用户随后在管理员 PowerShell 完成
+`usbipd bind --busid 6-5`，已实查为 Shared。普通权限 attach --wsl Ubuntu 成功，
+仅转交 9505，未使用 --force，未改驱动包或安全软件。hrdevmon 警告仍存在，但未阻止
+本次正常 attach。WSL lsusb 为 bus 1 / address 2，描述符与 Windows 一致。
 
 新增 `linux-port/scripts/eud-usb-step.py`：仅选单个 05c6:9505，从当前描述符取
 bulk IN/OUT，拒绝已有内核驱动占用，不 reset、不 set configuration；一轮仅一帧，
 最多 5 次、3 s 间隔，持续排空 TX，收到新回执后停重发并排空 2 s；finally 释放
 libusb 资源并关闭 usbmon。保存原始 TX、解码文本、提交/完成事件与目标设备 usbmon。
-它只通过了 Python 编译和 --help，**尚未进行设备测试，不能视为可用的替代终端**。
+首次只读排空暴露 usbmon 阻塞 read 导致线程无法 join；finally 已释放 USB，
+核实进程 fd 无 /dev/bus/usb 后才终止残留进程。改为非阻塞 read 后，新的只读
+排空、Ctrl-U、ABC、DEFG 均正常退出，输出 usbmon_thread_alive=False。
+该工具现已完成本轮单步设备验证，仍不是交互终端。
 
-下一步须先确认管理员 bind 成功，再单独 attach 9505；先描述符与只读排空，然后
-用 Ctrl-U 证明替代路径可用，再以同内核 ABC、DEFG 对照。每一步独立进程、手动审阅。
-没有新回执的轮次只记为“未确认受理”。如 attach 因过滤器失败，记录并停止，不盲试 force。
-用法与回退命令见 `reference/rx36/README.md`。测试结束 detach；恢复 Windows COM14
-可用之后再用现有 F1。无需重刷内核就能做这个对照。
+每轮独立进程，开始先排空 3 s；实际均第一次提交就取得新回执，无需重发：
+
+| 捕获前缀 | OUT 提交 / 成功完成 | 手机新回执 | TX 解码 |
+|---|---|---|---|
+| rx36-usb-ctrlu | 90 01 15，3 / 3 bytes，status 0 | tty byte=15 | 8 帧，0 stray，0 pending |
+| rx36-usb-ABC | 90 03 41 42 43，5 / 5 bytes，status 0 | BUFFERED len=3；41 90 90 | 41 帧，0 stray，0 pending |
+| rx36-usb-DEFG | 90 04 44 45 46 47，6 / 6 bytes，status 0 | BUFFERED len=4；44 90 90 90 | 50 帧，0 stray，0 pending |
+
+ABC 的目标 usbmon 记录：
+
+```text
+ffff8c93b9b569c0 193565402 S Bo:1:002:2 -115 5 = 90034142 43
+ffff8c93b9b569c0 193565807 C Bo:1:002:2 0 5 >
+```
+
+对应手机在 uptime 5608.985736 报 BUFFERED len=3，随后依次报 byte[1/3]=41、
+byte[2/3]=90、byte[3/3]=90。DEFG 也有完整 6 字节提交与成功完成，首字节 44，
+后续三个 90。这是同一个 rx33 内核上的新主机路径对照，非旧实验原样重跑。
+
+全部原始 TX、目标 URB、提交/完成/回执事件和配置 metadata 已存 reference/rx36，
+SHA-256 在 capture-manifest.json。用法见该目录 README。
 
 USBmon 是 WSL 虚拟主控上的 **URB** 记录，不能称为物理总线抓包，不能独自证明
 USB 包边界或物理 ACK，也不能直接证明旧 qcusbser 当时发出了哪些字节。
-如果绕开 qcusbser 的完整短帧同样受理且失败，可排除“必须由 qcusbser 才会触发”的
-解释；仍需考虑共同 USB 栈、初始化和设备侧访问，不能直接归为熔丝限制。
+本轮已经排除了“必须由 qcusbser 才会触发”的解释；仍需考虑共同 USB 栈、初始化
+和设备侧访问，不能直接归为熔丝限制。不能把 libusb URB 成功长度等同于已直接观察
+硬件内部 FIFO 的全部字节或物理包 ACK。
+
+## 36.6 返回 Windows 与下一步
+
+试验后正常 detach 6-5，9501/9505 均 PNP OK，COM14 能打开并 finally 关闭。
+第一次 Windows Ctrl-U 发满 5 次但捕获 0 字节；无受理回执，记为无效样本，
+不当作 RX payload 失败，也不声称此时 console 已恢复。所有 USB/串口进程关闭后，
+用现有 eudtool 单独 com-off、com-up 一次；新的 Windows Ctrl-U 首次发送即取得
+tty byte=15。手机仍为 Linux，串口已关闭；F1 本轮未触发，内核/镜像保持原版。
+9505 留在 Shared、没有 Attached；持久共享未删除，后续可再次转交 WSL。
+
+下一步优先查 SM8150 COM 接收完成/读指针推进和初始化、时钟的可定位依据。
+USB 短帧的字节内容与成功完成、设备受理现在已有同轮证据；不要再把重装 qcusbser、
+去 Flush、补零或同样延时作为首选。需要旧 Windows OUT 抓包时，必须另建其证据，
+本轮 WSL 路径不能代替它。改变设备侧读法前提出新的具体依据，并保留 console/F1；
+len 3..14 继续仅作诊断，不注入 tty。允许刷写仍仅 boot/logdump。

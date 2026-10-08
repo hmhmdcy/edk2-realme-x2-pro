@@ -60,9 +60,11 @@ EUD - the only console this board has - all verified on hardware today:
 * Session 36 confirmed Linux/COM14 and measured 9505 descriptors: bulk IN 0x81,
   OUT 0x02, max packet 16; no MDLM extras. Legacy WDM qcusbser 2.1.3.8 source
   adds conditional byte-stuffing, but this device lacks its descriptor gate.
-  It is not the exact installed 2.1.3.5 source. USB OUT comparison remains
-  pending: usbipd bind 6-5 was denied because this token is not administrator.
-  No kernel/image changed; see session 36 and reference/rx36 for the next step.
+  It is not the exact installed 2.1.3.5 source. After the user's administrator
+  bind, libusb/WSL OUT completed full ABC/DEFG frames and the phone accepted
+  both, still returning 41 90 90 / 44 90 90 90. qcusbser is not required to
+  trigger the failure. Detached back to Windows; COM14 receipt recovered after
+  one com-off/up. No kernel/image changed; see session 36 and reference/rx36.
 
 ## 1. What to do next, in order
 
@@ -72,9 +74,9 @@ before spending another hardware cycle. The downstream `drivers/soc/qcom/eud.c`
 and QUIC host library established the register layout and framing; multi-byte
 RX on this unit is still open.
 
-**Next session: continue the USB OUT comparison prepared in session 36.** Read
-`sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md` for the latest evidence
-and the outstanding administrator bind, and session 35 for excluded experiments.
+**Next session: prioritize SM8150 RX advancement/initialization evidence.** Read
+`sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md` for the completed host-path
+comparison and returned Windows state, and session 35 for excluded experiments.
 The temporary terminal remains available; native multi-byte RX is still open.
 
 1. Resume native multi-byte RX investigation using sessions 35/36. The temporary
@@ -88,14 +90,15 @@ The temporary terminal remains available; native multi-byte RX is still open.
    printk; [90][01][char] reaches tty. The offset-2 hypothesis is unsupported.
    a. Keep len 3..14 as bounded diagnostics, buffer before printing and do not
       inject repeated/stale probe bytes into tty. Length 3 is not recovery.
-   b. Obtain USB OUT evidence or a controlled host-path comparison, then actual
-      SM8150 RX completion/advance and clock documentation. TX exclusion,
+   b. Session 36 obtained a controlled host-path comparison: accepted ABC/DEFG
+      still fail without qcusbser. Prioritize actual SM8150 RX completion/advance,
+      initialization and clock documentation. TX exclusion,
       200 us/2 ms/20 ms pacing, readb, nGnRnE and changed header ordering have
       already failed; do not repeat them unchanged. Installed qcusbser is older
       than the public WDF source. SWD restrictions do not establish COM gating.
       Session 36 also audits the legacy WDM path and actual SM8150 clock/PM/PHY
-      diffs. See reference/rx36/README.md for the pending 9505-only WSL comparison;
-      the new libusb helper has passed syntax checks but has no device validation.
+      diffs. reference/rx36/README.md has the target-only URB/receipt evidence and
+      the device-tested libusb helper. Do not repeat the same comparison unchanged.
    c. Only then wire more commands (recovery / EDL) into the length table.
    Reminders that still hold: start the host capture BEFORE the kernel boots so
    the device TX FIFO never backs up, and a silent EUD does not mean a crashed
@@ -167,7 +170,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 1e54944  docs: hand off native EUD RX investigation
+    master = e606a99  eud: audit legacy qcusbser and prepare USB OUT comparison
+             1e54944  docs: hand off native EUD RX investigation
              0e4a8cc  eud: add temporary interactive terminal for single-byte RX
              38bf2b8  docs: mark raw EUD captures as binary fixtures
              79b0f9d  eud: protect RX header access and record FIFO investigations
@@ -175,9 +179,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              649c90d  linux-port: mirror the Linux side of the port into the repo
              2184dc1  docs: anchor the Repo state count to the tip the block names
              6658232  docs: regenerate the whole Repo state block, no stale duplicate
-             4903417  docs: generate the handover Repo state block from git, and check it
 
-    61 commits ahead of upstream origin/master, as of the tip named above;
+    62 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -324,7 +327,7 @@ the only copy.
 | 33 | RX access, host/upstream audits and production-policy evidence; multi-byte advancement still open | `sessions/33-rx-access-and-production-policy.md` |
 | 34 | Temporary host terminal; multi-byte TX, single-byte RX bridge, tty/console and keyboard verification | `sessions/34-temporary-eud-terminal.md` |
 | 35 | Next-session RX handoff: retained state, excluded paths, new evidence needed and short prompt | `sessions/35-rx-next-session-handoff.md` |
-| 36 | Actual USB descriptors, legacy qcusbser and SM8150 source audit; USB OUT comparison awaits administrator bind | `sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md` |
+| 36 | Actual USB descriptors, legacy qcusbser/SM8150 audit; accepted libusb/WSL ABC and DEFG still fail | `sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md` |
 
 Rules that keep this file from growing again:
 
