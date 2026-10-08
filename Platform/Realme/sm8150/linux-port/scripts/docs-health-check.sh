@@ -41,6 +41,12 @@ for f in HANDOVER-NEXT.md README.md EUD.md BINARIES.md DOCS-INDEX.md SWD-JTAG.md
     say "   missing on one side: $f"
   fi
 done
+for f in DIAG-CAPTURE.md; do
+  if [ -e "$W/$f" ] || [ -e "$P/$f" ]; then
+    say "   STALE: $f still exists - its content moved to sessions/2026-10-06-*.md"; fail=1
+  fi
+done
+
 if [ -d "$W/linux-port" ]; then
   d=$(diff -rq "$W/linux-port" "$P/linux-port" 2>/dev/null | grep -v -e artifacts -e README-MIRROR.md || true)
   if [ -n "$d" ]; then say "   linux-port differences:"; printf '%s\n' "$d" | sed 's/^/     /'; fail=1; fi
