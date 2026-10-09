@@ -17,13 +17,18 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Final session-44 live state: logdump-rx44-rx-stats-ctrl-u.img diagnostic;
+Final session-45 live state: restored logdump-rx44-rx-stats-ctrl-u.img diagnostic;
 TOP_CFG=0x11, original zero, Linux shell booted. Native 10-byte echo had exact
-payload/output/prompt. F1 independently reached fastboot; rebooted the same
-candidate and obtained a fresh Ctrl-U receipt. COM14 closed/disposed;
+payload/output/prompt in RX44. RX45's 14-byte command also returned exact output,
+but enabling the RX mask before arrival did not fix missing pending/receipts.
+F1 independently reached fastboot; restored RX44 and obtained a fresh Ctrl-U
+receipt after reboot. COM14 closed/disposed;
 9501/9500/9505 OK; 6-5 Shared, not Attached. Stability remains unresolved.
 
-Current handoff: sessions/44-rx-receipt-counters.md. Software counters show
+Current handoff: sessions/45-rx-mask-before-arrival.md. Persistent INT1 RX
+mask 0x1d alone was insufficient; excluded candidate/source retained for audit,
+actual source/Image restored to RX44. Next investigate measured IRQ delivery,
+not the same mask-only experiment. RX44 software counters show
 failed native A/B inputs did not add a pending observation, rejected header or
 tty bytes; a successful C input added exactly one 10-byte frame. Investigate
 EUD/USB delivery versus unsampled pending state, with the RX IRQ path and
@@ -77,7 +82,7 @@ Sessions 35-40 remain the history of excluded paths and source limits. The new
 SM8150 map plus actual zero/0x11 readbacks supplied evidence missing from the
 older SDM845 register table. No PHY/clock reset, filter change or force bind.
 
-1. Read sessions 41, 42, the RX43 corrections and RX44 counters before further experiments. First verify
+1. Read sessions 41, 42, the RX43 corrections, RX44 counters and RX45 mask exclusion before further experiments. First verify
    live device enumeration, serial ownership and a fresh bounded device receipt.
    Use the verified wait-state plus whole-frame RX method. The remaining
    question is intermittent missing frame receipts. Read RX43's correction of
@@ -89,7 +94,10 @@ older SDM845 register table. No PHY/clock reset, filter change or force bind.
    a successful native echo. Distinguish EUD delivery from missed transient
    pending state; review IRQ route/mask semantics before implementing IRQ RX.
    Read-only stats are at /sys/class/tty/ttyEUD0/device/rx_stats and on Ctrl-U.
-   Trace from this boundary using new evidence.
+   RX45 set only INT1 RX before arrival with readback; a failed command still
+   added no pending/frame/tty counts. Mask-only candidate was reverted. Trace
+   actual IRQ delivery from this boundary using new evidence; the matching
+   vendor DT specifies SPI 492 level high, absent from the actual mainline node.
    Compare one variable at a time and classify each result by evidence stage
    (sessions 42/43), without treating empty captures as proof of USB rejection.
    Preserve the receipt/retry boundary and reserved length-2 F1 protocol.
@@ -97,7 +105,8 @@ older SDM845 register table. No PHY/clock reset, filter change or force bind.
    E:\eud-host\eud-terminal.cmd -Reconnect (linux-port/docs/EUD-TERMINAL.md).
    For native frames use the bounded eud-step helper and fresh capture names;
    RetryJitterMs is optional, not proof of reliable delivery.
-2. Current diagnostic is logdump-rx44-rx-stats-ctrl-u.img; exact hashes and
+2. Current diagnostic is restored logdump-rx44-rx-stats-ctrl-u.img; RX45's
+   excluded mask candidate and restoration evidence are in session 45. Exact hashes and
    original source/Image backups are in session 44. It retains the RX41
    hardware method, console/F1 and actual initramfs; receipt stability is not
    fixed. Rollback for this diagnostic is logdump-rx41-native-ordered-tty.img.
@@ -169,7 +178,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 8a264f1  linux-port: mirror the Linux side of the port into the repo
+    master = 4ab26a9  eud: measure missing pending receipts and qualify debug access evidence
+             8a264f1  linux-port: mirror the Linux side of the port into the repo
              7af0fbe  eud: expose native command output and audit missing receipts
              cf87864  docs: hand off native EUD terminal stability investigation
              eff092d  eud: verify native SM8150 RX with AHB2PHY wait state
@@ -179,7 +189,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              703469c  eud: record pre-Linux RX failure and USB boundary comparisons
              9d01126  eud: audit native RX sources and PHY lifecycle
 
-    73 commits ahead of upstream origin/master, as of the tip named above;
+    74 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -284,9 +294,10 @@ Answered since; kept here so nobody re-opens them:
 
 * EUD COM drain speed with full DEBUG on: fine now - paced writes, and a 210 s
   capture reassembles with 0 resyncs (sessions/15, sessions/16).
-* Why EUD SWD 9504 did not enumerate after CTLOUT_SET 0x645 + attach: the
-  transport works, the AP DAP is unreachable on this retail unit (APPS_DBGEN_DISABLE
-  fuse + signed APDP debug policy) - see SWD-JTAG.md and Mnemon document 06827d0c.
+* EUD SWD/JTAG USB transport works; the tested AP DAP does not answer in
+  Android or UEFI. Fuse/policy is a plausible cause, but this unit's fuse
+  values were not read. No demonstrated unlock method; TRACE unvalidated.
+  See SWD-JTAG.md for the qualified evidence and source limits.
 
 
 ---
@@ -337,6 +348,7 @@ the only copy.
 | 42 | Native terminal handoff: verified payload fix, unresolved receipt/response faults, next checks and short prompt; docs only | `sessions/42-native-terminal-next-session-handoff.md` |
 | 43 | Correct RX41 missing-output claims from unchanged raw evidence; actual BusyBox/tty/TX audit, repaired-config USB comparison and final live state | `sessions/43-native-terminal-evidence-audit.md` |
 | 44 | RX counters narrow failed native inputs to no observed pending; retained native output/F1, source review and qualified fuse/policy evidence | `sessions/44-rx-receipt-counters.md` |
+| 45 | Persistent RX mask before arrival remains insufficient; exact native 14-byte output/F1, restored RX44 baseline, fuse-claim correction | `sessions/45-rx-mask-before-arrival.md` |
 
 Rules that keep this file from growing again:
 

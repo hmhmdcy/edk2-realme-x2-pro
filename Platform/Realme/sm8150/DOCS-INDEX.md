@@ -38,7 +38,8 @@
 | sessions/41-rx-ahb2phy-wait-state-fix.md、reference/rx41/ | 原厂 SM8150 映射、TOP_CFG=0x11 有效 RX 方法，UEFI/Linux 完整 payload、tty 执行与输出验证 |
 | sessions/42-native-terminal-next-session-handoff.md | 历史交接与短提示词：仅文档更新；其中缺输出样本已由 session 43 更正 |
 | sessions/43-native-terminal-evidence-audit.md、reference/rx43/ | 原始抓取更正缺输出，BusyBox/tty/TX 审查，已修复配置下双 USB 路径的缺回执边界与最终状态 |
-| sessions/44-rx-receipt-counters.md、reference/rx44/ | 当前交接：只读计数定位到未观测 pending，原生输出/F1 保留，IRQ/超时来源审查与熔丝证据限定 |
+| sessions/44-rx-receipt-counters.md、reference/rx44/ | 只读计数定位到未观测 pending，原生输出/F1 保留，IRQ/超时来源审查与熔丝证据限定 |
+| sessions/45-rx-mask-before-arrival.md、reference/rx45/ | 当前交接：接收前只启用 RX 掩码仍失败；完整 LEN=14 输出/F1、恢复 RX44，下一步观察真实 IRQ |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
@@ -64,4 +65,4 @@
 
 - HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
 - 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD 打开时占 USB，彻底断电要长按电源约 15 s。
-- 待办：HANDOVER-NEXT.md 第 1 节、sessions/44-rx-receipt-counters.md。保留 session 41 的真实整帧修复；RX44 失败帧未增加 pending 或头部拒绝计数，下一步区分 USB/EUD 交付与未采样到短暂状态。当前只读诊断不是稳定性修复；不要原样重跑已排除实验。
+- 待办：HANDOVER-NEXT.md 第 1 节、sessions/45-rx-mask-before-arrival.md。保留 session 41 的真实整帧修复；RX44/RX45 失败帧未增加 pending 或头部拒绝计数，仅接收前启用 RX 掩码不足，下一步观察真实 IRQ。已恢复 RX44 诊断，不是稳定性修复；不要原样重跑已排除实验。

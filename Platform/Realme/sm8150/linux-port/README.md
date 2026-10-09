@@ -13,7 +13,11 @@
 `-RetryJitterMs 800` 仅改变有界重试时间，不保证所有 OUT 都受理。
 不要使用旧 build-image.sh 重建 initramfs；本轮保留真实 WSL initramfs 和原 DTB。
 
-当前交接见 [session 44](../sessions/44-rx-receipt-counters.md)。当前 eud.c 在 RX41
+当前交接见 [session 45](../sessions/45-rx-mask-before-arrival.md)。接收前只开启 INT1
+RX 掩码仍未消除缺回执；该候选已撤回，设备、实际源码/Image 和本 eud.c 恢复 RX44。
+原生 LEN=14 命令输出和 F1 保留，下一步观察真实 IRQ；不要重复仅掩码实验。
+
+计数边界见 [session 44](../sessions/44-rx-receipt-counters.md)。当前 eud.c 在 RX41
 硬件方法上增加只读 sysfs 接收计数，Ctrl-U 回执也含计数；没有改动 FIFO 顺序、20 ms
 轮询或正常原生帧回执。诊断镜像仅更新 logdump；失败输入没有增加 pending/坏帧头/tty
 计数，成功 echo 的帧/字节准确。根因仍未定位，不能把诊断称为稳定性修复。
