@@ -11,7 +11,14 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 56](sessions/56-source-boundaries-and-focused-research.md)。**
+> **当前入口：[session 57](sessions/57-driver-raw-logging-boundary.md)。**
+> 实装驱动前缓冲原始日志已实际抓取：9550 字节与 GET_STATS/raw 完全一致，512 个
+> 软件发送帧直接匹配。旧缺回执/TX 缺口未重现，不是稳定性修复。首轮启动脚本误判
+> PnP 返回对象；独立确认恢复、修正且另获单次 UAC 后完成一个有界 owner。两项临时
+> 日志配置已移除、串口/帮助进程关闭、三节点 OK；未刷机/手机重启/换驱动或安装终端。
+> 下一项真实缺口的日志→受理计数→raw 边界，避免原样循环通过样本；详见 reference/rx57。
+>
+> **上一轮来源审查：[session 56](sessions/56-source-boundaries-and-focused-research.md)。**
 > 只读审查/收敛搜索：实装 reset selector=2 对应 URB=0x1e，找到有条件的受理缓冲前
 > 原始日志路径；padding 单独解释不了 RX55 整帧缺口。未启用日志/改注册表/开串口/刷机。
 > 新资料含 QUIC COM issue/未完成示例与 OpenOCD SWD 实现，没有现成 COM 丢包修复。

@@ -17,7 +17,15 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current handoff: sessions/56-source-boundaries-and-focused-research.md.
+Current handoff: sessions/57-driver-raw-logging-boundary.md.
+Built-in pre-buffer driver logging is now measured in one bounded Windows
+owner: 9550 successful-read/counter/raw bytes agree; 512 journal records match
+directly. Old startup/TX faults did not recur; no stability repair. Initial
+setup's PassThru output-object error was corrected after independent restoration
+and separate UAC approval. Both temporary COM14 values are removed; three nodes
+OK, serial/helpers closed, same candidate/terminal. See reference/rx57.
+
+Previous source audit: sessions/56-source-boundaries-and-focused-research.md.
 Read-only consolidation/search: exact reset selector 2 maps to URB 0x1e;
 conditional pre-buffer raw logger identified, padding cannot alone remove
 RX55's six-byte frame. No runtime logging/PID proof or repair; old ETW totals
@@ -44,8 +52,9 @@ TX/session-start fix. TOP_CFG=0x11/whole-frame payload/F1/compatible/native
 terminal and unchanged RX48 rollback are retained. Finally COM14 closes/probes
 dispose; three nodes OK, no owner, Shared/not Attached. No new admin ETW.
 
-Next audit the exact installed worker/completion path before vPutToReadBuffer
-and obtain boundary evidence for a reproduced gap. Preserve startup OUT/RX
+The dual-worker pre-buffer logger has now been measured; next obtain its byte
+boundary during an actual reproduced gap. Both UAC attempts are used and logging
+is restored off. Do not repeat RX57's passing capture as a repair. Preserve startup OUT/RX
 count distinction. Do not repeat masks/reset/ZLP/old zero-wait or ordinary
 passing commands as proof; open/reset code alone does not measure data toggles.
 
@@ -242,7 +251,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 691126b  eud: locate reproduced TX gap before Windows accepted-buffer count
+    master = 738845e  eud: consolidate faults and audit pre-buffer receive boundaries
+             691126b  eud: locate reproduced TX gap before Windows accepted-buffer count
              45d96fc  eud: validate repeated console RX and F1, audit host receive counters
              9943786  eud: service RX at console frame boundaries and retain TX loss evidence
                f081526  eud: isolate same-owner RX loss and continuous USB IN effects
@@ -264,7 +274,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              703469c  eud: record pre-Linux RX failure and USB boundary comparisons
              9d01126  eud: audit native RX sources and PHY lifecycle
 
-    85 commits ahead of upstream origin/master, as of the tip named above;
+    86 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -435,6 +445,7 @@ the only copy.
 | 54 | Nine manual console RX overlaps and console F1 pass on unchanged candidate; six credited empties, exact Windows worker/GET_STATS audit, TX gap still open | `sessions/54-console-rx-regression-and-host-counter-audit.md` |
 | 55 | Reproduced seq7376 TX gap before Windows accepted-buffer count; first startup receipt still missing, unchanged candidate | `sessions/55-windows-perf-counter-and-reproduced-tx-gap.md` |
 | 56 | Repair/measurement synthesis, exact pre-buffer/reset/padding boundaries and focused new sources; read-only, no stability fix | `sessions/56-source-boundaries-and-focused-research.md` |
+| 57 | Built-in pre-buffer logger measured; 9550 driver/counter/raw bytes and 512 journal matches, restored configuration; old faults untriggered | `sessions/57-driver-raw-logging-boundary.md` |
 
 Rules that keep this file from growing again:
 

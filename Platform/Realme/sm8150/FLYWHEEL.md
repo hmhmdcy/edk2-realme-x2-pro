@@ -14,7 +14,13 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/56-source-boundaries-and-focused-research.md`：本轮只读，未开串口/
+当前交接看 `sessions/57-driver-raw-logging-boundary.md`：一个有界 Windows owner 已取得
+实装驱动受理前原始日志，9550 字节与计数/raw 一致、512 软件发送帧直接匹配。
+旧故障未重现，不算稳定性修复；首轮 PnP 返回值误判已记录并修正，两个单次 UAC 均已用。
+两项临时 COM14 配置已恢复、串口/帮助进程关闭、三节点 OK；未刷机/手机重启或换驱动。
+下一项必须取得真实缺口的前缓冲字节，不能原样重跑 passing 流程。
+
+上一轮来源审查 `sessions/56-source-boundaries-and-focused-research.md`：当轮只读，未开串口/
 attach/刷机/重启/改驱动或注册表。审查得受理缓冲前日志路径、reset selector 与 padding
 边界，合并旧结论做针对性搜索；未取得新修复。下一项要在真实缺帧时区分 USB 到主机
 与驱动前段丢失，普通 passing/F1/reset 循环不再算进展。

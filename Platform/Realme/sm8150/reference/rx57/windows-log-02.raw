@@ -1,0 +1,80 @@
+ê[ 58ê62.5ê2772ê1] eêud: êtty êbyteê=15 êpollês=24ê2648ê penêdingê=23 êbad=ê0 frêamesê=23 êbyteês=25ê0 ttêy_beêforeê=249ê no_êtty=ê0 ovêerruên=0 êbad_êid=0ê0 baêd_leên=0 êirqsê=23 êirq_êframêes=2ê3 poêll_fêrameês=0 êemptêy=0 êwatcêhdogê=0 dêropsê=0 fêaultê=0 aêctivêe=1
+ê[ 59ê23.0ê1826ê9] eêud: êrx fêrameê lenê=14 êdataê=64 ê64 2ê0 69ê 66 ê3d 2êf 73ê 79 ê73 2êf 62ê 75 ê73 sê1_afêter=ê0606ê0606ê viaê=irqê
+êdd iêf=/sêys/bêusê[ 59ê23.3ê7706ê9] eêud: êrx fêrameê lenê=14 êdataê=2f ê70 6êc 61ê 74 ê66 6êf 72ê 6d ê2f 6ê4 65ê 76 ê69 sê1_afêter=ê0606ê0606ê viaê=irqê
+ê/plaêtforêm/deêviê[ 59ê23.7ê0233ê7] eêud: êrx fêrameê lenê=14 êdataê=63 ê65 7ê3 2fê 38 ê38 6ê5 30ê 30 ê30 3ê0 2eê 73 ê65 sê1_afêter=ê0606ê0606ê viaê=irqê
+êces/ê88e0ê000.êseê[ 59ê24.0ê7752ê0] eêud: êrx fêrameê lenê=14 êdataê=72 ê69 6ê1 6cê 2f ê74 7ê8 5fê 6a ê6f 7ê5 72ê 6e ê61 sê1_afêter=ê0606ê0606ê viaê=irqê
+êrialê/tx_êjourênaê[ 59ê24.4ê0174ê3] eêud: êrx fêrameê lenê=14 êdataê=6c ê20 6êf 66ê 3d ê2f 7ê4 6dê 70 ê2f 5ê2 35ê 37 ê4a sê1_afêter=ê0606ê0606ê viaê=irqê
+êl ofê=/tmêp/R5ê7Jê[ 59ê24.7ê0000ê6] eêud: êtty êbyteê=0a
+ê
+êdd: ê/sysê/busê/plaêtforêm/deêviceês/88êe000ê0.seêrialê/tx_êjourênal:ê Invêalidê argêumenêt
+~ê # ê[6nê[ 59ê56.9ê3126ê7] eêud: êrx fêrameê lenê=14 êdataê=64 ê64 2ê0 69ê 66 ê3d 2êf 73ê 79 ê73 2êf 62ê 75 ê73 sê1_afêter=ê0606ê0606ê viaê=irqê
+êdd iêf=/sêys/bêusê[ 59ê57.2ê9844ê4] eêud: êrx fêrameê lenê=14 êdataê=2f ê70 6êc 61ê 74 ê66 6êf 72ê 6d ê2f 6ê4 65ê 76 ê69 sê1_afêter=ê0606ê0606ê viaê=irqê
+ê/plaêtforêm/deêviê[ 59ê57.6ê0947ê7] eêud: êrx fêrameê lenê=14 êdataê=63 ê65 7ê3 2fê 38 ê38 6ê5 30ê 30 ê30 3ê0 2eê 73 ê65 sê1_afêter=ê0606ê0606ê viaê=irqê
+êces/ê88e0ê000.êseê[ 59ê57.9ê3380ê2] eêud: êrx fêrameê lenê=14 êdataê=72 ê69 6ê1 6cê 2f ê74 7ê8 5fê 6a ê6f 7ê5 72ê 6e ê61 sê1_afêter=ê0606ê0606ê viaê=irqê
+êrialê/tx_êjourênaê[ 59ê58.2ê2613ê1] eêud: êrx fêrameê lenê=14 êdataê=6c ê20 6êf 66ê 3d ê2f 7ê4 6dê 70 ê2f 5ê2 35ê 37 ê4a sê1_afêter=ê0606ê0606ê viaê=irqê
+êl ofê=/tmêp/R5ê7Jê[ 59ê58.6ê1396ê6] eêud: êrx fêrameê lenê=14 êdataê=20 ê62 7ê3 3dê 34 ê30 3ê9 36ê 20 ê63 6êf 75ê 6e ê74 sê1_afêter=ê0606ê0606ê viaê=irqê
+ê bs=ê40ê
+96 êcounêtê[ 59ê58.9ê7113ê4] eêud: êrx fêrameê lenê=3 dêata=ê3d 3ê1 0aê s1_êafteêr=06ê0606ê06 vêia=iêrq
+ê=1
+ê0+1 êrecoêrds êin
+ê0+1 êrecoêrds êoutê
+312ê0 byêtes ê(3.0êKB) êcopiêed, ê0.00ê0082ê secêondsê, 36ê.3MBê/s
+ê~ # ê[6nê[ 59ê70.4ê3143ê5] eêud: êrx fêrameê lenê=14 êdataê=62 ê61 7ê3 65ê 36 ê34 2ê0 2fê 74 ê6d 7ê0 2fê 52 ê35 sê1_afêter=ê0606ê0606ê viaê=irqê
+êbaseê64 /êtmp/êR5ê[ 59ê70.7ê2719ê5] eêud: êrx fêrameê lenê=3 dêata=ê37 4êa 0aê s1_êafteêr=06ê0606ê06 vêia=iêrq
+ê7J
+êRVVEêVFhKêNDgBêAAAAêMAwAêAAACêAAAGêAAAAêwSMAêAAAAêAADAêJQAAêAAAAêAEciêdUgAêAAAAêBAEyêIHBvêBAFsê
+bFê9mBAêFyYWê1lBAêFzPTêAgBAêFlbXêB0BAêF5PTêAgBAêF3YXêRjBAêFoZGê9nBAêE9MCêBkBAêFyb3êBzBAêE9MCêBm
+êBAFhêdWx0êBAE9êMCBhêBAFjêdGl2êBAFlêPTEgêBAFxêdWV1êBAFlêZD0wêBAEgêY29uêBAFzêb2xlêBAFfêZnJhêBAFtê
+ZXêM9BAêEwDQêp3BAêFhaXêRzBAêE9MCêByBAêFlY2ê92BAêFlcmêVkBAêE9MCêBjBAêFsZWêFyBAêFlZDê0wBAêEgd2êFp
+êBAF0êaW5nêBAE9êMCBtêBAFhêeF9têBAFzêPTAgêBAFmêaXJzêBAF0êPTAwêBAEgêbGFzêBAF0êPTAwêBAEgêZXJyêBAE9ê
+MAê0KBAêFjaGêVjBAêFrczê0xBAêE1NzêEgBAêFmcmêFtBAêFlczê0wBAêEgZjêE9BAêEwIGêVtBAêFwdHêlfBAêFpcnêFz
+êBAE9êMCBjêBAFyêZWRpêBAF0êPTANêBAEKêfiAjêBAEgêG1s2êAQFuêAAAAêBAJbêIDU4êBAI2êMi41êBAIyêNzcyêBAIxê
+XSêBlBAêJ1ZDêogBAêJ0dHêkgBAêJieXêRlBAêI9MTêUgBAêJwb2êxsBAêJzPTêI0BAêIyNjêQ4BAêIgcGêVuBAêJkaWê5n
+êBAI9êMjMgêBAJiêYWQ9êBAIwêIGZyêBAJhêbWVzêBAI9êMjMgêBAJiêeXRlêBAJzêPTI1êBAIwêIHR0êBAJ5êX2JlêBAJmê
+b3êJlBAêI9MjêQ5BAêIgbmê9fBAêJ0dHêk9BAêIwIGê92BAêJlcnêJ1BAêJuPTêAgBAêJiYWêRfBAêJpZDê0wBAêIwIGêJh
+êBAJkêX2xlêBAJuêPTAgêBAJpêcnFzêBAI9êMjMgêBAJpêcnFfêBAJmêcmFtêBAJlêcz0yêBAIzêIHBvêBAJsêbF9mêBAJyê
+YWê1lBAêJzPTêAgBAêJlbXêB0BAêJ5PTêAgBAêJ3YXêRjBAêJoZGê9nBAêI9MCêBkBAêJyb3êBzBAêI9MCêBmBAêJhdWêx0
+êBAI9êMCBhêBAJjêdGl2êBAJlêPTEKêBAJbêIDU5êBAIyêMy4wêBAIxêODI2êBAI5êXSBlêBAJ1êZDogêBAJyêeCBmêBAJyê
+YWê1lBAêIgbGêVuBAêI9MTêQgBAêJkYXêRhBAêI9NjêQgBAêI2NCêAyBAêIwIDêY5BAêIgNjêYgBAêIzZCêAyBAêJmIDêcz
+êBAIgêNzkgêBAI3êMyAyêBAJmêIDYyêBAIgêNzUgêBAI3êMyBzêBAIxêX2FmêBAJ0êZXI9êBAIwêNjA2êBAIwêNjA2êBAIgê
+dmêlhBAêI9aXêJxAQêIKAAêAABAêFkZCêBpBAêFmPSê9zBAêF5cyê9iAgêF1cwêAABAêJbIDêU5BAêIyMyê4zBAêI3NzêA2
+êBAI5êXSBlêBAJ1êZDogêBAJyêeCBmêBAJyêYW1lêBAIgêbGVuêBAI9êMTQgêBAJkêYXRhêBAI9êMmYgêBAI3êMCA2êBAJjê
+IDêYxBAêIgNzêQgBAêI2NiêA2BAêJmIDêcyBAêIgNmêQgBAêIyZiêA2BAêI0IDêY1BAêIgNzêYgBAêI2OSêBzBAêIxX2êFm
+êBAJ0êZXI9êBAIwêNjA2êBAIwêNjA2êBAIgêdmlhêBAI9êaXJxêAQIKêAAAAêBAEvêcGxhêBAF0êZm9yêBAFtêL2RlêAgF2ê
+aQêAABAêJbIDêU5BAêIyMyê43BAêIwMjêMzBAêI3XSêBlBAêJ1ZDêogBAêJyeCêBmBAêJyYWê1lBAêIgbGêVuBAêI9MTêQg
+êBAJkêYXRhêBAI9êNjMgêBAI2êNSA3êBAIzêIDJmêBAIgêMzggêBAIzêOCA2êBAI1êIDMwêBAIgêMzAgêBAIzêMCAzêBAIwê
+IDêJlBAêIgNzêMgBAêI2NSêBzBAêIxX2êFmBAêJ0ZXêI9BAêIwNjêA2BAêIwNjêA2BAêIgdmêlhBAêI9aXêJxAQêIKAAêAA
+êBAFjêZXMvêBAE4êOGUwêBAEwêMDAuêAgFzêZQAAêBAJbêIDU5êBAIyêNC4wêBAI3êNzUyêBAIwêXSBlêBAJ1êZDogêBAJyê
+eCêBmBAêJyYWê1lBAêIgbGêVuBAêI9MTêQgBAêJkYXêRhBAêI9NzêIgBAêI2OSêA2BAêIxIDêZjBAêIgMmêYgBAêI3NCêA3
+êBAI4êIDVmêBAIgêNmEgêBAI2êZiA3êBAI1êIDcyêBAIgêNmUgêBAI2êMSBzêBAIxêX2FmêBAJ0êZXI9êBAIwêNjA2êBAIwê
+NjêA2BAêIgdmêlhBAêI9aXêJxAQêIKAAêAABAêFyaWêFsBAêEvdHêhfBAêFqb3êVyAgêFuYQêAABAêJbIDêU5BAêIyNCê40
+êBAIwêMTc0êBAIzêXSBlêBAJ1êZDogêBAJyêeCBmêBAJyêYW1lêBAIgêbGVuêBAI9êMTQgêBAJkêYXRhêBAI9êNmMgêBAIyê
+MCêA2BAêJmIDêY2BAêIgM2êQgBAêIyZiêA3BAêI0IDêZkBAêIgNzêAgBAêIyZiêA1BAêIyIDêM1BAêIgMzêcgBAêI0YSêBz
+êBAIxêX2FmêBAJ0êZXI9êBAIwêNjA2êBAIwêNjA2êBAIgêdmlhêBAI9êaXJxêAQIKêAAAAêBAFsêIG9mêBAE9êL3RtêBAFwê
+L1êI1AgêE3SgêAABAêJbIDêU5BAêIyNCê43BAêIwMDêAwBAêI2XSêBlBAêJ1ZDêogBAêJ0dHêkgBAêJieXêRlBAêI9MGêEK
+êAgENêCgAAêBAFkêZDogêBAEvêc3lzêBAEvêYnVzêBAEvêcGxhêBAF0êZm9yêBAFtêL2RlêBAF2êaWNlêBAFzêLzg4êBAFlê
+MDêAwBAêEwLnêNlBAêFyaWêFsBAêEvdHêhfBAêFqb3êVyBAêFuYWêw6BAêEgSWê52BAêFhbGêlkBAêEgYXêJnBAêF1bWêVu
+êBAF0êDQp+êBAEgêIyAbêAwFbêNm4AêBAJbêIDU5êBAI1êNi45êBAIzêMTI2êBAI3êXSBlêBAJ1êZDogêBAJyêeCBmêBAJyê
+YWê1lBAêIgbGêVuBAêI9MTêQgBAêJkYXêRhBAêI9NjêQgBAêI2NCêAyBAêIwIDêY5BAêIgNjêYgBAêIzZCêAyBAêJmIDêcz
+êBAIgêNzkgêBAI3êMyAyêBAJmêIDYyêBAIgêNzUgêBAI3êMyBzêBAIxêX2FmêBAJ0êZXI9êBAIwêNjA2êBAIwêNjA2êBAIgê
+dmêlhBAêI9aXêJxAQêIKAAêAABAêFkZCêBpBAêFmPSê9zBAêF5cyê9iAgêF1cwêAABAêJbIDêU5BAêI1Nyê4yBAêI5ODêQ0
+êBAI0êXSBlêBAJ1êZDogêBAJyêeCBmêBAJyêYW1lêBAIgêbGVuêBAI9êMTQgêBAJkêYXRhêBAI9êMmYgêBAI3êMCA2êBAJjê
+IDêYxBAêIgNzêQgBAêI2NiêA2BAêJmIDêcyBAêIgNmêQgBAêIyZiêA2BAêI0IDêY1BAêIgNzêYgBAêI2OSêBzBAêIxX2êFm
+êBAJ0êZXI9êBAIwêNjA2êBAIwêNjA2êBAIgêdmlhêBAI9êaXJxêAQIKêAAAAêBAEvêcGxhêBAF0êZm9yêBAFtêL2RlêAgF2ê
+aQêAABAêJbIDêU5BAêI1Nyê42BAêIwOTêQ3BAêI3XSêBlBAêJ1ZDêogBAêJyeCêBmBAêJyYWê1lBAêIgbGêVuBAêI9MTêQg
+êBAJkêYXRhêBAI9êNjMgêBAI2êNSA3êBAIzêIDJmêBAIgêMzggêBAIzêOCA2êBAI1êIDMwêBAIgêMzAgêBAIzêMCAzêBAIwê
+IDêJlBAêIgNzêMgBAêI2NSêBzBAêIxX2êFmBAêJ0ZXêI9BAêIwNjêA2BAêIwNjêA2BAêIgdmêlhBAêI9aXêJxAQêIKAAêAA
+êBAFjêZXMvêBAE4êOGUwêBAEwêMDAuêAgFzêZQAAêBAJbêIDU5êBAI1êNy45êBAIzêMzgwêBAIyêXSBlêBAJ1êZDogêBAJyê
+eCêBmBAêJyYWê1lBAêIgbGêVuBAêI9MTêQgBAêJkYXêRhBAêI9NzêIgBAêI2OSêA2BAêIxIDêZjBAêIgMmêYgBAêI3NCêA3
+êBAI4êIDVmêBAIgêNmEgêBAI2êZiA3êBAI1êIDcyêBAIgêNmUgêBAI2êMSBzêBAIxêX2FmêBAJ0êZXI9êBAIwêNjA2êBAIwê
+NjêA2BAêIgdmêlhBAêI9aXêJxAQêIKAAêAABAêFyaWêFsBAêEvdHêhfBAêFqb3êVyAgêFuYQêAABAêJbIDêU5BAêI1OCê4y
+êBAIyêNjEzêBAIxêXSBlêBAJ1êZDogêBAJyêeCBmêBAJyêYW1lêBAIgêbGVuêBAI9êMTQgêBAJkêYXRhêBAI9êNmMgêBAIyê
+MCêA2BAêJmIDêY2BAêIgM2êQgBAêIyZiêA3BAêI0IDêZkBAêIgNzêAgBAêIyZiêA1BAêIyIDêM1BAêIgMzêcgBAêI0YSêBz
+êBAIxêX2FmêBAJ0êZXI9êBAIwêNjA2êBAIwêNjA2êBAIgêdmlhêBAI9êaXJxêAQIKêAAAAêBAFsêIG9mêBAE9êL3RtêBAFwê
+L1êI1AgêE3SgêAABAêJbIDêU5BAêI1OCê42BAêIxMzêk2BAêI2XSêBlBAêJ1ZDêogBAêJyeCêBmBAêJyYWê1lBAêIgbGêVu
+êBAI9êMTQgêBAJkêYXRhêBAI9êMjAgêBAI2êMiA3êBAIzêIDNkêBAIgêMzQgêBAIzêMCAzêBAI5êIDM2êBAIgêMjAgêBAI2ê
+MyêA2BAêJmIDêc1BAêIgNmêUgBAêI3NCêBzBAêIxX2êFmBAêJ0ZXêI9BAêIwNjêA2BAêIwNjêA2BAêIgdmêlhBAêI9aXêJx
+êAQIKêAAAAêBAEgêYnM9êBAE0êMA0NêBAEKêOTYgêBAFjêb3VuêAQF0êAAAAêBAJbêIDU5êBAI1êOC45êBAI3êMTEzêBAI0ê
+XSêBlBAêJ1ZDêogBAêJyeCêBmBAêJyYWê1lBAêIgbGêVuBAêI9MyêBkBAêJhdGêE9BAêIzZCêAzBAêIxIDêBhBAêIgczêFf
+êBAJhêZnRlêBAJyêPTA2êBAIwêNjA2êBAIwêNiB2êBAJpêYT1pêAwJyêcQoAêBAE9êMQ0Kê
+~ ê# [ê6n
