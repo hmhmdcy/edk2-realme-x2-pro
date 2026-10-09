@@ -11,7 +11,14 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 46](sessions/46-rx-irq-and-host-trace-boundary.md)。**
+> **当前入口：[session 47](sessions/47-native-terminal-session-boundary.md)。**
+> 现有 ETW 显示串口会话边界有 IN/OUT 端点清 halt/pipe reset；微软文档提供数据翻转
+> 不同步丢包的依据，物理 DATA0/1 尚未测到，不能称根因已证明。持续打开的原生帧
+> 成功，重开后的命令和首个 Ctrl-U 没有设备 RX；原生终端现有 `-Native` 启动同步。
+> 默认兼容输入保留。本轮重启后长状态输出有真实缺字，并首次测到 watchdog=1/fault=4
+> 退回轮询；输入和轮询 F1 仍成功。未刷机，保留 IRQ B；稳定性仍未彻底解决。
+>
+> **上一轮：[session 46](sessions/46-rx-irq-and-host-trace-boundary.md)。**
 > 真实 SPI 492/hwirq 524 IRQ 接收、整帧缓存和工作上下文 tty/F1 已实测。
 > Windows 一次失败原生命令仍未增加 IRQ/pending/帧/tty；同次启动 libusb 小样本全成功，
 > 不能据此认定仅 Windows 故障。当前保留 IRQ B 诊断镜像，仍未解决长期稳定性。
@@ -47,9 +54,10 @@
 > `logdump-rx33-console.img`；RX 状态、头部与首次 DAT 读取共用 TX 锁。
 
 > **临时交互入口（2026-10-09）：** `linux-port/scripts/eud-terminal.cmd`，工具副本
-> 在 `E:\eud-host\`。手机 TX 已能用每帧 4 字节组成长输出；主机输入自动拆成长度 1
-> 帧、等受理后继续。见 [终端指南](linux-port/docs/EUD-TERMINAL.md)。这是绕开原生
-> 多字节输入问题的兼容方案；它与 session 41 的整帧原生 payload 修复是两条不同路径。
+> 在 `E:\eud-host\`。手机 TX 用每帧 4 字节组成输出；默认主机输入仍拆成长度 1。
+> 加 `-Native` 则先 Ctrl-U 同步，再持续发送最多 14 字节原生帧，命令帧不重试。
+> 见 [终端指南](linux-port/docs/EUD-TERMINAL.md)。TOP_CFG=0x11 的真实整帧修复仍保留；
+> 不把可用小样本或零 stray 当作无损稳定性证明。
 
 > **session 36 新证据：** 实机 9505 为 bulk IN `0x81` / OUT `0x02`，最大包长 16，
 > 配置仅 32 字节、无 MDLM extras。旧 WDM qcusbser 有条件字节填充的描述符门槛

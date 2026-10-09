@@ -14,10 +14,12 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/46-rx-irq-and-host-trace-boundary.md`：真实 IRQ 接收已实测，
-失败 Windows 原生命令却未增加 IRQ/pending/帧/tty。保留 IRQ B 诊断；完整命令输出、
-两次 F1/fastboot 和最终同镜像重启/Ctrl-U 已核对。Windows USB ETW 结果见该节。
-串口 finally 关闭。稳定性仍未解决，下一步追踪原始主机 OUT/完成；勿重复仅掩码实验。
+当前交接看 `sessions/47-native-terminal-session-boundary.md`：持续打开串口的原生终端
+已实测，`eud-terminal.cmd -Native` 启动先同步，之后命令帧只提交一次。重开首帧丢失
+与已有 ETW 端点 reset 相符，但物理数据翻转未证明。IRQ B 未改、未刷机。
+本轮 F1 分别经 IRQ 与 watchdog 退回后的轮询进入 fastboot，两次同镜像重启与最终
+原生命令已核对。长状态输出实际缺字及 fault=4 仍未解；串口 finally 关闭。
+勿重复仅掩码/reset 实验；下一步审查 TX 缺完整帧与看门狗观察 pending 的竞态。
 
 计数边界看 `sessions/44-rx-receipt-counters.md`：只读计数把失败原生命令定位到
 没有观测到 pending/头部拒绝/tty 投递的边界，成功 echo 的帧/字节计数准确。

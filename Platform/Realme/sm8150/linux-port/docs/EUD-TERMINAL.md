@@ -1,13 +1,14 @@
-# 临时 EUD 终端：先继续 Linux 移植
+# EUD 终端：兼容输入与可选原生多字符输入
 
-> session 41 已找到原生 FIFO 推进方法（SM8150 TOP_CFG=0x11），并验证原生多字节
-> shell 执行；此终端继续按单字节发送，兼容 rx33 和 RX41 驱动。
-> 原生帧长度 2 仍保留 F1，发送长命令时不能用长度 2 的 tty 分片。
-> 新证据与最终镜像见 [session 41](../../sessions/41-rx-ahb2phy-wait-state-fix.md)。
-> 当前稳定性排查与证据更正见 [session 43](../../sessions/43-native-terminal-evidence-audit.md)。
-> RX41 数次“缺输出”源于漏看完整解码结果；偶发缺回执仍待定位。
+> session 47 加入 `-Native`：启动时先用 Ctrl-U 同步，持续打开同一个串口，
+> 粘贴/命令模式按最多 14 字节原生帧发送；两字节尾片拆成 1+1，保留 F1。
+> 默认仍为兼容单字节输入。当前 RX46 IRQ B 真机已验证命令、长命令、交互清行、
+> 重启后 20 行输出与 shell 状态读回，但长状态输出仍有实际 TX 缺字，且曾触发
+> 看门狗退回轮询。可用路径已有，稳定性尚未彻底解决。
+> 证据、限制和最终状态见 [session 47](../../sessions/47-native-terminal-session-boundary.md)。
 
-2026-10-09，本工具兼容 rx33 基线和当前 `logdump-rx41-native-ordered-tty.img` 候选。
+2026-10-09，默认模式兼容 rx33；`-Native` 需要 RX41 之后的完整 payload 修复和回执。
+当前实测镜像为 `logdump-rx46-rx-irq-b.img`，TOP_CFG=0x11 方法保留。
 工具的原始源码与测量见
 `../../sessions/33-rx-access-and-production-policy.md`、
 [session 34](../../sessions/34-temporary-eud-terminal.md)。
@@ -19,7 +20,7 @@
 | 方向 | 当前状态 | 临时终端的处理 |
 |---|---|---|
 | 手机 TX → PC | 内核每帧发送最多 4 个 payload 字节，长输出拆成多帧；限速后可用 | 持续读取、解帧、显示，并保存日志 |
-| PC → 手机 RX | RX41 已修复整帧 payload，原生命令有完整响应；偶发缺回执仍待定位，rx33 则仍有旧 payload 故障 | 此兼容工具继续每次只发 `[90][01][char]`，等该字符受理后继续 |
+| PC → 手机 RX | RX41 已修复整帧 payload；打开串口后的首帧可能未受理，持续打开的原生输入已实测 | 默认按单字节回执发送；`-Native` 先同步，再发送长度 1 或 3..14 的帧 |
 
 TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μs/寄存器写与
 2 ms/帧的节奏。它不是 RX 的“读不出下一字节”现象；也不保证任意帧长或绝无丢失。
@@ -31,6 +32,8 @@ TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μ
 
 ```powershell
 & 'E:\eud-host\eud-terminal.cmd' -Reconnect
+# 当前 RX46 IRQ B 上使用原生输入；保持终端打开后连续输入命令。
+& 'E:\eud-host\eud-terminal.cmd' -Native -Port COM14
 ```
 
 项目内同一份入口：`linux-port/scripts/eud-terminal.cmd`，也可直接双击。
@@ -40,7 +43,8 @@ TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μ
 未加此参数且找不到 COM 时，工具会尝试一次 com-up。
 
 终端始终排空输出；退出和异常路径都在 finally 中 Close/Dispose 串口。
-只输入 ASCII，适合 shell 命令、路径和驱动诊断；可粘贴整条命令，发送较慢属于正常。
+只输入 ASCII，适合 shell 命令、路径和驱动诊断；可粘贴整条命令。
+原生模式把当前队列分成最多 14 字节；逐键输入时队列可能只有 1 字节。
 不用手工拼 EUD 帧。
 
 | 按键 | 含义 |
@@ -53,7 +57,7 @@ TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μ
 
 这是简易字符终端，尚不支持方向键历史、全屏应用或 Unicode 输入。若需要 Ctrl-]
 之外的方法退出，应等工具正常结束，不要强杀正在持有串口的进程。
-完整的 `eud: tty byte=..` 受理行默认只保留在日志中；`-ShowAcks` 可显示它们。
+完整的 `eud: tty byte=..` 和原生 `eud: rx frame ...` 受理行默认只保留在日志中；`-ShowAcks` 可显示它们。
 破损的诊断行可能仍显示出来。
 远端 shell 的 `ESC[6n` 光标查询只在显示端过滤，避免 Windows 终端自动回复后
 被 ReadKey 当作键盘输入转回手机；原始日志仍保留查询。
@@ -63,6 +67,7 @@ TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μ
 ```powershell
 & 'E:\eud-host\eud-terminal.cmd' -Reconnect -Command 'uname -r'
 & 'E:\eud-host\eud-terminal.cmd' -Reconnect -Command 'dmesg | tail -n 60'
+& 'E:\eud-host\eud-terminal.cmd' -Native -Port COM14 -Command 'uname -r'
 ```
 
 命令模式先发送 Ctrl-U 清理旧的半行，再发送命令和换行；最后继续排空输出，默认
@@ -70,14 +75,21 @@ TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μ
 不要同时运行交互终端和命令模式。
 退出码表示桥接是否完成，不是远端 shell 命令的退出码；远端结果要查看输出。
 
-单字符重试基准默认 500 ms，另加 0..399 ms 扰动；最多发送 10 次，收到回执即停。
+兼容模式的单字符重试基准默认 500 ms，另加 0..399 ms 扰动；最多发送 10 次，收到回执即停。
 成功字符之间再留 200..299 ms。该较短节奏已用于临时单字符路径实测，F1 的单步
 探针脚本仍保留原来的秒级命令间隔。需要保守节奏可加 `-RetryMs 2200`。
 某字节用尽重试次数仍无回执，工具停止剩余输入、报错并关闭端口，不自动重跑整条命令。
 若换行已经受理但回执丢失，命令可能已经执行；先看输出，再决定是否重输。
 
-现有内核回执仅含字符值，没有序号/去重。因此 ACK 丢失时仍有重复字符的可能；
-临时桥接不承诺 exactly-once，也不是原生多字节 RX 修复或二进制传输通道。
+原生模式只有启动 Ctrl-U 使用上述有界重试；同步完成前暂不读取键盘输入。
+之后每个命令帧只提交一次，按完整 payload 查找回执，默认等待 4 s；可用
+`-NativeAckTimeoutMs` 调整等待上限。缺回执就停止剩余输入、报错并 finally 关闭串口。
+不会自动重发可能已经执行的命令；先检查 `.raw/.txt` 输出，再决定是否重输。
+Ctrl-C/Ctrl-U 仍会取消主机未发送队列。
+
+现有内核回执没有序号/去重，延迟的同值回执仍是协议限制；两种模式都不承诺
+exactly-once。长 TX 输出还可能丢失完整帧，本轮已保留真实缺字样本。
+`-Native` 是主机使用已验证整帧 RX 的方式，不代替 TOP_CFG=0x11 设备修复。
 
 ## 日志与后续工作
 
@@ -86,10 +98,12 @@ TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μ
 
 * `.raw`：EUD 原始输入帧；
 * `.txt`：未过滤的设备输出，保留受理日志；
-* `.events.txt`：每字节发送、重试与受理时间。
+* `.events.txt`：兼容模式记录每字节；原生模式记录长度、payload、startup sync、发送与受理时间。
 
 退出时打印 ACK 数、重试数、收到的帧数、最大 payload、stray 和残留字节数。
 原始日志仍可用 `decode-eud-capture.py` 重组。
+
+退出时原生模式另报已受理的数据帧数与同步状态。退出码不验证远端完整响应。
 
 RX43 起解码脚本在 stdout 显示全部响应；旧版本只打印 `eud:` 行，而 `.txt`
 一直保留了完整输出。原生单帧诊断用 `eud-step.ps1`，直接保存新 `.raw/.txt/.events.txt`，

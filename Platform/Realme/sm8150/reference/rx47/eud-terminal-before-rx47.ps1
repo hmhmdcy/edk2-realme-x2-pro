@@ -1,13 +1,11 @@
-# EUD terminal: compatible one-byte input, optional native RX41 frames.
+# Temporary terminal for the rx33 kernel: RX uses one-byte frames and printk ACKs.
 param(
     [string]$Port = '',
     [string]$Command,
-    [switch]$Native,
     [switch]$Reconnect,
     [ValidateRange(500,10000)][int]$RetryMs = 500,
     [ValidateRange(1,10)][int]$MaxAttempts = 10,
     [ValidateRange(1,60)][int]$TailSeconds = 3,
-    [ValidateRange(500,10000)][int]$NativeAckTimeoutMs = 4000,
     [switch]$ShowAcks,
     [string]$LogBase = (Join-Path $env:TEMP ('eud-terminal-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff')))
 )
@@ -42,17 +40,15 @@ $sp.WriteTimeout = 500
 $sp.DtrEnable = $true
 $sp.RtsEnable = $true
 $queue = [Collections.Generic.Queue[byte]]::new()
-if ($oneShot -or $Native) {
-    $queue.Enqueue(0x15) # Ctrl-U clears any earlier incomplete shell line.
-}
 if ($oneShot) {
+    $queue.Enqueue(0x15) # Ctrl-U clears any earlier incomplete shell line.
     foreach ($b in [Text.Encoding]::ASCII.GetBytes($Command)) { $queue.Enqueue($b) }
     $queue.Enqueue(0x0a)
 }
 $clock = [Diagnostics.Stopwatch]::StartNew()
 $state = @{ AckText=''; Pending=$null; Attempts=0; LastWrite=0L; NextByte=3000L;
     LastActivity=0L; Frames=0; Stray=0; Acked=0; Retries=0; MaxPayload=0; RetryAt=0L;
-    DisplayPending=''; DisplayAt=0L; Synchronizing=[bool]$Native; NativeFrames=0 }
+    DisplayPending=''; DisplayAt=0L }
 $wire = [Collections.Generic.List[byte]]::new()
 $utf8 = [Text.UTF8Encoding]::new($false)
 $decoder = $utf8.GetDecoder()
@@ -78,8 +74,7 @@ function Show-EudText([string]$chunk) {
                     $state.DisplayPending = ''
                 }
             } elseif ($character -eq "`n") {
-                $receipt = '^\[\s*\d+\.\d+\]\s*eud: (tty byte=[0-9a-f]{2}(?: [a-z0-9_]+=[a-z0-9]+)*|rx frame len=\d+ data=[0-9a-f ]+ s1_after=[0-9a-f]{8}(?: via=(irq|poll))?)\r?\n$'
-                if ($ShowAcks -or $state.DisplayPending -notmatch $receipt) {
+                if ($ShowAcks -or $state.DisplayPending -notmatch '^\[\s*\d+\.\d+\]\s*eud: tty byte=[0-9a-f]{2}\r?\n$') {
                     [Console]::Write($state.DisplayPending)
                 }
                 $state.DisplayPending = ''
@@ -124,24 +119,13 @@ function Receive-Eud {
 }
 
 function Send-Pending {
-    $payload = [byte[]]@($state.Pending)
-    $frame = [byte[]](@(0x90,$payload.Length) + $payload)
-    $sp.Write($frame,0,$frame.Length)
+    $frame = [byte[]]@(0x90,0x01,[byte]$state.Pending)
+    $sp.Write($frame,0,3)
     $sp.BaseStream.Flush()
     $state.Attempts++
     $state.LastWrite = $clock.ElapsedMilliseconds
-    if ($Native -and !$state.Synchronizing) {
-        $state.RetryAt = $state.LastWrite + $NativeAckTimeoutMs
-    } else {
-        $state.RetryAt = $state.LastWrite + $RetryMs + $jitter.Next(0,400)
-    }
-    if ($Native) {
-        $hex = ($payload | ForEach-Object { $_.ToString('x2') }) -join ' '
-        $events.WriteLine(('{0} TX native len={1} data={2} attempt={3} sync={4}' -f
-            $state.LastWrite,$payload.Length,$hex,$state.Attempts,$state.Synchronizing))
-    } else {
-        $events.WriteLine(('{0} TX byte={1:x2} attempt={2}' -f $state.LastWrite,$state.Pending,$state.Attempts))
-    }
+    $state.RetryAt = $state.LastWrite + $RetryMs + $jitter.Next(0,400)
+    $events.WriteLine(('{0} TX byte={1:x2} attempt={2}' -f $state.LastWrite,$state.Pending,$state.Attempts))
     if ($state.Attempts -gt 1) { $state.Retries++ }
 }
 
@@ -159,11 +143,7 @@ try {
         [Console]::TreatControlCAsInput = $true
     }
     [Console]::Error.WriteLine("[host] $Port opened; Ctrl-] exits, Ctrl-C interrupts phone, Ctrl-U clears line.")
-    if ($Native) {
-        [Console]::Error.WriteLine("[host] Native ASCII frames up to 14 bytes; startup Ctrl-U sync, then one attempt per data frame. Logs: $LogBase.*")
-    } else {
-        [Console]::Error.WriteLine("[host] ASCII input; one byte per frame. Unfiltered logs: $LogBase.*")
-    }
+    [Console]::Error.WriteLine("[host] ASCII input; one byte per frame. Unfiltered logs: $LogBase.*")
     $running = $true
     while ($running) {
         Receive-Eud
@@ -173,40 +153,21 @@ try {
             $state.DisplayPending = ''
         }
         if ($null -ne $state.Pending) {
-            $payload = [byte[]]@($state.Pending)
-            if ($payload.Length -eq 1) {
-                $ack = 'eud: tty byte={0:x2}' -f $payload[0]
-            } else {
-                $hex = ($payload | ForEach-Object { $_.ToString('x2') }) -join ' '
-                $ack = 'eud: rx frame len={0} data={1}' -f $payload.Length,$hex
-            }
+            $ack = 'eud: tty byte={0:x2}' -f $state.Pending
             if ($state.AckText.Contains($ack)) {
-                if ($Native) {
-                    $events.WriteLine(('{0} ACK native len={1} data={2}' -f $now,$payload.Length,
-                        (($payload | ForEach-Object { $_.ToString('x2') }) -join ' ')))
-                    if ($state.Synchronizing) {
-                        $state.Synchronizing = $false
-                        $events.WriteLine("$now SYNC fresh Ctrl-U receipt; begin native input")
-                    } else { $state.NativeFrames++ }
-                } else {
-                    $events.WriteLine(('{0} ACK byte={1:x2}' -f $now,$state.Pending))
-                }
-                $state.Acked += $payload.Length
+                $events.WriteLine(('{0} ACK byte={1:x2}' -f $now,$state.Pending))
+                $state.Acked++
                 $state.Pending = $null
                 $state.NextByte = $now + 200 + $jitter.Next(0,100)
                 $state.LastActivity = $now
             } elseif ($now -ge $state.RetryAt) {
-                if ($Native -and !$state.Synchronizing) {
-                    throw 'Native frame has no receipt; remaining input stopped. Check captured output before resending because the frame may have executed.'
-                }
                 if ($state.Attempts -ge $MaxAttempts) {
-                    if ($Native) { throw "Startup Ctrl-U has no receipt after $($state.Attempts) attempts; native input was not sent." }
-                    throw ('No ACK for byte {0:x2} after {1} attempts; remaining input stopped. The shell line may be partial. Reconnect and Ctrl-U before retrying.' -f $payload[0],$state.Attempts)
+                    throw ('No ACK for byte {0:x2} after {1} attempts; remaining input stopped. The shell line may be partial. Reconnect and Ctrl-U before retrying.' -f $state.Pending,$state.Attempts)
                 }
                 Send-Pending
             }
         }
-        if (!$oneShot -and !($Native -and $state.Synchronizing)) {
+        if (!$oneShot) {
             while ([Console]::KeyAvailable) {
                 $key = [Console]::ReadKey($true)
                 $code = [int]$key.KeyChar
@@ -227,14 +188,7 @@ try {
         }
         if (!$running) { break }
         if ($null -eq $state.Pending -and $queue.Count -gt 0 -and $now -ge $state.NextByte) {
-            if ($Native) {
-                # Do not combine the harmless startup sync byte with shell input.
-                $n = if ($state.Synchronizing) { 1 } else { [Math]::Min(14,$queue.Count) }
-                if ($n -eq 2) { $n = 1 } # Length 2 is the header-only F1 command.
-                $state.Pending = [byte[]]@(for ($i=0; $i -lt $n; $i++) { $queue.Dequeue() })
-            } else {
-                $state.Pending = $queue.Dequeue()
-            }
+            $state.Pending = $queue.Dequeue()
             $state.Attempts = 0
             $state.AckText = ''
             Send-Pending
@@ -253,6 +207,5 @@ try {
         if ($state.DisplayPending) { [Console]::Write($state.DisplayPending) }
         [Console]::Error.WriteLine(('[host] Closed {0}; ACKed={1}, retries={2}, received frames={3}, max payload={4}, stray={5}, buffered bytes={6}' -f
             $Port,$state.Acked,$state.Retries,$state.Frames,$state.MaxPayload,$state.Stray,$wire.Count))
-        if ($Native) { [Console]::Error.WriteLine("[host] Native data frames ACKed=$($state.NativeFrames); startup synchronized=$(!$state.Synchronizing)") }
     }
 }

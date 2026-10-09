@@ -40,7 +40,8 @@
 | sessions/43-native-terminal-evidence-audit.md、reference/rx43/ | 原始抓取更正缺输出，BusyBox/tty/TX 审查，已修复配置下双 USB 路径的缺回执边界与最终状态 |
 | sessions/44-rx-receipt-counters.md、reference/rx44/ | 只读计数定位到未观测 pending，原生输出/F1 保留，IRQ/超时来源审查与熔丝证据限定 |
 | sessions/45-rx-mask-before-arrival.md、reference/rx45/ | 接收前只启用 RX 掩码仍失败；完整 LEN=14 输出/F1、恢复 RX44，排除仅掩码方案 |
-| sessions/46-rx-irq-and-host-trace-boundary.md、reference/rx46/ | 当前交接：真实 IRQ 接收与完整输出/F1；失败 Windows 帧未增 IRQ，libusb 对照与 Windows USB ETW |
+| sessions/46-rx-irq-and-host-trace-boundary.md、reference/rx46/ | 真实 IRQ 接收与完整输出/F1；失败 Windows 帧未增 IRQ，libusb 对照与一次 Windows USB ETW |
+| sessions/47-native-terminal-session-boundary.md、reference/rx47/ | 当前交接：原生终端持续打开/启动同步、重开缺 RX 与端点 reset；真实 TX 缺字、看门狗退回及轮询 F1 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
@@ -66,4 +67,4 @@
 
 - HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
 - 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD 打开时占 USB，彻底断电要长按电源约 15 s。
-- 待办：HANDOVER-NEXT.md 第 1 节、sessions/46-rx-irq-and-host-trace-boundary.md。保留 session 41 的真实整帧修复；RX46 实际 IRQ 路径可用，但失败 Windows 命令仍未增加 IRQ/pending/帧/tty，下一步核对原始主机 OUT 与完成。当前 IRQ B 是诊断，不是稳定性修复；不要原样重跑已排除实验。
+- 待办：HANDOVER-NEXT.md 第 1 节、sessions/47-native-terminal-session-boundary.md。保留 TOP_CFG=0x11 和 IRQ B；原生终端 `-Native` 持续打开、启动先同步，交互/重启已测。缺回执的 session 边界有端点 reset 证据，数据翻转仍是假设；长状态输出真实缺字及首次 watchdog 退回仍待修复。勿原样重跑已排除实验。

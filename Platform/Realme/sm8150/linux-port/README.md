@@ -8,17 +8,21 @@
 > 0004 为零上下文补丁，先核对 session 41 的基线源码 SHA256，再用 `git apply --unidiff-zero`
 > 或 `patch -p1`；本轮已对原源码做 dry-run。
 
-原临时终端 `scripts/eud-terminal.cmd`（副本 E:\eud-host\）仍按单字节回执发送，
-兼容当前驱动。原生帧可用 `scripts/eud-step.ps1` 单步测试，finally 关闭串口；
+终端 `scripts/eud-terminal.cmd`（副本 E:\eud-host\）默认按单字节回执发送，
+兼容当前驱动；`-Native` 启动先 Ctrl-U 同步，持续打开串口，发送最多 14 字节原生帧，
+两字节尾片拆成 1+1，命令帧不重试。交互与重启验证见
+[session 47](../sessions/47-native-terminal-session-boundary.md)。原生帧也可用 `scripts/eud-step.ps1` 单步测试，finally 关闭串口；
 `-RetryJitterMs 800` 仅改变有界重试时间，不保证所有 OUT 都受理。
 不要使用旧 build-image.sh 重建 initramfs；本轮保留真实 WSL initramfs 和原 DTB。
 
-当前交接见 [session 46](../sessions/46-rx-irq-and-host-trace-boundary.md)。本 eud.c 为
+当前交接见 [session 47](../sessions/47-native-terminal-session-boundary.md)。本 eud.c 仍为
 IRQ B 诊断：SPI 492/hwirq 524、RX-only 掩码、整帧 IRQ 缓存、工作上下文 tty/F1，
 有界 watchdog 可退回轮询，保留 TOP_CFG=0x11。真实 IRQ 与原生完整输出已验证，
-一次失败 Windows 命令却未增加 IRQ/pending/帧/tty；稳定性仍未解决。回退为 RX44。
+重开后的失败 Windows 命令仍未增加 IRQ/pending/帧/tty。RX47 首次实测 watchdog=1/fault=4
+退回轮询及轮询 F1；长状态输出也有真实缺字。稳定性仍未解决，回退为 RX44。
 `scripts/eud-etw-step.ps1` 用内置 USB ETW 对照主机 OUT/完成，需管理员权限；
-语法核对和实际抓包结果见 session 46。所有设备 ETL 保留本地，不直接入库。
+语法核对和实际抓包结果见 session 46；RX47 只离线审查该次 trace，没有新管理员抓包。
+端点 reset 的目标事件另存 reference/rx47，物理 DATA0/1 未测。所有设备 ETL 保留本地，不直接入库。
 RX45 已排除仅掩码方案；不要原样重复。
 
 计数边界见 [session 44](../sessions/44-rx-receipt-counters.md)。当时 eud.c 在 RX41
