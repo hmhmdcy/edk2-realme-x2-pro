@@ -14,13 +14,14 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/45-rx-mask-before-arrival.md`：接收前只开启 INT1 RX 位仍丢回执，
-候选已撤回，设备/源码/Image 恢复 RX44；LEN=14 的完整命令和 F1 已核对，恢复后
-重启并取得新 Ctrl-U 回执，COM14 关闭。仅掩码不足，下一步观察真实 IRQ。
+当前交接看 `sessions/46-rx-irq-and-host-trace-boundary.md`：真实 IRQ 接收已实测，
+失败 Windows 原生命令却未增加 IRQ/pending/帧/tty。保留 IRQ B 诊断；完整命令输出、
+两次 F1/fastboot 和最终同镜像重启/Ctrl-U 已核对。Windows USB ETW 结果见该节。
+串口 finally 关闭。稳定性仍未解决，下一步追踪原始主机 OUT/完成；勿重复仅掩码实验。
 
 计数边界看 `sessions/44-rx-receipt-counters.md`：只读计数把失败原生命令定位到
 没有观测到 pending/头部拒绝/tty 投递的边界，成功 echo 的帧/字节计数准确。
-当前为 logdump-rx44-rx-stats-ctrl-u.img 诊断镜像，仍未修复稳定性；只刷 logdump。
+当时为 logdump-rx44-rx-stats-ctrl-u.img 诊断镜像，仍未修复稳定性；只刷 logdump。
 F1 已独立核对 fastboot，重启相同镜像后取得 Ctrl-U 新回执，COM14 关闭。
 
 上一轮审查看 `sessions/43-native-terminal-evidence-audit.md`：原生整帧修复保留，RX41

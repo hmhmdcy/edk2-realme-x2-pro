@@ -11,7 +11,7 @@
 | README.md | 项目门面：fork 介绍、构建、刷机、各阶段 status update |
 | DOCS-INDEX.md | 本文：文档地图、同步方式与维护规则 |
 | EUD.md | EUD 设备事实、寄存器、CTL/COM 协议、固件日志环、ArmMmuLib 崩溃真因 |
-| SWD-JTAG.md | EUD SWD 9504 / JTAG 9503：传输层可用，AP DAP 被熔丝＋签名 debug policy 挡住 |
+| SWD-JTAG.md | EUD SWD 9504 / JTAG 9503：传输层可用，AP DAP 无应答；未读熔丝，权限原因未证实 |
 | RX-CONSOLE.md | EUD RX 寄存器、组帧、tty console；原生 payload 推进修复与剩余终端问题，保留历史探针记录 |
 | BINARIES.md | 设备 blob 来源、ButtonsDxe DEPEX 补丁 |
 | linux-port/README.md、linux-port/docs/00-INDEX.md | 主线 Linux 侧（内核、DTB、patch、脚本、参考） |
@@ -39,7 +39,8 @@
 | sessions/42-native-terminal-next-session-handoff.md | 历史交接与短提示词：仅文档更新；其中缺输出样本已由 session 43 更正 |
 | sessions/43-native-terminal-evidence-audit.md、reference/rx43/ | 原始抓取更正缺输出，BusyBox/tty/TX 审查，已修复配置下双 USB 路径的缺回执边界与最终状态 |
 | sessions/44-rx-receipt-counters.md、reference/rx44/ | 只读计数定位到未观测 pending，原生输出/F1 保留，IRQ/超时来源审查与熔丝证据限定 |
-| sessions/45-rx-mask-before-arrival.md、reference/rx45/ | 当前交接：接收前只启用 RX 掩码仍失败；完整 LEN=14 输出/F1、恢复 RX44，下一步观察真实 IRQ |
+| sessions/45-rx-mask-before-arrival.md、reference/rx45/ | 接收前只启用 RX 掩码仍失败；完整 LEN=14 输出/F1、恢复 RX44，排除仅掩码方案 |
+| sessions/46-rx-irq-and-host-trace-boundary.md、reference/rx46/ | 当前交接：真实 IRQ 接收与完整输出/F1；失败 Windows 帧未增 IRQ，libusb 对照与 Windows USB ETW |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
@@ -65,4 +66,4 @@
 
 - HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
 - 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD 打开时占 USB，彻底断电要长按电源约 15 s。
-- 待办：HANDOVER-NEXT.md 第 1 节、sessions/45-rx-mask-before-arrival.md。保留 session 41 的真实整帧修复；RX44/RX45 失败帧未增加 pending 或头部拒绝计数，仅接收前启用 RX 掩码不足，下一步观察真实 IRQ。已恢复 RX44 诊断，不是稳定性修复；不要原样重跑已排除实验。
+- 待办：HANDOVER-NEXT.md 第 1 节、sessions/46-rx-irq-and-host-trace-boundary.md。保留 session 41 的真实整帧修复；RX46 实际 IRQ 路径可用，但失败 Windows 命令仍未增加 IRQ/pending/帧/tty，下一步核对原始主机 OUT 与完成。当前 IRQ B 是诊断，不是稳定性修复；不要原样重跑已排除实验。

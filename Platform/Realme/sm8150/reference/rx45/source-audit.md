@@ -5,8 +5,9 @@ RX44's counters narrowed failed commands to no pending observation.
 
 The [matching Realme driver](https://github.com/realme-kernel-opensource/realmeX2Pro-kernel-source/blob/9668fcdc6ec15be7a10d66f7b93c347829e0fdb6/drivers/soc/qcom/eud.c)
 defines INT1_EN_MASK at +0x24 and RX at BIT(0). Its common enable mask is
-VBUS|CHGR|SAFE_MODE=0x1c. Its tty IRQ routine gates RX using that mask and
-STATUS1. This supplied the basis for setting only RX before arrival; it
+VBUS|CHGR|SAFE_MODE=0x1c. Its IRQ routine reads the mask and STATUS1, but
+the RX branch tests STATUS1 only; the TX branch also checks the mask.
+This supplied the basis for setting only the hardware RX enable before arrival; it
 does not establish that enabling an IRQ bit changes FIFO retention.
 
 Session 33 changed both INT0 and INT1 only after a pending LEN=6 frame was

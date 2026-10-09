@@ -31,7 +31,8 @@ for name in ('baseline-fastboot-product.txt', 'mask-fastboot-product.txt',
     normalized = '\n'.join(line.rstrip() for line in data.splitlines()).rstrip()
     (DEST / name).write_text(normalized + ('\n' if normalized else ''), encoding='utf-8')
 shutil.copyfile(SOURCE / 'eud-mask-candidate.c', DEST / 'eud-mask-candidate.c')
-protected = sorted([*DEST.glob('*.raw'), DEST / 'eud-mask-candidate.c'])
+shutil.copyfile(SOURCE / 'eud-before-rx45.c', DEST / 'eud-before-rx45.c')
+protected = sorted([*DEST.glob('*.raw'), DEST / 'eud-mask-candidate.c', DEST / 'eud-before-rx45.c'])
 (DEST / 'SHA256SUMS').write_text(''.join(
     f'{sha256(p.read_bytes()).hexdigest()}  {p.name}\n' for p in protected), encoding='ascii')
 print(f'Exported {len(captures) + 1} raw capture sets and exact tested diagnostic.')

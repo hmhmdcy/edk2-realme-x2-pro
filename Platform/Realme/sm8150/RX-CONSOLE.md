@@ -11,16 +11,18 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 45](sessions/45-rx-mask-before-arrival.md)。**
-> 接收前持久启用 INT1 RX 掩码 0x1d 并读回，仍有失败原生命令不增加 pending/帧/tty。
-> 仅掩码不能修复稳定性；该候选已撤回，源码、Image 和设备恢复 RX44 诊断版。
-> LEN=14 的原生命令有准确输出，F1、重启、恢复后 Ctrl-U 均核对。下一步观察真实 IRQ。
+> **当前入口：[session 46](sessions/46-rx-irq-and-host-trace-boundary.md)。**
+> 真实 SPI 492/hwirq 524 IRQ 接收、整帧缓存和工作上下文 tty/F1 已实测。
+> Windows 一次失败原生命令仍未增加 IRQ/pending/帧/tty；同次启动 libusb 小样本全成功，
+> 不能据此认定仅 Windows 故障。当前保留 IRQ B 诊断镜像，仍未解决长期稳定性。
+> 原生完整输出、F1、重启和 Ctrl-U 保留；下一步对照原始主机 OUT/完成与设备计数。
+> RX45 已排除仅掩码方案，勿重复；Windows USB ETW 权限与抓包结果见 session 46。
 >
 > **计数边界：[session 44](sessions/44-rx-receipt-counters.md)。**
 > 只读接收计数显示，失败的原生命令没有增加 pending、坏帧头或 tty 字节；
-> 成功原生 echo 则增加准确的一帧/10 字节并返回输出。当前诊断镜像 rx44-rx-stats-ctrl-u
-> 保留 RX41 硬件方法，仍未修复偶发缺回执。下一步区分 EUD/USB 未交付与轮询未看到
-> 短暂 pending；不把 IRQ/超时假设当作根因。计数可读 sysfs 或 Ctrl-U 回执。
+> 成功原生 echo 则增加准确的一帧/10 字节并返回输出。当时诊断镜像 rx44-rx-stats-ctrl-u
+> 保留 RX41 硬件方法，未修复偶发缺回执；后续 RX46 增加实际 IRQ 计数，区分
+> 主机交付与缺接收通知；不把 IRQ/超时假设当作根因。计数可读 sysfs 或 Ctrl-U 回执。
 >
 > **上一轮审查：[session 43](sessions/43-native-terminal-evidence-audit.md)。**
 > RX41 原生 id/echo/console 的“缺输出”经未改动的原始抓取核对撤回；解码 stdout

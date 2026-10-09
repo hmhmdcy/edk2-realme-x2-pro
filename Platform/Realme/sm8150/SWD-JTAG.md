@@ -8,7 +8,7 @@
 > respond. We have not read this unit's debug-fuse values, so this is not proof
 > of which fuse was programmed or that every retail unit has identical policy.
 > TRACE has not been validated. The current COM receipt-loss investigation is
-> in sessions/45-rx-mask-before-arrival.md; enabling another peripheral does not
+> in sessions/46-rx-irq-and-host-trace-boundary.md; enabling another peripheral does not
 > itself repair the COM receive path.
 
 ---

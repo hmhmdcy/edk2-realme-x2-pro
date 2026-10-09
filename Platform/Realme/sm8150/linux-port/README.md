@@ -13,11 +13,15 @@
 `-RetryJitterMs 800` 仅改变有界重试时间，不保证所有 OUT 都受理。
 不要使用旧 build-image.sh 重建 initramfs；本轮保留真实 WSL initramfs 和原 DTB。
 
-当前交接见 [session 45](../sessions/45-rx-mask-before-arrival.md)。接收前只开启 INT1
-RX 掩码仍未消除缺回执；该候选已撤回，设备、实际源码/Image 和本 eud.c 恢复 RX44。
-原生 LEN=14 命令输出和 F1 保留，下一步观察真实 IRQ；不要重复仅掩码实验。
+当前交接见 [session 46](../sessions/46-rx-irq-and-host-trace-boundary.md)。本 eud.c 为
+IRQ B 诊断：SPI 492/hwirq 524、RX-only 掩码、整帧 IRQ 缓存、工作上下文 tty/F1，
+有界 watchdog 可退回轮询，保留 TOP_CFG=0x11。真实 IRQ 与原生完整输出已验证，
+一次失败 Windows 命令却未增加 IRQ/pending/帧/tty；稳定性仍未解决。回退为 RX44。
+`scripts/eud-etw-step.ps1` 用内置 USB ETW 对照主机 OUT/完成，需管理员权限；
+语法核对和实际抓包结果见 session 46。所有设备 ETL 保留本地，不直接入库。
+RX45 已排除仅掩码方案；不要原样重复。
 
-计数边界见 [session 44](../sessions/44-rx-receipt-counters.md)。当前 eud.c 在 RX41
+计数边界见 [session 44](../sessions/44-rx-receipt-counters.md)。当时 eud.c 在 RX41
 硬件方法上增加只读 sysfs 接收计数，Ctrl-U 回执也含计数；没有改动 FIFO 顺序、20 ms
 轮询或正常原生帧回执。诊断镜像仅更新 logdump；失败输入没有增加 pending/坏帧头/tty
 计数，成功 echo 的帧/字节准确。根因仍未定位，不能把诊断称为稳定性修复。

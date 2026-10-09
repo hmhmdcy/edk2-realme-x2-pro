@@ -17,23 +17,26 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Final session-45 live state: restored logdump-rx44-rx-stats-ctrl-u.img diagnostic;
-TOP_CFG=0x11, original zero, Linux shell booted. Native 10-byte echo had exact
-payload/output/prompt in RX44. RX45's 14-byte command also returned exact output,
-but enabling the RX mask before arrival did not fix missing pending/receipts.
-F1 independently reached fastboot; restored RX44 and obtained a fresh Ctrl-U
-receipt after reboot. COM14 closed/disposed;
-9501/9500/9505 OK; 6-5 Shared, not Attached. Stability remains unresolved.
+Current session-46 diagnostic: logdump-rx46-rx-irq-b.img; TOP_CFG=0x11,
+original zero, Linux shell booted. Real IRQ reception on vendor SPI 492 /
+hwirq 524 is measured. Native commands have exact payload/output/prompt,
+but one failed Windows command added no IRQ/pending/frame/tty observation.
+Same-boot libusb commands all passed in a small set; this does not establish
+a Windows-only cause or reliable native input. F1 independently reached
+fastboot on both IRQ candidates; final B reboot and fresh Ctrl-U were checked.
+COM14 closes/disposes in finally; 9501/9500/9505 OK; 6-5 Shared/not Attached.
+Stability remains unresolved. See session 46 for the latest capture state.
 
-Current handoff: sessions/45-rx-mask-before-arrival.md. Persistent INT1 RX
-mask 0x1d alone was insufficient; excluded candidate/source retained for audit,
-actual source/Image restored to RX44. Next investigate measured IRQ delivery,
-not the same mask-only experiment. RX44 software counters show
-failed native A/B inputs did not add a pending observation, rejected header or
-tty bytes; a successful C input added exactly one 10-byte frame. Investigate
-EUD/USB delivery versus unsampled pending state, with the RX IRQ path and
-timeout semantics as candidates. Only logdump was flashed; current eud.c adds
-read-only stats and counters on the Ctrl-U receipt. No new hardware handshake.
+Current handoff: sessions/46-rx-irq-and-host-trace-boundary.md. RX45's mask-only
+candidate was insufficient; RX46 adds real IRQ entries/frame counts, deferred
+tty/F1 and bounded polling fallback. No measured frame used fallback; fault
+paths were reviewed, not exercised. Investigate missing notification before
+handler entry using original host OUT/completion evidence. One user-authorized
+Windows USB ETW capture records successful 12/3/3-byte OUT completions but
+only echo plus one Ctrl-U adds IRQ frames. Original ETW payload bytes remain
+unverified. Serial/trace cleanup was checked. See session 46 for the outcome.
+Only logdump was flashed; firmware/DTB/actual initramfs and compatible terminal
+are retained. Do not repeat mask-only or reset experiments unchanged.
 
 Previous audit: sessions/43-native-terminal-evidence-audit.md. RX41's native
 id/echo/console output failures were misreported: unchanged raw captures contain
@@ -82,7 +85,7 @@ Sessions 35-40 remain the history of excluded paths and source limits. The new
 SM8150 map plus actual zero/0x11 readbacks supplied evidence missing from the
 older SDM845 register table. No PHY/clock reset, filter change or force bind.
 
-1. Read sessions 41, 42, the RX43 corrections, RX44 counters and RX45 mask exclusion before further experiments. First verify
+1. Read sessions 41, 42, the RX43 corrections, RX44 counters, RX45 mask exclusion and RX46 real IRQ evidence before further experiments. First verify
    live device enumeration, serial ownership and a fresh bounded device receipt.
    Use the verified wait-state plus whole-frame RX method. The remaining
    question is intermittent missing frame receipts. Read RX43's correction of
@@ -91,13 +94,16 @@ older SDM845 register table. No PHY/clock reset, filter change or force bind.
    Windows payload is absent from the device RX log. USB/EUD versus STATUS1/
    header gating was unresolved in RX43. RX44 now records no pending/header
    rejection for two failed native inputs, and correct frame/tty totals for
-   a successful native echo. Distinguish EUD delivery from missed transient
-   pending state; review IRQ route/mask semantics before implementing IRQ RX.
+   a successful native echo. RX46 implements measured IRQ reception: SPI 492,
+   hwirq 524, RX-only mask 01 and work-context dispatch. A failed command
+   still added no IRQ entry, pending/header/frame or tty count. Distinguish
+   host delivery from missing notification before handler entry.
    Read-only stats are at /sys/class/tty/ttyEUD0/device/rx_stats and on Ctrl-U.
    RX45 set only INT1 RX before arrival with readback; a failed command still
    added no pending/frame/tty counts. Mask-only candidate was reverted. Trace
-   actual IRQ delivery from this boundary using new evidence; the matching
-   vendor DT specifies SPI 492 level high, absent from the actual mainline node.
+   original host OUT bytes/completion from this boundary using new evidence;
+   the matching vendor DT specifies SPI 492 level high. RX46 supplies a
+   board-specific mapping because the actual mainline node lacks interrupts.
    Compare one variable at a time and classify each result by evidence stage
    (sessions 42/43), without treating empty captures as proof of USB rejection.
    Preserve the receipt/retry boundary and reserved length-2 F1 protocol.
@@ -105,11 +111,11 @@ older SDM845 register table. No PHY/clock reset, filter change or force bind.
    E:\eud-host\eud-terminal.cmd -Reconnect (linux-port/docs/EUD-TERMINAL.md).
    For native frames use the bounded eud-step helper and fresh capture names;
    RetryJitterMs is optional, not proof of reliable delivery.
-2. Current diagnostic is restored logdump-rx44-rx-stats-ctrl-u.img; RX45's
-   excluded mask candidate and restoration evidence are in session 45. Exact hashes and
-   original source/Image backups are in session 44. It retains the RX41
-   hardware method, console/F1 and actual initramfs; receipt stability is not
-   fixed. Rollback for this diagnostic is logdump-rx41-native-ordered-tty.img.
+2. Current diagnostic is logdump-rx46-rx-irq-b.img; exact source/Image hashes,
+   captures and limitations are in session 46. Rollback is the unchanged
+   logdump-rx44-rx-stats-ctrl-u.img/source, backed up before RX46. It retains
+   the RX41 hardware method, console/F1 and actual initramfs; receipt stability
+   is not fixed. RX44's own rollback is logdump-rx41-native-ordered-tty.img.
    Session 41 builds that image; its verification and
    final live-device state are recorded in the session. Rollback remains the
    unchanged logdump-rx33-console.img (SHA256 d5a36aa2...). Do not run the old
@@ -178,7 +184,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 4ab26a9  eud: measure missing pending receipts and qualify debug access evidence
+    master = 16c593c  eud: exclude persistent RX mask alone and restore diagnostic baseline
+             4ab26a9  eud: measure missing pending receipts and qualify debug access evidence
              8a264f1  linux-port: mirror the Linux side of the port into the repo
              7af0fbe  eud: expose native command output and audit missing receipts
              cf87864  docs: hand off native EUD terminal stability investigation
@@ -189,7 +196,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              703469c  eud: record pre-Linux RX failure and USB boundary comparisons
              9d01126  eud: audit native RX sources and PHY lifecycle
 
-    74 commits ahead of upstream origin/master, as of the tip named above;
+    75 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -349,6 +356,7 @@ the only copy.
 | 43 | Correct RX41 missing-output claims from unchanged raw evidence; actual BusyBox/tty/TX audit, repaired-config USB comparison and final live state | `sessions/43-native-terminal-evidence-audit.md` |
 | 44 | RX counters narrow failed native inputs to no observed pending; retained native output/F1, source review and qualified fuse/policy evidence | `sessions/44-rx-receipt-counters.md` |
 | 45 | Persistent RX mask before arrival remains insufficient; exact native 14-byte output/F1, restored RX44 baseline, fuse-claim correction | `sessions/45-rx-mask-before-arrival.md` |
+| 46 | Real IRQ reception and absent notification for a failed Windows command; exact outputs/F1, libusb comparison and host ETW instrument | `sessions/46-rx-irq-and-host-trace-boundary.md` |
 
 Rules that keep this file from growing again:
 

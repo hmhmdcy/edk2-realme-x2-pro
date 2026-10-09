@@ -66,7 +66,7 @@ assert '[tty] shell started on /dev/ttyEUD0' in returned
 assert 'RX45 INT1 mask=' not in returned
 metrics('baseline-ctrl-u')
 metrics('baseline-return-ctrl-u')
-assert sha256((BASE.parent.parent / 'linux-port/eud.c').read_bytes()).hexdigest() == 'e17acbd5d6139c94c3e22f6d6bcd442186d3bd24e9292a10e29f3d5781970dd2'
+assert sha256((BASE / 'eud-before-rx45.c').read_bytes()).hexdigest() == 'e17acbd5d6139c94c3e22f6d6bcd442186d3bd24e9292a10e29f3d5781970dd2'
 assert sha256((BASE / 'eud-mask-candidate.c').read_bytes()).hexdigest() == 'a4a51107234b38140e2e64dfd79f665af97e9f5aa5689748207c5a769fae9b2c'
 print('PASS: persistent RX mask alone is insufficient; exact payload/output and F1 retained; baseline restored.')
 print('This run does not verify IRQ delivery, pending lifetime, physical USB OUT or reliable native delivery.')

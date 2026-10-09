@@ -2,8 +2,9 @@
 
 2026-10-09. Read [session 45](../../sessions/45-rx-mask-before-arrival.md) for
 the measured result, retained state and next step. This is an excluded
-diagnostic, not a stability fix. The current driver is the restored RX44
-driver in linux-port/eud.c.
+diagnostic, not a stability fix. At the end of session 45, the current driver
+was restored to RX44. Session 46 subsequently adds an IRQ diagnostic; this
+historical verifier checks the archived pre-RX45 source, not a future driver.
 
 Raw captures are byte-identical exports from E:\edk2-samurai-out\rx45.
 The boot helper appended extensions to `mask-boot.raw`; the export calls
