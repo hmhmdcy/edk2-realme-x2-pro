@@ -14,16 +14,17 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/52-same-owner-usb-overlap-and-continuous-in.md`：两次持续
-libusb owner 中，长 console 期间的 7 字节输入有完整 OUT 完成，却没有回执或
-RX/tty 计数；同一 owner 一次 Ctrl-U 恢复、各多一个 empty IRQ。这次失败不需要
-qcusbser/reopen。持续读 IN 与保存/显示分开后，最大请求空窗 8423→854 us，TX
-快照 510→512/512 帧，RX 仍失败；不扩大为全部旧 TX 同因/已修复。
-本轮未刷机/重启/新 Windows 管理员抓包，保留 rx48-tx-journal、TOP_CFG=0x11/F1/
-安装终端。USB owner finally 释放/detach，恢复状态完整，COM14 关闭、三节点 OK。
-下一项针对长 console 持锁/外层 IRQ 关闭时 RX 服务，候选尚未实现或刷入；实际
-IRQ 延迟仍未测量。RX51 的 Windows 缺帧和 RX50 的队列/PDB 审查仍保留，长期
-稳定性开放，不再把正常通过的重复命令当修复证据。
+当前交接看 `sessions/53-console-boundary-rx-service.md`：当前只刷一次
+logdump-rx53-console-rx，在完整 console TX 帧边界收 RX，回执/tty/F1 留在工作
+线程；记录 console 来源和最多一次消费后空 IRQ credit。相同长日志/7 字节输入
+在 USB 和 Windows 都受理、执行，各 512 TX 帧直接匹配、990 个零完整。
+TOP_CFG=0x11、TX 节奏、安装原生/兼容终端保留，候选 IRQ F1 首次进入 fastboot、
+同镜像 reboot 成功；没有再刷或新 Windows 管理员抓包。owner finally 释放/detach，
+COM14 关闭、三节点 OK。立即回退是未变的 rx48-tx-journal。
+整体稳定性仍开放：最后安装终端缺首条状态 `[   `，seq 7287 有软件记录、raw 对应
+位置无它，其余 511/512 跨三段直接匹配。不要把 RX 改善称为全部 TX/reopen 已修复。
+下一项是多次 overlap 跨空 IRQ 门槛、console 来源 F1 和确切 TX 缺口的主机/USB
+边界；实际 IRQ 延迟仍未测量，不再重复普通成功命令当稳定性证明。
 RX49 的完整虚拟 IN/部分取消核对、RX48 的 IRQ F1/同镜像重启实测仍保留。
 `eud-terminal.cmd -Native` 持续 owner、启动同步、数据只发一次的用法不变。
 旧 ETW reset/数据翻转假设仍未物理验证，勿重复仅掩码/reset/旧零等待实验。
@@ -100,6 +101,8 @@ logdump 打包（Windows，`E:\edk2-samurai-out\patch-logdump.py`）：
 以下 offset/长度是 session 31 的旧镜像记录，不能直接用于当前 RX41 Image。
 当前迭代以 session 41 的镜像/源码为起点，在原 FAT 副本中替换 Image，核对内容与 DTB；
 不要运行会用旧 Windows initramfs 镜像覆盖真实 WSL initramfs 的 build-image.sh。
+RX53 Image 已增至 30181888 字节，不能使用旧固定长度原地补丁；沿用 session 53
+的 mcopy 包装和抽取比较。当前/回退完整 SHA 见 session 53/reference/rx53。
 
     Image 在 FAT 里的固定位置：offset 90112，长度恒为 30116352 B（原地替换）
     FAT 里的 \samurai.dtb：     offset 30208000，长度 94739 B（原地替换，尺寸没变）

@@ -11,7 +11,17 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 52](sessions/52-same-owner-usb-overlap-and-continuous-in.md)。**
+> **当前入口：[session 53](sessions/53-console-boundary-rx-service.md)。**
+> 当前仅刷 logdump-rx53-console-rx：在 console 完整 TX 帧边界收完整 RX，回执/tty/F1
+> 留在工作线程，单独记录 via=console 与 console_frames，最多 credit 一次消费后空 IRQ。
+> 同样长日志/7 字节输入在 USB、Windows 都受理并执行，各 512 TX 帧直接匹配、990 个
+> 零完整；验证了明确 RX 触发的改善。TOP_CFG=0x11、TX 节奏、F1/兼容终端保留。
+> 但重启后安装终端仍缺状态前缀 `[   `：seq 7287 有软件记录、raw 对应位置无它，
+> 其余 511/512 跨三段抓取直接匹配。整体稳定性仍开放，不能把 RX 成功称为 TX 修复。
+> IRQ F1/同候选重启成功，owner finally 关闭/detach、三节点 OK；console 来源 F1、
+> 多次 overlap 跨空 IRQ 门槛，以及精确 TX 缺口是下一项，不再重复普通成功命令。
+>
+> **历史上一轮：[session 52](sessions/52-same-owner-usb-overlap-and-continuous-in.md)。**
 > 两次持续 libusb owner 中，长日志期间一次 7 字节输入均有完整 OUT 完成，却没有
 > 回执或 RX/tty 字节；同一 owner 一次 Ctrl-U 恢复，均多一个 empty IRQ，没有捕获期
 > 控制传输，因此这次失败不需要 qcusbser/reopen。持续读 IN 与保存/显示分开后，

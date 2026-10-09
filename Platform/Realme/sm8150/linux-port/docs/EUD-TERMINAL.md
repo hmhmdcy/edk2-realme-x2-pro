@@ -8,7 +8,7 @@
 > 证据、限制和最终状态见 [session 47](../../sessions/47-native-terminal-session-boundary.md)。
 
 2026-10-09，默认模式兼容 rx33；`-Native` 需要 RX41 之后的完整 payload 修复和回执。
-当前实测镜像为 `logdump-rx48-tx-journal.img`，TOP_CFG=0x11 方法保留。
+当前实测候选为 `logdump-rx53-console-rx.img`，TOP_CFG=0x11 方法保留。
 主机终端仍是 RX47 同一源码；RX48 新诊断、CRC 快照、兼容/F1/重启结果和限制见
 [session 48](../../sessions/48-irq-grace-and-tx-journal.md)。其 512 个发送记录全匹配 raw，
 但未重现此前 TX 缺字，宽限等待分支也未触发，稳定性仍开放。
@@ -33,6 +33,13 @@ RX52 通过完整目标 USB OUT/IN，在同一 libusb owner 内也复现该 7 �
 后，本次 TX 快照 512/512 匹配、IN 请求间隙改善，RX 仍失败；没有替换本终端或
 宣称普遍修复。见 [session 52](../../sessions/52-same-owner-usb-overlap-and-continuous-in.md)。
 手机镜像、TOP_CFG=0x11/F1/默认兼容模式都保留，稳定性继续排查。
+
+RX53 仅刷 logdump，在完整 console TX 帧之间及时收 RX、延后回执/tty/F1；同样的
+长日志输入在 USB 和 Windows 均取得 via=console 回执、执行，各 512 TX 帧匹配。
+本终端源码未换，原生/默认兼容与 IRQ F1/重启保留。最终安装终端仍缺首条状态一个
+已发 4 字节前缀，整体稳定性尚未解决；见
+[session 53](../../sessions/53-console-boundary-rx-service.md)。console 来源回执会显示在
+旧过滤器之外，但 native ACK 匹配正常；不为隐藏它而改写真实 RX 来源。
 
 ## TX 和 RX 的状态
 
