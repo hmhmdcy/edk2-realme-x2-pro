@@ -1,0 +1,21 @@
+3007 TX native len=1 data=15 attempt=1 sync=True
+3058 ACK native len=1 data=15
+3058 SYNC fresh Ctrl-U receipt; begin native input
+17289 TX native len=14 data=64 64 20 69 66 3d 2f 73 79 73 2f 62 75 73 attempt=1 sync=False
+17307 ACK native len=14 data=64 64 20 69 66 3d 2f 73 79 73 2f 62 75 73
+17584 TX native len=14 data=2f 70 6c 61 74 66 6f 72 6d 2f 64 65 76 69 attempt=1 sync=False
+17603 ACK native len=14 data=2f 70 6c 61 74 66 6f 72 6d 2f 64 65 76 69
+17877 TX native len=14 data=63 65 73 2f 38 38 65 30 30 30 30 2e 73 65 attempt=1 sync=False
+17897 ACK native len=14 data=63 65 73 2f 38 38 65 30 30 30 30 2e 73 65
+18171 TX native len=14 data=72 69 61 6c 2f 74 78 5f 6a 6f 75 72 6e 61 attempt=1 sync=False
+18190 ACK native len=14 data=72 69 61 6c 2f 74 78 5f 6a 6f 75 72 6e 61
+18543 TX native len=14 data=6c 20 6f 66 3d 2f 74 6d 70 2f 52 35 39 4a attempt=1 sync=False
+18565 ACK native len=14 data=6c 20 6f 66 3d 2f 74 6d 70 2f 52 35 39 4a
+18855 TX native len=14 data=20 62 73 3d 34 30 39 36 20 63 6f 75 6e 74 attempt=1 sync=False
+18873 ACK native len=14 data=20 62 73 3d 34 30 39 36 20 63 6f 75 6e 74
+19183 TX native len=3 data=3d 31 0a attempt=1 sync=False
+19229 ACK native len=3 data=3d 31 0a
+53052 TX native len=14 data=62 61 73 65 36 34 20 2f 74 6d 70 2f 52 35 attempt=1 sync=False
+53072 ACK native len=14 data=62 61 73 65 36 34 20 2f 74 6d 70 2f 52 35
+53363 TX native len=3 data=39 4a 0a attempt=1 sync=False
+53410 ACK native len=3 data=39 4a 0a

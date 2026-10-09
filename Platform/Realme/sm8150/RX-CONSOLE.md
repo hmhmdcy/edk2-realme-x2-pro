@@ -11,13 +11,14 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 58](sessions/58-reopen-first-frame-and-driver-completion-gates.md)。**
-> 三次 CRC 真缺帧都在重开 Windows 后首条 Ctrl-U 状态的第一个 console 帧；
-> 其余 511 帧直接匹配。RX53 首同步已受理，不能强行合并 RX/TX 两故障。
-> 精确驱动失败读只记录四字节状态且后续跳过正文入缓冲；故障期是否走此分支未测。
-> 新首状态 ETW/原始日志联合方案已准备、模拟检查，等待独立单次 UAC，尚未执行。
-> RX57 的 9550 字节/512 帧 passing 对照及配置恢复保留；三节点正常、无 owner，
-> 未改源码/终端/镜像或刷机。缺原始日志正文不能独自判 EUD/物理 USB 丢失。
+> **当前入口：[session 59](sessions/59-joint-capture-and-forced-odd-reopen-gap.md)。**
+> 两轮联合抓取完成并恢复。预先定义的 75 个短 IN / 两条短 OUT 后普通重开，
+> 首 Ctrl-U 受理但缺 seq12407 的 `[100`；另外 511 帧直接匹配。
+> driver 原始日志/ReceivedCount/raw 同缺六字节；同步 ETW 无失败正长度 IN。
+> 数据翻转失配是最强候选，仍未测物理 PID/ACK，未修复。0x1e 重置主机翻转，
+> 0x30 才保留；更正 RX58 旧措辞。下一项偶数 IN 反向干预，避免普通 echo 循环。
+> 用户持续授权覆盖同范围后续抓取；三节点 OK、无 owner，配置/跟踪已恢复关闭。
+> TOP_CFG=0x11/整帧 RX、console/F1、终端及回退未变，没有刷机。
 >
 > **上一轮来源审查：[session 56](sessions/56-source-boundaries-and-focused-research.md)。**
 > 只读审查/收敛搜索：实装 reset selector=2 对应 URB=0x1e，找到有条件的受理缓冲前

@@ -17,19 +17,19 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current handoff: sessions/58-reopen-first-frame-and-driver-completion-gates.md.
-Read-only replay: all three CRC-proven TX gaps are the first console timestamp
-frame of the first status after a Windows reopen; 511 other records match
-directly. RX53 accepted the first Ctrl-U, so TX loss does not require startup
-RX loss. Exact installed-driver audit binds the L1 indirect read callback:
-nonzero completion logs status only and skips payload insertion into vPut.
-No fault-time failed partial transfer is measured; this is a candidate, not a
-repair. RX57's raw logger passing sample remains valid and limited.
-New joint ETW/logger first-status plan is prepared/mocked but not executed,
-awaiting separate single UAC permission; both old RX57 approvals were used.
-Three nodes OK, no owner, Shared/not Attached, logging off, artifacts unchanged.
-See reference/rx58. Do not repeat ordinary passing echo or assume missing logger
-payload alone proves physical/EUD loss.
+Current handoff: sessions/59-joint-capture-and-forced-odd-reopen-gap.md.
+Both bounded ETW/raw-driver captures completed and restored under the human's
+continuing authorization. Three startup statuses pass (one RX sync retries).
+The pre-defined odd-IN/even-short-OUT intervention reproduces a real TX gap:
+75 IN frames + two short OUT, ordinary reopen, first Ctrl-U accepted, missing
+seq12407 / 90 04 5b 31 30 30. Other 511 journal records match directly.
+Driver raw, ReceivedCount and host raw all miss the same six bytes; matched
+ETW has no positive-length failed IN, only zero-length close cancellations.
+Toggle misalignment is the strongest candidate, not direct DATA0/1/ACK proof.
+Correction: installed 0x1e resets host toggle; 0x30 preserves it. SDK verified.
+Three nodes OK, no owner, Shared/not Attached, logging and ETW off, artifacts
+unchanged. Next: a comparable even-IN reversal, then a scoped reversible fix.
+Do not repeat ordinary echo/reset loops. See reference/rx59.
 
 Previous measured logger: sessions/57-driver-raw-logging-boundary.md.
 Built-in pre-buffer driver logging is now measured in one bounded Windows
@@ -265,7 +265,9 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = e7de5a3  eud: measure pre-buffer driver logging and restored capture
+    master = 7c43d67  (last published tip before RX59)
+             eud: align reopen first-frame gaps and audit failed-read gates
+             e7de5a3  eud: measure pre-buffer driver logging and restored capture
              738845e  eud: consolidate faults and audit pre-buffer receive boundaries
              691126b  eud: locate reproduced TX gap before Windows accepted-buffer count
              45d96fc  eud: validate repeated console RX and F1, audit host receive counters
@@ -289,7 +291,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              703469c  eud: record pre-Linux RX failure and USB boundary comparisons
              9d01126  eud: audit native RX sources and PHY lifecycle
 
-    87 commits ahead of upstream origin/master, as of the tip named above;
+    88 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro

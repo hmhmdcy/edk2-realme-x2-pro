@@ -16,14 +16,13 @@ upstream project.
 
 Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
 
-Current EUD stability handoff: [session 58](sessions/58-reopen-first-frame-and-driver-completion-gates.md).
-TOP_CFG=0x11 whole-frame RX and console-boundary RX repairs remain verified;
-startup missing receipts and actual TX frame gaps remain unresolved. All three
-CRC-proven gaps share the first status frame after Windows reopen. Exact driver
-failure gates are audited, but no fault-time failed partial read is measured.
-The joint first-status ETW/logger plan is prepared and awaiting new permission;
-logging is restored off, artifacts unchanged. No stability repair or fuse cause
-is established.
+Current EUD stability handoff: [session 59](sessions/59-joint-capture-and-forced-odd-reopen-gap.md).
+Two bounded joint captures are complete and restored. A pre-defined 75-short-IN /
+two-short-OUT reopen reproduces first TX frame loss while initial RX sync succeeds;
+511 other journal records match. Driver raw/counter/host raw agree, with no
+positive-length failed IN in the matching ETW. Toggle mismatch is a candidate,
+not a physical PID proof or repair. TOP_CFG=0x11/console RX/F1/terminals remain
+unchanged; the next experiment is an even-IN reversal.
 
 | Feature | Status | Notes |
 |---|---|---|

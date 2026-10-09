@@ -1,0 +1,5 @@
+3013 TX native len=1 data=15 attempt=1 sync=True
+3575 TX native len=1 data=15 attempt=2 sync=True
+3606 ACK native len=1 data=15
+3606 SYNC fresh Ctrl-U receipt; begin native input
+20001 AUDIT bounded owner deadline

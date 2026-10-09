@@ -57,6 +57,12 @@ RX57 的关闭期六条取消记录不能冒充 RX51/53/55 故障期原因。
 定向词与来源限制在 focused-research.json。未找到现成 EUD COM 修复；没联系他人。
 没有新增熔丝证据；COM 已工作不能证明 SWD/JTAG 可用，其他外设也未提供当前问题的修复。
 
+**2026-10-10 RX59 更正：** 上一句关于 0x1e 的措辞错误。SDK 与微软文档定义
+0x1e 为 CLEAR_FEATURE + 重置主机数据翻转；0x30 才保留主机翻转。设备实际是否同步
+仍须测量，不能把文档当物理 PID 证据。旧 focused-research.json 保留历史并明确被
+[session 59](59-joint-capture-and-forced-odd-reopen-gap.md) 更正；准备的联合方案已于
+后续持续授权下执行，实际结果在 session 59，以下仍保留本节发布时的状态。
+
 ## 58.4 下一项已准备，尚未运行
 
 [measurement-plan.md](../reference/rx58/measurement-plan.md)：一次独立新 UAC，仍只临时

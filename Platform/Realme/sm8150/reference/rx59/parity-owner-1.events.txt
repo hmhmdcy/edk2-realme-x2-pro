@@ -1,0 +1,5 @@
+3029 TX native len=1 data=15 attempt=1 sync=True
+3112 ACK native len=1 data=15
+3112 SYNC fresh Ctrl-U receipt; begin native input
+21612 TX native len=4 data=61 62 63 64 attempt=1 sync=False
+21668 ACK native len=4 data=61 62 63 64
