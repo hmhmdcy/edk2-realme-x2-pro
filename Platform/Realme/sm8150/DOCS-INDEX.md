@@ -56,6 +56,7 @@
 | sessions/59-joint-capture-and-forced-odd-reopen-gap.md、reference/rx59/ | 两轮联合抓取恢复；75 奇数 IN / 偶数短 OUT 干预重现首帧缺失，同步 ETW 无失败正长度 IN，翻转候选及 0x1e 更正 |
 | sessions/60-even-reopen-reversal-and-toggle-candidate.md、reference/rx60/ | 74 偶数反向重开首帧完整、512/512 匹配；无管理员有界抓取与未安装的 WDF 保留翻转候选，14 离线用例 |
 | sessions/61-eud-wdf-package-and-build-preparation.md、reference/rx61/ | 固定完整 WDF 源码、9505 专用 INF/project、旧驱动精确回退副本；EWDK 下载进行，完整构建/签名/上机尚待验证 |
+| sessions/62-eud-wdf-build-and-test-signed-package.md、reference/rx62/ | 真实九模块 WDK 构建、Win11 INF/catalog、文件内测试签名与 PE 核对通过；未安装/上机，加载环境待决定 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
@@ -81,4 +82,4 @@
 
 - HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
 - 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD 打开时占 USB，彻底断电要长按电源约 15 s。
-- 待办：HANDOVER-NEXT.md 第 1 节、sessions/61-eud-wdf-package-and-build-preparation.md。保留 TOP_CFG=0x11/RX53 console RX 修复/现有终端与 RX48 回退；TX 缺帧及启动缺回执仍开放。前缓冲日志方法已实测、临时配置已恢复；已取得真缺口联合边界与偶数反向验证，下一项具体保留翻转方案，不重复普通 passing/同一个偶数对照或 reset/旧零等待。
+- 待办：HANDOVER-NEXT.md 第 1 节、sessions/62-eud-wdf-build-and-test-signed-package.md。保留 TOP_CFG=0x11/RX53 console RX 修复/现有终端与 RX48 回退；TX 缺帧及启动缺回执仍开放。前缓冲日志方法已实测、临时配置已恢复；已取得真缺口联合边界与偶数反向验证，候选已构建/校验/测试签名，下一项选定加载环境后同一二进制开关对照；不重复普通 passing/同一个偶数对照或 reset/旧零等待。

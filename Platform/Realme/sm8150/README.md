@@ -16,13 +16,14 @@ upstream project.
 
 Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
 
-Current EUD stability handoff: [session 61](sessions/61-eud-wdf-package-and-build-preparation.md).
-RX60's 74-even-IN reversal receives complete first status and 512/512 journal
-records, strengthening a reopen toggle mismatch candidate. RX61 prepares full
-pinned source and an EUD-only INF/project; authored input/source checks pass.
-EWDK download is in progress at the record; full build, INF/catalog checks,
-supported signing/loading and hardware validation remain. Exact old driver
-package backed up locally. No driver/firmware/security change or new phone IO.
+Current EUD stability handoff: [session 62](sessions/62-eud-wdf-build-and-test-signed-package.md).
+The ordinary-reopen toggle-preservation candidate now builds all nine modules
+with zero warnings/errors; Windows Driver INF and explicit Win11 catalog pass.
+File-only test signatures/PE digest verify. It is not installed or hardware
+validated. Secure Boot/HVCI remain on; supported loading environment decision
+is pending. Original driver/firmware/terminal unchanged, exact rollback ready.
+Next same-binary option off/on causal trial, then the full native acceptance
+matrix; full-packet OUT/ZLP remains separate. Original goal remains open.
 
 | Feature | Status | Notes |
 |---|---|---|

@@ -17,22 +17,24 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current handoff: sessions/61-eud-wdf-package-and-build-preparation.md.
-RX60's pre-defined 74-even-IN reversal remains the latest device contrast:
-complete first status, accepted first Ctrl-U, 512/512 direct journal matches.
-Toggle mismatch is a concrete candidate; no physical PID proof or repair.
-RX61 prepares complete pinned WDF source and a 9505-only INF/project;
-nine C modules verified, only the unchanged RX60 QCPNP patch alters code.
-Stock vendor INF has no EUD match. KMDF/DIRID 13 authored inputs verified.
-Existing EWDK download was live at the frozen observation; full driver build,
-INF/catalog validation, signing and hardware remain pending. Refresh external
-observer and keep the existing download; do not repeat device experiments.
-Host Secure Boot enabled / HVCI running; installed signed driver unchanged.
-Exact installed package copied to external rollback, no driver/security change.
-Three nodes OK, no owner/logging/ETW, Shared/not Attached; hashes unchanged.
+Current handoff: sessions/62-eud-wdf-build-and-test-signed-package.md.
+Ordinary-reopen first-packet toggle mismatch remains the concrete candidate:
+RX59 forced 75-IN loses first six-byte frame; RX60 predefined 74-IN is complete.
+RX62 completes full nine-module WDK build: zero warnings/errors, valid Win11
+INF and explicit catalog. Unchanged RX60 code; UTF8/minimum26100 metadata fixed.
+File-only SYS/CAT test signatures and PE image digest verify; no root import,
+PFX removed, ISO finally dismounted. Full binaries/kit/source ZIP stay external.
+Candidate package E:\edk2-samurai-out\rx62\package-test-signed is not installed,
+loaded, Microsoft release-signed or hardware validated; this is not a repair.
+Fresh Windows26300 host: Secure Boot enabled/HVCI running; three nodes OK,
+no owner/logging/ETW, Shared/not Attached, old driver/terminal/logdump unchanged.
+Exact old-driver rollback is external rx61/rollback-qcusbser-2.1.3.5.
+Supported loading environment decision requested after package/plan preparation;
+no host security/driver-store/registry change, phone flash/reboot or data I/O.
+Next selected environment, same-binary flag-off/on reset and first-frame trial.
+Keep full LEN14/16-byte OUT/ZLP separate and full native acceptance matrix.
 Preserve TOP_CFG=0x11/whole-frame/RX53 console/F1/terminals/RX48 rollback.
-Next full build then supported loading and same-binary flag-off/on comparison.
-Full-packet OUT/ZLP XACT_ERROR remains separate. See reference/rx61 and rx60.
+See reference/rx62/loading-review.md and validation-plan.md; goal remains open.
 
 Previous measured logger: sessions/57-driver-raw-logging-boundary.md.
 Built-in pre-buffer driver logging is now measured in one bounded Windows
@@ -268,7 +270,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 6f8ec50  eud: confirm even reopen reversal and prepare toggle-preserving candidate
+    master = ac16146  eud: prepare dedicated WDF package and supported build environment
+             6f8ec50  eud: confirm even reopen reversal and prepare toggle-preserving candidate
              da915a8  eud: reproduce odd-frame reopen loss with matched driver and USB trace
              7c43d67  eud: align reopen first-frame gaps and audit failed-read gates
              e7de5a3  eud: measure pre-buffer driver logging and restored capture
@@ -276,9 +279,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              691126b  eud: locate reproduced TX gap before Windows accepted-buffer count
              45d96fc  eud: validate repeated console RX and F1, audit host receive counters
              9943786  eud: service RX at console frame boundaries and retain TX loss evidence
-             f081526  eud: isolate same-owner RX loss and continuous USB IN effects
 
-    90 commits ahead of upstream origin/master, as of the tip named above;
+    91 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
