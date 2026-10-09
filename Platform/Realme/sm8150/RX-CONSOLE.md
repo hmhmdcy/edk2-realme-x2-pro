@@ -11,7 +11,17 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 51](sessions/51-console-overlap-and-issued-frame-loss.md)。**
+> **当前入口：[session 52](sessions/52-same-owner-usb-overlap-and-continuous-in.md)。**
+> 两次持续 libusb owner 中，长日志期间一次 7 字节输入均有完整 OUT 完成，却没有
+> 回执或 RX/tty 字节；同一 owner 一次 Ctrl-U 恢复，均多一个 empty IRQ，没有捕获期
+> 控制传输，因此这次失败不需要 qcusbser/reopen。持续读 IN 与保存/显示分开后，
+> 最大请求空窗 8423→854 us，TX 快照 510→512/512 帧，RX 仍失败。只是一组对照，
+> 不宣称全部旧 TX 故障同因/已修复；首样本缺 8 个零，具体重复帧序号有歧义。
+> 完整目标 IN/raw 逐字节相等；未刷机/重启/新 Windows 管理员抓包，保留 RX48 B、
+> TOP_CFG=0x11/F1/兼容终端，USB finally 释放/detach，三节点 OK、COM14 关闭。
+> 下一项针对长 console 锁/外层 IRQ 关闭时 RX 服务；候选尚未实现，IRQ 延迟未实测。
+>
+> **历史上一轮：[session 51](sessions/51-console-overlap-and-issued-frame-loss.md)。**
 > 长日志接收期间一次提交的 7 字节原生输入没有回执、未进入 RX/tty；恢复连接时
 > 不可变 512 帧 TX 快照有一个完整 4 字节 console 帧 `[ 58` 缺于 Windows raw，
 > 其余 511 帧跨两个 owner 直接匹配。本轮真实异常已复现，但 console 锁/物理 OUT/

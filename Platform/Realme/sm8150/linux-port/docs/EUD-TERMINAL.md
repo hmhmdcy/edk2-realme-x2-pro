@@ -28,6 +28,12 @@ RX51 已在长 console 日志接收期间复现缺回执：一次 7 字节输入
 见 [session 51](../../sessions/51-console-overlap-and-issued-frame-loss.md)。诊断副本只做
 一次明确触发实验，缺回执即停止数据，不通过重复有副作用命令掩盖丢失。
 
+RX52 通过完整目标 USB OUT/IN，在同一 libusb owner 内也复现该 7 字节缺 RX；
+人工 Ctrl-U 首次恢复，证明这次失败不需要 qcusbser/reopen。诊断读取与 sink 分开
+后，本次 TX 快照 512/512 匹配、IN 请求间隙改善，RX 仍失败；没有替换本终端或
+宣称普遍修复。见 [session 52](../../sessions/52-same-owner-usb-overlap-and-continuous-in.md)。
+手机镜像、TOP_CFG=0x11/F1/默认兼容模式都保留，稳定性继续排查。
+
 ## TX 和 RX 的状态
 
 方向以手机为准：

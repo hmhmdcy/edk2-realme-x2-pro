@@ -1,13 +1,13 @@
 # Session handover - realme X2 Pro (samurai) EDK2/UEFI
 
-> Updated 2026-10-09 (Asia/Shanghai).  Sections 0-7 below are the living part:
+> Updated 2026-10-10 (Asia/Shanghai).  Sections 0-7 below are the living part:
 > current state, next steps, repo state, tools, pitfalls, safety, open questions.
 > The history (former sections 8-30) now lives in exactly one file per section -
 > see the index at the end of this file.  Read DOCS-INDEX.md for the whole map.
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-09)
+## 0. TL;DR - where the project stands (2026-10-10)
 
 Boots and runs:
 
@@ -17,26 +17,32 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current session-51 handoff: sessions/51-console-overlap-and-issued-frame-loss.md.
-One controlled busy-console test reproduced a missing native receipt: a single
-7-byte input submitted during a complete long log never entered accepted RX/tty.
-Recovery also lost one whole 4-byte console frame: a CRC-valid 512-record TX
-snapshot directly matches 336 failed-owner suffix and 175 recovery-owner prefix
-frames, with only seq 11733 `[ 58` absent from Windows raw. No gap filling.
-This is new evidence, not a fix or proof that console locking caused the loss.
-Host output overlap/Write completion do not prove physical OUT arrival; the
-extra empty IRQ and first missed reopened Ctrl-U cannot be assigned to either
-probe or session reset. IRQ remains active/fault=0, grace waits=0 unexercised.
+Current session-52 handoff: sessions/52-same-owner-usb-overlap-and-continuous-in.md.
+Two continuous libusb owners reproduce the busy-console missing 7-byte input:
+complete target OUT succeeds, but no receipt/RX/tty bytes; a manual Ctrl-U then
+recovers in the SAME owner. Each adds one empty IRQ, with no captured control
+transfer. qcusbser and serial reopen are not necessary for this failure.
+Actual IRQ entry delay and physical USB/EUD acceptance remain unmeasured.
+
+The first read/save/display loop loses two identical issued `0000` console
+frames (8 bytes); only 510/512 snapshot frames reach complete IN/raw. Their
+exact sequence positions are ambiguous. Separating continuous reads from the
+sink reduces the largest body IN requeue gap from 8423 to 854 us; this sample
+matches all 512 TX records and 990 zeros, while RX still fails. This is one
+host-path contrast, not a universal TX cause/fix or resolved stability.
+All positive target IN bytes equal raw (13220/13245), with no capture truncation.
 
 Unchanged logdump-rx48-tx-journal.img retains TOP_CFG=0x11 whole-frame RX,
-console/F1, pacing and the installed RX47 terminal. No flash/reboot/elevation.
-Both diagnostic owners closed in finally; recovery commands/status completed,
-COM14 is closed, 9501/9500/9505 OK, Shared/not Attached. Ordinary idle use works,
-but busy-console and reopen failures are real. Next compare this specific
-trigger with complete target USB IN/OUT evidence, not more passing commands.
-RX50's exact managed/installed-driver audit and queue observation remain useful;
-its normal sample does not supersede RX51's failure. RX49's virtual IN/partial
-cancel checks remain valid. No serial errors observed here cannot rule out loss.
+console/F1, pacing and the installed RX47 terminal. No flash/reboot/new Windows
+administrator ETW; usbmon uses existing WSL root access. Both USB owners close
+in finally and detach; recovery status completes, COM14 is closed, three nodes
+OK, Shared/not Attached. IRQ remains active/fault=0, grace waits=0 unexercised.
+Next target RX service during legacy console locking/outer IRQ disable, with
+explicit console collection provenance and deferred tty/F1; do not simply
+unlock between frames or repeat passing commands. No candidate yet installed.
+RX51's missing issued Windows frame and reopened Ctrl-U remain separate open
+faults. RX50's exact managed/installed-driver audit and RX49 partial-data checks
+remain valid; zero observed serial errors cannot rule out loss.
 
 RX45's mask-only candidate was insufficient; RX46 introduced real IRQ
 entries/frame counts and deferred tty/F1. One completed administrator ETW
@@ -126,8 +132,14 @@ older SDM845 register table. No PHY/clock reset, filter change or force bind.
    its immutable journal identifies one issued 4-byte frame absent from Windows
    raw. The legacy console holds the UART lock for the whole record and this
    non-RT printk core disables IRQs outside it; actual IRQ delay is unmeasured.
-   See session 51/reference/rx51. Next use that marker trigger with complete
-   target USB IN/OUT evidence to distinguish Windows from device behavior.
+   RX52 repeats this marker trigger with complete target USB OUT/IN in one
+   owner: the 7-byte probe is absent from RX/tty in both host paths and manual
+   Ctrl-U recovers without reopen. Each adds an empty IRQ. Continuous IN reduces
+   requeue gaps and matches all 512 TX records in one contrast, but RX still
+   fails. See session 52/reference/rx52; next evaluate whole-frame RX service
+   at complete console TX boundaries with deferred tty/F1, separate source
+   accounting and consumed-frame IRQ handling. Preserve the outer printk
+   IRQ constraint; do not infer physical acceptance or general TX stability.
    Ordinary idle use works; avoid repeating passing samples as stability proof.
    Preserve the current diagnostic and compare software records with actual IN;
    the matching vendor DT specifies SPI 492 level high. RX46 supplies a
@@ -214,7 +226,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = d8094c7  eud: audit Windows receive queues and exact installed driver
+    master = d97bc81  eud: reproduce console-overlap RX loss and a missing issued TX frame
+             d8094c7  eud: audit Windows receive queues and exact installed driver
              b957120  eud: audit complete USB IN and preserve partial cancellation data
              6ea8338  eud: add bounded IRQ grace and validated TX journal
              b660d24  eud: add continuous native terminal and record reopen boundary
@@ -231,7 +244,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              703469c  eud: record pre-Linux RX failure and USB boundary comparisons
              9d01126  eud: audit native RX sources and PHY lifecycle
 
-    80 commits ahead of upstream origin/master, as of the tip named above;
+    81 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -397,6 +410,7 @@ the only copy.
 | 49 | Complete virtual USB IN/raw comparison, seven offline audits and real partial cancellation retained; unchanged kernel, physical stability still open | `sessions/49-usb-in-and-partial-timeout-audit.md` |
 | 50 | Current connection normal; Windows receive observation and exact installed-driver buffer/status audit, 287 overlapping TX frames match; no old fault reproduced | `sessions/50-windows-receive-and-driver-buffer-audit.md` |
 | 51 | Busy-console native receipt failure and one issued 4-byte console frame absent from raw; 511/512 direct cross-owner matches, unchanged image | `sessions/51-console-overlap-and-issued-frame-loss.md` |
+| 52 | Same-owner busy-console RX loss with complete OUT/IN; continuous IN improves requeue gap and TX match in one contrast, RX remains unresolved | `sessions/52-same-owner-usb-overlap-and-continuous-in.md` |
 
 Rules that keep this file from growing again:
 

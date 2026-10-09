@@ -14,13 +14,16 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/51-console-overlap-and-issued-frame-loss.md`：长 console 输出
-期间一次 7 字节原生输入未进入 RX/tty；恢复状态行有一个已记录的 4 字节 console
-帧缺于 Windows raw，其余 511/512 跨 owner 直接匹配，真实异常已复现但根因未定。
-本轮未刷机/重启/新管理员抓包，保留 rx48-tx-journal、TOP_CFG=0x11/F1/安装终端。
-两次 owner finally 关闭，恢复命令/状态完整；普通空闲可用，长期稳定性仍开放。
-RX50 的 Windows 队列观测/精确 PDB 审查保留；下一步对照这一触发条件的目标
-USB IN/OUT，不再把正常通过的重复命令当修复证据。
+当前交接看 `sessions/52-same-owner-usb-overlap-and-continuous-in.md`：两次持续
+libusb owner 中，长 console 期间的 7 字节输入有完整 OUT 完成，却没有回执或
+RX/tty 计数；同一 owner 一次 Ctrl-U 恢复、各多一个 empty IRQ。这次失败不需要
+qcusbser/reopen。持续读 IN 与保存/显示分开后，最大请求空窗 8423→854 us，TX
+快照 510→512/512 帧，RX 仍失败；不扩大为全部旧 TX 同因/已修复。
+本轮未刷机/重启/新 Windows 管理员抓包，保留 rx48-tx-journal、TOP_CFG=0x11/F1/
+安装终端。USB owner finally 释放/detach，恢复状态完整，COM14 关闭、三节点 OK。
+下一项针对长 console 持锁/外层 IRQ 关闭时 RX 服务，候选尚未实现或刷入；实际
+IRQ 延迟仍未测量。RX51 的 Windows 缺帧和 RX50 的队列/PDB 审查仍保留，长期
+稳定性开放，不再把正常通过的重复命令当修复证据。
 RX49 的完整虚拟 IN/部分取消核对、RX48 的 IRQ F1/同镜像重启实测仍保留。
 `eud-terminal.cmd -Native` 持续 owner、启动同步、数据只发一次的用法不变。
 旧 ETW reset/数据翻转假设仍未物理验证，勿重复仅掩码/reset/旧零等待实验。
