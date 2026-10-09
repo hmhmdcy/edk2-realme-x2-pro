@@ -17,30 +17,30 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current session-54 handoff: sessions/54-console-rx-regression-and-host-counter-audit.md.
-Same logdump-rx53-console-rx.img; no driver/terminal change or flash this session.
-RX53's console-boundary whole-frame RX fix passes nine manual long-log overlaps:
-all via=console, nine distinct assignments read back, 990 zeros per log, IRQ
-active=1/fault=0. Full USB IN/raw and a CRC-valid 512-frame snapshot match.
-Six credited empty IRQs occurred; eight consecutive empties were not induced.
+Current session-55 handoff: sessions/55-windows-perf-counter-and-reproduced-tx-gap.md.
+Same logdump-rx53-console-rx.img and installed terminal; no flash/reboot/reset.
+One bounded Windows owner adds read-only GET_STATS on its existing overlapped
+handle, with an isolated manual event/low bit to suppress CLR completion-port
+notification. Six drained samples complete; all received deltas equal raw.
 
-One header-only F1 submitted during that log receives via=console, then enters
-independently verified fastboot. Same-image reboot restores TOP_CFG=0x11,
-tty shell/IRQ and a fresh installed-native receipt/echo. All owners finally
-close/dispose/detach, three nodes OK, COM14 closed, Shared/not Attached.
-No new Windows administrator ETW; WSL root usbmon retains complete target data.
-Rollback remains unchanged RX48 B; F1/console/compatible terminal are preserved.
+TX loss recurs: seq 7376 console `[ 16`, six wire bytes absent. The other 511
+journal records match directly (27 previous/484 current). First-status raw and
+accepted-buffer receive delta are both 309 bytes, versus 315 CPU-issued bytes.
+The gap is before that counter, excluding a loss solely in app Read/decoder/
+display. EUD/physical USB/early driver refusal remain unresolved; zero observed
+errors is not proof against every early refusal. See session 55/reference/rx55.
 
-Remaining TX fault is still RX53's exact seq 7287 console `[   ` gap: 511 other
-records directly match boot/affected/recovery raw. This passing regression is
-not a TX/reopen fix. Exact installed-driver audit now identifies SerialGetStats:
-read-only cumulative received bytes at its buffer-acceptance boundary. No live
-GET_STATS query yet. Next implement bounded overlapped sampling on one existing
-diagnostic handle and compare counters/raw/journal, retaining queue/errors.
-Open's reset/read-worker path does not establish physical data-toggle failure.
-See session 54/reference/rx54 for new regression/source evidence and its limits,
-session 53 for the retained kernel fix and missing issued TX frame. Do not
-repeat masks/reset/ZLP/old zero-wait or ordinary passing commands as proof.
+The first of two startup Ctrl-U writes still lacks RX acceptance; all nineteen
+once-only data frames receive receipts, IRQ active=1/fault=0. Long-console RX
+remains improved by RX53 and RX54's nine overlaps/console F1; it is not a global
+TX/session-start fix. TOP_CFG=0x11/whole-frame payload/F1/compatible/native
+terminal and unchanged RX48 rollback are retained. Finally COM14 closes/probes
+dispose; three nodes OK, no owner, Shared/not Attached. No new admin ETW.
+
+Next audit the exact installed worker/completion path before vPutToReadBuffer
+and obtain boundary evidence for a reproduced gap. Preserve startup OUT/RX
+count distinction. Do not repeat masks/reset/ZLP/old zero-wait or ordinary
+passing commands as proof; open/reset code alone does not measure data toggles.
 
 RX45's mask-only candidate was insufficient; RX46 introduced real IRQ
 entries/frame counts and deferred tty/F1. One completed administrator ETW
@@ -140,11 +140,13 @@ older SDM845 register table. No PHY/clock reset, filter change or force bind.
    nine manual distinct 9-byte overlaps, six credited empty IRQs, and console F1
    into independent fastboot. It does not induce eight consecutive empty IRQs.
    Final RX53 installed raw still loses seq 7287 `[   `; 511 other records
-   match across boot/affected/recovery owners. RX54 exact-driver SerialGetStats
-   audit gives a read-only buffer-acceptance count; next implement bounded
-   overlapped querying on the existing diagnostic handle and compare with
-   raw/journal/queue/errors. No live GET_STATS query yet. See sessions 53/54
-   and references rx53/rx54; physical acceptance/full stability stay unproven.
+   match across boot/affected/recovery owners. RX55 uses RX54's exact-driver
+   SerialGetStats boundary: new missing seq7376 has 309 received/raw bytes
+   versus 315 CPU-issued bytes, 511 other records directly match. This excludes
+   a gap solely after the accepted-buffer count, not EUD/physical USB/early
+   driver refusal. One startup Ctrl-U is still unaccepted; nineteen data frames
+   execute once. Next audit the exact worker/completion path before acceptance.
+   See session 55/reference/rx55; physical acceptance/full stability are unproven.
    Ordinary idle use works; avoid repeating passing samples as stability proof.
    Preserve the current diagnostic and compare software records with actual IN;
    the matching vendor DT specifies SPI 492 level high. RX46 supplies a
@@ -233,7 +235,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 9943786  eud: service RX at console frame boundaries and retain TX loss evidence
+    master = 45d96fc  eud: validate repeated console RX and F1, audit host receive counters
+             9943786  eud: service RX at console frame boundaries and retain TX loss evidence
                f081526  eud: isolate same-owner RX loss and continuous USB IN effects
              d97bc81  eud: reproduce console-overlap RX loss and a missing issued TX frame
              d8094c7  eud: audit Windows receive queues and exact installed driver
@@ -253,7 +256,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              703469c  eud: record pre-Linux RX failure and USB boundary comparisons
              9d01126  eud: audit native RX sources and PHY lifecycle
 
-    83 commits ahead of upstream origin/master, as of the tip named above;
+    84 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro

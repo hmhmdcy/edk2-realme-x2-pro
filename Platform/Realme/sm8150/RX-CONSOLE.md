@@ -11,7 +11,15 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 54](sessions/54-console-rx-regression-and-host-counter-audit.md)。**
+> **当前入口：[session 55](sessions/55-windows-perf-counter-and-reproduced-tx-gap.md)。**
+> 同 RX53 候选/安装终端，未刷机/重启/reset。单 Windows owner 实测 6 次只读
+> GET_STATS；新缺 seq7376 的 `[ 16`，其余 511 帧直接匹配。首状态 raw 和驱动受理
+> 缓冲计数均 309 线缆字节，软件发送记录应为 315；缺口在计数之前，排除纯终端
+> 读取/解码/显示丢失，EUD/物理 USB/驱动前段仍未区分。第一次启动 Ctrl-U 未受理，
+> 第二次成功，后续 19 数据帧只发一次均有回执。长日志 RX 修复保留，整体未解决。
+> finally 串口/诊断关闭、三节点 OK，无 owner、Shared/not Attached；详见 reference/rx55。
+>
+> **上一轮：[session 54](sessions/54-console-rx-regression-and-host-counter-audit.md)。**
 > 未改 RX53 候选/安装终端、未刷机；9 次手动长日志 overlap 均 via=console 并执行，
 > 全部变量读回、每条 990 个零，IRQ active=1/fault=0，6 次空 IRQ 正确计入 console
 > credit；并未诱发连续 8 次空 IRQ。完整 USB IN/raw、512 帧快照直接匹配。

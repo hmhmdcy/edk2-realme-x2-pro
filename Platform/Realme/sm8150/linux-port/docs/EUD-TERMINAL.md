@@ -47,6 +47,12 @@ RX54 未改本终端或 RX53 候选，9 次手动长日志输入均经 console �
 缺前缀。下一项独立诊断只读累计接收计数，尚未实测、不修改安装终端；见
 [session 54](../../sessions/54-console-rx-regression-and-host-counter-audit.md)。
 
+RX55 已在独立诊断 owner 上实测 GET_STATS：seq7376 缺 4 字符（6 线缆字节），
+raw 与驱动受理缓冲累计计数同为 309，软件记录应为 315，排除纯应用读取/显示
+丢失。EUD/USB/驱动前段仍待区分；启动首 Ctrl-U 本次也未受理，第二次成功，
+之后 19 数据帧只发一次都有回执。未改本终端、未刷机/重启，finally 关闭串口；见
+[session 55](../../sessions/55-windows-perf-counter-and-reproduced-tx-gap.md)。
+
 ## TX 和 RX 的状态
 
 方向以手机为准：
@@ -66,7 +72,7 @@ TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μ
 
 ```powershell
 & 'E:\eud-host\eud-terminal.cmd' -Reconnect
-# 当前 RX48 B 上使用原生输入；保持终端打开后连续输入命令。
+# 当前 RX53 候选上使用原生输入；保持终端打开后连续输入命令。
 & 'E:\eud-host\eud-terminal.cmd' -Native -Port COM14
 ```
 

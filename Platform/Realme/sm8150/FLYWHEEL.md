@@ -14,7 +14,13 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/54-console-rx-regression-and-host-counter-audit.md`：未改
+当前交接看 `sessions/55-windows-perf-counter-and-reproduced-tx-gap.md`：未刷机/重启，
+同 RX53 候选与安装终端。新 TX 缺 seq7376 在 raw 和 GET_STATS 受理缓冲计数中
+均少 6 线缆字节；已排除纯终端显示/读取丢失，EUD/USB/驱动前段仍未区分。
+启动首 Ctrl-U 仍可能未受理；只重试同步，后续数据只发一次。finally 关闭串口，
+三节点 OK、Shared/not Attached。TOP_CFG=0x11/F1/console/兼容终端与回退保留。
+
+前一轮 `sessions/54-console-rx-regression-and-host-counter-audit.md`：未改
 logdump-rx53-console-rx/安装终端、未刷机，9 次手动长日志原生输入均经 console
 整帧受理/执行、全部变量读回；6 次空 IRQ 计入 credit，IRQ active=1/fault=0。
 完整 USB IN/raw 与 512 帧 TX 快照匹配，但并未诱发连续 8 次空 IRQ。
