@@ -4,9 +4,10 @@
 > shell 执行；此终端继续按单字节发送，兼容 rx33 和 RX41 驱动。
 > 原生帧长度 2 仍保留 F1，发送长命令时不能用长度 2 的 tty 分片。
 > 新证据与最终镜像见 [session 41](../../sessions/41-rx-ahb2phy-wait-state-fix.md)。
-> 下表的多字节故障描述针对 rx33 基线，保留作历史。
+> 下一轮终端稳定性排查与证据边界见 [session 42](../../sessions/42-native-terminal-next-session-handoff.md)。
 
-2026-10-09，适用于当前 `logdump-rx33-console.img` 内核。源码与测量见
+2026-10-09，本工具兼容 rx33 基线和当前 `logdump-rx41-native-ordered-tty.img` 候选。
+工具的原始源码与测量见
 `../../sessions/33-rx-access-and-production-policy.md`、
 [session 34](../../sessions/34-temporary-eud-terminal.md)。
 
@@ -17,7 +18,7 @@
 | 方向 | 当前状态 | 临时终端的处理 |
 |---|---|---|
 | 手机 TX → PC | 内核每帧发送最多 4 个 payload 字节，长输出拆成多帧；限速后可用 | 持续读取、解帧、显示，并保存日志 |
-| PC → 手机 RX | 单字符可用，原生一帧多字符仍重复首字节或读到 90 | 输入排队，每次只发 `[90][01][char]`，等该字符受理后继续 |
+| PC → 手机 RX | RX41 已修复原生整帧重复首字节；缺回执/缺命令输出仍待定位，rx33 则仍有旧 payload 故障 | 此兼容工具继续每次只发 `[90][01][char]`，等该字符受理后继续 |
 
 TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μs/寄存器写与
 2 ms/帧的节奏。它不是 RX 的“读不出下一字节”现象；也不保证任意帧长或绝无丢失。

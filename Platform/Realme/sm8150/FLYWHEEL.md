@@ -14,6 +14,10 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
+下一会话看 `sessions/42-native-terminal-next-session-handoff.md`：原生 payload 重复首字节
+已有真实整帧修复；缺少回执与缺少命令输出仍未定位，不能称为已确认的新故障。
+最后设备状态来自 session 41，操作前须重新核实。session 42 只更新文档，没有串口操作或刷机。
+
 手机能从 Linux **自己**重启进 fastboot。主机通过 EUD COM 发一帧 `[0x90][0x02]`，
 驱动打印 `eud: reboot2 bootloader requested`，先写 `CSR_EUD_EN(0x1014)=0` 把 USB PHY
 交还常规通道，再 `kernel_restart("bootloader")`；PMIC PON 的 magic 由 reboot-mode
@@ -29,15 +33,17 @@ notifier 写入，ABL 读到后进 fastboot。
 
 ## 1. 命令通道：用「长度」字段当命令码
 
-`id` 恒为 `0x90`（= 上游 `kernel/msm` 的 `UART_ID`）。**单字符 payload 已验证，多字节仍未解**
-（§6），但 `0x0c`/`0x10` 两个闩锁（id / len）是**精确可靠**的，所以把命令编进
-长度字段，完全不依赖 payload：
+当前协议使用 `id=0x90`（厂商驱动的 `UART_ID`）。session 41 已验证在 TOP_CFG=0x11
+时读取完整多字节 payload。F1 仍编进长度字段，在读取头部后分派，不依赖 payload；
+这条旧兼容命令继续保留，不是当前 payload 修复的方法。
 
 | 主机发 | 含义 | 状态 |
 |---|---|---|
 | `[90][01][字符]` | tty 输入一个字符 | 已有真实字符回显；受理后停止重发，见 session 32 |
 | `[90][02]` | `reboot bootloader` → fastboot | **真机已验证** |
-| `[90][3..14][payload]` | payload 探针：每 poll 读 1 字节，按 len 有界采样，全部结束后打印 | 已跑；多字节推进仍未解，不向 tty 注入 |
+| `[90][3..14][payload]` | 原生 tty 输入：TX 锁内一次缓存整帧，读完才记录/投递 | session 41 已验证完整 payload 与单帧 shell 赋值；命令输出仍不稳定 |
+
+禁止把 2 字符 tty 分片发成 `[90][02][payload]`；len=2 专用于头部 F1。
 
 设计约束：**收到头部即可判定命令**。驱动曾经等 payload 收齐才分发，结果
 `len=02` 的帧在第 1 个字节后门控清零就被放弃，命令永远到不了——所以命令分支
@@ -53,7 +59,7 @@ notifier 写入，ABL 读到后进 fastboot。
 | 4 | PC | `fastboot reboot`（手机自动进 EDK2 → Linux） | — |
 | 5 | phone | 固件 → Linux，EUD 控制台起来 | ~40 s |
 | 6 | PC | 等 9501 → `eudtool com-up` → 找 COM → 开端口抓包 | ~10 s |
-| 7 | PC | 发实验帧（每条重发 3–5 次，见 §5 投递率） | ~10 s |
+| 7 | PC | 手动有界发送实验帧，取得新回执即停止重发（见 §5） | 依实际回执 |
 | 8 | PC | 发 `[90][02]` → 手机自己回 fastboot | ~10 s |
 | 9 | — | 回到第 3 步 | — |
 
@@ -70,6 +76,10 @@ notifier 写入，ABL 读到后进 fastboot。
 `make Image` **不会**重建 DTB，改了 DTS 必须单独跑上面第二条。
 
 logdump 打包（Windows，`E:\edk2-samurai-out\patch-logdump.py`）：
+
+以下 offset/长度是 session 31 的旧镜像记录，不能直接用于当前 RX41 Image。
+当前迭代以 session 41 的镜像/源码为起点，在原 FAT 副本中替换 Image，核对内容与 DTB；
+不要运行会用旧 Windows initramfs 镜像覆盖真实 WSL initramfs 的 build-image.sh。
 
     Image 在 FAT 里的固定位置：offset 90112，长度恒为 30116352 B（原地替换）
     FAT 里的 \samurai.dtb：     offset 30208000，长度 94739 B（原地替换，尺寸没变）
@@ -110,8 +120,9 @@ DTB 的两条路径都要照顾（否则猜不准哪条生效）：
    只有 **换 USB 口（换设备节点）** 或 **重启主机** 能解。
    → 飞轮脚本必须：`try/finally { Close(); Dispose() }`、一次只让一个进程开端口、
    每轮实验用新进程，绝不在常驻会话里裸开端口。
-2. **投递率只有约 1/3**。主机每次 `Write()` 不一定被设备暂存（实测 15 帧只有 7 帧
-   在闩锁里出现；另一轮 3 帧中 1 帧）。→ **每条命令必须重发 3–5 次**，间隔 ≥2 s。
+2. **旧测试收到回执的比例较低，不能当当前固定投递率**。session 41 仍有空抓取，
+   主机 `Write()` 成功不证明设备受理，缺回执也不证明设备拒收。使用有界重试，
+   收到新回执即停；现有协议无序号/去重，重发可能重复执行，优先用幂等诊断输入。
 3. **抓包必须先起**。设备 TX FIFO 只有几格，没人排空就会丢日志；而且"EUD 哑了"
    常常是主机侧没读。
 4. **普通 warm reboot 可能保留 EUD 状态**：EUD 开着时 USB 被占（fastboot/UMS
@@ -122,7 +133,10 @@ DTB 的两条路径都要照顾（否则猜不准哪条生效）：
 7. 只刷 boot / logdump；U 盘模式下绝不让 PC 初始化/格式化 UFS 分区。
 8. 长命令容易被工具链截断/挂起：写 .py/.ps1 文件再执行，比内联长命令可靠。
 
-## 6. 待解：`0x14` 到底给的是什么
+## 6. 历史排查：`0x14` 到底给的是什么（sessions 32-40）
+
+以下“未修复”“主假设”“尚未跑”只描述当时阶段。session 41 已验证 TOP_CFG=0x11
+后的真实整帧推进；当前剩余问题与下次判据以 sessions 41/42 为准。
 
 **2026-10-09 session 40 更新：** 仅搜索/静态审查，无刷机、无新的多字节实验。
 旧 DSP 完整表及原厂 SM8150 固件仍未提供 RX advance 修法；基线 Windows 单字节回执正常，

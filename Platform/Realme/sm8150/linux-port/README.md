@@ -13,6 +13,10 @@
 `-RetryJitterMs 800` 仅改变有界重试时间，不保证所有 OUT 都受理。
 不要使用旧 build-image.sh 重建 initramfs；本轮保留真实 WSL initramfs 和原 DTB。
 
+当前交接与短提示词见 [session 42](../sessions/42-native-terminal-next-session-handoff.md)。
+payload 推进的修复使用真实整帧，不依赖临时终端逐字发送。剩余缺回执/缺输出故障的
+原因与是否由候选改动引入均未确定；下一轮追踪 RX→tty/shell→TX/主机抓取。
+
 全新开始，不使用 `E:\Realme X2 Pro移植主线Linux`（旧工程已废弃；它的准确性核实
 结论见 [docs/OLD-PROJECT-VERIFICATION.md](docs/OLD-PROJECT-VERIFICATION.md)，
 里面有 3 处**必须丢弃**的错误写法）。

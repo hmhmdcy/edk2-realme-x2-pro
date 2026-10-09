@@ -12,7 +12,7 @@
 | DOCS-INDEX.md | 本文：文档地图、同步方式与维护规则 |
 | EUD.md | EUD 设备事实、寄存器、CTL/COM 协议、固件日志环、ArmMmuLib 崩溃真因 |
 | SWD-JTAG.md | EUD SWD 9504 / JTAG 9503：传输层可用，AP DAP 被熔丝＋签名 debug policy 挡住 |
-| RX-CONSOLE.md | EUD RX 寄存器、组帧、tty console；最新单字符修复与多字节未决问题，保留历史探针记录 |
+| RX-CONSOLE.md | EUD RX 寄存器、组帧、tty console；原生 payload 推进修复与剩余终端问题，保留历史探针记录 |
 | BINARIES.md | 设备 blob 来源、ButtonsDxe DEPEX 补丁 |
 | linux-port/README.md、linux-port/docs/00-INDEX.md | 主线 Linux 侧（内核、DTB、patch、脚本、参考） |
 | FLYWHEEL.md | 免按键测试飞轮：命令表、一轮流程、构建打包、硬约束与坑 |
@@ -36,6 +36,7 @@
 | sessions/39-rx-tight-arrival-poll.md、reference/rx39/ | UEFI 紧轮询仍重复首字节；受理/恢复边界、原基线恢复、新 boot HWIO 来源限制 |
 | sessions/40-rx-register-map-and-stock-firmware-audit.md、reference/rx40/ | 完整旧 DSP EUD_ACORE 表、原厂 SM8150 静态审查，无推进规格；未刷机，单字节回执核对 |
 | sessions/41-rx-ahb2phy-wait-state-fix.md、reference/rx41/ | 原厂 SM8150 映射、TOP_CFG=0x11 有效 RX 方法，UEFI/Linux 完整 payload、tty 执行与输出验证 |
+| sessions/42-native-terminal-next-session-handoff.md | 当前交接与短提示词：payload 真修复、缺回执/缺输出的证据边界、下一轮判据；仅文档更新 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
@@ -61,4 +62,4 @@
 
 - HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
 - 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD 打开时占 USB，彻底断电要长按电源约 15 s。
-- 待办：HANDOVER-NEXT.md 第 1 节。先用临时终端继续驱动移植（linux-port/docs/EUD-TERMINAL.md）；原生多字节 RX 仍待芯片握手/初始化的新证据。session 36 已取得 libusb OUT 受理后失败的对照，session 37 提供 PHY 生命周期方向；不再阻塞全部工作。
+- 待办：HANDOVER-NEXT.md 第 1 节、sessions/42-native-terminal-next-session-handoff.md。session 41 已验证真实整帧 payload 修复；继续定位缺少帧回执和可见命令响应，追踪 RX→tty/shell→TX/主机抓取。临时逐字终端仍可用于驱动移植；不要用 sessions 35-40 的旧提示词重新排查已解决的 FIFO 推进。

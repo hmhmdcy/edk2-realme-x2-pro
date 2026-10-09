@@ -6,25 +6,31 @@
 > **2026-10-09 session 41：找到有效原生多字节 RX 方法。** 原厂 SM8150 DAL 映射确认
 > SOUTH SWMAN=0x088ee000；同机型源码的 TOP_CFG +0x10、值 0x11，经实际读回验证。
 > 配置 0x088ee010=0x11 后，UEFI 两次重启与 Linux 均读到完整 ABC/DEFG，Linux 也读对 LEN=14。
-> 驱动在 TX 锁内收完整帧后才打印/投递 tty，保留 len=2 的 F1；其他已验证长度为 1、3..14。
+> 驱动在 TX 锁内收完整帧后才打印/投递 tty，保留 len=2 的 F1；tty 允许长度为 1、3..14。
 > 原生 X=ok\n 已在 shell 执行。整帧偶发没有回执仍需有界重试，不是无损保证。
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **截至 session 40 的历史核对：单字符 RX 可用，多字节仍未解。** 原探针实际读到
+> **下一会话入口（session 42，仅文档更新）：**
+> [原生终端交接](sessions/42-native-terminal-next-session-handoff.md)。
+> 已修复并复测的是受理整帧后重复读取首字节的故障；使用真实多字节帧，未拆字节绕过。
+> 发送后缺少回执、读对并投递 tty 后缺少可见命令输出，仍未查清；不能断言是新引入的故障。
+> 下一轮区分主机提交、完整 RX、tty 投递、shell 执行与可见 TX，不把任何一层证据扩大到全链路。
+
+> **截至 session 40 的历史核对（非当前镜像）：单字符 RX 可用，多字节仍未解。** 原探针实际读到
 > `90 90`。去掉读取前的 printk 后，`ABC` 的首字节能读到 `41`，`DEFG` 的首字节
 > 能读到 `44`；因此不能按「整帧在 FIFO，payload 偏移 2」修改驱动。当前
 > `[90][01][字符]` 已有真实 tty 回显，`[90][02]` 仍是 fastboot，`len>=3` 保留
 > 有界诊断、不向 tty 注入未验证的多字节。下文旧节保留为历史观测，最新证据与
 > 跨机型源码对照见 [session 32](sessions/32-rx-printk-interference.md)；帧内禁止 TX、
 > MMIO 属性、读序、上下游及量产权限排查见
-> [session 33](sessions/33-rx-access-and-production-policy.md)。当前恢复版是
+> [session 33](sessions/33-rx-access-and-production-policy.md)。当时恢复版是
 > `logdump-rx33-console.img`；RX 状态、头部与首次 DAT 读取共用 TX 锁。
 
 > **临时交互入口（2026-10-09）：** `linux-port/scripts/eud-terminal.cmd`，工具副本
 > 在 `E:\eud-host\`。手机 TX 已能用每帧 4 字节组成长输出；主机输入自动拆成长度 1
 > 帧、等受理后继续。见 [终端指南](linux-port/docs/EUD-TERMINAL.md)。这是绕开原生
-> 多字节 RX 的临时方案，内核无需重刷。
+> 多字节输入问题的兼容方案；它与 session 41 的整帧原生 payload 修复是两条不同路径。
 
 > **session 36 新证据：** 实机 9505 为 bulk IN `0x81` / OUT `0x02`，最大包长 16，
 > 配置仅 32 字节、无 MDLM extras。旧 WDM qcusbser 有条件字节填充的描述符门槛

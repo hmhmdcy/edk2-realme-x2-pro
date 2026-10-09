@@ -20,7 +20,14 @@ Boots and runs:
 Final session-41 phone state: logdump-rx41-native-ordered-tty.img retained;
 TOP_CFG=0x11, original zero, Linux shell booted. The last bounded retry obtained
 a fresh Ctrl-U on its second OUT. COM14 closed/disposed; 6-5 Shared, not Attached.
-Native command responses remain unreliable; use the compatible terminal.
+Some native commands have no captured response; use the compatible terminal.
+
+Current next-session handoff: sessions/42-native-terminal-next-session-handoff.md.
+The repeated-first-byte payload fault has a verified fix, using complete native
+frames rather than host-side single-byte splitting. The remaining terminal
+faults are not established as newly introduced: their cause and relationship to
+the earlier failure are still unknown. The last phone state above is a session-41
+snapshot, not a live check made during the session-42 documentation update.
 
 EUD native multi-byte RX now has a verified method (session 41):
 
@@ -35,8 +42,8 @@ EUD native multi-byte RX now has a verified method (session 41):
 * The Linux driver sets/verifies the wait state, buffers the complete frame
   under the TX lock before logging, and restores the original configuration
   on F1/remove. Native multi-byte X=ok\n executed in the shell and a later
-  single-byte terminal command read back ok. Intermediate candidates lost
-  visible responses; the session distinguishes input execution from TX output.
+  single-byte terminal command read back ok. Some correctly received commands
+  had no captured response; the session distinguishes execution from TX output.
 * Length 1 and 3..14 carry tty input; length 2 remains the header-only F1
   command [90][02]. Never send a two-character tty frame. The existing
   temporary terminal still uses single-byte frames and remains compatible.
@@ -53,17 +60,23 @@ EUD native multi-byte RX now has a verified method (session 41):
 Process rule agreed on 2026-10-08: when an experiment has failed two or three
 times in a row, STOP and search for an existing implementation or document
 before spending another hardware cycle. The downstream `drivers/soc/qcom/eud.c`
-and QUIC host library established the register layout and framing; multi-byte
-RX on this unit is still open.
+and QUIC host library established the register layout and framing; session 41
+verified native payload advancement with the SM8150 AHB2PHY wait state.
 
 **Native FIFO advancement has a working method; read session 41 first.**
 Sessions 35-40 remain the history of excluded paths and source limits. The new
 SM8150 map plus actual zero/0x11 readbacks supplied evidence missing from the
 older SDM845 register table. No PHY/clock reset, filter change or force bind.
 
-1. Use the verified wait-state plus whole-frame RX method. The remaining
-   transport questions are intermittent whole-frame OUT acceptance and TX
-   response continuity, not an assumed COM single-byte fuse restriction.
+1. Read sessions 41 and 42 before further terminal experiments. First verify
+   live device enumeration, serial ownership and a fresh bounded device receipt.
+   Use the verified wait-state plus whole-frame RX method. The remaining
+   questions are missing frame receipts and missing visible command responses;
+   neither the failing layer nor whether these are old or introduced faults
+   has been established. Trace complete RX -> tty/line discipline -> shell ->
+   TX -> host capture; inspect the actual initramfs/BusyBox terminal behavior.
+   Compare one variable at a time and classify each result by evidence stage
+   (session 42), without treating empty captures as proof of USB rejection.
    Preserve the receipt/retry boundary and reserved length-2 F1 protocol.
    Continue Linux port work with the existing compatible terminal:
    E:\eud-host\eud-terminal.cmd -Reconnect (linux-port/docs/EUD-TERMINAL.md).
@@ -97,7 +110,9 @@ EUD enable (same writes the kernel driver does; no secure-eud on this unit):
     +0x1014 = 1      (CSR_EUD_EN)
     +0x0024 = 0x1C   (INT1_EN_MASK: VBUS|CHGR|SAFE_MODE)
 Readback shows the low byte replicated into all four lanes: writing 1 reads
-back 0x01010101.  Never gate logic on these readback values.
+back 0x01010101. Interpret EUD fields through the low-byte mask, not unmasked
+32-bit equality. AHB2PHY TOP_CFG is a separate bridge register; its 0x11
+configuration readback is explicitly verified by the session-41 method.
 
 Host CTL node (Windows, already working):
     \\.\Qualcomm EUD Control Device 9501\DEBUG      (no "(0003)" suffix)
@@ -135,7 +150,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 2708b47  eud: audit complete register map and stock SM8150 firmware
+    master = eff092d  eud: verify native SM8150 RX with AHB2PHY wait state
+             2708b47  eud: audit complete register map and stock SM8150 firmware
              89236ea  eud: record tight arrival polling failure and verified baseline recovery
              3bfecb7  docs: normalize RX38 evidence text and retain original hashes
              703469c  eud: record pre-Linux RX failure and USB boundary comparisons
@@ -143,9 +159,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              ed31013  docs: normalize RX evidence manifests
              0915f34  eud: confirm native RX failure without qcusbser
              e606a99  eud: audit legacy qcusbser and prepare USB OUT comparison
-             1e54944  docs: hand off native EUD RX investigation
 
-    69 commits ahead of upstream origin/master, as of the tip named above;
+    70 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -240,6 +255,9 @@ overrides, PlatformBm.c, EUD.md) is in git log and in sessions/15-17.
 * Which layer causes intermittent whole OUT frames without a receipt, and
   how can TX responses be checked for exact continuity? Do not conflate this
   with the now-verified AHB2PHY FIFO advancement method (session 41).
+* Why do some correctly read and tty-inserted native commands have no captured
+  response? Audit tty/line discipline, actual BusyBox shell and TX/host capture
+  before assigning a root cause or calling this a newly introduced fault.
 * Move the SM8150 shared bridge configuration to appropriate platform/DT
   resource management before generalizing the board-specific driver.
 
@@ -297,6 +315,7 @@ the only copy.
 | 39 | Tight pre-Linux arrival polling still AAA/DDDD; bounded recovery, baseline/native receipt restored; HWIO source limits | `sessions/39-rx-tight-arrival-poll.md` |
 | 40 | Complete older EUD register map and stock SM8150 static audit; no RX advance spec/fix; fresh baseline single-byte receipt | `sessions/40-rx-register-map-and-stock-firmware-audit.md` |
 | 41 | SM8150 AHB2PHY wait-state native RX method; UEFI/Linux complete payloads and tty execution | `sessions/41-rx-ahb2phy-wait-state-fix.md` |
+| 42 | Native terminal handoff: verified payload fix, unresolved receipt/response faults, next checks and short prompt; docs only | `sessions/42-native-terminal-next-session-handoff.md` |
 
 Rules that keep this file from growing again:
 
