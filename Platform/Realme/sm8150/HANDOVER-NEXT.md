@@ -17,54 +17,36 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-EUD - the only console this board has - all verified on hardware today:
+Final session-41 phone state: logdump-rx41-native-ordered-tty.img retained;
+TOP_CFG=0x11, original zero, Linux shell booted. The last bounded retry obtained
+a fresh Ctrl-U on its second OUT. COM14 closed/disposed; 6-5 Shared, not Attached.
+Native command responses remain unreliable; use the compatible terminal.
 
-* Single-writer, fully paced log channel.  The early console is retired as soon
-  as our real console registers ("printk: legacy bootconsole [eud0] disabled"),
-  every register write is paced (200 us) and every frame spaced (2 ms), and a
-  210 s capture reassembles with 0 resyncs. This alone does not prove no
-  complete frames were dropped; session 34 separately verifies exact TX strings.
-* /dev/ttyEUD0 exists (a real uart driver, "ttyEUD"), its TX path works end to
-  end, and /dev/console is bound to it.
-* The firmware command line was rebuilt to
-  "earlycon=eud,mmio,0x88e0000 console=tty0 console=eud ..." with keep_bootcon
-  removed.
-* Current host frames use id 0x90. [90][01][char] types real payload into the
-  shell; sending i, d, then newline returned `uid=0 gid=0`. Older 0x81/0x82
-  header-only shortcuts are historical and are not the current protocol.
-* The RX payload register is 0x14 (a FIFO read port); 0x0c/0x10 are latches
-  holding the last message's header, and `EUD_INT_RX` = BIT(0) of INT_STATUS_1
-  (0x44) is the payload-available gate.  The downstream Qualcomm driver was
-  found while searching, and its receive function reads the id latch first,
-  filters on `UART_ID`, then reads `len` bytes from 0x14 (RX-CONSOLE.md).
-* The RX command channel WORKS.  id 0x90 (= the upstream UART_ID, confirmed in
-  two kernel/msm mirrors) is accepted; the length field carries the command, and
-  `[90][02]` makes Linux reboot straight into fastboot - verified on hardware,
-  no key presses.  That closes the hands-free flywheel (FLYWHEEL.md).
-* Session 32 ran the original probe: it returned 90 90. Removing printk before
-  RX_DAT exposes the real first payload byte (ABC -> 41, DEFG -> 44), and
-  [90][01][char] now reaches tty with real echo. Do not skip two header bytes.
-  Multi-byte advancement remains unresolved: burst reads repeat the first byte,
-  a buffered one-byte-per-poll probe returns 41 90 90. See RX-CONSOLE.md and
-  sessions/32-rx-printk-interference.md for the initial evidence. Session 33 adds
-  whole-frame TX exclusion, verified Device-nGnRnE mapping, data-before-header
-  and host-path tests; none produced consecutive payload. RX pending does not
-  always clear on the first read. Production debug gating is possible, but no
-  evidence establishes a COM single-byte restriction.
-* The temporary host terminal is working (session 34): multi-byte TX is decoded,
-  ASCII input is sent one byte at a time with receipt/retry. id, uname, direct
-  tty/console output, keyboard editing, Ctrl-C and graceful port close were tested.
-  It is a workaround, not a native multi-byte RX fix. Last verified kernel is
-  rx33-console; session 34 changed only host tools/docs. Check the live phone
-  state and port ownership again next session rather than assuming it is unchanged.
-* Session 36 confirmed Linux/COM14 and measured 9505 descriptors: bulk IN 0x81,
-  OUT 0x02, max packet 16; no MDLM extras. Legacy WDM qcusbser 2.1.3.8 source
-  adds conditional byte-stuffing, but this device lacks its descriptor gate.
-  It is not the exact installed 2.1.3.5 source. After the user's administrator
-  bind, libusb/WSL OUT completed full ABC/DEFG frames and the phone accepted
-  both, still returning 41 90 90 / 44 90 90 90. qcusbser is not required to
-  trigger the failure. Detached back to Windows; COM14 receipt recovered after
-  one com-off/up. No kernel/image changed; see session 36 and reference/rx36.
+EUD native multi-byte RX now has a verified method (session 41):
+
+* Stock RMX1931 SM8150 DAL maps SOUTH SWMAN at 0x088ee000. The matching
+  vendor USB driver defines TOP_CFG +0x10, one read/write wait state 0x11.
+  A read-only UEFI snapshot measured zero; setting 0x088ee010 to 0x11 with
+  matching readback makes the unchanged RX39 burst loop advance correctly.
+* Two UEFI boots each accepted ABC=41 42 43 and DEFG=44 45 46 47, then restored
+  zero before Linux. Linux independently accepted two ABC and three DEFG
+  probes, and a full 14-byte payload. Only low COM field bytes are interpreted;
+  upper lanes need not replicate after the FIFO starts advancing.
+* The Linux driver sets/verifies the wait state, buffers the complete frame
+  under the TX lock before logging, and restores the original configuration
+  on F1/remove. Native multi-byte X=ok\n executed in the shell and a later
+  single-byte terminal command read back ok. Intermediate candidates lost
+  visible responses; the session distinguishes input execution from TX output.
+* Length 1 and 3..14 carry tty input; length 2 remains the header-only F1
+  command [90][02]. Never send a two-character tty frame. The existing
+  temporary terminal still uses single-byte frames and remains compatible.
+* Host OUT acceptance is still intermittent and needs device receipts plus
+  bounded retry. Empty captures are inconclusive. 0 stray does not prove
+  lossless TX. Do not repeat the old 0-wait DAT/latency/flag guesses unchanged.
+* Only logdump was flashed in session 41. Firmware boot, DTB, actual working
+  initramfs, existing kernel changes and backups are preserved. COM owners
+  always close/dispose in finally. Current artifact/state and raw verification
+  are in sessions/41-rx-ahb2phy-wait-state-fix.md and reference/rx41.
 
 ## 1. What to do next, in order
 
@@ -74,73 +56,25 @@ before spending another hardware cycle. The downstream `drivers/soc/qcom/eud.c`
 and QUIC host library established the register layout and framing; multi-byte
 RX on this unit is still open.
 
-**Next session: prioritize SM8150 RX advancement/initialization evidence.** Read
-`sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md` for the completed host-path
-comparison and returned Windows state, and session 35 for excluded experiments.
-The temporary terminal remains available; native multi-byte RX is still open.
+**Native FIFO advancement has a working method; read session 41 first.**
+Sessions 35-40 remain the history of excluded paths and source limits. The new
+SM8150 map plus actual zero/0x11 readbacks supplied evidence missing from the
+older SDM845 register table. No PHY/clock reset, filter change or force bind.
 
-Session 38 obtained a pre-Linux comparison: a bounded standalone UEFI app,
-with the known firmware TX timer excluded, still reads accepted ABC/DEFG as
-AAA/DDDD. Valid 16-byte OUT frames (LEN=14), with and without explicit ZLP,
-also fail; PORT_RESET did not improve accepted ABC. No native fix yet.
-Only logdump was flashed for the app and then restored to rx33-console;
-unchanged Linux/tty/shell booted, F1 reached fastboot twice, and a fresh Windows
-COM14 Ctrl-U receipt succeeded after WSL detach. Ports are closed, 6-5 Shared.
-Read sessions/38 and reference/rx38 before new experiments. Actual HS PHY is
-SNPS femto-v2, not the QUSB2 reference from session 37. Pursue SM8150 COM read
-side effects/initialization or a verified same-SoC success; do not repeat these
-failed sequences or blindly reset the PHY. Goal remains unfinished.
-
-Session 39 further measured tight pre-Linux polling (adjacent loop entries
-625/572 ns): accepted ABC/DEFG still produce AAA/DDDD. This is not end-to-end
-USB arrival latency. Stop repeating latency/burst variants unchanged. Native
-Windows RX was silent after a two-hour gap; libusb plus PORT_RESET recovered
-a fresh Ctrl-U and F1 receipt, then fastboot was independently confirmed.
-Only logdump was restored to rx33-console; passive Linux/tty/shell capture
-and first-attempt Windows Ctrl-U succeeded. COM14 closed, 6-5 Shared, not
-Attached. Source searches found no verified fix; public HWIO headers are
-other-SoC/filtered and cannot establish a SM8150 register write. See
-sessions/39 and reference/rx39 for the exact evidence and recovery limits.
-
-Session 40 searched the complete DSP register map and statically audited X2 Pro
-stock SM8150 HWIODxe/UsbConfigDxe. The older SDM845 table lists COM/flags but no
-RX read side effects; it does not authorize SM8150 register writes. Stock code
-checks CSR_EUD_EN and skips a PHY reset operation when active, without supplying
-a COM advance implementation. No flash or multi-byte re-test. Fresh Windows
-Ctrl-U receipt succeeded on attempt 2; COM14 finally closed, 6-5 Shared. Native
-RX remains unresolved. See sessions/40 and reference/rx40 for pinned sources.
-
-1. Resume native multi-byte RX investigation using sessions 35/36. The temporary
-   terminal remains available for driver bring-up:
-   `E:\eud-host\eud-terminal.cmd -Reconnect` (guide: linux-port/docs/EUD-TERMINAL.md).
-   It queues ASCII input as single-byte frames with receipt/retry and decodes
-   multi-byte TX output; it does not require another kernel flash. Native RX
-   investigation should not hold up all Linux port work.
-   Remaining multi-byte RX investigation is recorded in session 33. The original
-   probe and the single-character fix are done: RX_DAT must be read before any
-   printk; [90][01][char] reaches tty. The offset-2 hypothesis is unsupported.
-   a. Keep len 3..14 as bounded diagnostics, buffer before printing and do not
-      inject repeated/stale probe bytes into tty. Length 3 is not recovery.
-   b. Session 36 obtained a controlled host-path comparison: accepted ABC/DEFG
-      still fail without qcusbser. Prioritize actual SM8150 RX completion/advance,
-      initialization and clock documentation. TX exclusion,
-      200 us/2 ms/20 ms pacing, readb, nGnRnE and changed header ordering have
-      already failed; do not repeat them unchanged. Installed qcusbser is older
-      than the public WDF source. SWD restrictions do not establish COM gating.
-      Session 36 also audits the legacy WDM path and actual SM8150 clock/PM/PHY
-      diffs. reference/rx36/README.md has the target-only URB/receipt evidence and
-      the device-tested libusb helper. Do not repeat the same comparison unchanged.
-   c. Only then wire more commands (recovery / EDL) into the length table.
-   Reminders that still hold: start the host capture BEFORE the kernel boots so
-   the device TX FIFO never backs up, and a silent EUD does not mean a crashed
-   kernel - try a full power cycle first.  Host writes are only staged about 1
-   time in 3, so send every command 3-5 times.
-2. Latest kernel artifact: `logdump-rx33-console.img`, with the single-character
-   RX fix, header/first-data lock, actual mapbase and bounded multi-byte probe;
-   older baseline `logdump-tty6.img` remains available. Current state and hashes
-   are in session 33. Only logdump was flashed in session 33; sessions 34-36 did
-   not flash any partition. Back to Android with
-   `cd E:\edk2-samurai-out; .\flash-and-test-rx.ps1 -RestoreAndroid`.
+1. Use the verified wait-state plus whole-frame RX method. The remaining
+   transport questions are intermittent whole-frame OUT acceptance and TX
+   response continuity, not an assumed COM single-byte fuse restriction.
+   Preserve the receipt/retry boundary and reserved length-2 F1 protocol.
+   Continue Linux port work with the existing compatible terminal:
+   E:\eud-host\eud-terminal.cmd -Reconnect (linux-port/docs/EUD-TERMINAL.md).
+   For native frames use the bounded eud-step helper and fresh capture names;
+   RetryJitterMs is optional, not proof of reliable delivery.
+2. Session 41 builds logdump-rx41-native-ordered-tty.img; its verification and
+   final live-device state are recorded in the session. Rollback remains the
+   unchanged logdump-rx33-console.img (SHA256 d5a36aa2...). Do not run the old
+   build-image.sh: it would replace the actual working initramfs with a stale
+   mirror. Build incrementally from the current WSL source and package only
+   the new FAT Image, keeping the DTB byte-identical.
 3. DONE 2026-10-08 evening: PON reboot-mode plus the two DT mode lines are in and
    verified.  `[90][02]` on the EUD command channel reboots Linux straight into
    fastboot with no key presses, and no reboot2 helper was needed (the driver is
@@ -201,7 +135,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 89236ea  eud: record tight arrival polling failure and verified baseline recovery
+    master = 2708b47  eud: audit complete register map and stock SM8150 firmware
+             89236ea  eud: record tight arrival polling failure and verified baseline recovery
              3bfecb7  docs: normalize RX38 evidence text and retain original hashes
              703469c  eud: record pre-Linux RX failure and USB boundary comparisons
              9d01126  eud: audit native RX sources and PHY lifecycle
@@ -209,9 +144,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              0915f34  eud: confirm native RX failure without qcusbser
              e606a99  eud: audit legacy qcusbser and prepare USB OUT comparison
              1e54944  docs: hand off native EUD RX investigation
-             0e4a8cc  eud: add temporary interactive terminal for single-byte RX
 
-    68 commits ahead of upstream origin/master, as of the tip named above;
+    69 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -303,12 +237,11 @@ overrides, PlatformBm.c, EUD.md) is in git log and in sessions/15-17.
 
 * Can the log channel survive the UEFI -> OS handoff (useful for Linux boot
   debugging), and what does the Android kernel ttyEUD see at that point?
-* Multi-byte RX: id 0x90 and the first payload byte are verified. Pre-read printk
-  changes the result to 0x90; the underlying hardware mechanism and subsequent
-  byte advancement remain unproven. Current probes gate only the message start,
-  collect at most len bytes and print afterward; they never feed unverified
-  multi-byte data to tty (RX-CONSOLE.md, sessions 32/33). Whole-frame TX
-  exclusion still fails; production COM gating remains an unproven hypothesis.
+* Which layer causes intermittent whole OUT frames without a receipt, and
+  how can TX responses be checked for exact continuity? Do not conflate this
+  with the now-verified AHB2PHY FIFO advancement method (session 41).
+* Move the SM8150 shared bridge configuration to appropriate platform/DT
+  resource management before generalizing the board-specific driver.
 
 Answered since; kept here so nobody re-opens them:
 
@@ -363,6 +296,7 @@ the only copy.
 | 38 | Pre-Linux UEFI still repeats first byte; accepted legal max-packet/ZLP and reset comparisons fail; baseline restored | `sessions/38-rx-pre-linux-and-usb-boundaries.md` |
 | 39 | Tight pre-Linux arrival polling still AAA/DDDD; bounded recovery, baseline/native receipt restored; HWIO source limits | `sessions/39-rx-tight-arrival-poll.md` |
 | 40 | Complete older EUD register map and stock SM8150 static audit; no RX advance spec/fix; fresh baseline single-byte receipt | `sessions/40-rx-register-map-and-stock-firmware-audit.md` |
+| 41 | SM8150 AHB2PHY wait-state native RX method; UEFI/Linux complete payloads and tty execution | `sessions/41-rx-ahb2phy-wait-state-fix.md` |
 
 Rules that keep this file from growing again:
 

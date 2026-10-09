@@ -33,3 +33,5 @@
 
 [Components]
   Platform/Realme/sm8150/linux-port/uefi-rx-probe/RxProbe.inf
+  Platform/Realme/sm8150/linux-port/uefi-rx-probe/EudSnapshot.inf
+  Platform/Realme/sm8150/linux-port/uefi-rx-probe/EudWaitProbe.inf

@@ -13,15 +13,14 @@
  *    works is timing: 200 us per register write, 2 ms per frame.  Faster than
  *    that and whole frames are dropped, which loses four bytes out of the
  *    middle of a log line.
- *  - RX: only id 0x90 is accepted on this unit. Length 1 carries a tty
- *    character; length 2 is the header-only bootloader command; lengths 3..14
- *    remain diagnostic probes. Read RX_DAT before any printk: a preceding
- *    console write changes the observed byte to 0x90. The first payload byte
- *    is verified; advancing through a multi-byte message is still unresolved.
- *    RX-CONSOLE.md and sessions/32 and 33 hold the evidence. Header and first
- *    data access also share the TX lock, so a console writer cannot intervene.
- *  - Readbacks replicate the low byte into all four lanes (0x81 -> 0x81818181),
- *    so every value read back is masked with 0xff.
+ *  - RX: id 0x90 carries tty payload of length 1 or 3..14; length 2 remains
+ *    the header-only bootloader command. SM8150 SOUTH AHB2PHY TOP_CFG must
+ *    be set to 0x11 before consecutive DAT reads. Session 41 verifies native
+ *    ABC/DEFG in UEFI across reboot and in Linux. Collect the whole frame
+ *    under the TX lock before printk or tty delivery; interleaved TX corrupts
+ *    unread data. The host still needs receipt/retry for unaccepted OUTs.
+ *  - COM fields occupy the low byte. Upper lanes may reflect different
+ *    entries as the FIFO advances; mask with 0xff, never unpack four bytes.
  *  - The console is registered only when the command line asks for it: this
  *    firmware uses "earlycon=eud,... console=eud" without keep_bootcon, so the
  *    real console retires the early writer. FIFO accesses share the port lock.
@@ -58,6 +57,10 @@
 #define EUD_REG_INT_STATUS_0   0x0040
 #define EUD_REG_INT_STATUS_1   0x0044
 #define EUD_REG_CSR_EUD_EN     0x1014
+
+/* SM8150 SOUTH SWMAN, confirmed by the stock RMX1931 DAL map. */
+#define EUD_AHB2PHY_TOP_CFG    0x088ee010
+#define EUD_AHB2PHY_ONE_WAIT   0x11
 
 #define EUD_COM_UART_ID        0x90    /* the id this port transmits with */
 #define EUD_TX_CHUNK           4u      /* data bytes per frame: six entries */
@@ -97,7 +100,10 @@ struct eud_port {
         u8  rx_len;     /* payload bytes this message should have */
         u8  rx_id;      /* id of the message being collected */
         u8  rx_buf[EUD_RX_MAX_FRAME];
+        u8  rx_delivered;
         bool console_registered;
+        void __iomem *ahb2phy_cfg;
+        u32 original_ahb2phy_cfg;
 };
 
 static struct eud_port *eud;   /* one COM FIFO per board */
@@ -360,6 +366,13 @@ static void eud_command(struct eud_port *up, const u8 *data, unsigned int n)
  * the USB PHY goes back to the gadget/ABL, else the host never sees fastboot. */
 static bool eud_reboot_pending;
 
+static void eud_restore_ahb2phy(struct eud_port *up)
+{
+        writel(up->original_ahb2phy_cfg, up->ahb2phy_cfg);
+        /* Complete restoration before handing the PHY back to ABL. */
+        readl(up->ahb2phy_cfg);
+}
+
 static void eud_reboot_cmd(struct eud_port *up, unsigned int len)
 {
 	const char *what;
@@ -371,6 +384,7 @@ static void eud_reboot_cmd(struct eud_port *up, unsigned int len)
 		return;
 	eud_reboot_pending = true;
 	pr_info("eud: reboot2 %s requested\n", what);
+        eud_restore_ahb2phy(up);
 	writel_relaxed(0, up->port.membase + EUD_REG_CSR_EUD_EN);
 	wmb();
 	kernel_restart((char *)what);
@@ -382,6 +396,7 @@ static void eud_rx_dispatch(struct eud_port *up)
         unsigned int i;
         unsigned long flags;
 
+        up->rx_delivered = 0;
         if (up->rx_id == EUD_RX_UART_ID && up->rx_len == 2) {
                 eud_reboot_cmd(up, up->rx_len);
         } else if ((up->rx_id == EUD_RX_CHAR_ID || up->rx_id == EUD_RX_CHAR_ID2 ||
@@ -389,11 +404,10 @@ static void eud_rx_dispatch(struct eud_port *up)
             up->rx_have) {
                 if (port->state) {
                         uart_port_lock_irqsave(port, &flags);
-                        for (i = 0; i < up->rx_have; i++) {
-                                port->icount.rx++;
-                                uart_insert_char(port, 0, 0, up->rx_buf[i],
-                                                  TTY_NORMAL);
-                        }
+                        up->rx_delivered = tty_insert_flip_string(
+                                &port->state->port, up->rx_buf, up->rx_have);
+                        port->icount.rx += up->rx_delivered;
+                        port->icount.buf_overrun += up->rx_have - up->rx_delivered;
                         uart_port_unlock_irqrestore(port, flags);
                         tty_flip_buffer_push(&port->state->port);
                 }
@@ -409,66 +423,54 @@ static void eud_rx_dispatch(struct eud_port *up)
 }
 
 /*
- * Gate the start of a message, then collect one byte per poll. Diagnostic
- * probes continue after RX_PENDING drops, but never read more than len bytes.
- * Buffer first and print only at the end; no header bytes are skipped.
- * Multi-byte probes are deliberately not delivered to the tty yet.
+ * The verified AHB2PHY one-wait setting enables consecutive FIFO reads.
+ * Collect the complete frame under the shared TX lock before any logging.
+ * Linux ABC/DEFG were verified before enabling multi-byte tty delivery.
  */
 static void eud_rx_work(struct work_struct *work)
 {
         struct eud_port *up = container_of(to_delayed_work(work),
                                            struct eud_port, rx_work);
         void __iomem *base = up->port.membase;
-        u32 id, len, s1, s2, ch;
+        u32 id, len, s1, s2;
         unsigned int i;
         unsigned long flags;
 
         uart_port_lock_irqsave(&up->port, &flags);
-        s1 = readl_relaxed(base + EUD_REG_INT_STATUS_1);
+        s1 = readl(base + EUD_REG_INT_STATUS_1);
+        if (!(s1 & EUD_INT_RX_PENDING))
+                goto unlock;
 
-        if (!(s1 & EUD_INT_RX_PENDING)) {
-                if (up->rx_len < 3)
-                        up->rx_collect = 0;
-                if (!up->rx_collect)
-                        goto unlock;
+        id = readl(base + EUD_REG_COM_RX_ID) & 0xff;
+        len = readl(base + EUD_REG_COM_RX_LEN) & 0xff;
+        if (id == EUD_RX_UART_ID && len == 2) {
+                uart_port_unlock_irqrestore(&up->port, flags);
+                eud_reboot_cmd(up, len);
+                goto out;
         }
+        if ((id != EUD_RX_UART_ID && id != EUD_RX_CHAR_ID &&
+             id != EUD_RX_CHAR_ID2 && id != EUD_RX_CMD_ID) ||
+            len < 1 || len > EUD_RX_MAX_FRAME)
+                goto unlock;
 
-        if (!up->rx_collect) {
-                id  = readl_relaxed(base + EUD_REG_COM_RX_ID) & 0xff;
-                len = readl_relaxed(base + EUD_REG_COM_RX_LEN) & 0xff;
-                if (id == EUD_RX_UART_ID && len == 2) {
-                        uart_port_unlock_irqrestore(&up->port, flags);
-                        eud_reboot_cmd(up, len);        /* does not return */
-                        goto out;
-                }
-                if ((id != EUD_RX_UART_ID && id != EUD_RX_CHAR_ID &&
-                     id != EUD_RX_CHAR_ID2 && id != EUD_RX_CMD_ID) ||
-                    len < 1 || len > EUD_RX_MAX_FRAME) {
-                        goto unlock;
-                }
-                up->rx_id    = id;
-                up->rx_len   = len;
-                up->rx_have  = 0;
-                up->rx_collect = 1;
-        }
-
-        ch = readl(base + EUD_REG_COM_RX_DAT) & 0xff;
-        up->rx_buf[up->rx_have++] = ch;
+        up->rx_id = id;
+        up->rx_len = len;
+        up->rx_have = len;
+        for (i = 0; i < len; i++)
+                up->rx_buf[i] = readl(base + EUD_REG_COM_RX_DAT) & 0xff;
         s2 = readl(base + EUD_REG_INT_STATUS_1);
         uart_port_unlock_irqrestore(&up->port, flags);
-        if (up->rx_have == up->rx_len) {
-                up->rx_collect = 0;
-                if (up->rx_len == 1) {
-                        eud_rx_dispatch(up);
-                        pr_info("eud: tty byte=%02x\n", ch);
-                } else {
-                        pr_info("eud: BUFFERED len=%u s1_after=%08x\n",
-                                up->rx_len, s2);
-                        for (i = 0; i < up->rx_have; i++)
-                                pr_info("eud: byte[%u/%u]=%02x\n", i + 1,
-                                        up->rx_have, up->rx_buf[i]);
-                }
+
+        /* Finish the receipt before tty echo/command output can be queued. */
+        if (len == 1) {
+                pr_info("eud: tty byte=%02x\n", up->rx_buf[0]);
+        } else {
+                pr_info("eud: rx frame len=%u data=%*ph s1_after=%08x\n",
+                        len, len, up->rx_buf, s2);
         }
+        eud_rx_dispatch(up);
+        if (id == EUD_RX_UART_ID && up->rx_delivered != len)
+                pr_warn("eud: tty accepted %u/%u bytes\n", up->rx_delivered, len);
         goto out;
 
 unlock:
@@ -498,6 +500,24 @@ static int eud_probe(struct platform_device *pdev)
                 return PTR_ERR(port->membase);
         port->mapbase = res->start;
 
+        /* This driver is bound only to qcom,sm8150-eud-com. The stock
+         * dwc3-msm driver uses 0x11 for one read/write wait state; RX41
+         * verifies it enables native FIFO advancement on this board.
+         */
+        up->ahb2phy_cfg = devm_ioremap(&pdev->dev, EUD_AHB2PHY_TOP_CFG,
+                                     sizeof(u32));
+        if (!up->ahb2phy_cfg)
+                return -ENOMEM;
+        up->original_ahb2phy_cfg = readl(up->ahb2phy_cfg);
+        writel(EUD_AHB2PHY_ONE_WAIT, up->ahb2phy_cfg);
+        if (readl(up->ahb2phy_cfg) != EUD_AHB2PHY_ONE_WAIT) {
+                eud_restore_ahb2phy(up);
+                return dev_err_probe(&pdev->dev, -EIO,
+                                     "AHB2PHY one-wait readback failed\n");
+        }
+        dev_info(&pdev->dev, "AHB2PHY TOP_CFG=%08x original=%08x\n",
+                 EUD_AHB2PHY_ONE_WAIT, up->original_ahb2phy_cfg);
+
         port->dev      = &pdev->dev;
         port->iotype   = UPIO_MEM;
         port->flags    = UPF_BOOT_AUTOCONF | UPF_SKIP_TEST;
@@ -515,8 +535,10 @@ static int eud_probe(struct platform_device *pdev)
         INIT_DELAYED_WORK(&up->rx_work, eud_rx_work);
 
         ret = uart_add_one_port(&eud_uart_driver, port);
-        if (ret)
+        if (ret) {
+                eud_restore_ahb2phy(up);
                 return ret;
+        }
 
         platform_set_drvdata(pdev, port);
         eud = up;
@@ -530,7 +552,7 @@ static int eud_probe(struct platform_device *pdev)
         schedule_delayed_work(&up->rx_work, msecs_to_jiffies(20000));
 
         dev_info(&pdev->dev,
-                 "EUD COM ready: ttyEUD0, [0x%02x][1]=tty [2]=bootloader [3..14]=probe\n",
+                 "EUD COM ready: ttyEUD0, [0x%02x][1,3..14]=tty [2]=bootloader\n",
                  EUD_RX_UART_ID);
         return 0;
 }
@@ -545,6 +567,7 @@ static void eud_remove(struct platform_device *pdev)
         if (up->console_registered)
                 unregister_console(&eud_console);
         uart_remove_one_port(&eud_uart_driver, port);
+        eud_restore_ahb2phy(up);
         eud = NULL;
 }
 

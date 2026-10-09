@@ -3,7 +3,15 @@
 > Split out of EUD.md on 2026-10-08; verbatim from there.  The TX side and the firmware
 > log ring are in EUD.md.
 
-> **2026-10-09 最新核对：单字符 RX 可用，多字节仍未解。** 原探针实际读到
+> **2026-10-09 session 41：找到有效原生多字节 RX 方法。** 原厂 SM8150 DAL 映射确认
+> SOUTH SWMAN=0x088ee000；同机型源码的 TOP_CFG +0x10、值 0x11，经实际读回验证。
+> 配置 0x088ee010=0x11 后，UEFI 两次重启与 Linux 均读到完整 ABC/DEFG，Linux 也读对 LEN=14。
+> 驱动在 TX 锁内收完整帧后才打印/投递 tty，保留 len=2 的 F1；其他已验证长度为 1、3..14。
+> 原生 X=ok\n 已在 shell 执行。整帧偶发没有回执仍需有界重试，不是无损保证。
+> 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
+> 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
+
+> **截至 session 40 的历史核对：单字符 RX 可用，多字节仍未解。** 原探针实际读到
 > `90 90`。去掉读取前的 printk 后，`ABC` 的首字节能读到 `41`，`DEFG` 的首字节
 > 能读到 `44`；因此不能按「整帧在 FIFO，payload 偏移 2」修改驱动。当前
 > `[90][01][字符]` 已有真实 tty 回显，`[90][02]` 仍是 fastboot，`len>=3` 保留

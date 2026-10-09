@@ -35,6 +35,7 @@
 | sessions/38-rx-pre-linux-and-usb-boundaries.md、reference/rx38/、linux-port/uefi-rx-probe/ | Linux 之前 UEFI 也重复首字节；合法满包/ZLP、reset 未改善；实际 SNPS PHY 更正、只刷 logdump 后恢复基线 |
 | sessions/39-rx-tight-arrival-poll.md、reference/rx39/ | UEFI 紧轮询仍重复首字节；受理/恢复边界、原基线恢复、新 boot HWIO 来源限制 |
 | sessions/40-rx-register-map-and-stock-firmware-audit.md、reference/rx40/ | 完整旧 DSP EUD_ACORE 表、原厂 SM8150 静态审查，无推进规格；未刷机，单字节回执核对 |
+| sessions/41-rx-ahb2phy-wait-state-fix.md、reference/rx41/ | 原厂 SM8150 映射、TOP_CFG=0x11 有效 RX 方法，UEFI/Linux 完整 payload、tty 执行与输出验证 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 

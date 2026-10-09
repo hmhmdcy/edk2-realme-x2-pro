@@ -1,4 +1,34 @@
-# Bounded pre-Linux EUD RX comparison
+# Bounded pre-Linux EUD RX comparisons
+
+**Session 41 found a working native FIFO method:** verified SM8150 SOUTH
+AHB2PHY TOP_CFG at `0x088ee010`, set it to `0x11`, read the entire payload
+before TX. `EudWaitProbe` produced ABC/DEFG correctly across two reboots and
+restored the original zero before Linux. See [session 41](../../sessions/41-rx-ahb2phy-wait-state-fix.md)
+and [raw evidence](../../reference/rx41/README.md). This does not establish
+lossless OUT delivery; a missing device receipt remains inconclusive.
+
+The build now emits three separate applications:
+
+* `RxProbe.efi`: retained RX39 tight-poll failure control; no configuration write.
+* `EudSnapshot.efi`: reads TOP_CFG twice, replays the cached pair five times,
+  then starts the preloaded original Kernel. No configuration write or RX read.
+* `EudWaitProbe.efi`: writes `0x11` only if the original configuration is zero,
+  requires two matching readbacks, runs the original RX39 payload loop,
+  restores zero and prints the restoration readback before starting Kernel.
+
+`package.sh [new-output.img] [application.efi]` accepts explicit paths; without
+arguments it retains the RX39 defaults. It checks the rx33 baseline hash,
+rejects an existing output and compares the retained Kernel and DTB byte for byte.
+All apps preserve LoadOptions and the DTB. The snapshot/wait trial does not
+reset the PHY or change clocks, interrupts or the boot partition.
+
+For the wait trial, start `wait-capture.ps1 -Out <fresh-prefix> -Marker RX41-WAIT`
+before reboot. Omit `-StartAbc`: host writes require the fresh READY marker.
+Each pattern is bounded to three attempts. For the read-only snapshot, use
+the default marker without StartAbc; it sends no RX pattern. Always wait for
+the capture's `Closed/disposed` result before any new serial owner.
+
+The following RX38/39 workflow is retained as history, not a trial to repeat.
 
 SM8150 samurai 的诊断应用。sessions 38/39 均实测 ABC→AAA、DEFG→DDDD，**不是原生 RX 修复**。
 当前为 RX39 紧轮询版本，受理前检测间隔约 625/572 ns 仍失败。RX38 的 1 ms 版本见提交 703469c。

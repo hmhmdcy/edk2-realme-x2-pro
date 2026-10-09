@@ -1,5 +1,11 @@
 # 临时 EUD 终端：先继续 Linux 移植
 
+> session 41 已找到原生 FIFO 推进方法（SM8150 TOP_CFG=0x11），并验证原生多字节
+> shell 执行；此终端继续按单字节发送，兼容 rx33 和 RX41 驱动。
+> 原生帧长度 2 仍保留 F1，发送长命令时不能用长度 2 的 tty 分片。
+> 新证据与最终镜像见 [session 41](../../sessions/41-rx-ahb2phy-wait-state-fix.md)。
+> 下表的多字节故障描述针对 rx33 基线，保留作历史。
+
 2026-10-09，适用于当前 `logdump-rx33-console.img` 内核。源码与测量见
 `../../sessions/33-rx-access-and-production-policy.md`、
 [session 34](../../sessions/34-temporary-eud-terminal.md)。

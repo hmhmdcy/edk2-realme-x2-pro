@@ -1,5 +1,5 @@
 param([string]$Port = 'COM14', [int]$Seconds = 100, [Parameter(Mandatory=$true)][string]$Out,
-      [switch]$StartAbc, [ValidateSet('RX38-UEFI','RX39-UEFI')][string]$Marker = 'RX39-UEFI')
+      [switch]$StartAbc, [ValidateSet('RX38-UEFI','RX39-UEFI','RX41-WAIT')][string]$Marker = 'RX39-UEFI')
 $ErrorActionPreference = 'Stop'
 if ($Seconds -lt 1 -or $Seconds -gt 150) { throw 'Seconds must be 1..150' }
 $sp = [System.IO.Ports.SerialPort]::new($Port,115200,'None',8,'One')

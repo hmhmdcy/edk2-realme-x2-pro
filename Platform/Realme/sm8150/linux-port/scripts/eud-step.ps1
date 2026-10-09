@@ -1,5 +1,6 @@
 param([string]$Port, [string]$Hex = '', [int]$Repeat = 1,
-      [int]$Seconds = 20, [string]$Out, [string]$Ack = '')
+      [int]$Seconds = 20, [string]$Out, [string]$Ack = '',
+      [ValidateRange(0,1000)][int]$RetryJitterMs = 0)
 $ErrorActionPreference = 'Stop'
 $sp = [System.IO.Ports.SerialPort]::new($Port,115200,'None',8,'One')
 $sp.ReadTimeout = 100
@@ -13,6 +14,7 @@ try {
         ForEach-Object { [Convert]::ToByte($_,16) })
     $timer = [System.Diagnostics.Stopwatch]::StartNew()
     $sent = 0
+    $nextSendMs = 3000
     $ackedAt = $null
     $pending = [System.Collections.Generic.List[byte]]::new()
     $decoded = [System.Text.StringBuilder]::new()
@@ -44,11 +46,17 @@ try {
         }
         if ($null -ne $ackedAt -and $timer.ElapsedMilliseconds -ge $ackedAt + 2000) { break }
         if ($frame.Length -gt 0 -and $sent -lt $Repeat -and
-            $timer.Elapsed.TotalSeconds -ge (3 + 3 * $sent)) {
+            $timer.ElapsedMilliseconds -ge $nextSendMs) {
             if ($sent -eq 0) { [void]$decoded.Clear() }
             $sp.Write($frame,0,$frame.Length)
             $sp.BaseStream.Flush()
             $sent++
+            if ($RetryJitterMs -gt 0) {
+                $nextSendMs = $timer.ElapsedMilliseconds + 3000 +
+                    (Get-Random -Minimum 0 -Maximum ($RetryJitterMs + 1))
+            } else {
+                $nextSendMs = 3000 + 3000 * $sent
+            }
             Write-Output "TX $sent at $($timer.ElapsedMilliseconds)ms: $Hex"
         }
         Start-Sleep -Milliseconds 5

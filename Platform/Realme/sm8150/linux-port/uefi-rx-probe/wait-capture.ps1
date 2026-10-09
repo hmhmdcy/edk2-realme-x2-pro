@@ -1,4 +1,5 @@
-param([Parameter(Mandatory=$true)][string]$Out, [switch]$StartAbc)
+param([Parameter(Mandatory=$true)][string]$Out, [switch]$StartAbc,
+      [ValidateSet('RX38-UEFI','RX39-UEFI','RX41-WAIT')][string]$Marker = 'RX39-UEFI')
 $ErrorActionPreference = 'Stop'
 $tool = 'E:\eud-host\eudtool.exe'
 $deadline = (Get-Date).AddSeconds(60)
@@ -19,4 +20,4 @@ while ((Get-Date) -lt $deadline -and -not $port) {
     if (-not $port) { Start-Sleep -Milliseconds 500 }
 }
 if (-not $port) { throw 'EUD COM did not enumerate after com-up' }
-& "$PSScriptRoot\capture.ps1" -Port $port -Seconds 100 -Out $Out -StartAbc:$StartAbc.IsPresent
+& "$PSScriptRoot\capture.ps1" -Port $port -Seconds 100 -Out $Out -StartAbc:$StartAbc.IsPresent -Marker $Marker

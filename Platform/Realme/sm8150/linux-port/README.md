@@ -1,17 +1,17 @@
 # Linux 移植工作区（Realme X2 Pro / RMX1931 / samurai）
 
-> 2026-10-09 session 33：本目录 `eud.c` 已更新为 WSL 实测版本，含 `[90][02]`
-> 飞轮、单字符 RX、状态/头部/首次 DAT 共用 TX 锁与实际 mapbase。旧 patches/0003 之后还需把本文件复制到
-> 内核 `drivers/tty/serial/eud.c` 再构建；旧补丁不代表目前全部 bring-up 修改。
-> 多字节 RX 仍是诊断，不向 tty 注入。证据与镜像哈希见
-> `../sessions/33-rx-access-and-production-policy.md`，操作流程见 `../FLYWHEEL.md`。
-> `scripts/eud-step.ps1` 每次只操作一帧，finally 关闭串口；
-> `scripts/decode-eud-capture.py` 重组原始 `.raw` 抓包。
+> 2026-10-09 session 41：`eud.c` 接入实际 SM8150 SOUTH AHB2PHY TOP_CFG=0x11
+> 并验证回读，在 TX 锁内一次读取整帧，读完才记录回执/投递 tty。UEFI 跨重启和 Linux
+> 的 ABC/DEFG 均正确；原生多字节 shell 赋值已执行。len=2 保留 F1，len=1、3..14 为 tty。
+> 源码、实测、镜像与输出限制见 [session 41](../sessions/41-rx-ahb2phy-wait-state-fix.md)。
+> patches/0004 是针对已验证 rx33 eud.c 的增量；此前 patches/0003 不是当前完整驱动。
+> 0004 为零上下文补丁，先核对 session 41 的基线源码 SHA256，再用 `git apply --unidiff-zero`
+> 或 `patch -p1`；本轮已对原源码做 dry-run。
 
-当前交互入口：`scripts/eud-terminal.cmd`（工具副本在 `E:\eud-host\`）。
-输入自动拆成单字符帧并等受理，输出按多字节帧重组；可用 `-Command 'uname -r'`
-一次执行命令。使用方法与限制见 [临时终端指南](docs/EUD-TERMINAL.md)。
-原生多字节 RX 仍未解决，但不再要求手动为每个字符运行一次探针。
+原临时终端 `scripts/eud-terminal.cmd`（副本 E:\eud-host\）仍按单字节回执发送，
+兼容当前驱动。原生帧可用 `scripts/eud-step.ps1` 单步测试，finally 关闭串口；
+`-RetryJitterMs 800` 仅改变有界重试时间，不保证所有 OUT 都受理。
+不要使用旧 build-image.sh 重建 initramfs；本轮保留真实 WSL initramfs 和原 DTB。
 
 全新开始，不使用 `E:\Realme X2 Pro移植主线Linux`（旧工程已废弃；它的准确性核实
 结论见 [docs/OLD-PROJECT-VERIFICATION.md](docs/OLD-PROJECT-VERIFICATION.md)，
