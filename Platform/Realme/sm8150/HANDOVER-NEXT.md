@@ -18,6 +18,11 @@ Boots and runs:
   interactive shell in the initramfs.
 
 Current handoff: sessions/63-single-device-driver-compatibility-and-trial-tools.md.
+RX64 blocked audit: reference/rx64. Same loading-environment condition remains
+after RX62/RX63/RX64; fresh CI F401/Secure Boot1/test cert absent, old COM14
+binding and packages unchanged. No live job/owner or new phone experiment.
+Offline preparation exhausted; full stability goal unproved, awaiting the
+selected supported environment. Do not continue repetitive automatic probes.
 RX62 built/test-signed the unchanged RX60 toggle candidate; no kernel loading
 or repair yet. RX63 native SetupAPI recognizes exactly one candidate/rollback
 driver node for current 9505, with matching packages and unchanged binding.
@@ -272,7 +277,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 727657e  eud: build and validate toggle-preserving test driver package
+    master = 32ae015  eud: audit driver compatibility and prepare single-device trial tools
+             727657e  eud: build and validate toggle-preserving test driver package
              ac16146  eud: prepare dedicated WDF package and supported build environment
              6f8ec50  eud: confirm even reopen reversal and prepare toggle-preserving candidate
              da915a8  eud: reproduce odd-frame reopen loss with matched driver and USB trace
@@ -280,9 +286,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              e7de5a3  eud: measure pre-buffer driver logging and restored capture
              738845e  eud: consolidate faults and audit pre-buffer receive boundaries
              691126b  eud: locate reproduced TX gap before Windows accepted-buffer count
-             45d96fc  eud: validate repeated console RX and F1, audit host receive counters
 
-    92 commits ahead of upstream origin/master, as of the tip named above;
+    93 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro

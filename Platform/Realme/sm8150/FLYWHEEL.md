@@ -15,6 +15,8 @@
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
 当前交接看 `sessions/63-single-device-driver-compatibility-and-trial-tools.md`：
+RX64 受阻审查在 reference/rx64：连续三轮同一加载环境条件；无现存运行任务。
+离线准备已完成，等待所选受支持环境后继续完整真机验收，勿自动重复旧实验。
 RX62 已构建/校验/测试签名的候选仍未安装；RX63 原生 SetupAPI 只读识别候选和回退
 各一节点。单设备试装/回退工具默认只读，15 保护用例通过，实际暂存/安装调用为 0。
 当前 CI=F401，测试签名未开/HVCI 强制/Secure Boot1；同一个加载环境选择仍待答复。

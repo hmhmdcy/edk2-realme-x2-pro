@@ -17,6 +17,9 @@ upstream project.
 Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
 
 Current EUD stability handoff: [session63](sessions/63-single-device-driver-compatibility-and-trial-tools.md).
+RX64 [blocked audit](reference/rx64/README.md): same supported-loading condition
+persists across three goal turns; fresh host/device state unchanged, no live
+job/owner. Offline preparation complete; the original repair remains unproved.
 RX62's built/test-signed candidate remains unloaded. RX63's native SetupAPI
 audits recognize both exact candidate and rollback nodes for current 9505.
 Single-device trial tools default to Audit; 15 gate cases pass, zero actual

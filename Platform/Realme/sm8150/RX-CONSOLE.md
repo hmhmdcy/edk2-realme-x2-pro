@@ -12,6 +12,8 @@
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
 > **当前入口：[session63](sessions/63-single-device-driver-compatibility-and-trial-tools.md)。**
+> RX64 受阻审查见 reference/rx64：连续三轮同一加载环境条件；最新 CI/Secure Boot/
+> 旧 COM14 绑定和包均未变，无运行任务或新手机实验。离线准备完成，完整稳定性未证实。
 > RX62 完整构建/校验/文件内签名的候选未安装；RX63 原生 SetupAPI 只读识别候选/
 > 回退各唯一匹配当前 9505，包字节与实装旧驱动不变。单设备试装/回退工具默认 Audit，
 > 15 保护用例通过；实际暂存/安装调用 0，不能当作加载或稳定性证明。

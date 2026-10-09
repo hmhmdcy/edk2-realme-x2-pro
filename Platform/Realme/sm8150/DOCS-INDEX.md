@@ -58,6 +58,7 @@
 | sessions/61-eud-wdf-package-and-build-preparation.md、reference/rx61/ | 固定完整 WDF 源码、9505 专用 INF/project、旧驱动精确回退副本；EWDK 下载进行，完整构建/签名/上机尚待验证 |
 | sessions/62-eud-wdf-build-and-test-signed-package.md、reference/rx62/ | 真实九模块 WDK 构建、Win11 INF/catalog、文件内测试签名与 PE 核对通过；未安装/上机，加载环境待决定 |
 | sessions/63-single-device-driver-compatibility-and-trial-tools.md、reference/rx63/ | 原生只读候选/回退匹配、当前 CI 策略、单设备试装工具 15 保护用例；ZLP 读取阶段明确，安装与上机未运行 |
+| reference/rx64/ | 同一加载环境连续三轮受阻审查、最新只读设备/策略状态、完整原始验收仍未完成 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
