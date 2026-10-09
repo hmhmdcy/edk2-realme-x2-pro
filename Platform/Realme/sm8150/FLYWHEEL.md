@@ -14,17 +14,17 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/53-console-boundary-rx-service.md`：当前只刷一次
-logdump-rx53-console-rx，在完整 console TX 帧边界收 RX，回执/tty/F1 留在工作
-线程；记录 console 来源和最多一次消费后空 IRQ credit。相同长日志/7 字节输入
-在 USB 和 Windows 都受理、执行，各 512 TX 帧直接匹配、990 个零完整。
-TOP_CFG=0x11、TX 节奏、安装原生/兼容终端保留，候选 IRQ F1 首次进入 fastboot、
-同镜像 reboot 成功；没有再刷或新 Windows 管理员抓包。owner finally 释放/detach，
-COM14 关闭、三节点 OK。立即回退是未变的 rx48-tx-journal。
-整体稳定性仍开放：最后安装终端缺首条状态 `[   `，seq 7287 有软件记录、raw 对应
-位置无它，其余 511/512 跨三段直接匹配。不要把 RX 改善称为全部 TX/reopen 已修复。
-下一项是多次 overlap 跨空 IRQ 门槛、console 来源 F1 和确切 TX 缺口的主机/USB
-边界；实际 IRQ 延迟仍未测量，不再重复普通成功命令当稳定性证明。
+当前交接看 `sessions/54-console-rx-regression-and-host-counter-audit.md`：未改
+logdump-rx53-console-rx/安装终端、未刷机，9 次手动长日志原生输入均经 console
+整帧受理/执行、全部变量读回；6 次空 IRQ 计入 credit，IRQ active=1/fault=0。
+完整 USB IN/raw 与 512 帧 TX 快照匹配，但并未诱发连续 8 次空 IRQ。
+一次长日志期间 header-only F1 明确 via=console，独立核实 fastboot 后仅 reboot
+同候选，TOP_CFG=0x11/tty/IRQ/原生新回执恢复；owner finally 关闭/dispose/detach，
+三节点 OK、COM14 关闭、Shared/not Attached，立即回退仍是 unchanged RX48 B。
+RX53 的 seq 7287 已发 TX 前缀缺失仍未定位；本轮 passing 回归不代表 TX/reopen 修复。
+实装驱动 SerialGetStats 的累计接收字节提供下一项只读缓冲边界观测；尚未实测，
+在现有诊断 overlapped handle 有界读取，与 raw/journal/queue/errors 对照，不复做
+reset/仅掩码/旧零等待，不动熔丝或安装终端。RX53 的内核改动和 TX 缺口证据保留。
 RX49 的完整虚拟 IN/部分取消核对、RX48 的 IRQ F1/同镜像重启实测仍保留。
 `eud-terminal.cmd -Native` 持续 owner、启动同步、数据只发一次的用法不变。
 旧 ETW reset/数据翻转假设仍未物理验证，勿重复仅掩码/reset/旧零等待实验。

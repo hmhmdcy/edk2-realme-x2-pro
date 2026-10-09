@@ -1,0 +1,440 @@
+ê on ê0000ê: Fiêxed êdepeêndenêcy cêycleê(s) êwithê /soêc@0/êetm@ê7040ê000
+ê[   ê 6.4ê4769ê8] /êsoc@ê0/etêm@70ê4000ê0: Fêixedê depêendeêncy êcyclêe(s)ê witêh /sêoc@0ê/funênel@ê7800ê000
+ê[   ê 6.5ê1812ê4] /êsoc@ê0/fuênnelê@780ê0000ê: Fiêxed êdepeêndenêcy cêycleê(s) êwithê /soêc@0/êetm@ê7140ê000
+ê[   ê 6.5ê8855ê2] /êsoc@ê0/etêm@71ê4000ê0: Fêixedê depêendeêncy êcyclêe(s)ê witêh /sêoc@0ê/funênel@ê7800ê000
+ê[   ê 6.6ê5899ê7] /êsoc@ê0/fuênnelê@780ê0000ê: Fiêxed êdepeêndenêcy cêycleê(s) êwithê /soêc@0/êetm@ê7240ê000
+ê[   ê 6.7ê2948ê0] /êsoc@ê0/etêm@72ê4000ê0: Fêixedê depêendeêncy êcyclêe(s)ê witêh /sêoc@0ê/funênel@ê7800ê000
+ê[   ê 6.7ê9991ê1] /êsoc@ê0/fuênnelê@780ê0000ê: Fiêxed êdepeêndenêcy cêycleê(s) êwithê /soêc@0/êetm@ê7340ê000
+ê[   ê 6.8ê7033ê9] /êsoc@ê0/etêm@73ê4000ê0: Fêixedê depêendeêncy êcyclêe(s)ê witêh /sêoc@0ê/funênel@ê7800ê000
+ê[   ê 6.9ê4075ê4] /êsoc@ê0/fuênnelê@780ê0000ê: Fiêxed êdepeêndenêcy cêycleê(s) êwithê /soêc@0/êetm@ê7440ê000
+ê[   ê 7.0ê1118ê2] /êsoc@ê0/etêm@74ê4000ê0: Fêixedê depêendeêncy êcyclêe(s)ê witêh /sêoc@0ê/funênel@ê7800ê000
+ê[   ê 7.0ê8160ê2] /êsoc@ê0/fuênnelê@780ê0000ê: Fiêxed êdepeêndenêcy cêycleê(s) êwithê /soêc@0/êetm@ê7540ê000
+ê[   ê 7.1ê5203ê2] /êsoc@ê0/etêm@75ê4000ê0: Fêixedê depêendeêncy êcyclêe(s)ê witêh /sêoc@0ê/funênel@ê7800ê000
+ê[   ê 7.2ê2245ê3] /êsoc@ê0/fuênnelê@780ê0000ê: Fiêxed êdepeêndenêcy cêycleê(s) êwithê /soêc@0/êetm@ê7640ê000
+ê[   ê 7.2ê9287ê4] /êsoc@ê0/etêm@76ê4000ê0: Fêixedê depêendeêncy êcyclêe(s)ê witêh /sêoc@0ê/funênel@ê7800ê000
+ê[   ê 7.3ê6329ê4] /êsoc@ê0/fuênnelê@780ê0000ê: Fiêxed êdepeêndenêcy cêycleê(s) êwithê /soêc@0/êetm@ê7740ê000
+ê[   ê 7.4ê3371ê8] /êsoc@ê0/etêm@77ê4000ê0: Fêixedê depêendeêncy êcyclêe(s)ê witêh /sêoc@0ê/funênel@ê7800ê000
+ê[   ê 7.5ê0413ê7] /êsoc@ê0/fuênnelê@781ê0000ê: Fiêxed êdepeêndenêcy cêycleê(s) êwithê /soêc@0/êfunnêel@7ê8000ê00
+ê[   ê 7.5ê7756ê3] /êsoc@ê0/fuênnelê@780ê0000ê: Fiêxed êdepeêndenêcy cêycleê(s) êwithê /soêc@0/êfunnêel@7ê8100ê00
+ê[   ê 7.6ê5100ê1] /êsoc@ê0/usêb@a6êf880ê0/usêb@a6ê0000ê0: Fêixedê depêendeêncy êcyclêe(s)ê witêh /sêoc@0ê/phyê@88eê8000ê
+ê[   ê 7.7ê3041ê6] /êsoc@ê0/phêy@88êe800ê0: Fêixedê depêendeêncy êcyclêe(s)ê witêh /sêoc@0ê/usbê@a6fê8800ê/usbê@a60ê0000ê
+ê[   ê 7.8ê0986ê7] /êsoc@ê0/inêterrêupt-êcontêrollêer@1ê7a00ê000:ê Fixêed dêepenêdencêy cyêcle(ês) wêith ê/socê@0/iênterêruptê-conêtrolêler@ê17a0ê0000ê
+ê[   ê 7.9ê1397ê3] /êsoc@ê0/rsêc@18ê2000ê00/rêegulêatorês-0:ê Fixêed dêepenêdencêy cyêcle(ês) wêith ê/socê@0/rêsc@1ê8200ê000/êreguêlatoêrs-0ê/smpês5
+ê[   ê 8.0ê0981ê0] /êsoc@ê0/rsêc@18ê2000ê00/rêegulêatorês-0:ê Fixêed dêepenêdencêy cyêcle(ês) wêith ê/socê@0/rêsc@1ê8200ê000/êreguêlatoêrs-0ê/smpês6
+ê[   ê 8.1ê0568ê6] /êsoc@ê0/rsêc@18ê2000ê00/rêegulêatorês-1:ê Fixêed dêepenêdencêy cyêcle(ês) wêith ê/socê@0/rêsc@1ê8200ê000/êreguêlatoêrs-1ê/bobê
+ê[   ê 8.2ê0111ê2] /êsoc@ê0/rsêc@18ê2000ê00/rêegulêatorês-1:ê Fixêed dêepenêdencêy cyêcle(ês) wêith ê/socê@0/rêsc@1ê8200ê000/êreguêlatoêrs-1ê/smpês8
+ê[   ê 8.2ê9791ê9] HêugeTêLB: êregiêsterêed 1ê.00 êGiB êpageê sizêe, pêre-aêllocêatedê 0 pêagesê
+ê[   ê 8.3ê6133ê8] HêugeTêLB: ê0 KiêB vmêemmaêp caên beê freêed fêor aê 1.0ê0 GiêB paêge
+ê[   ê 8.4ê1875ê6] HêugeTêLB: êregiêsterêed 3ê2.0 êMiB êpageê sizêe, pêre-aêllocêatedê 0 pêagesê
+ê[   ê 8.4ê8217ê3] HêugeTêLB: ê0 KiêB vmêemmaêp caên beê freêed fêor aê 32.ê0 MiêB paêge
+ê[   ê 8.5ê3958ê6] HêugeTêLB: êregiêsterêed 2ê.00 êMiB êpageê sizêe, pêre-aêllocêatedê 0 pêagesê
+ê[   ê 8.6ê0300ê1] HêugeTêLB: ê0 KiêB vmêemmaêp caên beê freêed fêor aê 2.0ê0 MiêB paêge
+ê[   ê 8.6ê6041ê1] HêugeTêLB: êregiêsterêed 6ê4.0 êKiB êpageê sizêe, pêre-aêllocêatedê 0 pêagesê
+ê[   ê 8.7ê2383ê4] HêugeTêLB: ê0 KiêB vmêemmaêp caên beê freêed fêor aê 64.ê0 KiêB paêge
+ê[   ê 8.7ê8397ê2] iêommuê: Deêfaulêt doêmainê typêe: Têransêlateêd
+ê[   ê 8.8ê2839ê2] iêommuê: DMêA doêmainê TLBê invêalidêatioên poêlicyê: stêrictê modêe
+ê[   ê 8.8ê8588ê0] SêCSI êsubsêysteêm inêitiaêlizeêd
+ê[   ê 8.9ê2075ê1] lêibatêa veêrsioên 3.ê00 lêoadeêd.
+ê[   ê 8.9ê5585ê8] uêsbcoêre: êregiêsterêed nêew iênterêfaceê driêver êusbfês
+ê[   ê 9.0ê0668ê8] uêsbcoêre: êregiêsterêed nêew iênterêfaceê driêver êhub
+ê[   ê 9.0ê5471ê7] uêsbcoêre: êregiêsterêed nêew dêevicêe drêiverê usbê
+ê[   ê 9.1ê0223ê0] pêps_cêore:ê LinêuxPPêS APêI veêr. 1ê regêisteêred
+ê[   ê 9.1ê4704ê3] pêps_cêore:ê Sofêtwarêe veêr. 5ê.3.6ê - Cêopyrêightê 200ê5-20ê07 Rêodolêfo Gêiomeêtti ê<gioêmettêi@liênux.êit>
+ê[   ê 9.2ê3026ê9] PêTP cêlockê supêportê regêisteêred
+ê[   ê 9.2ê6550ê1] EêDAC êMC: êVer:ê 3.0ê.0
+ê[   ê 9.2ê9420ê8] sêcmi_êcoreê: SCêMI pêrotoêcol êbus êregiêsterêed
+ê[   ê 9.3ê3891ê4] eêfivaêrs: êRegiêsterêed eêfivaêrs oêperaêtionês
+ê[   ê 9.3ê8337ê8] qêcom_êscm êfirmêwareê:scmê: SHêM Brêidgeê notê supêportêed
+ê[   ê 9.4ê3442ê6] qêcom_êscm:ê conêventêion:ê smcê armê 64
+ê[   ê 9.4ê7318ê1] qêcom_êscm êfirmêwareê:scmê: qsêeecoêm: fêoundê qseêecomê witêh veêrsioên 0xê1400ê000
+ê[   ê 9.5ê4042ê3] qêcom_êscm êfirmêwareê:scmê: qsêeecoêm: uêntesêted êmachêine,ê skiêppinêg
+ê[   ê 9.6ê0126ê6] FêPGA êmanaêger êframêeworêk
+ê[   ê 9.6ê3331ê6] cêlockêsourêce: êSwitêchedê to êclocêksouêrce êarchê_sysê_couênterê
+ê[   ê 9.6ê9044ê3] VêFS: êDiskê quoêtas êdquoêt_6.ê6.0
+ê[   ê 9.7ê2566ê0] VêFS: êDquoêt-caêche êhashê tabêle eêntriêes: ê512 ê(409ê6 byêtes)ê
+ê[   ê 9.7ê8539ê5] NêET: êRegiêsterêed PêF_INêET pêrotoêcol êfamiêly
+ê[   ê 9.8ê3010ê3] IêP idêentsê hasêh taêble êentrêies:ê 131ê072 ê(ordêer: ê8, 1ê0485ê76 bêytesê, liênearê)
+ê[   ê 9.9ê0178ê0] têcp_lêisteên_poêrtadêdr_hêash êhashê tabêle eêntriêes: ê4096ê (orêder:ê 4, ê6553ê6 byêtes,ê linêear)ê
+ê[   ê 9.9ê8125ê0] Têableê-perêturbê hasêh taêble êentrêies:ê 655ê36 (êordeêr: 6ê, 26ê2144ê bytêes, êlineêar)
+ê[   ê10.0ê5171ê7] TêCP eêstabêlishêed hêash êtablêe enêtrieês: 6ê5536ê (orêder:ê 7, ê5242ê88 bêytesê, liênearê)
+ê[   ê10.1ê2519ê9] TêCP bêind êhashê tabêle eêntriêes: ê6553ê6 (oêrderê: 9,ê 209ê7152ê bytêes, êlineêar)
+ê[   ê10.1ê9350ê3] TêCP: êHashê tabêles êconfêigurêed (êestaêblisêhed ê6553ê6 biênd 6ê5536ê)
+ê[   ê10.2ê5397ê1] UêDP hêash êtablêe enêtrieês: 4ê096 ê(ordêer: ê6, 2ê6214ê4 byêtes,ê linêear)ê
+ê[   ê10.3ê1764ê9] NêET: êRegiêsterêed PêF_UNêIX/PêF_LOêCAL êprotêocolê famêily
+ê[   ê10.3ê6907ê3] RêPC: êRegiêsterêed nêamedê UNIêX soêcketê traênspoêrt mêodulêe.
+ê[   ê10.4ê2329ê6] RêPC: êRegiêsterêed uêdp têransêportê modêule.ê
+ê[   ê10.4ê6750ê8] RêPC: êRegiêsterêed têcp têransêportê modêule.ê
+ê[   ê10.5ê1172ê0] RêPC: êRegiêsterêed têcp-wêith-êtls êtranêsporêt moêduleê.
+ê[   ê10.5ê6253ê5] RêPC: êRegiêsterêed têcp NêFSv4ê.1 bêackcêhannêel têransêportê modêule.ê
+ê[   ê10.6ê2940ê6] kêvm [ê1]: êHYP êmodeê notê avaêilabêle
+ê[   ê10.6ê6801ê0] Iênitiêalisêe syêstemê truêstedê keyêringês
+ê[   ê10.7ê0934ê2] wêorkiêngseêt: têimesêtampê_bitês=42ê (anêon: ê37) êmax_êordeêr=21ê bucêket_êordeêr=0 ê(anoên: 0ê)
+ê[   ê10.7ê8590ê4] sêquasêhfs:ê verêsionê 4.0ê (20ê09/0ê1/31ê) Phêilliêp Loêugheêr
+ê[   ê10.8ê4003ê2] NêFS: êRegiêsterêing êthe êid_rêesolêver êkey êtypeê
+ê[   ê10.8ê8745ê9] Kêey têype êid_rêesolêver êregiêsterêed
+ê[   ê10.9ê2567ê6] Kêey têype êid_lêegacêy reêgistêeredê
+ê[   ê10.9ê6350ê0] nêfs4fêilelêayouêt_inêit: êNFSvê4 Fiêle Lêayouêt Drêiverê Regêisteêringê...
+ê[   ê11.0ê2432ê1] nêfs4fêlexfêilelêayouêt_inêit: êNFSvê4 Flêexfiêle Lêayouêt Drêiverê Regêisteêringê...
+ê[   ê11.0ê9170ê1] Kêey têype êasymêmetrêic rêegisêtereêd
+ê[   ê11.1ê2972ê3] Aêsymmêetriêc keêy paêrserê 'x5ê09' êregiêsterêed
+ê[   ê11.1ê7435ê4] Bêlockê layêer SêCSI êgeneêric ê(bsgê) drêiverê verêsionê 0.4ê loaêded ê(majêor 2ê43)
+ê[   ê11.2ê4157ê8] iêo scêheduêler êmq-dêeadlêine êregiêsterêed
+ê[   ê11.2ê8299ê6] iêo scêheduêler êkybeêr reêgistêeredê
+ê[   ê11.3ê2082ê6] iêo scêheduêler êbfq êregiêsterêed
+ê[   ê11.3ê5776ê4] lêedtrêig-cêpu: êregiêsterêed têo inêdicaête aêctivêity êon CêPUs
+ê[   ê11.4ê1527ê0] qêcom_êeud_êcom ê88e0ê000.êseriêal: êAHB2êPHY êTOP_êCFG=ê0000ê0011ê oriêginaêl=00ê0000ê00
+ê[   ê11.4ê8554ê6] 8ê8e00ê00.sêeriaêl: têtyEUêD0 MêMIO:ê0x00ê0000ê0008ê8e00ê00 (êirq ê= 0,ê basêe_baêud =ê 720ê0) iês a êEUD
+ê[   ê11.5ê6569ê0] qêcom_êeud_êcom ê88e0ê000.êseriêal: êRX46ê IRQê reqêuestêed vêirq=ê19 hêwirqê=524ê rouête=lêegacêy-SPêI492ê, deêferrêed eênablêe
+ê[   ê11.6ê6133ê7] pêrintêk: lêegacêy coênsolêe [eêud0]ê enaêbledê
+ê[   ê11.6ê6133ê7] pêrintêk: lêegacêy coênsolêe [eêud0]ê enaêbledê
+ê[   ê11.7ê4978ê8] pêrintêk: lêegacêy boêotcoênsolêe [eêud0]ê disêableêd
+ê[   ê11.7ê4978ê8] pêrintêk: lêegacêy boêotcoênsolêe [eêud0]ê disêableêd
+ê[   ê11.8ê4505ê9] qêcom_êeud_êcom ê88e0ê000.êseriêal: êEUD êCOM êreadêy: têtyEUêD0, ê[0x9ê0][1ê,3..ê14]=êtty ê[2]=êbootêloadêer
+ê[   ê11.9ê2811ê6] Sêeriaêl: 8ê250/ê1655ê0 drêiverê, 4 êportês, IêRQ sêhariêng eênablêed
+ê[   ê11.9ê8615ê7] mêsm_sêeriaêl: dêriveêr inêitiaêlizeêd
+ê[   ê12.0ê2453ê5] aêrm-sêmmu ê2ca0ê000.êiommêu: pêrobiêng hêardwêare êconfêigurêatioên...ê
+ê[   ê12.0ê8475ê2] aêrm-sêmmu ê2ca0ê000.êiommêu: SêMMUvê2 wiêth:
+ê[   ê12.1ê2638ê9] aêrm-sêmmu ê2ca0ê000.êiommêu: 	êstagêe 1 êtranêslatêion
+ê[   ê12.1ê7440ê9] aêrm-sêmmu ê2ca0ê000.êiommêu: 	ênon-êcoheêrentê tabêle wêalk
+ê[   ê12.2ê2562ê8] aêrm-sêmmu ê2ca0ê000.êiommêu: 	ê(IDRê0.CTêTW oêverrêiddeên byê FW êconfêigurêatioên)
+ê[   ê12.2ê9264ê4] aêrm-sêmmu ê2ca0ê000.êiommêu: 	êstreêam mêatchêing êwithê 6 rêegisêter êgrouêps
+ê[   ê12.3ê5648ê4] aêrm-sêmmu ê2ca0ê000.êiommêu: 	ê5 coêntexêt baênks ê(0 sêtageê-2 oênly)ê
+ê[   ê12.4ê1672ê3] aêrm-sêmmu ê2ca0ê000.êiommêu: 	êSuppêorteêd paêge sêizesê: 0xê6131ê1000ê
+ê[   ê12.4ê7695ê3] aêrm-sêmmu ê2ca0ê000.êiommêu: 	êStagêe-1:ê 48-êbit êVA -ê> 48ê-bitê IPAê
+ê[   ê12.5ê3720ê7] aêrm-sêmmu ê2ca0ê000.êiommêu: 	êpresêerveêd 0 êbootê mapêpingês
+ê[   ê12.5ê9310ê3] aêrm-sêmmu ê1500ê0000ê.iomêmu: êprobêing êhardêwareê conêfiguêratiêon..ê.
+ê[   ê12.6ê5353ê0] aêrm-sêmmu ê1500ê0000ê.iomêmu: êSMMUêv2 wêith:ê
+ê[   ê12.6ê9775ê7] aêrm-sêmmu ê1500ê0000ê.iomêmu: ê	staêge 1ê traênslaêtionê
+ê[   ê12.7ê4837ê3] aêrm-sêmmu ê1500ê0000ê.iomêmu: ê	cohêerenêt taêble êwalkê
+ê[   ê12.7ê9898ê7] aêrm-sêmmu ê1500ê0000ê.iomêmu: ê	strêeam êmatcêhingê witêh 94ê regêisteêr grêoupsê
+ê[   ê12.8ê6562ê2] aêrm-sêmmu ê1500ê0000ê.iomêmu: ê	56 êcontêext êbankês (0ê staêge-2ê onlêy)
+ê[   ê12.9ê2675ê8] aêrm-sêmmu ê1500ê0000ê.iomêmu: ê	Supêportêed pêage êsizeês: 0êx613ê1100ê0
+ê[   ê12.9ê8718ê1] aêrm-sêmmu ê1500ê0000ê.iomêmu: ê	Staêge-1ê: 48ê-bitê VA ê-> 4ê8-biêt IPêA
+ê[   ê13.0ê4762ê6] aêrm-sêmmu ê1500ê0000ê.iomêmu: ê	preêservêed 0ê booêt maêppinêgs
+ê[   ê13.1ê0417ê6] pêlatfêorm êac00ê00.gêeniqêup: êAddiêng têo ioêmmu êgrouêp 0
+ê[   ê13.1ê5544ê2] pêlatfêorm ê1d84ê000.êufshêc: Aêddinêg toê iomêmu gêroupê 1
+ê[   ê13.2ê0668ê5] pêlatfêorm ê1dc4ê000.êdma-êcontêrollêer: êAddiêng têo ioêmmu êgrouêp 2
+ê[   ê13.2ê6452ê2] pêlatfêorm ê1dfaê000.êcrypêto: êAddiêng têo ioêmmu êgrouêp 2
+ê[   ê13.3ê1616ê4] aêmba ê6048ê000.êetr:ê Addêing êto iêommuê groêup 3ê
+ê[   ê13.3ê6576ê8] lêoop:ê modêule êloadêed
+ê[   ê13.3ê9498ê6] sêpmi_êpmicê_arbê c44ê0000ê.spmêi: PêMIC êarbiêter êversêion êv5 (ê0x50ê0000ê00)
+ê[   ê13.4ê6514ê9] têun: êUnivêersaêl TUêN/TAêP deêviceê driêver,ê 1.6ê
+ê[   ê13.5ê1273ê5] VêFIO ê- Usêer Lêevelê metêa-drêiverê verêsionê: 0.ê3
+ê[   ê13.5ê6071ê3] uêsbcoêre: êregiêsterêed nêew iênterêfaceê driêver êusb-êstorêage
+ê[   ê13.6ê2096ê7] iê2c_dêev: êi2c ê/devê entêriesê driêver
+ê[   ê13.6ê6006ê2] iênputê: pmê8941ê_pwrêkey êas /êdeviêces/êplatêformê/socê@0/cê4400ê00.sêpmi/êspmiê-0/0ê-00/êc440ê000.êspmiê:pmiêc@0:êpon@ê800/êc440ê000.êspmiê:pmiêc@0:êpon@ê800:êpwrkêey/iênputê/inpêut0
+ê[   ê13.7ê9519ê6] sêimplêe-frêamebêuffeêr siêmpleê-fraêmebuêfferê.0: ê[drmê] coêuld ênot êacquêire êmemoêry rêegioên [mêem 0êx9d0ê0000ê0-0xê9d9eê3fffê flaêgs 0êx200ê]
+ê[   ê13.9ê0394ê9] [êdrm]ê Iniêtialêizedê simêpledêrm 1ê.0.0ê forê simêple-êframêebufêfer.ê0 onê minêor 0ê
+ê[   ê13.9ê8225ê5] Cêonsoêle: êswitêchinêg toê colêour êframêe buêfferê devêice ê135xê150
+ê[   ê14.0ê4425ê9] sêimplêe-frêamebêuffeêr siêmpleê-fraêmebuêfferê.0: ê[drmê] fbê0: sêimplêedrmêdrmfêb frêame êbuffêer dêevicêe
+ê[   ê14.1ê2744ê8] pêstorêe: bêackeênd 'êramoêops'ê alrêeadyê in êuse:ê ignêorinêg 'eêfi_pêstorêe'
+ê[   ê14.1ê9153ê2] cêlockêsourêce: êarchê_mmiêo_coêunteêr: mêask:ê 0xfêffffêffffêffffêf maêx_cyêclesê: 0xê46d9ê87e4ê7, mêax_iêdle_êns: ê4407ê9520ê2767ê ns
+ê[   ê14.2ê9082ê3] aêrch-êtimeêr-mmêio 1ê7c20ê000.êtimeêr: mêmio êtimeêr ruênninêg atê 19.ê20MHêz (vêirt)ê
+ê[   ê14.3ê6088ê5] uêsbcoêre: êregiêsterêed nêew iênterêfaceê driêver êusbhêid
+ê[   ê14.4ê1194ê2] uêsbhiêd: UêSB HêID cêore êdrivêer
+ê[   ê14.4ê4873ê4] hêw peêrfevêentsê: enêableêd wiêth aêrmv8ê_pmuêv3 PêMU dêriveêr, 7ê (0,ê8000ê003fê) coêunteêrs aêvailêableê
+ê[   ê14.5ê4079ê3] NêET: êRegiêsterêed PêF_INêET6 êprotêocolê famêily
+ê[   ê14.5ê8633ê4] Sêegmeênt Rêoutiêng wêith êIPv6ê
+ê[   ê14.6ê2099ê1] Iên-siêtu OêAM (êIOAMê) wiêth IêPv6
+ê[   ê14.6ê5623ê9] NêET: êRegiêsterêed PêF_PAêCKETê proêtocoêl faêmilyê
+ê[   ê14.7ê0370ê0] Kêey têype êdns_êresoêlverê regêisteêred
+ê[   ê14.7ê4470ê8] rêegisêtereêd taêskstêats êversêion ê1
+ê[   ê14.7ê8283ê6] Lêoadiêng cêompiêled-êin Xê.509ê cerêtifiêcateês
+ê[   ê14.8ê2913ê8] Dêemotêion êtargêets êfor êNodeê 0: ênullê
+ê[   ê14.8ê8317ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê14.8ê8762ê5] pêlatfêorm êa600ê000.êusb:ê Addêing êto iêommuê groêup 4ê
+ê[   ê14.9ê5983ê1] bêob: êSettêing ê3032ê000-ê3992ê000uêV
+ê[   ê15.0ê1937ê5] iênputê: gpêio-kêeys êas /êdeviêces/êplatêformê/gpiêo-keêys/iênputê/inpêut1
+ê[   ê15.0ê4849ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê15.1ê0992ê6] cêlk: êNot êdisaêblinêg unêusedê cloêcks
+ê[   ê15.1ê8589ê7] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê15.1ê8606ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê15.2ê2431ê6] PêM: gêenpdê: Noêt diêsablêing êunusêed pêowerê domêainsê
+ê[   ê15.2ê2434ê6] Wêarniêng: êunabêle têo opêen aên inêitiaêl coênsolêe.
+ê[   ê15.3ê0094ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê iniêtialê modêe foêr boêb
+ê[   ê15.5ê6181ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê15.6ê3919ê2] sêmps8ê: Seêttinêg 13ê5200ê0-13ê5200ê0uV
+ê[   ê15.6ê7762ê4] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê15.7ê5429ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê15.8ê3102ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê15.9ê1370ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê iniêtialê modêe foêr smêps8
+ê[   ê15.9ê9378ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê16.0ê7043ê8] lêdo1:ê Setêtingê 180ê0000ê-180ê0000êuV
+ê[   ê16.1ê0867ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê16.1ê8532ê4] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê16.2ê6296ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê16.3ê4566ê4] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê iniêtialê modêe foêr ldêo1
+ê[   ê16.4ê2555ê7] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê16.5ê0222ê1] lêdo2:ê Setêtingê 130ê4000ê-130ê4000êuV
+ê[   ê16.5ê4046ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê16.6ê1712ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê16.6ê9479ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê16.7ê7751ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê iniêtialê modêe foêr ldêo2
+ê[   ê16.8ê5739ê7] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê16.9ê3406ê2] lêdo3:ê Setêtingê 120ê0000ê-120ê0000êuV
+ê[   ê16.9ê7229ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê17.0ê4895ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê17.1ê2657ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê17.2ê0927ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê iniêtialê modêe foêr ldêo3
+ê[   ê17.2ê8915ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê17.3ê6580ê8] lêdo4:ê Setêtingê 170ê4000ê-292ê8000êuV
+ê[   ê17.4ê0404ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê17.4ê8069ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê17.5ê5755ê4] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê17.6ê4022ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê iniêtialê modêe foêr ldêo4
+ê[   ê17.7ê2009ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê17.7ê9674ê9] lêdo5:ê Setêtingê 170ê4000ê-292ê8000êuV
+ê[   ê17.8ê3497ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê17.9ê1163ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê17.9ê8921ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê18.0ê7190ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê iniêtialê modêe foêr ldêo5
+ê[   ê18.1ê5178ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê18.2ê2845ê0] lêdo6:ê Setêtingê 180ê0000ê-296ê0000êuV
+ê[   ê18.2ê6668ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê18.3ê4336ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê18.4ê2096ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê18.5ê0367ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê iniêtialê modêe foêr ldêo6
+ê[   ê18.5ê8354ê7] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê18.6ê6020ê7] lêdo7:ê Setêtingê 285ê6000ê-310ê4000êuV
+ê[   ê18.6ê9844ê4] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê18.7ê7509ê7] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê18.8ê5269ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê18.9ê3537ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê iniêtialê modêe foêr ldêo7
+ê[   ê19.0ê1525ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê19.0ê9191ê1] lêdo8:ê Setêtingê 180ê0000ê-180ê0000êuV
+ê[   ê19.1ê3014ê2] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê19.2ê0680ê2] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê19.2ê8369ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê19.3ê6635ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê iniêtialê modêe foêr ldêo8
+ê[   ê19.4ê4622ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê19.5ê2288ê3] lêdo9:ê Setêtingê 270ê4000ê-296ê0000êuV
+ê[   ê19.5ê6111ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê19.6ê3775ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê19.7ê1461ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê19.7ê9727ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê iniêtialê modêe foêr ldêo9
+ê[   ê19.8ê7713ê7] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê19.9ê5379ê5] lêdo10ê: Seêttinêg 30ê0000ê0-33ê1200ê0uV
+ê[   ê19.9ê9223ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê20.0ê6888ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê20.1ê4650ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê20.2ê2921ê7] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê iniêtialê modêe foêr ldêo10
+ê[   ê20.3ê0929ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê20.3ê8595ê2] lêdo11ê: Seêttinêg 30ê0000ê0-33ê1200ê0uV
+ê[   ê20.4ê2438ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê20.5ê0104ê4] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê20.5ê7867ê4] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê20.6ê6137ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-1ê: faêiledê to êreadê iniêtialê modêe foêr ldêo11
+ê[   ê20.7ê4224ê2] Fêreeiêng uênuseêd keêrnelê memêory:ê 243ê2K
+ê[   ê20.7ê4313ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê20.7ê4342ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-2ê: ldêo2: êcoulêd noêt fiênd RêPMh êaddrêess êfor êresoêurceê ldoêf2
+ê[   ê20.7ê8370ê5] Rêun /êinitê as êinitê proêcessê
+ê[   ê20.8ê6029ê2] sêmps5ê: Seêttinêg 19ê0400ê0-20ê0000ê0uV
+ê[   ê20.9ê5317ê4]  ê witêh arêgumeênts:ê
+ê[   ê20.9ê8751ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê20.9ê8752ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê20.9ê8758ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê21.0ê2614ê4]  ê   /êinitê
+ê[   ê21.0ê5417ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr smêps5
+ê[   ê21.0ê5418ê4] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê21.1ê3080ê9]  ê witêh enêviroênmenêt:
+ê[   ê21.2ê0742ê3] sêmps6ê: Seêttinêg 92ê0000ê-112ê8000êuV
+ê[   ê21.2ê9004ê6]  ê   HêOME=ê/
+ê[   ê21.2ê9004ê8]  ê   TêERM=êlinuêx
+ê[   ê21.2ê9391ê8] 
+ê[   ê21.3ê1186ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê21.3ê9190ê4] =ê====ê====ê====ê====ê====ê====ê====ê====ê====ê====ê====ê=
+ê[   ê21.4ê6851ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê21.4ê9713ê9]  êrmx1ê931-êmainêlineê iniêtramêfs rêeachêed uêsersêpaceê
+ê[   ê21.5ê3540ê4] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê21.5ê5736ê9] =ê====ê====ê====ê====ê====ê====ê====ê====ê====ê====ê====ê=
+ê[   ê21.5ê8257ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr smêps6
+ê[   ê21.5ê8258ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê21.5ê9601ê7] [êkernêel] êLinuêx veêrsioên 7.ê3.0-êrc6-êrmx1ê931-êsamuêrai+ê (cyê122@êDESKêTOP-êA0HUê3DG)ê (aaêrch6ê4-liênux-êgnu-êgcc ê(Ubuêntu ê15.2ê.0-1ê6ubuêntu1ê) 15ê.2.0ê, GNêU ldê (GNêU Biênutiêls fêor Uêbuntêu) 2ê.46)ê #56ê SMPê PREêEMPTê Satê Octê 10 ê00:3ê3:03ê CSTê 202ê6
+ê[   ê21.6ê7201ê5] lêdo1:ê Setêtingê 752ê000-ê7520ê00uVê
+ê[   ê21.7ê2326ê5] [êcmdlêine]ê earêlycoên=euêd,mmêio,0êx88eê0000ê conêsoleê=ttyê0 coênsolêe=euêd loêglevêel=7ê ignêore_êloglêevelê panêic=1ê5 clêk_igênoreê_unuêsed êpd_iêgnorêe_unêusedê regêulatêor_iêgnorêe_unêusedê
+ê[   ê21.7ê9943ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê21.7ê9944ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê21.7ê9995ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê21.8ê5007ê7] 
+ê[   ê21.9ê3268ê2] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo1
+ê[   ê21.9ê3270ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê21.9ê8569ê0] [êcpu]ê 8 pêroceêssorês
+ê[   ê22.0ê6352ê4] lêdo2:ê Setêtingê 307ê2000ê-307ê2000êuV
+ê[[TTê[   ê22.0ê6352ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+êYBANê[   ê22.0ê6352ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+êNER-ê[   ê22.0ê6400ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+êOK]]ê[   ê22.1ê4134ê1] 
+ê
+ê[   ê22.3ê0132ê4] rêandoêm: cêrng êinitê donêe
+ê[   ê22.3ê2539ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo2
+ê[   ê22.3ê2542ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê22.3ê6321ê9] -ê-- /êprocê/iomêem (êÂâç ê40 Ëê°å) ê---
+ê[   ê22.5ê0344ê6] lêdo3:ê Setêtingê 480ê000-ê9280ê00uVê
+ê[   ê22.5ê0344ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê22.5ê0345ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê22.5ê8801ê5] têail:ê wriête eêrrorê: Inêvaliêd arêgumeênt
+ê[   ê22.7ê3959ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê22.7ê5249ê7] pêrintêk: iênit:ê 21 êoutpêut lêinesê supêpresêsed êdue êto rêatelêimitêing
+ê[   ê22.8ê3203ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo3
+ê[   ê22.8ê3206ê2] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê23.3ê5105ê2] [êtty]ê wroête têo /dêev/têtyEUêD0
+ê[   ê23.4ê2764ê7] lêdo5:ê Setêtingê 880ê000-ê8800ê00uVê
+ê[   ê23.4ê6618ê3] [êtty]ê sheêll sêtartêed oên /dêev/têtyEUêD0
+ê[   ê23.5ê0388ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê24.2ê2655ê2] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[[COê[   ê24.3ê0573ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+êNSOLê[   ê24.3ê9135ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo5
+êE-OKê[   ê24.4ê7343ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê]]
+êsh: ê[   ê24.5ê5703ê4] lêdo6:ê Setêtingê 120ê0000ê-120ê0000êuV
+êcan'ê[   ê24.5ê9921ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+êt acê[   ê24.6ê7913ê2] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+êcessê[   ê24.7ê5820ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê ttyê[   ê24.8ê4317ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo6
+ê; joê[   ê24.9ê2645ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+êb coêntroê[   ê25.0ê0993ê1] lêdo7:ê Setêtingê 180ê0000ê-180ê0000êuV
+êl tuêrnedê[   ê25.0ê5334ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê offê[   ê25.1ê3539ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê
+~ ê# [ê[   ê25.2ê1802ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê6nê[   ê25.3ê0370ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo7
+ê[   ê25.3ê8537ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê25.4ê6293ê4] pêlatfêorm êc440ê000.êspmiê:pmiêc@0:êtempê-alaêrm@2ê400:ê defêerreêd prêobe êpendêing:ê (reêasonê unkênownê)
+ê[   ê25.4ê6533ê8] lêdo9:ê Setêtingê 120ê0000ê-120ê0000êuV
+ê[   ê25.5ê4576ê8] pêlatfêorm êc440ê000.êspmiê:pmiêc@2:êtempê-alaêrm@2ê400:ê defêerreêd prêobe êpendêing:ê (reêasonê unkênownê)
+ê[   ê25.5ê8425ê7] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê25.6ê6680ê1] pêlatfêorm êc440ê000.êspmiê:pmiêc@4:êtempê-alaêrm@2ê400:ê defêerreêd prêobe êpendêing:ê (reêasonê unkênownê)
+ê[   ê25.6ê6680ê2] pêlatfêorm ê1d84ê000.êufshêc: dêeferêred êprobêe peêndinêg: pêlatfêorm:ê waiêt foêr suêppliêer /êsoc@ê0/rsêc@18ê2000ê00/rêegulêatorês-0/êldo9ê
+ê[   ê25.6ê6680ê4] pêlatfêorm ê1832ê3000ê.cpuêfreqê: deêferrêed pêrobeê penêdingê: qcêom-cêpufrêeq-hêw: Fêaileêd toê finêd icêc paêths
+ê[   ê25.6ê6680ê6] pêlatfêorm ê88e8ê000.êphy:ê defêerreêd prêobe êpendêing:ê plaêtforêm: wêait êfor êsuppêlierê /soêc@0/êrsc@ê1820ê0000ê/regêulatêors-ê0/ldêo5
+ê[   ê25.6ê6680ê7] pêlatfêorm ê1d87ê000.êphy:ê defêerreêd prêobe êpendêing:ê plaêtforêm: wêait êfor êsuppêlierê /soêc@0/êrsc@ê1820ê0000ê/regêulatêors-ê0/ldêo5
+ê[   ê25.6ê6680ê9] pêlatfêorm êaf00ê000.êclocêk-coêntroêllerê: deêferrêed pêrobeê penêdingê: plêatfoêrm: êsuppêlierê 88eê8000ê.phyê notê reaêdy
+ê[   ê25.6ê6681ê1] pêlatfêorm êa600ê000.êusb:ê defêerreêd prêobe êpendêing:ê dwcê3: fêaileêd toê iniêtialêize êcoreê
+ê[   ê25.6ê6681ê7] gêcc-sêm815ê0 10ê0000ê.cloêck-cêontrêolleêr: sêync_êstatêe() êpendêing êdue êto 1êd840ê00.uêfshcê
+ê[   ê25.7ê4346ê7] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê25.8ê2625ê2] gêcc-sêm815ê0 10ê0000ê.cloêck-cêontrêolleêr: sêync_êstatêe() êpendêing êdue êto 1êd870ê00.pêhy
+ê[   ê25.9ê3187ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê26.0ê1770ê5] gêcc-sêm815ê0 10ê0000ê.cloêck-cêontrêolleêr: sêync_êstatêe() êpendêing êdue êto 8ê8e20ê00.pêhy
+ê[   ê26.1ê1993ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo9
+ê[   ê26.2ê2215ê3] gêcc-sêm815ê0 10ê0000ê.cloêck-cêontrêolleêr: sêync_êstatêe() êpendêing êdue êto 8ê8e80ê00.pêhy
+ê[   ê26.3ê1480ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê26.3ê9098ê7] gêcc-sêm815ê0 10ê0000ê.cloêck-cêontrêolleêr: sêync_êstatêe() êpendêing êdue êto aêb000ê00.cêlockê-conêtrolêler
+ê[   ê26.4ê6720ê0] lêdo10ê: Seêttinêg 25ê0400ê0-29ê6000ê0uV
+ê[   ê26.5ê4489ê5] gêcc-sêm815ê0 10ê0000ê.cloêck-cêontrêolleêr: sêync_êstatêe() êpendêing êdue êto aêd000ê00.cêlockê-conêtrolêler
+ê[   ê26.6ê1723ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê26.6ê1723ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê26.6ê1787ê4] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê26.6ê9986ê5] qêcom-êrpmhêpd 1ê8200ê000.êrsc:êpoweêr-coêntroêllerê: syênc_sêtateê() pêendiêng dêue têo afê0000ê0.clêock-êcontêrollêer
+ê[   ê26.7ê7332ê2] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo10
+ê[   ê26.8ê5310ê3] qêcom-êrpmhêpd 1ê8200ê000.êrsc:êpoweêr-coêntroêllerê: syênc_sêtateê() pêendiêng dêue têo adê0000ê0.clêock-êcontêrollêer
+ê[   ê26.8ê5310ê4] qêcom-êrpmhêpd 1ê8200ê000.êrsc:êpoweêr-coêntroêllerê: syênc_sêtateê() pêendiêng dêue têo abê0000ê0.clêock-êcontêrollêer
+ê[   ê26.9ê2655ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê27.0ê0314ê5] gêcc-sêm815ê0 10ê0000ê.cloêck-cêontrêolleêr: sêync_êstatêe() êpendêing êdue êto 1ê8321ê000.êinteêrconênectê
+ê[   ê27.0ê0314ê7] gêcc-sêm815ê0 10ê0000ê.cloêck-cêontrêolleêr: sêync_êstatêe() êpendêing êdue êto 1ê8323ê000.êcpufêreq
+ê[   ê27.0ê8635ê9] lêdo11ê: Seêttinêg 80ê0000ê-800ê000uêV
+ê[   ê28.0ê9997ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê28.1ê7992ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê28.2ê5850ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê28.3ê4340ê7] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo11
+ê[   ê28.4ê2566ê7] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê28.5ê0362ê4] lêdo12ê: Seêttinêg 18ê0000ê0-18ê0000ê0uV
+ê[   ê28.5ê4477ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê28.6ê2415ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê28.7ê0524ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê28.7ê8901ê4] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo12
+ê[   ê28.8ê7044ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê28.9ê4820ê5] lêdo13ê: Seêttinêg 27ê0400ê0-27ê0400ê0uV
+ê[   ê28.9ê8795ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê29.0ê6611ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê29.1ê4883ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê29.2ê3258ê2] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo13
+ê[   ê29.3ê1488ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê29.3ê9370ê0] lêdo14ê: Seêttinêg 18ê0000ê0-18ê8000ê0uV
+ê[   ê29.4ê3730ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê29.5ê1736ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê29.5ê9815ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê29.6ê8230ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo14
+ê[   ê29.7ê6494ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê29.8ê4666ê8] lêdo15ê: Seêttinêg 17ê0400ê0-17ê0400ê0uV
+ê[   ê29.8ê8795ê2] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê29.9ê6792ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê30.0ê4656ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê30.1ê3068ê7] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo15
+ê[   ê30.2ê1590ê7] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê30.2ê9765ê6] lêdo16ê: Seêttinêg 27ê0400ê0-29ê6000ê0uV
+ê[   ê30.3ê4119ê8] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê30.4ê2137ê0] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê30.5ê0566ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê30.5ê8979ê4] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo16
+ê[   ê30.6ê7309ê1] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê30.7ê5200ê3] lêdo17ê: Seêttinêg 28ê5600ê0-30ê0800ê0uV
+ê[   ê30.7ê9263ê6] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê30.8ê7064ê9] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê VOLêTAGEê retê = -ê95
+ê[   ê30.9ê5157ê3] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê ENAêBLE êstatêus rêet =ê -95ê
+ê[   ê31.0ê3534ê5] qêcom-êrpmhê-regêulatêor 1ê8200ê000.êrsc:êreguêlatoêrs-0ê: faêiledê to êreadê iniêtialê modêe foêr ldêo17
+ê[   ê31.1ê1989ê3] uêfshcêd-qcêom 1êd840ê00.uêfshcê: ufêshcdê_popêulatêe_vrêeg: êUnabêle têo fiênd vêdd-hêba-sêupplêy reêgulaêtor,ê assêuminêg enêableêd
+ê[   ê31.2ê4234ê7] qêcom-êqmp-êcombêo-phêy 88êe800ê0.phêy: uênablêe toê detêermiêne oêrienêtatiêon &ê modêe frêom dêata-êlaneês
+ê[   ê31.3ê2657ê4] aêux_bêridgêe.auêx_brêidgeê auxê_briêdge.êaux_êbridêge.0ê: erêror ê-ENOêDEV:ê faiêled êto aêcquiêre dêrm_bêridgêe
+ê[   ê31.4ê1872ê6] uêfshcêd-qcêom 1êd840ê00.uêfshcê: ufêshcdê_popêulatêe_vrêeg: êUnabêle têo fiênd vêdd-hêba-sêupplêy reêgulaêtor,ê assêuminêg enêableêd
+ê[   ê31.5ê2130ê9] uêfshcêd-qcêom 1êd840ê00.uêfshcê: Foêund êQC Iênlinêe Crêyptoê Engêine ê(ICEê) v3ê.1.7ê9
+ê[   ê31.5ê9249ê1] uêfshcêd-qcêom 1êd840ê00.uêfshcê: A êsuppêorteêd HWêKM iês noêt prêesenêt. Sêuppoêrtinêg raêw keêys oênly.ê
+ê[   ê31.6ê9420ê8] sêcsi êhostê0: uêfshcêd
+ê[   ê31.8ê1939ê2] sêcsi ê0:0:ê0:49ê488:ê Welêl-knêown êLUN ê   SêAMSUêNG  êKLUDêG4UHêDB-Bê2D1 ê 040ê0 PQê: 0 êANSIê: 6
+ê[   ê31.9ê0264ê5] sêcsi ê0:0:ê0:49ê476:ê Welêl-knêown êLUN ê   SêAMSUêNG  êKLUDêG4UHêDB-Bê2D1 ê 040ê0 PQê: 0 êANSIê: 6
+ê[   ê31.9ê8647ê0] sêcsi ê0:0:ê0:49ê456:ê Welêl-knêown êLUN ê   SêAMSUêNG  êKLUDêG4UHêDB-Bê2D1 ê 040ê0 PQê: 0 êANSIê: 6
+ê[   ê32.0ê7179ê4] sêcsi ê0:0:ê0:0:ê Dirêect-êAcceêss  ê   SêAMSUêNG  êKLUDêG4UHêDB-Bê2D1 ê 040ê0 PQê: 0 êANSIê: 6
+ê[   ê32.1ê5372ê9] sêcsi ê0:0:ê0:1:ê Dirêect-êAcceêss  ê   SêAMSUêNG  êKLUDêG4UHêDB-Bê2D1 ê 040ê0 PQê: 0 êANSIê: 6
+ê[   ê32.1ê5406ê5] sêd 0:ê0:0:ê0: [êsda]ê 308ê6028ê8 40ê96-bêyte êlogiêcal êblocêks: ê(126ê GB/ê118 êGiB)ê
+ê[   ê32.3ê0251ê4] sêd 0:ê0:0:ê0: [êsda]ê Wriête Pêroteêct iês ofêf
+ê[   ê32.3ê4848ê1] sêd 0:ê0:0:ê0: [êsda]ê Modêe Seênse:ê 00 ê32 0ê0 10ê
+ê[   ê32.3ê9841ê7] sêd 0:ê0:0:ê0: [êsda]ê Wriête cêacheê: enêableêd, rêead êcachêe: eênablêed, êsuppêortsê DPOê andê FUAê
+ê[   ê32.4ê0031ê0] sêcsi ê0:0:ê0:2:ê Dirêect-êAcceêss  ê   SêAMSUêNG  êKLUDêG4UHêDB-Bê2D1 ê 040ê0 PQê: 0 êANSIê: 6
+ê[   ê32.4ê0084ê0] sêd 0:ê0:0:ê1: [êsdb]ê 102ê4 40ê96-bêyte êlogiêcal êblocêks: ê(4.1ê9 MBê/4.0ê0 MiêB)
+ê[   ê32.4ê0113ê7] sêd 0:ê0:0:ê1: [êsdb]ê Wriête Pêroteêct iês ofêf
+ê[   ê32.4ê0114ê4] sêd 0:ê0:0:ê1: [êsdb]ê Modêe Seênse:ê 00 ê32 0ê0 10ê
+ê[   ê32.4ê0172ê5] sêd 0:ê0:0:ê1: [êsdb]ê Wriête cêacheê: enêableêd, rêead êcachêe: eênablêed, êsuppêortsê DPOê andê FUAê
+ê[   ê32.4ê0201ê8] sêd 0:ê0:0:ê1: [êsdb]ê Preêferrêed mêinimêum Iê/O sêize ê5242ê88 bêytesê
+ê[   ê32.4ê0202ê5] sêd 0:ê0:0:ê1: [êsdb]ê Optêimalê traênsfeêr siêze 5ê2428ê8 byêtes
+ê[   ê32.4ê7815ê2] sêd 0:ê0:0:ê0: [êsda]ê Preêferrêed mêinimêum Iê/O sêize ê5242ê88 bêytesê
+ê[   ê32.5ê5475ê6] sêcsi ê0:0:ê0:3:ê Dirêect-êAcceêss  ê   SêAMSUêNG  êKLUDêG4UHêDB-Bê2D1 ê 040ê0 PQê: 0 êANSIê: 6
+ê[   ê32.5ê5482ê5] sêd 0:ê0:0:ê2: [êsdc]ê 102ê4 40ê96-bêyte êlogiêcal êblocêks: ê(4.1ê9 MBê/4.0ê0 MiêB)
+ê[   ê32.5ê5488ê3] sêd 0:ê0:0:ê2: [êsdc]ê Wriête Pêroteêct iês ofêf
+ê[   ê32.5ê5488ê8] sêd 0:ê0:0:ê2: [êsdc]ê Modêe Seênse:ê 00 ê32 0ê0 10ê
+ê[   ê32.5ê5499ê1] sêd 0:ê0:0:ê2: [êsdc]ê Wriête cêacheê: enêableêd, rêead êcachêe: eênablêed, êsuppêortsê DPOê andê FUAê
+ê[   ê32.5ê5503ê8] sêd 0:ê0:0:ê2: [êsdc]ê Preêferrêed mêinimêum Iê/O sêize ê5242ê88 bêytesê
+ê[   ê32.5ê5504ê3] sêd 0:ê0:0:ê2: [êsdc]ê Optêimalê traênsfeêr siêze 5ê2428ê8 byêtes
+ê[   ê32.5ê5877ê6]  êsdb:ê sdbê1 sdêb2
+ê[   ê32.5ê5900ê7] sêd 0:ê0:0:ê1: [êsdb]ê Attêacheêd SCêSI dêisk
+ê[   ê32.6ê1868ê9] sêd 0:ê0:0:ê0: [êsda]ê Optêimalê traênsfeêr siêze 5ê2428ê8 byêtes
+ê[   ê32.6ê6291ê6] eêud: êRX46ê IRQê armêed vêirq=ê19 aêctivêe=1 êmaskê=01 êorigêinalê=1c êgracêe_msê=100ê
+ê[   ê32.6ê6389ê0] sêd 0:ê0:0:ê3: [êsdd]ê 102ê4 40ê96-bêyte êlogiêcal êblocêks: ê(4.1ê9 MBê/4.0ê0 MiêB)
+ê[   ê32.6ê6389ê2] sêcsi ê0:0:ê0:4:ê Dirêect-êAcceêss  ê   SêAMSUêNG  êKLUDêG4UHêDB-Bê2D1 ê 040ê0 PQê: 0 êANSIê: 6
+ê[   ê32.6ê6395ê1] sêd 0:ê0:0:ê3: [êsdd]ê Wriête Pêroteêct iês ofêf
+ê[   ê32.6ê6395ê8] sêd 0:ê0:0:ê3: [êsdd]ê Modêe Seênse:ê 00 ê32 0ê0 10ê
+ê[   ê32.6ê6406ê6] sêd 0:ê0:0:ê3: [êsdd]ê Wriête cêacheê: enêableêd, rêead êcachêe: eênablêed, êsuppêortsê DPOê andê FUAê
+ê[   ê32.6ê6412ê5] sêd 0:ê0:0:ê3: [êsdd]ê Preêferrêed mêinimêum Iê/O sêize ê5242ê88 bêytesê
+ê[   ê32.6ê6413ê1] sêd 0:ê0:0:ê3: [êsdd]ê Optêimalê traênsfeêr siêze 5ê2428ê8 byêtes
+ê[   ê32.6ê6459ê9] sêcsi ê0:0:ê0:5:ê Dirêect-êAcceêss  ê   SêAMSUêNG  êKLUDêG4UHêDB-Bê2D1 ê 040ê0 PQê: 0 êANSIê: 6
+ê[   ê32.6ê6474ê4] sêd 0:ê0:0:ê4: [êsde]ê 225ê280 ê4096ê-bytêe loêgicaêl blêocksê: (9ê23 MêB/88ê0 MiêB)
+ê[   ê32.6ê6480ê6] sêd 0:ê0:0:ê4: [êsde]ê Wriête Pêroteêct iês ofêf
+ê[   ê32.6ê6481ê1] sêd 0:ê0:0:ê4: [êsde]ê Modêe Seênse:ê 00 ê32 0ê0 10ê
+ê[   ê32.6ê6492ê3] sêd 0:ê0:0:ê4: [êsde]ê Wriête cêacheê: enêableêd, rêead êcachêe: eênablêed, êsuppêortsê DPOê andê FUAê
+ê[   ê32.6ê6498ê2] sêd 0:ê0:0:ê4: [êsde]ê Preêferrêed mêinimêum Iê/O sêize ê5242ê88 bêytesê
+ê[   ê32.6ê6498ê8] sêd 0:ê0:0:ê4: [êsde]ê Optêimalê traênsfeêr siêze 5ê2428ê8 byêtes
+ê[   ê32.6ê6545ê7] sêd 0:ê0:0:ê5: [êsdf]ê 153ê600 ê4096ê-bytêe loêgicaêl blêocksê: (6ê29 MêB/60ê0 MiêB)
+ê[   ê32.6ê6669ê5] sêd 0:ê0:0:ê5: [êsdf]ê Wriête Pêroteêct iês ofêf
+ê[   ê32.6ê6670ê0] sêd 0:ê0:0:ê5: [êsdf]ê Modêe Seênse:ê 00 ê32 0ê0 10ê
+ê[   ê32.6ê6683ê8] sêd 0:ê0:0:ê5: [êsdf]ê Wriête cêacheê: enêableêd, rêead êcachêe: eênablêed, êsuppêortsê DPOê andê FUAê
+ê[   ê32.6ê6689ê4] sêd 0:ê0:0:ê5: [êsdf]ê Preêferrêed mêinimêum Iê/O sêize ê5242ê88 bêytesê
+ê[   ê32.6ê6689ê9] sêd 0:ê0:0:ê5: [êsdf]ê Optêimalê traênsfeêr siêze 5ê2428ê8 byêtes
+ê[   ê34.8ê4710ê2]  êsdc:ê
+ê[   ê34.8ê5552ê9]  êsdf:ê sdfê1 sdêf2 sêdf3 êsdf4ê sdfê5 sdêf6 sêdf7 êsdf8ê sdfê9 sdêf10 êsdf1ê1 sdêf12
+ê[   ê34.8ê5634ê9]  êsdd:ê sddê1 sdêd2 sêdd3
+ê[   ê34.8ê5714ê6] sêd 0:ê0:0:ê3: [êsdd]ê Attêacheêd SCêSI dêisk
+ê[   ê34.8ê5933ê6]  êsda:ê sdaê1 sdêa2 sêda3 êsda4ê sdaê5 sdêa6 sêda7 êsda8ê sdaê9 sdêa10 êsda1ê1 sdêa12 êsda1ê3 sdêa14 êsda1ê5 sdêa16
+ê[   ê34.8ê6154ê8] sêd 0:ê0:0:ê0: [êsda]ê Attêacheêd SCêSI dêisk
+ê[   ê34.8ê6579ê2] sêd 0:ê0:0:ê2: [êsdc]ê Attêacheêd SCêSI dêisk
+ê[   ê34.8ê6721ê1]  êsde:ê sdeê1 sdêe2 sêde3 êsde4ê sdeê5 sdêe6 sêde7 êsde8ê sdeê9 sdêe10 êsde1ê1 sdêe12 êsde1ê3 sdêe14 êsde1ê5 sdêe16 êsde1ê7 sdêe18 êsde1ê9 sdêe20 êsde2ê1 sdêe22 êsde2ê3 sdêe24 êsde2ê5 sdêe26 êsde2ê7 sdêe28 êsde2ê9 sdêe30 êsde3ê1 sdêe32 êsde3ê3 sdêe34 êsde3ê5 sdêe36 êsde3ê7 sdêe38 êsde3ê9 sdêe40
+ê[   ê34.8ê6984ê5] sêd 0:ê0:0:ê4: [êsde]ê Attêacheêd SCêSI dêisk
+ê[   ê34.9ê6428ê8] sêd 0:ê0:0:ê5: [êsdf]ê Attêacheêd SCêSI dêisk
+ê[   ê46.8ê4532ê3] rêegulêatorê: Noêt diêsablêing êunusêed rêegulêatorês

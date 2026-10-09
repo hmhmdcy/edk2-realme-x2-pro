@@ -41,6 +41,12 @@ RX53 仅刷 logdump，在完整 console TX 帧之间及时收 RX、延后回执/
 [session 53](../../sessions/53-console-boundary-rx-service.md)。console 来源回执会显示在
 旧过滤器之外，但 native ACK 匹配正常；不为隐藏它而改写真实 RX 来源。
 
+RX54 未改本终端或 RX53 候选，9 次手动长日志输入均经 console 受理/执行，
+6 次空 IRQ 正确计数、IRQ 仍 active=1/fault=0；console 来源 F1/同候选 reboot
+及原生新回执/输出通过。并未诱发连续 8 次空 IRQ，也没有修复 RX53 已证明的 TX
+缺前缀。下一项独立诊断只读累计接收计数，尚未实测、不修改安装终端；见
+[session 54](../../sessions/54-console-rx-regression-and-host-counter-audit.md)。
+
 ## TX 和 RX 的状态
 
 方向以手机为准：

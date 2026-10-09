@@ -11,7 +11,17 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 53](sessions/53-console-boundary-rx-service.md)。**
+> **当前入口：[session 54](sessions/54-console-rx-regression-and-host-counter-audit.md)。**
+> 未改 RX53 候选/安装终端、未刷机；9 次手动长日志 overlap 均 via=console 并执行，
+> 全部变量读回、每条 990 个零，IRQ active=1/fault=0，6 次空 IRQ 正确计入 console
+> credit；并未诱发连续 8 次空 IRQ。完整 USB IN/raw、512 帧快照直接匹配。
+> 一次长日志期间的 header-only F1 明确 via=console 并进入独立核实的 fastboot；
+> 同候选 reboot 恢复 TOP_CFG=0x11/tty/IRQ、原生新回执/输出，finally 关闭/detach。
+> RX53 的 seq 7287 TX 缺前缀仍开放。本轮实装驱动审查找到只读累计接收计数
+> SerialGetStats；下一步在现有 owner 的 overlapped handle 有界读取，与 raw/journal/
+> queue/errors 对照。尚未实测 GET_STATS，不把接收缓冲计数当物理 USB ACK。
+>
+> **历史上一轮：[session 53](sessions/53-console-boundary-rx-service.md)。**
 > 当前仅刷 logdump-rx53-console-rx：在 console 完整 TX 帧边界收完整 RX，回执/tty/F1
 > 留在工作线程，单独记录 via=console 与 console_frames，最多 credit 一次消费后空 IRQ。
 > 同样长日志/7 字节输入在 USB、Windows 都受理并执行，各 512 TX 帧直接匹配、990 个

@@ -48,6 +48,7 @@
 | sessions/51-console-overlap-and-issued-frame-loss.md、reference/rx51/ | 长 console 输出期间 7 字节缺 RX；恢复状态缺一个已发 4 字节帧，511/512 直接匹配，根因仍开放 |
 | sessions/52-same-owner-usb-overlap-and-continuous-in.md、reference/rx52/ | 同 owner 长日志缺 RX，完整 OUT/IN；持续 IN 对照改善请求空窗/TX 匹配，RX 仍未修复 |
 | sessions/53-console-boundary-rx-service.md、reference/rx53/ | console 帧边界整帧 RX 在 USB/Windows 同触发通过；兼容/F1/重启保留，最后仍缺一个已发 TX 前缀 |
+| sessions/54-console-rx-regression-and-host-counter-audit.md、reference/rx54/ | 9 次手动 console RX/F1 回归通过、6 次空 IRQ 正确计数；实装 Windows worker/累计接收计数审查，未刷机、TX 缺口仍开放 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
