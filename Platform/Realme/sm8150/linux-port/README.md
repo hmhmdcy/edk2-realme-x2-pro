@@ -13,7 +13,12 @@
 `-RetryJitterMs 800` 仅改变有界重试时间，不保证所有 OUT 都受理。
 不要使用旧 build-image.sh 重建 initramfs；本轮保留真实 WSL initramfs 和原 DTB。
 
-当前交接见 [session 43](../sessions/43-native-terminal-evidence-audit.md)。
+当前交接见 [session 44](../sessions/44-rx-receipt-counters.md)。当前 eud.c 在 RX41
+硬件方法上增加只读 sysfs 接收计数，Ctrl-U 回执也含计数；没有改动 FIFO 顺序、20 ms
+轮询或正常原生帧回执。诊断镜像仅更新 logdump；失败输入没有增加 pending/坏帧头/tty
+计数，成功 echo 的帧/字节准确。根因仍未定位，不能把诊断称为稳定性修复。
+
+上一轮审查看 [session 43](../sessions/43-native-terminal-evidence-audit.md)。
 payload 推进的修复使用真实整帧，不依赖临时终端逐字发送。RX41 数次“缺输出”经
 原始抓取核对撤回；Windows/libusb 的新原生命令也返回了完整输出。偶发缺回执仍未解，
 已核对其在 RX 日志之前的边界，下一步需要 USB/EUD/STATUS1 的新受理证据。

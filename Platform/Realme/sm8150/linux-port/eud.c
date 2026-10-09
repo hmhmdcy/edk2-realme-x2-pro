@@ -93,7 +93,16 @@ struct eud_port {
         u32 rx_last_status;
         u32 rx_last_id;
         u32 rx_last_len;
-        u32 rx_last_dat;
+        u32 rx_last_after;
+        u32 rx_pending;
+        u32 rx_bad_headers;
+        u32 rx_frames;
+        u32 rx_f1;
+        u32 rx_bytes;
+        u32 rx_tty_bytes;
+        u32 rx_no_tty;
+        u32 rx_bad_id;
+        u32 rx_bad_len;
         u8  rx_state;   /* EUD_RX_STATE: idle / expect char / expect cmd */
         u8  rx_collect; /* collecting a payload right now */
         u8  rx_have;    /* payload bytes collected so far */
@@ -408,8 +417,13 @@ static void eud_rx_dispatch(struct eud_port *up)
                                 &port->state->port, up->rx_buf, up->rx_have);
                         port->icount.rx += up->rx_delivered;
                         port->icount.buf_overrun += up->rx_have - up->rx_delivered;
+                        up->rx_tty_bytes += up->rx_delivered;
                         uart_port_unlock_irqrestore(port, flags);
                         tty_flip_buffer_push(&port->state->port);
+                } else {
+                        uart_port_lock_irqsave(port, &flags);
+                        up->rx_no_tty++;
+                        uart_port_unlock_irqrestore(port, flags);
                 }
         } else if (up->rx_id == EUD_RX_CMD_ID) {
                 eud_command(up, up->rx_buf, up->rx_have);
@@ -437,21 +451,31 @@ static void eud_rx_work(struct work_struct *work)
         unsigned long flags;
 
         uart_port_lock_irqsave(&up->port, &flags);
+        up->rx_polls++;
         s1 = readl(base + EUD_REG_INT_STATUS_1);
+        up->rx_last_status = s1;
         if (!(s1 & EUD_INT_RX_PENDING))
                 goto unlock;
 
+        up->rx_pending++;
         id = readl(base + EUD_REG_COM_RX_ID) & 0xff;
         len = readl(base + EUD_REG_COM_RX_LEN) & 0xff;
+        up->rx_last_id = id;
+        up->rx_last_len = len;
         if (id == EUD_RX_UART_ID && len == 2) {
+                up->rx_f1++;
                 uart_port_unlock_irqrestore(&up->port, flags);
                 eud_reboot_cmd(up, len);
                 goto out;
         }
         if ((id != EUD_RX_UART_ID && id != EUD_RX_CHAR_ID &&
              id != EUD_RX_CHAR_ID2 && id != EUD_RX_CMD_ID) ||
-            len < 1 || len > EUD_RX_MAX_FRAME)
+            len < 1 || len > EUD_RX_MAX_FRAME) {
+                up->rx_bad_headers++;
+                up->rx_bad_id = id;
+                up->rx_bad_len = len;
                 goto unlock;
+        }
 
         up->rx_id = id;
         up->rx_len = len;
@@ -459,11 +483,21 @@ static void eud_rx_work(struct work_struct *work)
         for (i = 0; i < len; i++)
                 up->rx_buf[i] = readl(base + EUD_REG_COM_RX_DAT) & 0xff;
         s2 = readl(base + EUD_REG_INT_STATUS_1);
+        up->rx_frames++;
+        up->rx_bytes += len;
+        up->rx_last_after = s2;
         uart_port_unlock_irqrestore(&up->port, flags);
 
         /* Finish the receipt before tty echo/command output can be queued. */
         if (len == 1) {
-                pr_info("eud: tty byte=%02x\n", up->rx_buf[0]);
+                if (up->rx_buf[0] == 0x15)
+                        pr_info("eud: tty byte=15 polls=%u pending=%u bad=%u frames=%u bytes=%u tty_before=%u no_tty=%u overrun=%u bad_id=%02x bad_len=%u\n",
+                                up->rx_polls, up->rx_pending, up->rx_bad_headers,
+                                up->rx_frames, up->rx_bytes, up->rx_tty_bytes,
+                                up->rx_no_tty, up->port.icount.buf_overrun,
+                                up->rx_bad_id, up->rx_bad_len);
+                else
+                        pr_info("eud: tty byte=%02x\n", up->rx_buf[0]);
         } else {
                 pr_info("eud: rx frame len=%u data=%*ph s1_after=%08x\n",
                         len, len, up->rx_buf, s2);
@@ -476,9 +510,41 @@ static void eud_rx_work(struct work_struct *work)
 unlock:
         uart_port_unlock_irqrestore(&up->port, flags);
 out:
-        up->rx_polls++;
         schedule_delayed_work(&up->rx_work, msecs_to_jiffies(EUD_RX_POLL_MS));
 }
+
+/* Read a coherent software snapshot, never touch the hardware for diagnostics.
+ * The counter updates reuse the existing RX/TX lock and MMIO reads. There is
+ * no extra FIFO access, polling, interrupt setup or status write. Ctrl-U also
+ * includes counters in its existing receipt (before delivery of that byte),
+ * so observing a failed native input does not require a long shell command.
+ */
+static ssize_t rx_stats_show(struct device *dev, struct device_attribute *attr,
+                             char *buf)
+{
+        struct uart_port *port = dev_get_drvdata(dev);
+        struct eud_port *up = to_eud_port(port);
+        unsigned long flags;
+        ssize_t n;
+
+        uart_port_lock_irqsave(port, &flags);
+        n = sysfs_emit(buf,
+                "polls=%u pending=%u bad=%u frames=%u f1=%u bytes=%u tty=%u no_tty=%u overrun=%u status=%08x id=%02x len=%u after=%08x bad_id=%02x bad_len=%u\n",
+                up->rx_polls, up->rx_pending, up->rx_bad_headers,
+                up->rx_frames, up->rx_f1, up->rx_bytes, up->rx_tty_bytes,
+                up->rx_no_tty, port->icount.buf_overrun, up->rx_last_status,
+                up->rx_last_id, up->rx_last_len, up->rx_last_after,
+                up->rx_bad_id, up->rx_bad_len);
+        uart_port_unlock_irqrestore(port, flags);
+        return n;
+}
+static DEVICE_ATTR_RO(rx_stats);
+
+static struct attribute *eud_attrs[] = {
+        &dev_attr_rx_stats.attr,
+        NULL,
+};
+ATTRIBUTE_GROUPS(eud);
 
 static int eud_probe(struct platform_device *pdev)
 {
@@ -583,6 +649,7 @@ static struct platform_driver eud_com_driver = {
         .driver = {
                 .name           = "qcom_eud_com",
                 .of_match_table = eud_com_dt_match,
+                .dev_groups     = eud_groups,
         },
 };
 
