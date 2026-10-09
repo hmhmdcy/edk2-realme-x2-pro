@@ -51,6 +51,11 @@
 > 属于其他 SoC 或经过过滤，没有给出 SM8150 COM advance 修法。完整证据和限制见
 > [session 39](sessions/39-rx-tight-arrival-poll.md)、reference/rx39。
 
+> **session 40 源码审查：** 完整旧一代 DSP 寄存器表列出 EUD_ACORE/flags，仍没有 DAT 读副作用规格；
+> 原厂 RMX1931 SM8150 UsbConfigDxe 检查 EUD enable 并避开 PHY reset，没有提供 COM RX 推进代码。
+> 未刷机、未重跑多字节，基线 Windows Ctrl-U 第 2 次 OUT 有新回执并 finally 关闭。
+> 原生 RX 仍未修复；固定来源、证据边界见 [session 40](sessions/40-rx-register-map-and-stock-firmware-audit.md)。
+
 本节至「命令通道打通」是同日较早阶段的历史记录；当前实测结论见文首及末节。
 其中「每读一次必定弹出后续 payload」和 offset-2 都不能当作本机已验证事实。
 

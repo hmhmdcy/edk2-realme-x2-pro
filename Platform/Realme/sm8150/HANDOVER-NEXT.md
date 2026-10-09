@@ -102,6 +102,14 @@ Attached. Source searches found no verified fix; public HWIO headers are
 other-SoC/filtered and cannot establish a SM8150 register write. See
 sessions/39 and reference/rx39 for the exact evidence and recovery limits.
 
+Session 40 searched the complete DSP register map and statically audited X2 Pro
+stock SM8150 HWIODxe/UsbConfigDxe. The older SDM845 table lists COM/flags but no
+RX read side effects; it does not authorize SM8150 register writes. Stock code
+checks CSR_EUD_EN and skips a PHY reset operation when active, without supplying
+a COM advance implementation. No flash or multi-byte re-test. Fresh Windows
+Ctrl-U receipt succeeded on attempt 2; COM14 finally closed, 6-5 Shared. Native
+RX remains unresolved. See sessions/40 and reference/rx40 for pinned sources.
+
 1. Resume native multi-byte RX investigation using sessions 35/36. The temporary
    terminal remains available for driver bring-up:
    `E:\eud-host\eud-terminal.cmd -Reconnect` (guide: linux-port/docs/EUD-TERMINAL.md).
@@ -193,7 +201,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 3bfecb7  docs: normalize RX38 evidence text and retain original hashes
+    master = 89236ea  eud: record tight arrival polling failure and verified baseline recovery
+             3bfecb7  docs: normalize RX38 evidence text and retain original hashes
              703469c  eud: record pre-Linux RX failure and USB boundary comparisons
              9d01126  eud: audit native RX sources and PHY lifecycle
              ed31013  docs: normalize RX evidence manifests
@@ -201,9 +210,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              e606a99  eud: audit legacy qcusbser and prepare USB OUT comparison
              1e54944  docs: hand off native EUD RX investigation
              0e4a8cc  eud: add temporary interactive terminal for single-byte RX
-             38bf2b8  docs: mark raw EUD captures as binary fixtures
 
-    67 commits ahead of upstream origin/master, as of the tip named above;
+    68 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -354,6 +362,7 @@ the only copy.
 | 37 | Native RX source search: actual OEM bugs, QUIC overload correction, PHY v9 lifecycle candidate | `sessions/37-rx-source-search-and-phy-lifecycle.md` |
 | 38 | Pre-Linux UEFI still repeats first byte; accepted legal max-packet/ZLP and reset comparisons fail; baseline restored | `sessions/38-rx-pre-linux-and-usb-boundaries.md` |
 | 39 | Tight pre-Linux arrival polling still AAA/DDDD; bounded recovery, baseline/native receipt restored; HWIO source limits | `sessions/39-rx-tight-arrival-poll.md` |
+| 40 | Complete older EUD register map and stock SM8150 static audit; no RX advance spec/fix; fresh baseline single-byte receipt | `sessions/40-rx-register-map-and-stock-firmware-audit.md` |
 
 Rules that keep this file from growing again:
 

@@ -123,6 +123,11 @@ DTB 的两条路径都要照顾（否则猜不准哪条生效）：
 
 ## 6. 待解：`0x14` 到底给的是什么
 
+**2026-10-09 session 40 更新：** 仅搜索/静态审查，无刷机、无新的多字节实验。
+旧 DSP 完整表及原厂 SM8150 固件仍未提供 RX advance 修法；基线 Windows 单字节回执正常，
+COM14 finally 关闭，6-5 Shared/未 Attached。本轮未重新触发 F1。
+见 `sessions/40-rx-register-map-and-stock-firmware-audit.md`、reference/rx40。
+
 **2026-10-09 session 39 更新：** 只刷诊断 logdump 的 UEFI 紧轮询对照仍为 AAA/DDDD，
 详见 `sessions/39-rx-tight-arrival-poll.md`。Windows 无回执后 libusb 加 PORT_RESET 恢复，
 F1 有新回执且另确认 62bc28a1 fastboot，随后只刷回 rx33-console；Linux/tty/shell 被动
