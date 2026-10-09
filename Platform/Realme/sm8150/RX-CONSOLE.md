@@ -44,6 +44,13 @@
 > Linux/COM14 Ctrl-U 新回执正常、端口关闭。实际 HS PHY 匹配 SNPS femto-v2，修正此前 QUSB2 参考归属。
 > 详见 [session 38](sessions/38-rx-pre-linux-and-usb-boundaries.md) 和 reference/rx38；原生多字节仍未修复。
 
+> **session 39 新对照：** UEFI 去掉 1 ms 等待、紧轮询的相邻循环入口差为 625/572 ns，
+> 新受理 ABC/DEFG 仍为 AAA/DDDD；这个数值不是 USB 到达延迟。不要原样重跑更快轮询。
+> libusb 加 PORT_RESET 恢复单字节/F1 回执后，另证实 fastboot，已只刷回 rx33-console；
+> 原 Linux/tty/shell 启动、Windows Ctrl-U 首次受理，COM14 关闭。新搜到的 boot HWIO 定义
+> 属于其他 SoC 或经过过滤，没有给出 SM8150 COM advance 修法。完整证据和限制见
+> [session 39](sessions/39-rx-tight-arrival-poll.md)、reference/rx39。
+
 本节至「命令通道打通」是同日较早阶段的历史记录；当前实测结论见文首及末节。
 其中「每读一次必定弹出后续 payload」和 offset-2 都不能当作本机已验证事实。
 

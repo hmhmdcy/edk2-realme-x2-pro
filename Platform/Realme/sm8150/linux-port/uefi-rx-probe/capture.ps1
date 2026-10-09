@@ -1,5 +1,5 @@
 param([string]$Port = 'COM14', [int]$Seconds = 100, [Parameter(Mandatory=$true)][string]$Out,
-      [switch]$StartAbc)
+      [switch]$StartAbc, [ValidateSet('RX38-UEFI','RX39-UEFI')][string]$Marker = 'RX39-UEFI')
 $ErrorActionPreference = 'Stop'
 if ($Seconds -lt 1 -or $Seconds -gt 150) { throw 'Seconds must be 1..150' }
 $sp = [System.IO.Ports.SerialPort]::new($Port,115200,'None',8,'One')
@@ -42,10 +42,10 @@ try {
         for ($i = 0; $i -lt 2; $i++) {
             # The first ready marker may precede Windows opening the port.
             # ABC can start immediately; DEFG requires an observed UEFI marker.
-            $ready = ($StartAbc.IsPresent -and $i -eq 0) -or $text.ToString().Contains('RX38-UEFI READY ' + $names[$i])
+            $ready = ($StartAbc.IsPresent -and $i -eq 0) -or $text.ToString().Contains($Marker + ' READY ' + $names[$i])
             if ($ready -and
-                -not $text.ToString().Contains('RX38-UEFI RESULT ' + $names[$i]) -and
-                -not $text.ToString().Contains('RX38-UEFI TIMEOUT ' + $names[$i]) -and
+                -not $text.ToString().Contains($Marker + ' RESULT ' + $names[$i]) -and
+                -not $text.ToString().Contains($Marker + ' TIMEOUT ' + $names[$i]) -and
                 $sent[$i] -lt 3 -and $timer.ElapsedMilliseconds -ge $last[$i] + 3000) {
                 $frame = $patterns[$i]
                 $sp.Write($frame,0,$frame.Length)

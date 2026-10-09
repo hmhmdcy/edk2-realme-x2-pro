@@ -55,6 +55,9 @@ STATIC VOID
 Probe (UINT32 ExpectedLength, CONST CHAR8 *Name, UINT64 Frequency)
 {
   UINT64 Start;
+  UINT64 Now;
+  UINT64 PreviousPoll;
+  UINT64 PollGap;
   UINT32 Status;
   UINT32 Id;
   UINT32 Length;
@@ -62,10 +65,13 @@ Probe (UINT32 ExpectedLength, CONST CHAR8 *Name, UINT64 Frequency)
   UINTN Index;
   CHAR8 Line[192];
 
-  AsciiSPrint (Line, sizeof (Line), "\r\nRX38-UEFI READY %a len=%u wait=25s\r\n", Name, ExpectedLength);
+  AsciiSPrint (Line, sizeof (Line), "\r\nRX39-UEFI READY %a len=%u wait=25s poll=tight\r\n", Name, ExpectedLength);
   Send (Line);
   Start = GetPerformanceCounter ();
-  while ((GetPerformanceCounter () - Start) < Frequency * 25) {
+  PreviousPoll = Start;
+  while (((Now = GetPerformanceCounter ()) - Start) < Frequency * 25) {
+    PollGap = Now - PreviousPoll;
+    PreviousPoll = Now;
     Status = MmioRead32 (EUD_BASE + STATUS1);
     if ((Status & 1U) != 0) {
       Id = MmioRead32 (EUD_BASE + RX_ID);
@@ -75,7 +81,7 @@ Probe (UINT32 ExpectedLength, CONST CHAR8 *Name, UINT64 Frequency)
           Data[Index] = MmioRead32 (EUD_BASE + RX_DAT);
         }
         // Only now may this app write to EUD. Keep raw words as evidence.
-        AsciiSPrint (Line, sizeof (Line), "RX38-UEFI RESULT %a status=%08x id=%08x len=%08x words=", Name, Status, Id, Length);
+        AsciiSPrint (Line, sizeof (Line), "RX39-UEFI RESULT %a gap_ns=%Lu status=%08x id=%08x len=%08x words=", Name, GetTimeInNanoSecond (PollGap), Status, Id, Length);
         Send (Line);
         for (Index = 0; Index < ExpectedLength; Index++) {
           AsciiSPrint (Line, sizeof (Line), "%08x ", Data[Index]);
@@ -85,9 +91,10 @@ Probe (UINT32 ExpectedLength, CONST CHAR8 *Name, UINT64 Frequency)
         return;
       }
     }
-    MicroSecondDelay (1000);
+    // RX39 differs only in arrival polling: no 1 ms wait before detecting
+    // the next frame. Payload reads and all hardware configuration are unchanged.
   }
-  AsciiSPrint (Line, sizeof (Line), "RX38-UEFI TIMEOUT %a\r\n", Name);
+  AsciiSPrint (Line, sizeof (Line), "RX39-UEFI TIMEOUT %a\r\n", Name);
   Send (Line);
 }
 
@@ -130,10 +137,10 @@ UefiMain (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable)
     // Less than 52 seconds including paced output; no scheduler-dependent
     // waits, allocations, protocol calls or hardware configuration at high TPL.
     OldTpl = gBS->RaiseTPL (TPL_HIGH_LEVEL);
-    Send ("\r\nRX38-UEFI pre-Linux burst; firmware timer writer suspended\r\n");
+    Send ("\r\nRX39-UEFI pre-Linux burst; firmware timer writer suspended\r\n");
     Probe (3, "ABC", Frequency);
     Probe (4, "DEFG", Frequency);
-    Send ("RX38-UEFI CHAINLOAD original Kernel\r\n");
+    Send ("RX39-UEFI CHAINLOAD original Kernel\r\n");
     gBS->RestoreTPL (OldTpl);
   }
   return gBS->StartImage (KernelHandle, NULL, NULL);

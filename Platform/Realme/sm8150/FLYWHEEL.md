@@ -123,6 +123,12 @@ DTB 的两条路径都要照顾（否则猜不准哪条生效）：
 
 ## 6. 待解：`0x14` 到底给的是什么
 
+**2026-10-09 session 39 更新：** 只刷诊断 logdump 的 UEFI 紧轮询对照仍为 AAA/DDDD，
+详见 `sessions/39-rx-tight-arrival-poll.md`。Windows 无回执后 libusb 加 PORT_RESET 恢复，
+F1 有新回执且另确认 62bc28a1 fastboot，随后只刷回 rx33-console；Linux/tty/shell 被动
+启动抓包与 Windows Ctrl-U 首次受理均正常，COM14 已关闭，6-5 Shared、未 Attached。
+EIO 断开本身不是 F1 成功证明；没有回执的 Windows OUT 不算受理。原生多字节仍未修复。
+
 **2026-10-09 session 36 更新：** 未刷机，仍用 rx33-console；F1 本轮未重新触发。
 实机 OUT 为 0x02 / max packet 16；旧 WDM qcusbser 与 SM8150 握手源码的新审查见
 `sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md`。libusb/WSL 完整 ABC、DEFG
