@@ -1,0 +1,3 @@
+[11674.601684] eud: tty byte=15 polls=484499 pending=63 bad=0 frames=63 bytes=643 tty_before=642 no_tty=0 overrun=0 bad_id=00 bad_len=0 irqs=63 irq_frames=63 poll_frames=0 empty=0 watchdog=0 drops=0 fault=0 active=1
+[11701.727183] eud: rx frame len=3 data=61 62 63 s1_after=06060606 via=irq
+abc

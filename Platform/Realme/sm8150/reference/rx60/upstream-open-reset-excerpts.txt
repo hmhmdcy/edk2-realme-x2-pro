@@ -1,0 +1,192 @@
+/****************************************************************************
+ *
+ * function: QCPNP_EvtFileCreate
+ *
+ * purpose:  WDF callback for file create requests. Resets the bulk USB
+ *           pipes, clears DTR/RTS, and signals the read thread to start.
+ *
+ * arguments:Device     = handle to the WDF device object.
+ *           Request    = handle to the file create request.
+ *           FileObject = handle to the file object being created.
+ *
+ * returns:  VOID
+ *
+ ****************************************************************************/
+VOID QCPNP_EvtFileCreate
+(
+    WDFDEVICE     Device,
+    WDFREQUEST    Request,
+    WDFFILEOBJECT FileObject
+)
+{
+    PDEVICE_CONTEXT pDevContext = QCDevGetContext(Device);
+    NTSTATUS        status = STATUS_SUCCESS;
+
+    QCSER_DbgPrint
+    (
+        QCSER_DBG_MASK_CIRP,
+        QCSER_DBG_LEVEL_TRACE,
+        ("<%ws> QCPNP_EvtFileCreate request: 0x%p\n", pDevContext->PortName, Request)
+    );
+
+#ifdef QCUSB_MUX_PROTOCOL
+    pDevContext->QcStats.SessionTotal = 0;
+    pDevContext->QcStats.ViCurrentAddress = -1;
+    pDevContext->QcStats.ViCurrentDirection = 0;
+    pDevContext->QcStats.ViCurrentDataSize = 0;
+#endif
+
+    // reset bulk in & bulk out pipes
+    status = WdfDeviceStopIdle(pDevContext->Device, TRUE);     // unblocking call, return immediately
+    if (status == STATUS_PENDING || status == STATUS_SUCCESS)   // otherwise, the device may fails
+    {
+        for (int i = 0; i < QCSER_RESET_RETRIES; i++)
+        {
+            status = QCPNP_ResetUsbPipe(pDevContext, pDevContext->BulkIN, 500);
+            if (!NT_SUCCESS(status))
+            {
+                QCSER_DbgPrint
+                (
+                    QCSER_DBG_MASK_CIRP,
+                    QCSER_DBG_LEVEL_ERROR,
+                    ("<%ws> QCPNP_EvtFileCreate reset bulk in pipe FAILED status: 0x%x\n", pDevContext->PortName, status)
+                );
+                if (i < QCSER_RESET_RETRIES - 1)    // should not wait if the last attempt failed
+                {
+                    QCMAIN_Wait(pDevContext, -(4 * 1000 * 1000));  // 0.4 sec
+                }
+            }
+            else
+            {
+                QCSER_DbgPrint
+                (
+                    QCSER_DBG_MASK_CIRP,
+                    QCSER_DBG_LEVEL_TRACE,
+                    ("<%ws> QCPNP_EvtFileCreate reset bulk in pipe SUCCESSFUL status: 0x%x\n", pDevContext->PortName, status)
+                );
+                break;
+            }
+        }
+        for (int i = 0; i < QCSER_RESET_RETRIES; i++)
+        {
+            status = QCPNP_ResetUsbPipe(pDevContext, pDevContext->BulkOUT, 500);
+            if (!NT_SUCCESS(status))
+            {
+                QCSER_DbgPrint
+                (
+                    QCSER_DBG_MASK_CIRP,
+                    QCSER_DBG_LEVEL_ERROR,
+                    ("<%ws> QCPNP_EvtFileCreate reset bulk out pipe FAILED status: 0x%x\n", pDevContext->PortName, status)
+                );
+                if (i < QCSER_RESET_RETRIES - 1)    // should not wait if the last attempt failed
+                {
+                    QCMAIN_Wait(pDevContext, -(4 * 1000 * 1000));  // 0.4 sec
+                }
+            }
+            else
+            {
+                QCSER_DbgPrint
+                (
+                    QCSER_DBG_MASK_CIRP,
+                    QCSER_DBG_LEVEL_TRACE,
+                    ("<%ws> QCPNP_EvtFileCreate reset bulk out pipe SUCCESSFUL status: 0x%x\n", pDevContext->PortName, status)
+                );
+                break;
+            }
+        }
+        WdfDeviceResumeIdle(pDevContext->Device);
+    }
+
+    if (NT_SUCCESS(status))
+    {
+        QCSER_SerialClrDtr(pDevContext);
+        QCSER_SerialClrRts(pDevContext);
+
+        // wake up read thread
+        KeSetEvent(&pDevContext->FileCreateEvent, IO_NO_INCREMENT, FALSE);
+        QCSER_DbgPrint
+        (
+            QCSER_DBG_MASK_CIRP,
+            QCSER_DBG_LEVEL_TRACE,
+            ("<%ws> QCPNP_EvtFileCreate completed status: 0x%x\n", pDevContext->PortName, status)
+        );
+    }
+    else
+    {
+        QCSER_DbgPrint
+        (
+            QCSER_DBG_MASK_CIRP,
+            QCSER_DBG_LEVEL_ERROR,
+            ("<%ws> QCPNP_EvtFileCreate FAILED status: 0x%x\n", pDevContext->PortName, status)
+        );
+    }
+
+    WdfRequestComplete(Request, status);
+}
+
+/****************************************************************************
+ *
+
+
+NTSTATUS QCPNP_ResetUsbPipe
+(
+    PDEVICE_CONTEXT pDevContext,
+    WDFUSBPIPE      usbPipe,
+    ULONGLONG       timeoutMs
+)
+{
+    NTSTATUS status = STATUS_SUCCESS;
+
+    if (usbPipe == NULL)
+    {
+        QCSER_DbgPrint
+        (
+            QCSER_DBG_MASK_CIRP,
+            QCSER_DBG_LEVEL_ERROR,
+            ("<%ws> QCPNP_ResetUsbPipe called with NULL pipe, skipping\n", pDevContext->PortName)
+        );
+        return STATUS_SUCCESS;
+    }
+
+    WDFIOTARGET ioTarget = WdfUsbTargetPipeGetIoTarget(usbPipe);
+    WDF_REQUEST_SEND_OPTIONS syncReqOptions;
+    WDF_REQUEST_SEND_OPTIONS_INIT(&syncReqOptions, 0);
+    WDF_REQUEST_SEND_OPTIONS_SET_TIMEOUT(&syncReqOptions, WDF_REL_TIMEOUT_IN_MS(timeoutMs));
+
+#ifdef QCUSB_MUX_PROTOCOL
+    if (pDevContext->DeviceFunction == QCUSB_DEV_FUNC_LPC)
+    {
+        QCSER_DbgPrint
+        (
+            QCSER_DBG_MASK_CIRP,
+            QCSER_DBG_LEVEL_TRACE,
+            ("<%ws> QCPNP_ResetUsbPipe skip on LPC device\n", pDevContext->PortName)
+        );
+    }
+    else
+#endif
+    {
+        WdfIoTargetStop(ioTarget, WdfIoTargetCancelSentIo);
+        status = WdfUsbTargetPipeResetSynchronously(usbPipe, WDF_NO_HANDLE, &syncReqOptions);
+        QCSER_DbgPrint
+        (
+            QCSER_DBG_MASK_CIRP,
+            QCSER_DBG_LEVEL_DETAIL,
+            ("<%ws> QCPNP_ResetUsbPipe reset request returned with status: 0x%x\n", pDevContext->PortName, status)
+        );
+        if (!NT_SUCCESS(status))
+        {
+            WdfIoTargetStart(ioTarget);
+            return status;
+        }
+        else
+        {
+            status = WdfIoTargetStart(ioTarget);
+        }
+    }
+
+    return status;
+}
+
+/****************************************************************************
+ *

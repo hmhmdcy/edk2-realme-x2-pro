@@ -11,14 +11,15 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 59](sessions/59-joint-capture-and-forced-odd-reopen-gap.md)。**
-> 两轮联合抓取完成并恢复。预先定义的 75 个短 IN / 两条短 OUT 后普通重开，
-> 首 Ctrl-U 受理但缺 seq12407 的 `[100`；另外 511 帧直接匹配。
-> driver 原始日志/ReceivedCount/raw 同缺六字节；同步 ETW 无失败正长度 IN。
-> 数据翻转失配是最强候选，仍未测物理 PID/ACK，未修复。0x1e 重置主机翻转，
-> 0x30 才保留；更正 RX58 旧措辞。下一项偶数 IN 反向干预，避免普通 echo 循环。
-> 用户持续授权覆盖同范围后续抓取；三节点 OK、无 owner，配置/跟踪已恢复关闭。
-> TOP_CFG=0x11/整帧 RX、console/F1、终端及回退未变，没有刷机。
+> **当前入口：[session 60](sessions/60-even-reopen-reversal-and-toggle-candidate.md)。**
+> 预定偶数反向验证：74 个短 IN / 两条短 OUT 后普通重开，首状态完整、首 Ctrl-U 受理；
+> CRC ada51499，512/512 直接匹配。与 RX59 奇数缺帧对照，强化重开翻转失配候选。
+> 未测物理 PID/ACK、未修好。原联合 UAC 未启动并已撤销/阻止迟到 Arm；实际为无管理员
+> 抓取，无 logger/新 ETW/PnP 重载，两个 owner 手动 finally 关闭。
+> 已备开源 WDF 的 opt-in 保留翻转候选，14 离线 mock 用例通过；未改实装 qcusbser，
+> 尚需完整 WDK 构建/签名/上机验证。新选项不是旧驱动已知设置，不能往旧驱动写它。
+> 三节点 OK、无 owner、配置/ETW 关闭，TOP_CFG/整帧/console/F1/终端/回退未变。
+> 下一项验证具体保留翻转方案，不复做普通 echo 或同一个偶数 passing 样本。
 >
 > **上一轮来源审查：[session 56](sessions/56-source-boundaries-and-focused-research.md)。**
 > 只读审查/收敛搜索：实装 reset selector=2 对应 URB=0x1e，找到有条件的受理缓冲前

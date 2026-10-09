@@ -14,12 +14,13 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/59-joint-capture-and-forced-odd-reopen-gap.md`：联合 ETW/logger 在
-预定 75 个短 IN、两条短 OUT 后普通重开，首 Ctrl-U 受理但真缺 seq12407 首帧，
-另外 511 帧匹配。驱动日志/计数/raw 同缺，ETW 无失败正长度 IN；翻转失配候选
-未获物理 PID 证明，整体未修复。0x1e 重置主机翻转，更正 RX58 旧措辞。
-用户持续授权覆盖后续同范围抓取；两轮恢复完成，三节点 OK、无 owner，源码/
-镜像/终端及回退未变。下一项偶数 IN 反向干预，不重复普通 passing 命令。
+当前交接看 `sessions/60-even-reopen-reversal-and-toggle-candidate.md`：预定 74 偶数短 IN /
+两条短 OUT 后普通重开，首状态完整、首 Ctrl-U 受理，512/512 CRC 记录直接匹配。
+强化 RX59 奇数缺帧的翻转失配候选，未测物理 PID/ACK、整体未修复。原联合 UAC
+未启动即撤销，实际无管理员抓取，没有 logger/ETW/PnP 重载；两个 owner 手动关闭。
+开源 WDF 保留翻转候选已备，14 离线 mock 用例通过；不是已安装修复，还需完整
+WDK 构建/签名/上机。实装驱动、镜像、终端及回退未变，三节点正常/无 owner。
+下一项具体保留翻转方案，不再原样重复普通 passing/偶数对照或 reset 循环。
 
 前一轮交接看 `sessions/57-driver-raw-logging-boundary.md`：一个有界 Windows owner 已取得
 实装驱动受理前原始日志，9550 字节与计数/raw 一致、512 软件发送帧直接匹配。

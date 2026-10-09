@@ -17,19 +17,19 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current handoff: sessions/59-joint-capture-and-forced-odd-reopen-gap.md.
-Both bounded ETW/raw-driver captures completed and restored under the human's
-continuing authorization. Three startup statuses pass (one RX sync retries).
-The pre-defined odd-IN/even-short-OUT intervention reproduces a real TX gap:
-75 IN frames + two short OUT, ordinary reopen, first Ctrl-U accepted, missing
-seq12407 / 90 04 5b 31 30 30. Other 511 journal records match directly.
-Driver raw, ReceivedCount and host raw all miss the same six bytes; matched
-ETW has no positive-length failed IN, only zero-length close cancellations.
-Toggle misalignment is the strongest candidate, not direct DATA0/1/ACK proof.
-Correction: installed 0x1e resets host toggle; 0x30 preserves it. SDK verified.
-Three nodes OK, no owner, Shared/not Attached, logging and ETW off, artifacts
-unchanged. Next: a comparable even-IN reversal, then a scoped reversible fix.
-Do not repeat ordinary echo/reset loops. See reference/rx59.
+Current handoff: sessions/60-even-reopen-reversal-and-toggle-candidate.md.
+Pre-defined even reversal: 74 short IN / two short OUT, ordinary reopen,
+first status complete and first Ctrl-U accepted. CRC ada51499, all 512 journal
+frames directly match (169 prior / 74 first / 269 second). This strengthens
+the RX59 odd-IN toggle candidate; no physical PID or final stability repair.
+Prepared joint UAC never started and was cancelled/late-Arm blocked. Actual
+replacement is no-admin: no logger/ETW/PnP reload. Both owners manually closed.
+Offline opt-in EUD open-source WDF patch preserves toggles on ordinary Open;
+14 mocked dispatch tests pass. It does not alter installed qcusbser; full WDK
+build/signing/hardware validation remain. No known legacy skip-reset setting.
+Three nodes OK, no owner, Shared/not Attached, logging/ETW off; hashes unchanged.
+Next evaluate the concrete preservation route, not another even/echo/reset loop.
+TOP_CFG=0x11/whole-frame/console/F1/terminals/rollback retained. See reference/rx60.
 
 Previous measured logger: sessions/57-driver-raw-logging-boundary.md.
 Built-in pre-buffer driver logging is now measured in one bounded Windows
@@ -265,7 +265,9 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 7c43d67  (last published tip before RX59)
+    master = da915a8  (last published tip before RX60)
+             eud: reproduce odd-frame reopen loss with matched driver and USB trace
+             7c43d67
              eud: align reopen first-frame gaps and audit failed-read gates
              e7de5a3  eud: measure pre-buffer driver logging and restored capture
              738845e  eud: consolidate faults and audit pre-buffer receive boundaries
@@ -291,7 +293,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              703469c  eud: record pre-Linux RX failure and USB boundary comparisons
              9d01126  eud: audit native RX sources and PHY lifecycle
 
-    88 commits ahead of upstream origin/master, as of the tip named above;
+    89 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
