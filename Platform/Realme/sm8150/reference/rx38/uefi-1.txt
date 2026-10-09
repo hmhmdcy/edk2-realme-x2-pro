@@ -1,7 +1,7 @@
- 32-biRX38-UEFI RESULT ABC status=07070707 id=90909090 len=03030303 words=41414141 41414141 41414141 
+ 32-biRX38-UEFI RESULT ABC status=07070707 id=90909090 len=03030303 words=41414141 41414141 41414141
 
 RX38-UEFI READY DEFG len=4 wait=25s
-RX38-UEFI RESULT DEFG status=07070707 id=90909090 len=04040404 words=44444444 44444444 44444444 44444444 
+RX38-UEFI RESULT DEFG status=07070707 id=90909090 len=04040404 words=44444444 44444444 44444444 44444444
 RX38-UEFI CHAINLOAD original Kernel
 dded to 64-bit table
 SmbiosAdd: Smbios type 7 with size 0x36 is added t[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x51df805e]
@@ -11,7 +11,7 @@ SmbiosAdd: Smbios type 7 with size 0x36 is added t[    0.000000] Booting Linux o
 [    0.000000] ------------[ cut here ]------------
 [    0.000000] WARNING: mm/ioremap.c:23 at generic_ioremap_prot+0xf8/0x104, CPU#0: swapper/0
 [    0.000000] Modules linked in:
-[    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 7.3.0-rc6-rmx1931-samurai+ #44 PREEMPT 
+[    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 7.3.0-rc6-rmx1931-samurai+ #44 PREEMPT
 [    0.000000] Hardware name: Realme X2 Pro (RMX1931CN) (DT)
 [    0.000000] pstate: 800003c5 (Nzcv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
 [    0.000000] pc : generic_ioremap_prot+0xf8/0x104
@@ -45,7 +45,7 @@ SmbiosAdd: Smbios type 7 with size 0x36 is added t[    0.000000] Booting Linux o
 [    0.000000] printk: legacy bootconsole [eud0] enabled
 [    0.000000] printk: debug: ignoring loglevel setting.
 [    0.000000] efi: EFI v2.7 by Renegade Project
-[    0.000000] efi: ACPI 2.0=0x13cfd0018 SMBIOS=0xfffe0000 SMBIOS 3.0=0x13fee0000 MEMRESERVE=0x13ce00f18 
+[    0.000000] efi: ACPI 2.0=0x13cfd0018 SMBIOS=0xfffe0000 SMBIOS 3.0=0x13fee0000 MEMRESERVE=0x13ce00f18
 [    0.000000] OF: reserved mem: 0x0000000085700000..0x0000000085cfffff (6144 KiB) nomap non-reusable memory@85700000
 [    0.000000] OF: reserved mem: 0x0000000085f20000..0x0000000085f3ffff (128 KiB) nomap non-reusable memory@85f20000
 [    0.000000] OF: reserved mem: 0x0000000086000000..0x00000000861fffff (2048 KiB) nomap non-reusable memory@86000000
@@ -120,7 +120,7 @@ SmbiosAdd: Smbios type 7 with size 0x36 is added t[    0.000000] Booting Linux o
 [    0.000000] On node 0, zone DMA: 17664 pages in unavailable ranges
 [    0.000000] percpu: Embedded 26 pages/cpu s67096 r8192 d31208 u106496
 [    0.000000] pcpu-alloc: s67096 r8192 d31208 u106496 alloc=26*4096
-[    0.000000] pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 [0] 4 [0] 5 [0] 6 [0] 7 
+[    0.000000] pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 [0] 4 [0] 5 [0] 6 [0] 7
 [    0.000000] Detected VIPT I-cache on CPU0
 [    0.000000] CPU features: detected: GICv3 CPU interface
 [    0.000000] CPU features: detected: ARM errata 1165522, 1319367, or 1530923
@@ -131,7 +131,7 @@ SmbiosAdd: Smbios type 7 with size 0x36 is added t[    0.000000] Booting Linux o
 [    0.000000] Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
 [    0.000000] software IO TLB: area num 8.
 [    0.000000] software IO TLB: mapped [mem 0x00000000f9e00000-0x00000000fde00000] (64MB)
-[    0.000000] Fallback order for Node 0: 0 
+[    0.000000] Fallback order for Node 0: 0
 [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 2067678
 [    0.000000] Policy zone: Normal
 [    0.000000] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
@@ -503,7 +503,7 @@ SmbiosAdd: Smbios type 7 with size 0x36 is added t[    0.000000] Booting Linux o
 [   20.878754]     HOME=/
 [   20.878755]     TERM=linux
 [   20.906969] qcom-rpmh-regulator 18200000.rsc:regulators-0: failed to read VOLTAGE ret = -95
-[   20.932838] 
+[   20.932838]
 [   21.005475] qcom-rpmh-regulator 18200000.rsc:regulators-0: failed to read ENABLE status ret = -95
 [   21.034018] ==============================================
 [   21.056022] qcom-rpmh-regulator 18200000.rsc:regulators-0: failed to read initial mode for smps5
@@ -522,11 +522,11 @@ SmbiosAdd: Smbios type 7 with size 0x36 is added t[    0.000000] Booting Linux o
 [   21.511346] qcom-rpmh-regulator 18200000.rsc:regulators-0: failed to read VOLTAGE ret = -95
 [   21.511347] qcom-rpmh-regulator 18200000.rsc:regulators-0: failed to read VOLTAGE ret = -95
 [   21.511762] qcom-rpmh-regulator 18200000.rsc:regulators-0: failed to read ENABLE status ret = -95
-[   21.549564] 
+[   21.549564]
 [   21.626201] qcom-rpmh-regulator 18200000.rsc:regulators-0: failed to read initial mode for ldo1
 [   21.705722] [cpu] 8 processors
 [[TT[   21.753693] qcom-rpmh-regulator 18200000.rsc:regulators-0: failed to read VOLTAGE ret = -95
-[   21.837151] 
+[   21.837151]
 YBAN[   22.021493] ldo2: Setting 3072000-3072000uV
 NER-[   22.021495] qcom-rpmh-regulator 18200000.rsc:regulators-0: failed to read VOLTAGE ret = -95
 OK]][   22.021497] qcom-rpmh-regulator 18200000.rsc:regulators-0: failed to read VOLTAGE ret = -95

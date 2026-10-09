@@ -182,7 +182,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 9d01126  eud: audit native RX sources and PHY lifecycle
+    master = 703469c  eud: record pre-Linux RX failure and USB boundary comparisons
+             9d01126  eud: audit native RX sources and PHY lifecycle
              ed31013  docs: normalize RX evidence manifests
              0915f34  eud: confirm native RX failure without qcusbser
              e606a99  eud: audit legacy qcusbser and prepare USB OUT comparison
@@ -190,9 +191,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              0e4a8cc  eud: add temporary interactive terminal for single-byte RX
              38bf2b8  docs: mark raw EUD captures as binary fixtures
              79b0f9d  eud: protect RX header access and record FIFO investigations
-             f9b6f8a  eud: fix single-character RX and record hardware probe evidence
 
-    65 commits ahead of upstream origin/master, as of the tip named above;
+    66 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
