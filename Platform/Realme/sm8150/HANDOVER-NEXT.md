@@ -17,26 +17,26 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current session-50 handoff: sessions/50-windows-receive-and-driver-buffer-audit.md.
-The current connection works: no old receipt/output fault was reproduced.
-Unchanged logdump-rx48-tx-journal.img retains TOP_CFG=0x11, whole-frame RX,
-console/F1, pacing and the installed RX47 terminal. No flash/reboot/elevation.
-A separate Windows diagnostic copy records receive queues/errors/read timing;
-its one manual owner returned complete status output, max queue 150 bytes,
-no observed serial errors, and 287 directly matching issued-TX/raw frames.
-The other 225 journal records preceded the owner and are excluded.
+Current session-51 handoff: sessions/51-console-overlap-and-issued-frame-loss.md.
+One controlled busy-console test reproduced a missing native receipt: a single
+7-byte input submitted during a complete long log never entered accepted RX/tty.
+Recovery also lost one whole 4-byte console frame: a CRC-valid 512-record TX
+snapshot directly matches 336 failed-owner suffix and 175 recovery-owner prefix
+frames, with only seq 11733 `[ 58` absent from Windows raw. No gap filling.
+This is new evidence, not a fix or proof that console locking caused the loss.
+Host output overlap/Write completion do not prove physical OUT arrival; the
+extra empty IRQ and first missed reopened Ctrl-U cannot be assigned to either
+probe or session reset. IRQ remains active/fault=0, grace waits=0 unexercised.
 
-Actual managed IL confirms BytesToRead clears error flags without returning
-them. A GUID/age-matched PDB identifies the installed qcusbser overflow/status
-paths; a different WDF release's zero-error behavior cannot be assumed here.
-This supplies observability, not evidence that overflow caused RX47's loss.
-The diagnostic is not installed as the ordinary terminal. COM14 is closed;
-last enumeration has 9501/9500/9505 OK, Shared/not Attached.
-RX49's complete virtual IN/raw and partial-cancel checks remain valid.
-RX48 grace branches still have waits=0; RX47's genuine TX loss/reopen misses
-remain historical unresolved observations, not an assertion of current faults.
-Use the existing terminal normally. Further fault claims require an actual
-abnormal window/immutable journal or GIC progress, not more passing commands.
+Unchanged logdump-rx48-tx-journal.img retains TOP_CFG=0x11 whole-frame RX,
+console/F1, pacing and the installed RX47 terminal. No flash/reboot/elevation.
+Both diagnostic owners closed in finally; recovery commands/status completed,
+COM14 is closed, 9501/9500/9505 OK, Shared/not Attached. Ordinary idle use works,
+but busy-console and reopen failures are real. Next compare this specific
+trigger with complete target USB IN/OUT evidence, not more passing commands.
+RX50's exact managed/installed-driver audit and queue observation remain useful;
+its normal sample does not supersede RX51's failure. RX49's virtual IN/partial
+cancel checks remain valid. No serial errors observed here cannot rule out loss.
 
 RX45's mask-only candidate was insufficient; RX46 introduced real IRQ
 entries/frame counts and deferred tty/F1. One completed administrator ETW
@@ -122,9 +122,14 @@ older SDM845 register table. No PHY/clock reset, filter change or force bind.
    complete status output, with no observed queue error; old faults did not
    recur. BytesToRead previously cleared unrecorded errors; the new separate
    diagnostic saves flags/queue/timing, without replacing the ordinary terminal.
-   Current use works. Avoid repeating passing samples as stability evidence.
-   Preserve the current diagnostic and save an immutable snapshot
-   if it recurs, then compare software records with actual USB IN payload;
+   RX51 now reproduces a missing 7-byte input during long console output, and
+   its immutable journal identifies one issued 4-byte frame absent from Windows
+   raw. The legacy console holds the UART lock for the whole record and this
+   non-RT printk core disables IRQs outside it; actual IRQ delay is unmeasured.
+   See session 51/reference/rx51. Next use that marker trigger with complete
+   target USB IN/OUT evidence to distinguish Windows from device behavior.
+   Ordinary idle use works; avoid repeating passing samples as stability proof.
+   Preserve the current diagnostic and compare software records with actual IN;
    the matching vendor DT specifies SPI 492 level high. RX46 supplies a
    board-specific mapping because the actual mainline node lacks interrupts.
    Compare one variable at a time and classify each result by evidence stage
@@ -209,7 +214,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = b957120  eud: audit complete USB IN and preserve partial cancellation data
+    master = d8094c7  eud: audit Windows receive queues and exact installed driver
+             b957120  eud: audit complete USB IN and preserve partial cancellation data
              6ea8338  eud: add bounded IRQ grace and validated TX journal
              b660d24  eud: add continuous native terminal and record reopen boundary
              1226b54  eud: measure real IRQ reception and missing host-frame notifications
@@ -225,7 +231,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              703469c  eud: record pre-Linux RX failure and USB boundary comparisons
              9d01126  eud: audit native RX sources and PHY lifecycle
 
-    79 commits ahead of upstream origin/master, as of the tip named above;
+    80 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -390,6 +396,7 @@ the only copy.
 | 48 | Bounded IRQ grace and CRC-protected issued-TX journal; 512 frames matched, wait branches unexercised, compatibility/F1/reboot preserved | `sessions/48-irq-grace-and-tx-journal.md` |
 | 49 | Complete virtual USB IN/raw comparison, seven offline audits and real partial cancellation retained; unchanged kernel, physical stability still open | `sessions/49-usb-in-and-partial-timeout-audit.md` |
 | 50 | Current connection normal; Windows receive observation and exact installed-driver buffer/status audit, 287 overlapping TX frames match; no old fault reproduced | `sessions/50-windows-receive-and-driver-buffer-audit.md` |
+| 51 | Busy-console native receipt failure and one issued 4-byte console frame absent from raw; 511/512 direct cross-owner matches, unchanged image | `sessions/51-console-overlap-and-issued-frame-loss.md` |
 
 Rules that keep this file from growing again:
 

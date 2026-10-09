@@ -16,11 +16,17 @@ RX49 在不改内核的持续 libusb 对照中，进一步匹配了完整 USB IN
 并实测保留部分取消数据；切回此 Windows 终端后原生 echo 正常。边界与限制见
 [session 49](../../sessions/49-usb-in-and-partial-timeout-audit.md)，不扩大为长期无损保证。
 RX50 的一次 Windows 诊断会话正常，完整状态输出与 287 个重叠发送记录匹配。
-新错误/队列观测仅在独立诊断副本中，未替换本终端；当前可正常使用，旧故障没有
+新错误/队列观测仅在独立诊断副本中，未替换本终端；该样本可正常使用，旧故障没有
 复现。见 [session 50](../../sessions/50-windows-receive-and-driver-buffer-audit.md)。
 工具的原始源码与测量见
 `../../sessions/33-rx-access-and-production-policy.md`、
 [session 34](../../sessions/34-temporary-eud-terminal.md)。
+
+RX51 已在长 console 日志接收期间复现缺回执：一次 7 字节输入未进入已受理 RX/tty。
+恢复状态还缺一个已发 4 字节 console 帧，512 记录中其余 511 帧直接匹配 raw。
+镜像和本终端均未改；这限制了之前正常样本的稳定性结论，不宣称当前根因已定。
+见 [session 51](../../sessions/51-console-overlap-and-issued-frame-loss.md)。诊断副本只做
+一次明确触发实验，缺回执即停止数据，不通过重复有副作用命令掩盖丢失。
 
 ## TX 和 RX 的状态
 

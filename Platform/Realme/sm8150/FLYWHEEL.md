@@ -14,11 +14,13 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/50-windows-receive-and-driver-buffer-audit.md`：当前连接正常，
-本轮未刷机/重启/新管理员抓包，保留 rx48-tx-journal 和安装终端。单次 Windows 诊断
-owner 的完整状态输出、287 个重叠已发帧与 raw 匹配，未观察到串口错误；原查询会
-清除未记录错误的细节已在实际程序集/精确匹配驱动 PDB 核对。它只是新观测，旧
-缺字未重现、长期稳定性未证实；串口 finally 关闭，正常使用现有终端。
+当前交接看 `sessions/51-console-overlap-and-issued-frame-loss.md`：长 console 输出
+期间一次 7 字节原生输入未进入 RX/tty；恢复状态行有一个已记录的 4 字节 console
+帧缺于 Windows raw，其余 511/512 跨 owner 直接匹配，真实异常已复现但根因未定。
+本轮未刷机/重启/新管理员抓包，保留 rx48-tx-journal、TOP_CFG=0x11/F1/安装终端。
+两次 owner finally 关闭，恢复命令/状态完整；普通空闲可用，长期稳定性仍开放。
+RX50 的 Windows 队列观测/精确 PDB 审查保留；下一步对照这一触发条件的目标
+USB IN/OUT，不再把正常通过的重复命令当修复证据。
 RX49 的完整虚拟 IN/部分取消核对、RX48 的 IRQ F1/同镜像重启实测仍保留。
 `eud-terminal.cmd -Native` 持续 owner、启动同步、数据只发一次的用法不变。
 旧 ETW reset/数据翻转假设仍未物理验证，勿重复仅掩码/reset/旧零等待实验。

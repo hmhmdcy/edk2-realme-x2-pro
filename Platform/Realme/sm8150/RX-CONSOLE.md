@@ -11,7 +11,15 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 50](sessions/50-windows-receive-and-driver-buffer-audit.md)。**
+> **当前入口：[session 51](sessions/51-console-overlap-and-issued-frame-loss.md)。**
+> 长日志接收期间一次提交的 7 字节原生输入没有回执、未进入 RX/tty；恢复连接时
+> 不可变 512 帧 TX 快照有一个完整 4 字节 console 帧 `[ 58` 缺于 Windows raw，
+> 其余 511 帧跨两个 owner 直接匹配。本轮真实异常已复现，但 console 锁/物理 OUT/
+> USB/Windows 接收的根因仍未定。未刷机或换安装终端，TOP_CFG=0x11/F1/兼容保留；
+> 串口 finally 关闭，恢复状态完整、IRQ active=1/fault=0，grace waits=0 尚未验证。
+> 下一步只对照这个明确触发条件的目标 IN/OUT，不重复正常命令当稳定性证据。
+>
+> **历史上一轮：[session 50](sessions/50-windows-receive-and-driver-buffer-audit.md)。**
 > 当前连接正常，旧缺回执/缺字未重现；未改手机镜像或安装终端。独立 Windows 诊断
 > 记录接收队列/错误/读取时序，完整状态输出与重叠的 287 个已发帧匹配，最大队列
 > 150 字节、无观察到的串口错误。实际程序集与精确匹配 PDB 说明原查询会清错误
