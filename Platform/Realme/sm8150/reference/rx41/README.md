@@ -7,6 +7,10 @@ Only the low eight bits of each COM field are interpreted; upper lanes need
 not be identical when the FIFO advances. This is board evidence, not a claim
 about all Qualcomm SoCs or an undocumented COM flag handshake.
 
+RX43 audited the unchanged raw files and corrected the earlier missing-output
+claims: native id, echo and console responses are present. verify.py now checks
+those responses as well. See [session 43](../../sessions/43-native-terminal-evidence-audit.md).
+
 ## Fixed primary sources
 
 * [Stock RMX1931 DALSYSDxe](https://github.com/Project-Aloha/binaries_extracted/blob/adf853e45436bfcfd4274fa5d51b921c8b66e9f2/sm8150/realme/rmx1931/BOOT.XF.3.0-00501-SM8150LZB-1/QcomPkg/Drivers/DALSYSDxe/DALSYSDxe.efi):

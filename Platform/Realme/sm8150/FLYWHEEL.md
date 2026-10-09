@@ -14,9 +14,10 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-下一会话看 `sessions/42-native-terminal-next-session-handoff.md`：原生 payload 重复首字节
-已有真实整帧修复；缺少回执与缺少命令输出仍未定位，不能称为已确认的新故障。
-最后设备状态来自 session 41，操作前须重新核实。session 42 只更新文档，没有串口操作或刷机。
+当前交接看 `sessions/43-native-terminal-evidence-audit.md`：原生整帧修复保留，RX41
+数次“缺输出”经原始抓取更正；偶发缺回执在 Windows/libusb 均存在，根因尚未定位。
+session 43 未刷机，复核原生 console、兼容终端和 F1；最终重启同一候选并读回原生
+echo 响应，COM14 关闭。操作前仍须重新核实实时状态。
 
 手机能从 Linux **自己**重启进 fastboot。主机通过 EUD COM 发一帧 `[0x90][0x02]`，
 驱动打印 `eud: reboot2 bootloader requested`，先写 `CSR_EUD_EN(0x1014)=0` 把 USB PHY
@@ -41,7 +42,7 @@ notifier 写入，ABL 读到后进 fastboot。
 |---|---|---|
 | `[90][01][字符]` | tty 输入一个字符 | 已有真实字符回显；受理后停止重发，见 session 32 |
 | `[90][02]` | `reboot bootloader` → fastboot | **真机已验证** |
-| `[90][3..14][payload]` | 原生 tty 输入：TX 锁内一次缓存整帧，读完才记录/投递 | session 41 已验证完整 payload 与单帧 shell 赋值；命令输出仍不稳定 |
+| `[90][3..14][payload]` | 原生 tty 输入：TX 锁内一次缓存整帧，读完才记录/投递 | sessions 41/43 验证完整 payload、命令/console 响应；偶发缺回执仍未解 |
 
 禁止把 2 字符 tty 分片发成 `[90][02][payload]`；len=2 专用于头部 F1。
 

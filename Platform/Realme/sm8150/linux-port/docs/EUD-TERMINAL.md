@@ -4,7 +4,8 @@
 > shell 执行；此终端继续按单字节发送，兼容 rx33 和 RX41 驱动。
 > 原生帧长度 2 仍保留 F1，发送长命令时不能用长度 2 的 tty 分片。
 > 新证据与最终镜像见 [session 41](../../sessions/41-rx-ahb2phy-wait-state-fix.md)。
-> 下一轮终端稳定性排查与证据边界见 [session 42](../../sessions/42-native-terminal-next-session-handoff.md)。
+> 当前稳定性排查与证据更正见 [session 43](../../sessions/43-native-terminal-evidence-audit.md)。
+> RX41 数次“缺输出”源于漏看完整解码结果；偶发缺回执仍待定位。
 
 2026-10-09，本工具兼容 rx33 基线和当前 `logdump-rx41-native-ordered-tty.img` 候选。
 工具的原始源码与测量见
@@ -18,7 +19,7 @@
 | 方向 | 当前状态 | 临时终端的处理 |
 |---|---|---|
 | 手机 TX → PC | 内核每帧发送最多 4 个 payload 字节，长输出拆成多帧；限速后可用 | 持续读取、解帧、显示，并保存日志 |
-| PC → 手机 RX | RX41 已修复原生整帧重复首字节；缺回执/缺命令输出仍待定位，rx33 则仍有旧 payload 故障 | 此兼容工具继续每次只发 `[90][01][char]`，等该字符受理后继续 |
+| PC → 手机 RX | RX41 已修复整帧 payload，原生命令有完整响应；偶发缺回执仍待定位，rx33 则仍有旧 payload 故障 | 此兼容工具继续每次只发 `[90][01][char]`，等该字符受理后继续 |
 
 TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μs/寄存器写与
 2 ms/帧的节奏。它不是 RX 的“读不出下一字节”现象；也不保证任意帧长或绝无丢失。
@@ -89,6 +90,11 @@ TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μ
 
 退出时打印 ACK 数、重试数、收到的帧数、最大 payload、stray 和残留字节数。
 原始日志仍可用 `decode-eud-capture.py` 重组。
+
+RX43 起解码脚本在 stdout 显示全部响应；旧版本只打印 `eud:` 行，而 `.txt`
+一直保留了完整输出。原生单帧诊断用 `eud-step.ps1`，直接保存新 `.raw/.txt/.events.txt`，
+拒绝覆盖，限定一次完整帧和有界重试；`-TailSeconds 5` 可延长回执后排空时间。
+最长总时间仍受 `-Seconds` 限制，延长等待本身不是投递修复。
 
 现在可通过此终端查看 dmesg、设备节点和 sysfs，继续定位具体驱动。
 内核镜像仍走 `FLYWHEEL.md` 的 `[90][02] → fastboot → 只刷 logdump → reboot` 流程。

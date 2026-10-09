@@ -11,10 +11,16 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **下一会话入口（session 42，仅文档更新）：**
+> **当前入口：[session 43](sessions/43-native-terminal-evidence-audit.md)。**
+> RX41 原生 id/echo/console 的“缺输出”经未改动的原始抓取核对撤回；解码 stdout
+> 过滤曾隐藏已有响应。本轮 Windows/libusb 及重启后的原生命令有完整响应。
+> 偶发缺回执仍存在，失败 Windows echo 在后续设备 RX 日志中也不存在；
+> USB/EUD 交付与 STATUS1/头部门控尚未区分。保持 TOP_CFG=0x11 与原整帧锁方法。
+>
+> **历史交接（session 42，仅文档更新，其缺输出样本已由 session 43 更正）：**
 > [原生终端交接](sessions/42-native-terminal-next-session-handoff.md)。
 > 已修复并复测的是受理整帧后重复读取首字节的故障；使用真实多字节帧，未拆字节绕过。
-> 发送后缺少回执、读对并投递 tty 后缺少可见命令输出，仍未查清；不能断言是新引入的故障。
+> 当时提出缺回执/缺输出两个问题；其中原生 id/echo/console 的缺输出已撤回，见 session 43。
 > 下一轮区分主机提交、完整 RX、tty 投递、shell 执行与可见 TX，不把任何一层证据扩大到全链路。
 
 > **截至 session 40 的历史核对（非当前镜像）：单字符 RX 可用，多字节仍未解。** 原探针实际读到

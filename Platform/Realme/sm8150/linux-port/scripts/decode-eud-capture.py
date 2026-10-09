@@ -16,4 +16,6 @@ while i < len(d):
 text = out.decode('ascii', errors='replace')
 p.with_suffix('.txt').write_text(text, encoding='utf-8')
 print(f'{p.name}: bytes={len(d)} frames={frames} stray={stray}')
-print('\n'.join(line for line in text.splitlines() if 'eud:' in line))
+# The capture contains both driver receipts and tty/shell output. Filtering
+# stdout to eud: lines hid successful commands during the RX41 investigation.
+print(text, end='' if text.endswith('\n') else '\n')

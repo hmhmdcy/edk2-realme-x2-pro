@@ -53,10 +53,15 @@ print('PASS: accepted UEFI/Linux native payloads match; empty captures stay inco
 native = decode('bulk-native-set-x-retry')
 assert 'data=58 3d 6f 6b 0a' in native and 'tty=5 id=90' in native
 assert re.search(r'\r?\nok\r?\n', decode('bulk-check-x-after-ack'))
-assert 'data=69 64 0a' in decode('ordered-native-id')
+for name in ('native-id', 'native-id-cr', 'bulk-native-id', 'ordered-native-id'):
+    text = decode(name)
+    assert re.search(r'\r?\nuid=0 gid=0\r?\n~ # ', text), name
+assert re.search(r'\r?\nRX41-TTY\r?\n~ # ', decode('native-echo-14'))
+assert re.search(r'\r?\nRX41-C\r?\n~ # ', decode('ordered-console-native-suffix'))
 assert re.search(r'\r?\nE\r?\n', decode('ordered-legacy-echo-e'))
 assert re.search(r'\r?\nC\r?\n', decode('ordered-console-legacy-retry'))
 assert 'eud: reboot2 bootloader requested' in decode('f1-final-ordered')
 assert 'eud: tty byte=15' in decode('final-ctrl-u-retry')
 assert (BASE / 'final-ctrl-u.raw').stat().st_size == 0
 print('PASS: native shell state effect, compatible terminal/console and F1 receipt')
+print('PASS: RX43 audit confirms RX41 native command/console outputs in unchanged raw files')

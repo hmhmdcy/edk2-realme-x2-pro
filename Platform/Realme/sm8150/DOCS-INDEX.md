@@ -36,7 +36,8 @@
 | sessions/39-rx-tight-arrival-poll.md、reference/rx39/ | UEFI 紧轮询仍重复首字节；受理/恢复边界、原基线恢复、新 boot HWIO 来源限制 |
 | sessions/40-rx-register-map-and-stock-firmware-audit.md、reference/rx40/ | 完整旧 DSP EUD_ACORE 表、原厂 SM8150 静态审查，无推进规格；未刷机，单字节回执核对 |
 | sessions/41-rx-ahb2phy-wait-state-fix.md、reference/rx41/ | 原厂 SM8150 映射、TOP_CFG=0x11 有效 RX 方法，UEFI/Linux 完整 payload、tty 执行与输出验证 |
-| sessions/42-native-terminal-next-session-handoff.md | 当前交接与短提示词：payload 真修复、缺回执/缺输出的证据边界、下一轮判据；仅文档更新 |
+| sessions/42-native-terminal-next-session-handoff.md | 历史交接与短提示词：仅文档更新；其中缺输出样本已由 session 43 更正 |
+| sessions/43-native-terminal-evidence-audit.md、reference/rx43/ | 当前交接：原始抓取更正缺输出，BusyBox/tty/TX 审查，已修复配置下双 USB 路径的缺回执边界与最终状态 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
@@ -62,4 +63,4 @@
 
 - HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
 - 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD 打开时占 USB，彻底断电要长按电源约 15 s。
-- 待办：HANDOVER-NEXT.md 第 1 节、sessions/42-native-terminal-next-session-handoff.md。session 41 已验证真实整帧 payload 修复；继续定位缺少帧回执和可见命令响应，追踪 RX→tty/shell→TX/主机抓取。临时逐字终端仍可用于驱动移植；不要用 sessions 35-40 的旧提示词重新排查已解决的 FIFO 推进。
+- 待办：HANDOVER-NEXT.md 第 1 节、sessions/43-native-terminal-evidence-audit.md。保留 session 41 的真实整帧修复；RX41 数次缺输出结论已撤回，下一步定位 USB/EUD 交付与 STATUS1/头部门控的缺回执边界。临时逐字终端仍可用于驱动移植；不要原样重跑已排除实验。
