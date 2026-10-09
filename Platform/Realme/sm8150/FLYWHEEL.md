@@ -14,7 +14,12 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/43-native-terminal-evidence-audit.md`：原生整帧修复保留，RX41
+当前交接看 `sessions/44-rx-receipt-counters.md`：只读计数把失败原生命令定位到
+没有观测到 pending/头部拒绝/tty 投递的边界，成功 echo 的帧/字节计数准确。
+当前为 logdump-rx44-rx-stats-ctrl-u.img 诊断镜像，仍未修复稳定性；只刷 logdump。
+F1 已独立核对 fastboot，重启相同镜像后取得 Ctrl-U 新回执，COM14 关闭。
+
+上一轮审查看 `sessions/43-native-terminal-evidence-audit.md`：原生整帧修复保留，RX41
 数次“缺输出”经原始抓取更正；偶发缺回执在 Windows/libusb 均存在，根因尚未定位。
 session 43 未刷机，复核原生 console、兼容终端和 F1；最终重启同一候选并读回原生
 echo 响应，COM14 关闭。操作前仍须重新核实实时状态。

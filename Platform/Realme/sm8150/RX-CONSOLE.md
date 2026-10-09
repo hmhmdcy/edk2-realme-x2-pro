@@ -11,7 +11,13 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 43](sessions/43-native-terminal-evidence-audit.md)。**
+> **当前入口：[session 44](sessions/44-rx-receipt-counters.md)。**
+> 只读接收计数显示，失败的原生命令没有增加 pending、坏帧头或 tty 字节；
+> 成功原生 echo 则增加准确的一帧/10 字节并返回输出。当前诊断镜像 rx44-rx-stats-ctrl-u
+> 保留 RX41 硬件方法，仍未修复偶发缺回执。下一步区分 EUD/USB 未交付与轮询未看到
+> 短暂 pending；不把 IRQ/超时假设当作根因。计数可读 sysfs 或 Ctrl-U 回执。
+>
+> **上一轮审查：[session 43](sessions/43-native-terminal-evidence-audit.md)。**
 > RX41 原生 id/echo/console 的“缺输出”经未改动的原始抓取核对撤回；解码 stdout
 > 过滤曾隐藏已有响应。本轮 Windows/libusb 及重启后的原生命令有完整响应。
 > 偶发缺回执仍存在，失败 Windows echo 在后续设备 RX 日志中也不存在；
