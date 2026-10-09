@@ -12,6 +12,9 @@
 主机终端仍是 RX47 同一源码；RX48 新诊断、CRC 快照、兼容/F1/重启结果和限制见
 [session 48](../../sessions/48-irq-grace-and-tx-journal.md)。其 512 个发送记录全匹配 raw，
 但未重现此前 TX 缺字，宽限等待分支也未触发，稳定性仍开放。
+RX49 在不改内核的持续 libusb 对照中，进一步匹配了完整 USB IN/raw 与发送快照，
+并实测保留部分取消数据；切回此 Windows 终端后原生 echo 正常。边界与限制见
+[session 49](../../sessions/49-usb-in-and-partial-timeout-audit.md)，不扩大为长期无损保证。
 工具的原始源码与测量见
 `../../sessions/33-rx-access-and-production-policy.md`、
 [session 34](../../sessions/34-temporary-eud-terminal.md)。

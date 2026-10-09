@@ -15,7 +15,10 @@
 `-RetryJitterMs 800` 仅改变有界重试时间，不保证所有 OUT 都受理。
 不要使用旧 build-image.sh 重建 initramfs；本轮保留真实 WSL initramfs 和原 DTB。
 
-当前交接见 [session 48](../sessions/48-irq-grace-and-tx-journal.md)。本 eud.c 为 RX48 B
+当前交接见 [session 49](../sessions/49-usb-in-and-partial-timeout-audit.md)。本轮不改内核、
+未刷机或重启手机；持续 libusb 的 CRC 发送记录与全部 IN/raw 对应，部分取消数据
+实测保留，但未重现旧缺字或触发宽限。Windows 原生终端已恢复、COM14 关闭。
+诊断变更见 [session 48](../sessions/48-irq-grace-and-tx-journal.md)。本 eud.c 为 RX48 B
 诊断：保留 SPI 492/hwirq 524、RX-only 掩码、整帧 IRQ 缓存、工作上下文 tty/F1 和
 TOP_CFG=0x11；watchdog 首次 pending 留给 IRQ 服务，100 ms 持续未受理才退回轮询。
 只读 irq_watch/irq_state 与带 CRC 的 binary tx_journal 提供新证据边界。实测 512 个
@@ -23,7 +26,7 @@ TOP_CFG=0x11；watchdog 首次 pending 留给 IRQ 服务，100 ms 持续未受�
 兼容 startup 仍需一次重试，RX47 的真实缺字/退回及更早缺回执不作撤回。
 稳定性仍未解决；立即回退为 RX46 B，更早回退为 RX44。仅刷 logdump，init/DTB 不变。
 `scripts/eud-etw-step.ps1` 用内置 USB ETW 对照主机 OUT/完成，需管理员权限；
-语法核对和实际抓包结果见 session 46；RX47/48 只审查既有 trace，没有新管理员抓包。
+语法核对和实际抓包结果见 session 46；RX47-49 没有新管理员 ETW 抓包。
 端点 reset 的目标事件另存 reference/rx47，物理 DATA0/1 未测。所有设备 ETL 保留本地，不直接入库。
 RX45 已排除仅掩码方案；不要原样重复。
 

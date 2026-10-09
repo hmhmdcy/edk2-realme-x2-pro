@@ -42,7 +42,8 @@
 | sessions/45-rx-mask-before-arrival.md、reference/rx45/ | 接收前只启用 RX 掩码仍失败；完整 LEN=14 输出/F1、恢复 RX44，排除仅掩码方案 |
 | sessions/46-rx-irq-and-host-trace-boundary.md、reference/rx46/ | 真实 IRQ 接收与完整输出/F1；失败 Windows 帧未增 IRQ，libusb 对照与一次 Windows USB ETW |
 | sessions/47-native-terminal-session-boundary.md、reference/rx47/ | 原生终端持续打开/启动同步、重开缺 RX 与端点 reset；真实 TX 缺字、看门狗退回及轮询 F1 |
-| sessions/48-irq-grace-and-tx-journal.md、reference/rx48/ | 当前交接：IRQ 有界宽限、CRC 发送记录 512 帧匹配；wait 分支未触发，兼容/F1/重启保留，稳定性仍开放 |
+| sessions/48-irq-grace-and-tx-journal.md、reference/rx48/ | IRQ 有界宽限、CRC 发送记录 512 帧匹配；wait 分支未触发，兼容/F1/重启保留，稳定性仍开放 |
+| sessions/49-usb-in-and-partial-timeout-audit.md、reference/rx49/ | 当前交接：7 组旧 IN 离线匹配，持续 libusb 的记录/IN/raw 对应与真实部分取消保留；未改内核/刷机 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
@@ -68,4 +69,4 @@
 
 - HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
 - 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD 打开时占 USB，彻底断电要长按电源约 15 s。
-- 待办：HANDOVER-NEXT.md 第 1 节、sessions/48-irq-grace-and-tx-journal.md。保留 TOP_CFG=0x11 和当前 RX48 B；原生终端 `-Native` 持续打开、启动先同步。CRC 有效的 512 帧匹配 raw，但未重现旧 TX 缺字、wait 分支也未触发，稳定性仍未解决。下一步须取得真实 GIC 进展或已发记录与 USB IN payload 边界，勿原样重跑已排除实验。
+- 待办：HANDOVER-NEXT.md 第 1 节、sessions/49-usb-in-and-partial-timeout-audit.md。保留 TOP_CFG=0x11 和 RX48 B、原生持续 owner/startup sync。已发记录/虚拟 IN/raw 在新样本中对应，但旧缺字未重现、wait 未触发，稳定性仍开放；下一步须有真实异常窗口或 GIC 进展，不能用重复成功样本扩大结论。

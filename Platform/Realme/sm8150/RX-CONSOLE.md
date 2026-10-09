@@ -11,7 +11,14 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 48](sessions/48-irq-grace-and-tx-journal.md)。**
+> **当前入口：[session 49](sessions/49-usb-in-and-partial-timeout-audit.md)。**
+> 未改 RX48 B、未刷机或重启手机。7 组旧 IN/raw 离线逐字节匹配；持续 libusb owner
+> 的 60 行输出、CRC 有效 512 帧记录及全部 11,066 字节 IN/raw 也匹配。一次取消 IN
+> 仍返回 6 字节，安装的 PyUSB 正确保留，不能把所有 timeout 都当丢失。它只定位到
+> WSL 虚拟 HCD，不是物理 ACK 或 qcusbser 证明；旧缺字未重现、wait 分支未触发。
+> USB finally 关闭/detach 后 Windows 原生 echo 正常，COM14 关闭；稳定性仍开放。
+>
+> **历史上一轮：[session 48](sessions/48-irq-grace-and-tx-journal.md)。**
 > 当前 logdump-rx48-tx-journal.img 保留 TOP_CFG=0x11/整帧 RX、console/F1、TX 节奏。
 > watchdog 首次 pending 只记录，100 ms 未受理才退回；waits=0，相关分支尚未实测。
 > 新只读 TX 软件快照 CRC 有效，512 个已发 MMIO 帧全部与同一 owner 的 raw 匹配；
