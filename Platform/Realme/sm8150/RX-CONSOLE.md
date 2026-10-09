@@ -11,15 +11,15 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 60](sessions/60-even-reopen-reversal-and-toggle-candidate.md)。**
-> 预定偶数反向验证：74 个短 IN / 两条短 OUT 后普通重开，首状态完整、首 Ctrl-U 受理；
-> CRC ada51499，512/512 直接匹配。与 RX59 奇数缺帧对照，强化重开翻转失配候选。
-> 未测物理 PID/ACK、未修好。原联合 UAC 未启动并已撤销/阻止迟到 Arm；实际为无管理员
-> 抓取，无 logger/新 ETW/PnP 重载，两个 owner 手动 finally 关闭。
-> 已备开源 WDF 的 opt-in 保留翻转候选，14 离线 mock 用例通过；未改实装 qcusbser，
-> 尚需完整 WDK 构建/签名/上机验证。新选项不是旧驱动已知设置，不能往旧驱动写它。
-> 三节点 OK、无 owner、配置/ETW 关闭，TOP_CFG/整帧/console/F1/终端/回退未变。
-> 下一项验证具体保留翻转方案，不复做普通 echo 或同一个偶数 passing 样本。
+> **当前入口：[session 61](sessions/61-eud-wdf-package-and-build-preparation.md)。**
+> RX60 预定 74 偶数 IN 反向重开首帧完整、512/512 匹配；翻转失配仍是候选，未修好。
+> RX61 将原补丁应用到完整固定 WDF 源码，备好仅匹配 9505 的 INF/project；上游 INF
+> 原本不匹配 EUD。九模块来源、KMDF 字面 token/目录与 serial 分支已审查。
+> EWDK 下载在记录时仍进行；完整 WDK 构建、INF/catalog、签名和真机对照待完成。
+> 主机 Secure Boot/HVCI 开启，实装 Microsoft 签名旧驱动未动，已复制精确回退包。
+> 无新串口/USB IO、刷机、注册表或安全设置变化；三节点正常、无 owner/logging/ETW。
+> 保留 TOP_CFG/整帧/RX53 console/F1/终端/回退；下一项构建后同一二进制开关对照。
+> 满 16 字节 OUT 后的 ZLP/XACT_ERROR 分开验证；不重复普通 echo/reset/旧偶数样本。
 >
 > **上一轮来源审查：[session 56](sessions/56-source-boundaries-and-focused-research.md)。**
 > 只读审查/收敛搜索：实装 reset selector=2 对应 URB=0x1e，找到有条件的受理缓冲前

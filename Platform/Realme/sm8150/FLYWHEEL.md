@@ -14,13 +14,13 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/60-even-reopen-reversal-and-toggle-candidate.md`：预定 74 偶数短 IN /
-两条短 OUT 后普通重开，首状态完整、首 Ctrl-U 受理，512/512 CRC 记录直接匹配。
-强化 RX59 奇数缺帧的翻转失配候选，未测物理 PID/ACK、整体未修复。原联合 UAC
-未启动即撤销，实际无管理员抓取，没有 logger/ETW/PnP 重载；两个 owner 手动关闭。
-开源 WDF 保留翻转候选已备，14 离线 mock 用例通过；不是已安装修复，还需完整
-WDK 构建/签名/上机。实装驱动、镜像、终端及回退未变，三节点正常/无 owner。
-下一项具体保留翻转方案，不再原样重复普通 passing/偶数对照或 reset 循环。
+当前交接看 `sessions/61-eud-wdf-package-and-build-preparation.md`：RX60 偶数反向
+首帧完整/512 匹配证据保留；RX61 已准备固定完整 WDF 源码与 EUD 9505 专用安装描述。
+原补丁之外八个模块及全部后续函数未变，serial 配置路径已审查；未完成完整驱动构建。
+EWDK 下载在记录时进行，不重启现有下载；下一项构建/校验后解决受支持的签名加载。
+主机 Secure Boot/HVCI 开启，实装旧驱动与 TOP_CFG/RX53/F1/终端/回退未动。
+已复制字节匹配的旧驱动回退包；无新手机实验，三节点正常、无 owner/logging/ETW。
+下一轮同一二进制的保留翻转开关对照，ZLP 故障分开；整体目标仍开放。
 
 前一轮交接看 `sessions/57-driver-raw-logging-boundary.md`：一个有界 Windows owner 已取得
 实装驱动受理前原始日志，9550 字节与计数/raw 一致、512 软件发送帧直接匹配。

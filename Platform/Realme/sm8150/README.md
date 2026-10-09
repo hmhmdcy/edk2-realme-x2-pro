@@ -16,13 +16,13 @@ upstream project.
 
 Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
 
-Current EUD stability handoff: [session 60](sessions/60-even-reopen-reversal-and-toggle-candidate.md).
-The pre-defined 74-even-IN / two-short-OUT reopen has complete first status,
-accepted first Ctrl-U and 512/512 direct journal matches. This strengthens the
-odd-IN toggle candidate; no physical PID proof or installed repair. The planned
-joint UAC never started; actual capture is no-admin with no logging/ETW/reload.
-An opt-in open-source WDF preservation patch passes 14 mocked dispatch cases;
-full WDK build/signing/hardware validation remain. Firmware/terminals unchanged.
+Current EUD stability handoff: [session 61](sessions/61-eud-wdf-package-and-build-preparation.md).
+RX60's 74-even-IN reversal receives complete first status and 512/512 journal
+records, strengthening a reopen toggle mismatch candidate. RX61 prepares full
+pinned source and an EUD-only INF/project; authored input/source checks pass.
+EWDK download is in progress at the record; full build, INF/catalog checks,
+supported signing/loading and hardware validation remain. Exact old driver
+package backed up locally. No driver/firmware/security change or new phone IO.
 
 | Feature | Status | Notes |
 |---|---|---|

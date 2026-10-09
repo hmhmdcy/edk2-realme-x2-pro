@@ -17,19 +17,22 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current handoff: sessions/60-even-reopen-reversal-and-toggle-candidate.md.
-Pre-defined even reversal: 74 short IN / two short OUT, ordinary reopen,
-first status complete and first Ctrl-U accepted. CRC ada51499, all 512 journal
-frames directly match (169 prior / 74 first / 269 second). This strengthens
-the RX59 odd-IN toggle candidate; no physical PID or final stability repair.
-Prepared joint UAC never started and was cancelled/late-Arm blocked. Actual
-replacement is no-admin: no logger/ETW/PnP reload. Both owners manually closed.
-Offline opt-in EUD open-source WDF patch preserves toggles on ordinary Open;
-14 mocked dispatch tests pass. It does not alter installed qcusbser; full WDK
-build/signing/hardware validation remain. No known legacy skip-reset setting.
-Three nodes OK, no owner, Shared/not Attached, logging/ETW off; hashes unchanged.
-Next evaluate the concrete preservation route, not another even/echo/reset loop.
-TOP_CFG=0x11/whole-frame/console/F1/terminals/rollback retained. See reference/rx60.
+Current handoff: sessions/61-eud-wdf-package-and-build-preparation.md.
+RX60's pre-defined 74-even-IN reversal remains the latest device contrast:
+complete first status, accepted first Ctrl-U, 512/512 direct journal matches.
+Toggle mismatch is a concrete candidate; no physical PID proof or repair.
+RX61 prepares complete pinned WDF source and a 9505-only INF/project;
+nine C modules verified, only the unchanged RX60 QCPNP patch alters code.
+Stock vendor INF has no EUD match. KMDF/DIRID 13 authored inputs verified.
+Existing EWDK download was live at the frozen observation; full driver build,
+INF/catalog validation, signing and hardware remain pending. Refresh external
+observer and keep the existing download; do not repeat device experiments.
+Host Secure Boot enabled / HVCI running; installed signed driver unchanged.
+Exact installed package copied to external rollback, no driver/security change.
+Three nodes OK, no owner/logging/ETW, Shared/not Attached; hashes unchanged.
+Preserve TOP_CFG=0x11/whole-frame/RX53 console/F1/terminals/RX48 rollback.
+Next full build then supported loading and same-binary flag-off/on comparison.
+Full-packet OUT/ZLP XACT_ERROR remains separate. See reference/rx61 and rx60.
 
 Previous measured logger: sessions/57-driver-raw-logging-boundary.md.
 Built-in pre-buffer driver logging is now measured in one bounded Windows
@@ -265,35 +268,17 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = da915a8  (last published tip before RX60)
-             eud: reproduce odd-frame reopen loss with matched driver and USB trace
-             7c43d67
-             eud: align reopen first-frame gaps and audit failed-read gates
+    master = 6f8ec50  eud: confirm even reopen reversal and prepare toggle-preserving candidate
+             da915a8  eud: reproduce odd-frame reopen loss with matched driver and USB trace
+             7c43d67  eud: align reopen first-frame gaps and audit failed-read gates
              e7de5a3  eud: measure pre-buffer driver logging and restored capture
              738845e  eud: consolidate faults and audit pre-buffer receive boundaries
              691126b  eud: locate reproduced TX gap before Windows accepted-buffer count
              45d96fc  eud: validate repeated console RX and F1, audit host receive counters
              9943786  eud: service RX at console frame boundaries and retain TX loss evidence
-               f081526  eud: isolate same-owner RX loss and continuous USB IN effects
-             d97bc81  eud: reproduce console-overlap RX loss and a missing issued TX frame
-             d8094c7  eud: audit Windows receive queues and exact installed driver
-             b957120  eud: audit complete USB IN and preserve partial cancellation data
-             6ea8338  eud: add bounded IRQ grace and validated TX journal
-             b660d24  eud: add continuous native terminal and record reopen boundary
-             1226b54  eud: measure real IRQ reception and missing host-frame notifications
-             16c593c  eud: exclude persistent RX mask alone and restore diagnostic baseline
-             4ab26a9  eud: measure missing pending receipts and qualify debug access evidence
-             8a264f1  linux-port: mirror the Linux side of the port into the repo
-             7af0fbe  eud: expose native command output and audit missing receipts
-             cf87864  docs: hand off native EUD terminal stability investigation
-             eff092d  eud: verify native SM8150 RX with AHB2PHY wait state
-             2708b47  eud: audit complete register map and stock SM8150 firmware
-             89236ea  eud: record tight arrival polling failure and verified baseline recovery
-             3bfecb7  docs: normalize RX38 evidence text and retain original hashes
-             703469c  eud: record pre-Linux RX failure and USB boundary comparisons
-             9d01126  eud: audit native RX sources and PHY lifecycle
+             f081526  eud: isolate same-owner RX loss and continuous USB IN effects
 
-    89 commits ahead of upstream origin/master, as of the tip named above;
+    90 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
