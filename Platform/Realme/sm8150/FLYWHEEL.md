@@ -8,9 +8,10 @@
 
 ## 0. 一句话
 
-2026-10-09 session 37 仅搜索和审查源码，没有串口操作或刷机。原生多字节 RX 仍未修复；
-PHY 接管涉及当前 EUD 的 reset，先核实资源/状态再设计实验，不能直接覆盖现有 F1/console。
-来源与下一步见 `sessions/37-rx-source-search-and-phy-lifecycle.md`。
+2026-10-09 session 38 只刷 logdump 做 UEFI 对照并恢复 rx33-console：Linux 运行之前 ABC/DEFG
+仍读为 AAA/DDDD；合法满包/ZLP 也未改善。原生多字节 RX 仍未修复。
+F1 两次确认 fastboot，基线 Linux/COM14 Ctrl-U 回执正常、端口已关闭；9505 detach 回 Windows。
+实际 HS PHY 是 SNPS femto-v2，接管仍涉及 reset；来源与下一步见 `sessions/38-rx-pre-linux-and-usb-boundaries.md`。
 
 手机能从 Linux **自己**重启进 fastboot。主机通过 EUD COM 发一帧 `[0x90][0x02]`，
 驱动打印 `eud: reboot2 bootloader requested`，先写 `CSR_EUD_EN(0x1014)=0` 把 USB PHY

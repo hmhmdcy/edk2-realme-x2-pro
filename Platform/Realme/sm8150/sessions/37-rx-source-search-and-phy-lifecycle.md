@@ -28,6 +28,7 @@ WSL 与 Windows 内核 eud.c 的 SHA-256 均为 `311e5508fccb8d6f0623ba21e7f5891
 如果当前 PHY 供应者仍未就绪，先定位资源链；MTP 已启用 USB 节点，不能靠重复写 status=okay 解决。
 
 在此基础上才评估一个单独的 PHY 接管实验：只使用 DT 已知资源和 PHY API，先审清 reset 对现有 EUD 连接的影响及恢复顺序。
+后续 session 38 已确认实际 HS PHY 匹配 SNPS femto-v2；session 37 的 QUSB2 参考不是本机匹配驱动，已更正参考说明。
 保留当前 console/F1，不盲写其他 SoC 地址；若必须测试新内核，只替换 logdump，按既定飞轮手动小步进行。
 正确结果仍要求 ABC=41 42 43、DEFG=44 45 46 47，并能复测。
 

@@ -38,6 +38,12 @@
 
 ## RX side: registers, framing and the console driver (2026-10-08)
 
+> **session 38 新对照：** 独立 UEFI 程序在 Linux 运行之前、屏蔽已知固件 TX 定时器、整帧缓存后输出，
+> 新受理 ABC/DEFG 仍为 AAA/DDDD。合法 LEN=14 满 16 字节 OUT，及另附 ZLP，均仍为首字节后全 90。
+> PORT_RESET 后 ABC 也未改善；timeout 无回执不能算有效失败。已只刷 logdump 恢复 rx33-console，
+> Linux/COM14 Ctrl-U 新回执正常、端口关闭。实际 HS PHY 匹配 SNPS femto-v2，修正此前 QUSB2 参考归属。
+> 详见 [session 38](sessions/38-rx-pre-linux-and-usb-boundaries.md) 和 reference/rx38；原生多字节仍未修复。
+
 本节至「命令通道打通」是同日较早阶段的历史记录；当前实测结论见文首及末节。
 其中「每读一次必定弹出后续 payload」和 offset-2 都不能当作本机已验证事实。
 

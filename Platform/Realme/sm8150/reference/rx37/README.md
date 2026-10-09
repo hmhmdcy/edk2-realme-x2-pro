@@ -53,8 +53,10 @@ MTP 包含 USB HS/QMP PHY enabled 和 peripheral DWC3，**不能说整个 USB �
 88e8000 的 QMP 供应者问题也不能直接当作 88e2000 HS PHY 的错误原因。
 摘录与原文件 SHA-256 见 `local-evidence-manifest.json`；原始完整文件仍在 E:\edk2-samurai-out。
 
-本地 qusb2_phy_init 会开启供电/时钟并 assert/deassert reset。直接加 phy_init 可能重置承载当前控制台的 PHY；
-尚未证明可安全接管，因此未把 v9 整套移植，也没有猜时钟/TCSR 地址或重刷。
+session 38 更正：本机 SM8150 HS PHY 实际匹配 `phy-qcom-snps-femto-v2.c`，不是这里曾参考的 QUSB2。
+实际 SNPS init 同样开启供电/时钟并 assert/deassert reset，因此直接 phy_init 的接管风险仍需审查。
+这条具体匹配依据与新的启动/UEFI 对照见 `sessions/38-rx-pre-linux-and-usb-boundaries.md`；
+session 37 尚未证明安全接管，未移植 v9，也未猜时钟/TCSR 地址或重刷。
 
 ## 4. 启动源码搜索的边界
 

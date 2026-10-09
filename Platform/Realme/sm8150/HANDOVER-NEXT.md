@@ -79,12 +79,17 @@ RX on this unit is still open.
 comparison and returned Windows state, and session 35 for excluded experiments.
 The temporary terminal remains available; native multi-byte RX is still open.
 
-Session 37 searched the actual Realme X2 Pro source and the 2026-09-29 PHY v9
-series. No verified COM RX fix emerged. Read sessions/37 and reference/rx37 for
-the PHY lifecycle candidate, historical USB probe delays, and the correction
-that COM timeout uses the correct two-argument QUIC WriteCommand overload.
-Next check live HS PHY/QMP/DWC3 resources before considering a reset-sensitive
-PHY handoff experiment. Session 37 did not open a serial port or flash.
+Session 38 obtained a pre-Linux comparison: a bounded standalone UEFI app,
+with the known firmware TX timer excluded, still reads accepted ABC/DEFG as
+AAA/DDDD. Valid 16-byte OUT frames (LEN=14), with and without explicit ZLP,
+also fail; PORT_RESET did not improve accepted ABC. No native fix yet.
+Only logdump was flashed for the app and then restored to rx33-console;
+unchanged Linux/tty/shell booted, F1 reached fastboot twice, and a fresh Windows
+COM14 Ctrl-U receipt succeeded after WSL detach. Ports are closed, 6-5 Shared.
+Read sessions/38 and reference/rx38 before new experiments. Actual HS PHY is
+SNPS femto-v2, not the QUSB2 reference from session 37. Pursue SM8150 COM read
+side effects/initialization or a verified same-SoC success; do not repeat these
+failed sequences or blindly reset the PHY. Goal remains unfinished.
 
 1. Resume native multi-byte RX investigation using sessions 35/36. The temporary
    terminal remains available for driver bring-up:
@@ -177,7 +182,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = ed31013  docs: normalize RX evidence manifests
+    master = 9d01126  eud: audit native RX sources and PHY lifecycle
+             ed31013  docs: normalize RX evidence manifests
              0915f34  eud: confirm native RX failure without qcusbser
              e606a99  eud: audit legacy qcusbser and prepare USB OUT comparison
              1e54944  docs: hand off native EUD RX investigation
@@ -185,9 +191,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              38bf2b8  docs: mark raw EUD captures as binary fixtures
              79b0f9d  eud: protect RX header access and record FIFO investigations
              f9b6f8a  eud: fix single-character RX and record hardware probe evidence
-             649c90d  linux-port: mirror the Linux side of the port into the repo
 
-    64 commits ahead of upstream origin/master, as of the tip named above;
+    65 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -336,6 +341,7 @@ the only copy.
 | 35 | Next-session RX handoff: retained state, excluded paths, new evidence needed and short prompt | `sessions/35-rx-next-session-handoff.md` |
 | 36 | Actual USB descriptors, legacy qcusbser/SM8150 audit; accepted libusb/WSL ABC and DEFG still fail | `sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md` |
 | 37 | Native RX source search: actual OEM bugs, QUIC overload correction, PHY v9 lifecycle candidate | `sessions/37-rx-source-search-and-phy-lifecycle.md` |
+| 38 | Pre-Linux UEFI still repeats first byte; accepted legal max-packet/ZLP and reset comparisons fail; baseline restored | `sessions/38-rx-pre-linux-and-usb-boundaries.md` |
 
 Rules that keep this file from growing again:
 
