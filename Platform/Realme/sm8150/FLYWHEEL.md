@@ -14,14 +14,14 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/62-eud-wdf-build-and-test-signed-package.md`：普通重开首包
-丢失的翻转失配候选保留；RX62 真实九模块 WDK 构建、INF/catalog 检查通过。
-文件内测试签名与 PE 摘要/代码字节核对通过，未安装/加载/真机验证，不算修好。
-Secure Boot/HVCI 仍开，原驱动/终端/RX53 logdump 不变，精确旧驱动回退已准备。
-加载环境待决定，下一项同一二进制开关因果对照；满 16 字节 OUT/ZLP 单独验证。
-无新手机实验，三节点 OK、无 owner/logging/ETW、Shared/not Attached；没有刷机/
-重启/安全设置变化。保留 TOP_CFG=0x11/整帧/RX53 console/IRQ/F1/终端/RX48 回退。
-方案看 reference/rx62/loading-review.md；原始稳定性验收矩阵仍开放。
+当前交接看 `sessions/63-single-device-driver-compatibility-and-trial-tools.md`：
+RX62 已构建/校验/测试签名的候选仍未安装；RX63 原生 SetupAPI 只读识别候选和回退
+各一节点。单设备试装/回退工具默认只读，15 保护用例通过，实际暂存/安装调用为 0。
+当前 CI=F401，测试签名未开/HVCI 强制/Secure Boot1；同一个加载环境选择仍待答复。
+ZLP 必须 DeviceAdd 才读取，普通重开不刷新；与每次打开读取的保留翻转开关分开测。
+无新手机实验/换驱动/信任或安全设置/UAC/刷机/重启，三节点 OK、无 owner/日志/ETW。
+保留 TOP_CFG0x11/整帧/RX53 console/IRQ/F1/原生兼容终端/RX48 回退；方案在
+reference/rx63/trial-review.md。下一项实际受支持环境的开关对照及完整原生验收。
 
 前一轮交接看 `sessions/57-driver-raw-logging-boundary.md`：一个有界 Windows owner 已取得
 实装驱动受理前原始日志，9550 字节与计数/raw 一致、512 软件发送帧直接匹配。

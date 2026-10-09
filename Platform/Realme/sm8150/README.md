@@ -16,14 +16,14 @@ upstream project.
 
 Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
 
-Current EUD stability handoff: [session 62](sessions/62-eud-wdf-build-and-test-signed-package.md).
-The ordinary-reopen toggle-preservation candidate now builds all nine modules
-with zero warnings/errors; Windows Driver INF and explicit Win11 catalog pass.
-File-only test signatures/PE digest verify. It is not installed or hardware
-validated. Secure Boot/HVCI remain on; supported loading environment decision
-is pending. Original driver/firmware/terminal unchanged, exact rollback ready.
-Next same-binary option off/on causal trial, then the full native acceptance
-matrix; full-packet OUT/ZLP remains separate. Original goal remains open.
+Current EUD stability handoff: [session63](sessions/63-single-device-driver-compatibility-and-trial-tools.md).
+RX62's built/test-signed candidate remains unloaded. RX63's native SetupAPI
+audits recognize both exact candidate and rollback nodes for current 9505.
+Single-device trial tools default to Audit; 15 gate cases pass, zero actual
+stage/bind calls. Current CI confirms TESTSIGN off/HVCI enforced; selected
+loading environment is pending. ZLP loads at DeviceAdd, not ordinary reopen.
+Keep primary toggle comparison separate; full original acceptance is open.
+Original driver/terminal/firmware and TOP_CFG/RX53/F1/rollback are preserved.
 
 | Feature | Status | Notes |
 |---|---|---|

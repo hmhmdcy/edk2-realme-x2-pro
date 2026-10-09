@@ -17,24 +17,26 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current handoff: sessions/62-eud-wdf-build-and-test-signed-package.md.
-Ordinary-reopen first-packet toggle mismatch remains the concrete candidate:
-RX59 forced 75-IN loses first six-byte frame; RX60 predefined 74-IN is complete.
-RX62 completes full nine-module WDK build: zero warnings/errors, valid Win11
-INF and explicit catalog. Unchanged RX60 code; UTF8/minimum26100 metadata fixed.
-File-only SYS/CAT test signatures and PE image digest verify; no root import,
-PFX removed, ISO finally dismounted. Full binaries/kit/source ZIP stay external.
-Candidate package E:\edk2-samurai-out\rx62\package-test-signed is not installed,
-loaded, Microsoft release-signed or hardware validated; this is not a repair.
-Fresh Windows26300 host: Secure Boot enabled/HVCI running; three nodes OK,
-no owner/logging/ETW, Shared/not Attached, old driver/terminal/logdump unchanged.
-Exact old-driver rollback is external rx61/rollback-qcusbser-2.1.3.5.
-Supported loading environment decision requested after package/plan preparation;
-no host security/driver-store/registry change, phone flash/reboot or data I/O.
-Next selected environment, same-binary flag-off/on reset and first-frame trial.
-Keep full LEN14/16-byte OUT/ZLP separate and full native acceptance matrix.
-Preserve TOP_CFG=0x11/whole-frame/RX53 console/F1/terminals/RX48 rollback.
-See reference/rx62/loading-review.md and validation-plan.md; goal remains open.
+Current handoff: sessions/63-single-device-driver-compatibility-and-trial-tools.md.
+RX62 built/test-signed the unchanged RX60 toggle candidate; no kernel loading
+or repair yet. RX63 native SetupAPI recognizes exactly one candidate/rollback
+driver node for current 9505, with matching packages and unchanged binding.
+Prepared single-device stage/bind/restore tools default to Audit; 15 pure gate
+cases pass. Native install/restore unexecuted; actual stage/install calls zero.
+PnPUtil alone does not force lower-ranked rollback; explicit device/driver API
+is prepared. Port is read from hardware parameters; flags from PnP software key.
+Current CI F401: TESTSIGN off/HVCI enforced, Secure Boot1, cert gate unmet.
+Same environment-choice question remains pending; no UAC/security/trust/BCD,
+driver-store/registry, flash/reboot or serial/USB data change. Three nodes OK,
+no owner/logging/ETW, Shared/not Attached; old driver/terminal/logdump unchanged.
+Exact RX62 signed package/RX61 rollback remain external; source/binaries intact.
+Separate ZLP DWORD loads at DeviceAdd, not FileCreate or assumed power restart.
+Primary same-binary flag-off/on keeps ZLP default; later prove actual reread
+and zero-byte OUT behavior. Full native max14 acceptance remains open.
+Preserve TOP_CFG0x11/whole-frame/RX53 console/IRQ/F1/terminals/RX48 rollback.
+Next selected supported environment, guarded single-device trial, observed
+reset/first-frame contrast and full RX62 validation matrix. See reference/rx63
+trial-review.md. No repeated old passing/odd-even hardware samples; goal open.
 
 Previous measured logger: sessions/57-driver-raw-logging-boundary.md.
 Built-in pre-buffer driver logging is now measured in one bounded Windows
@@ -270,7 +272,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = ac16146  eud: prepare dedicated WDF package and supported build environment
+    master = 727657e  eud: build and validate toggle-preserving test driver package
+             ac16146  eud: prepare dedicated WDF package and supported build environment
              6f8ec50  eud: confirm even reopen reversal and prepare toggle-preserving candidate
              da915a8  eud: reproduce odd-frame reopen loss with matched driver and USB trace
              7c43d67  eud: align reopen first-frame gaps and audit failed-read gates
@@ -278,9 +281,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              738845e  eud: consolidate faults and audit pre-buffer receive boundaries
              691126b  eud: locate reproduced TX gap before Windows accepted-buffer count
              45d96fc  eud: validate repeated console RX and F1, audit host receive counters
-             9943786  eud: service RX at console frame boundaries and retain TX loss evidence
 
-    91 commits ahead of upstream origin/master, as of the tip named above;
+    92 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro

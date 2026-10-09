@@ -11,15 +11,15 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 62](sessions/62-eud-wdf-build-and-test-signed-package.md)。**
-> RX59 奇数重开缺首包、RX60 偶数反向完整，支持普通打开 reset 导致翻转失配候选。
-> RX62 九模块真实 WDK 构建成功，零警告/错误；Win11 INF/catalog 校验通过。
-> 原补丁未变，只修项目 UTF8/INF 最低版本元数据。已制成文件内测试签名包，
-> CMS/PE 摘要及代码字节核对通过；未安装/加载/真机验证，尚不能称为修复。
-> Secure Boot/HVCI 开启，旧驱动/终端/logdump 未动；三节点 OK、无 owner/logging/ETW。
-> 加载环境选择待用户决定；方案/精确回退已准备，无注册表/安全设置/刷机/重启变化。
-> 下一项同一二进制开关对照实际 reset/首帧；满 16 字节 OUT/ZLP 分开，不复做旧样本。
-> 保留 TOP_CFG=0x11/整帧/RX53 console/IRQ/F1/终端/RX48 回退与小步 finally 关闭。
+> **当前入口：[session63](sessions/63-single-device-driver-compatibility-and-trial-tools.md)。**
+> RX62 完整构建/校验/文件内签名的候选未安装；RX63 原生 SetupAPI 只读识别候选/
+> 回退各唯一匹配当前 9505，包字节与实装旧驱动不变。单设备试装/回退工具默认 Audit，
+> 15 保护用例通过；实际暂存/安装调用 0，不能当作加载或稳定性证明。
+> 当前内核 CI=F401，测试签名未开/HVCI 强制，Secure Boot1；环境选择仍待答复。
+> ZLP 配置在 DeviceAdd 读取，关闭重开不生效；先保持默认做翻转开关对照，再单独测。
+> 没有新手机输入、UAC/换驱动/信任或安全设置/刷机/重启；三节点 OK、无 owner/日志。
+> 保留 TOP_CFG0x11/整帧/RX53 console/IRQ/F1/原生兼容终端/RX48 回退与 finally 关闭。
+> 方案 reference/rx63/trial-review.md；原始验收矩阵未缩小，修复仍未真机证实。
 >
 > **上一轮来源审查：[session 56](sessions/56-source-boundaries-and-focused-research.md)。**
 > 只读审查/收敛搜索：实装 reset selector=2 对应 URB=0x1e，找到有条件的受理缓冲前
