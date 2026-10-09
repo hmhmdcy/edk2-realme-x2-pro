@@ -28,7 +28,6 @@
 
 #include <linux/circ_buf.h>
 #include <linux/console.h>
-#include <linux/crc32.h>
 #include <linux/delay.h>
 #include <linux/device.h>
 #include <linux/init.h>
@@ -36,7 +35,6 @@
 #include <linux/io.h>
 #include <linux/irq.h>
 #include <linux/irqdomain.h>
-#include <linux/jiffies.h>
 #include <linux/kfifo.h>
 #include <linux/kernel.h>
 #include <linux/minmax.h>
@@ -73,25 +71,6 @@
 #define EUD_TX_CHUNK           4u      /* data bytes per frame: six entries */
 #define EUD_TX_BYTE_US         200
 #define EUD_TX_FRAME_US        2000
-#define EUD_TX_JOURNAL_DEPTH   512
-#define EUD_TX_SOURCE_TTY      1
-#define EUD_TX_SOURCE_CONSOLE  2
-
-struct eud_tx_record {
-        u8 len;
-        u8 source;
-        u8 data[EUD_TX_CHUNK];
-};
-
-/* Version 1 binary snapshot: 48-byte LE header, then oldest-first records.
- * CRC32/IEEE covers the entire snapshot with the crc field zeroed.
- */
-struct eud_tx_journal_header {
-        u8 magic[8];
-        __le32 version, size, count, record_size;
-        __le64 first_seq, last_seq;
-        __le32 crc, reserved;
-} __packed;
 
 #define EUD_RX_POLL_MS         20
 #define EUD_RX_MAX_FRAME       14    /* MAX_FIFO_SIZE in kernel/msm */
@@ -105,7 +84,6 @@ struct eud_tx_journal_header {
 #define EUD_RX_QUEUE_DEPTH     32
 #define EUD_RX_GIC_SPI         492     /* matching RMX1931 vendor DT */
 #define EUD_RX_IRQ_EMPTY_MAX   8
-#define EUD_RX_IRQ_GRACE_MS    100     /* five status periods without progress */
 
 /* RX46 diagnostic fault reasons: retain polling/F1 if IRQ capture cannot run. */
 #define EUD_IRQ_FAULT_EMPTY    1
@@ -140,10 +118,6 @@ struct eud_port {
         struct uart_port port;
         struct work_struct tx_work;
         struct delayed_work rx_work;
-        u64 tx_journal_total;
-        u32 tx_journal_head;
-        u32 tx_journal_count;
-        struct eud_tx_record tx_journal[EUD_TX_JOURNAL_DEPTH];
         u32 rx_polls;
         u32 rx_reports;
         u32 rx_last_status;
@@ -186,15 +160,6 @@ struct eud_port {
         u32 rx_irq_empty;
         u32 rx_irq_empty_streak;
         u32 rx_watchdog_misses;
-        bool rx_irq_waiting;
-        unsigned long rx_irq_wait_start;
-        u32 rx_irq_waits;
-        u32 rx_irq_recovered;
-        u32 rx_irq_wait_cleared;
-        u32 rx_irq_wait_peak_ms;
-        u8 rx_gic_first;
-        u8 rx_gic_last;
-        int rx_gic_error;
         u32 rx_queue_drops;
         u32 rx_irq_fault;
         u32 rx_queue_head;
@@ -220,11 +185,8 @@ static inline void eud_put(void __iomem *base, unsigned int off, unsigned int v)
         writel_relaxed(v, base + off);
 }
 
-static void eud_send_frame(struct uart_port *port, const u8 *s, unsigned int n,
-                            u8 source)
+static void eud_send_frame(struct uart_port *port, const u8 *s, unsigned int n)
 {
-        struct eud_port *up = to_eud_port(port);
-        struct eud_tx_record *record;
         void __iomem *base = port->membase;
         unsigned int i;
 
@@ -234,19 +196,6 @@ static void eud_send_frame(struct uart_port *port, const u8 *s, unsigned int n,
                 eud_put(base, EUD_REG_COM_TX_DAT, s[i]);
 
         udelay(EUD_TX_FRAME_US);
-
-        /* Software evidence of the issued MMIO values, not a device ACK.
-         * Both writers hold the UART lock; do not print or change pacing.
-         */
-        record = &up->tx_journal[up->tx_journal_head];
-        memset(record, 0, sizeof(*record));
-        record->len = n;
-        record->source = source;
-        memcpy(record->data, s, n);
-        up->tx_journal_head = (up->tx_journal_head + 1) % EUD_TX_JOURNAL_DEPTH;
-        up->tx_journal_count = min_t(u32, up->tx_journal_count + 1,
-                                    EUD_TX_JOURNAL_DEPTH);
-        up->tx_journal_total++;
 }
 
 /* tty write path: a workqueue, because the pacing sleeps between frames */
@@ -281,7 +230,7 @@ static void eud_tx_work(struct work_struct *work)
                         break;
 
                 uart_port_lock_irqsave(port, &flags);
-            eud_send_frame(port, buf, n, EUD_TX_SOURCE_TTY);
+            eud_send_frame(port, buf, n);
             uart_port_unlock_irqrestore(port, flags);
         }
 
@@ -357,7 +306,7 @@ static void eud_shutdown(struct uart_port *port)
                         break;
 
                 uart_port_lock_irqsave(port, &flags);
-            eud_send_frame(port, buf, n, EUD_TX_SOURCE_TTY);
+            eud_send_frame(port, buf, n);
             uart_port_unlock_irqrestore(port, flags);
         }
 }
@@ -428,7 +377,7 @@ static void eud_console_write(struct console *co, const char *s,
         while (count) {
                 unsigned int n = min_t(unsigned int, count, EUD_TX_CHUNK);
 
-                eud_send_frame(port, (const u8 *)s, n, EUD_TX_SOURCE_CONSOLE);
+                eud_send_frame(port, (const u8 *)s, n);
                 s += n;
                 count -= n;
         }
@@ -491,7 +440,6 @@ static void eud_restore_ahb2phy(struct eud_port *up)
  */
 static void eud_rx_irq_stop_locked(struct eud_port *up, u32 fault)
 {
-        up->rx_irq_waiting = false;
         if (up->rx_irq_enabled) {
                 up->rx_irq_enabled = false;
                 disable_irq_nosync(up->rx_irq);
@@ -629,34 +577,6 @@ static int eud_rx_collect_locked(struct eud_port *up, u32 s1, bool from_irq)
         return 1;
 }
 
-/* Read-only GICv3 snapshot for the first/expired watchdog observation.
- * The board-specific direct SPI has no sleeping irq_chip bus lock. Caller
- * holds the UART lock with preemption/IRQs disabled. Never set chip state.
- * Bits: valid=0x80, pending=1, active=2, masked=4. Error leaves valid clear.
- */
-static u8 eud_rx_gic_snapshot_locked(struct eud_port *up)
-{
-        static const enum irqchip_irq_state which[] = {
-                IRQCHIP_STATE_PENDING, IRQCHIP_STATE_ACTIVE,
-                IRQCHIP_STATE_MASKED,
-        };
-        bool value;
-        unsigned int i;
-        u8 result = 0;
-        int ret;
-
-        for (i = 0; i < ARRAY_SIZE(which); i++) {
-                ret = irq_get_irqchip_state(up->rx_irq, which[i], &value);
-                if (ret) {
-                        up->rx_gic_error = ret;
-                        return result;
-                }
-                if (value)
-                        result |= BIT(i);
-        }
-        return result | 0x80;
-}
-
 static irqreturn_t eud_rx_irq(int irq, void *data)
 {
         struct eud_port *up = data;
@@ -677,13 +597,6 @@ static irqreturn_t eud_rx_irq(int irq, void *data)
                                 kick = true;
                         }
                 } else {
-                        if (ret > 0 && up->rx_irq_waiting) {
-                                up->rx_irq_wait_peak_ms = max_t(u32,
-                                        up->rx_irq_wait_peak_ms,
-                                        jiffies_to_msecs(jiffies - up->rx_irq_wait_start));
-                                up->rx_irq_recovered++;
-                                up->rx_irq_waiting = false;
-                        }
                         up->rx_irq_empty_streak = 0;
                         kick = true;
                         if (ret < 0)
@@ -761,37 +674,18 @@ static void eud_rx_work(struct work_struct *work)
                         arm_notice = true;
                 }
         }
-        /* A pending status can race an IRQ waiting for the UART lock. Give
-         * the IRQ unlocked execution opportunities before declaring failure.
-         * Keep the original 20 ms observations; only persistently unserviced
-         * data reaches the bounded watchdog. Never collect DAT while the IRQ
-         * is enabled, or count fallback data as IRQ success.
+        /* Watchdog keeps the original 20 ms status observation. If it sees
+         * data the IRQ failed to collect, disable IRQ before fallback DAT
+         * access and record the miss. Never claim a poll frame as IRQ success.
          */
         if (!up->rx_queue_count && !up->rx_bootloader_pending) {
                 up->rx_polls++;
                 s1 = readl(up->port.membase + EUD_REG_INT_STATUS_1);
                 if ((s1 & EUD_INT_RX_PENDING) && up->rx_irq_enabled) {
-                        if (!up->rx_irq_waiting) {
-                                up->rx_irq_waiting = true;
-                                up->rx_irq_wait_start = jiffies;
-                                up->rx_irq_waits++;
-                                up->rx_gic_first = eud_rx_gic_snapshot_locked(up);
-                        } else if (time_after_eq(jiffies,
-                                   up->rx_irq_wait_start +
-                                   msecs_to_jiffies(EUD_RX_IRQ_GRACE_MS))) {
-                                up->rx_gic_last = eud_rx_gic_snapshot_locked(up);
-                                up->rx_irq_wait_peak_ms = max_t(u32,
-                                        up->rx_irq_wait_peak_ms,
-                                        jiffies_to_msecs(jiffies - up->rx_irq_wait_start));
-                                up->rx_watchdog_misses++;
-                                eud_rx_irq_stop_locked(up, EUD_IRQ_FAULT_WATCHDOG);
-                        }
-                } else if (up->rx_irq_waiting) {
-                        up->rx_irq_wait_cleared++;
-                        up->rx_irq_waiting = false;
+                        up->rx_watchdog_misses++;
+                        eud_rx_irq_stop_locked(up, EUD_IRQ_FAULT_WATCHDOG);
                 }
-                if (!up->rx_irq_enabled)
-                        eud_rx_collect_locked(up, s1, false);
+                eud_rx_collect_locked(up, s1, false);
         }
         f1 = up->rx_bootloader_pending;
         f1_irq = up->rx_bootloader_from_irq;
@@ -815,9 +709,8 @@ static void eud_rx_work(struct work_struct *work)
         uart_port_unlock_irqrestore(&up->port, flags);
 
         if (arm_notice)
-                pr_info("eud: RX46 IRQ armed virq=%d active=%u mask=01 original=%02x grace_ms=%u\n",
-                        up->rx_irq, stats.active, up->original_int1_mask,
-                        EUD_RX_IRQ_GRACE_MS);
+                pr_info("eud: RX46 IRQ armed virq=%d active=%u mask=01 original=%02x\n",
+                        up->rx_irq, stats.active, up->original_int1_mask);
         if (fault_notice)
                 pr_warn("eud: RX46 IRQ fallback fault=%u irqs=%u irq_frames=%u watchdog=%u empty=%u drops=%u\n",
                         stats.fault, stats.irqs, stats.irq_frames,
@@ -885,105 +778,11 @@ static ssize_t rx_stats_show(struct device *dev, struct device_attribute *attr,
 }
 static DEVICE_ATTR_RO(rx_stats);
 
-/* Compact software-only diagnostics avoid expanding the legacy Ctrl-U log.
- * first/last are non-atomic snapshots of three chip reads, not wire events.
- */
-static ssize_t irq_watch_show(struct device *dev, struct device_attribute *attr,
-                              char *buf)
-{
-        struct eud_port *up = to_eud_port(dev_get_drvdata(dev));
-        unsigned long flags;
-        ssize_t n;
-
-        uart_port_lock_irqsave(&up->port, &flags);
-        n = sysfs_emit(buf,
-                "waits=%u recovered=%u cleared=%u waiting=%u max_ms=%u first=%02x last=%02x err=%d\n",
-                up->rx_irq_waits, up->rx_irq_recovered, up->rx_irq_wait_cleared,
-                up->rx_irq_waiting, up->rx_irq_wait_peak_ms,
-                up->rx_gic_first, up->rx_gic_last, up->rx_gic_error);
-        uart_port_unlock_irqrestore(&up->port, flags);
-        return n;
-}
-static DEVICE_ATTR_RO(irq_watch);
-
-/* Explicit live, read-only chip snapshot; irq_watch itself stays software-only. */
-static ssize_t irq_state_show(struct device *dev, struct device_attribute *attr,
-                              char *buf)
-{
-        struct eud_port *up = to_eud_port(dev_get_drvdata(dev));
-        unsigned long flags;
-        u8 state = 0;
-        int error = -ENXIO;
-
-        uart_port_lock_irqsave(&up->port, &flags);
-        if (up->rx_irq_requested) {
-                state = eud_rx_gic_snapshot_locked(up);
-                error = state & 0x80 ? 0 : up->rx_gic_error;
-        }
-        uart_port_unlock_irqrestore(&up->port, flags);
-        return sysfs_emit(buf, "gic=%02x err=%d\n", state, error);
-}
-static DEVICE_ATTR_RO(irq_state);
-
-/* One atomic read into a buffer large enough for the entire snapshot.
- * Save it to tmpfs before transporting it through EUD: CRC detects loss in
- * the subsequent base64 output. No register reads/writes occur here.
- */
-static ssize_t tx_journal_read(struct file *file, struct kobject *kobj,
-                               const struct bin_attribute *attr, char *buf,
-                               loff_t off, size_t count)
-{
-        struct eud_port *up = to_eud_port(dev_get_drvdata(kobj_to_dev(kobj)));
-        struct eud_tx_journal_header header = {};
-        unsigned long flags;
-        unsigned int i, start, size;
-
-        if (off)
-                return 0;
-        uart_port_lock_irqsave(&up->port, &flags);
-        size = sizeof(header) + up->tx_journal_count * sizeof(struct eud_tx_record);
-        if (count < size) {
-                uart_port_unlock_irqrestore(&up->port, flags);
-                return -EINVAL;
-        }
-        memcpy(header.magic, "EUDTXJ48", sizeof(header.magic));
-        header.version = cpu_to_le32(1);
-        header.size = cpu_to_le32(size);
-        header.count = cpu_to_le32(up->tx_journal_count);
-        header.record_size = cpu_to_le32(sizeof(struct eud_tx_record));
-        header.first_seq = cpu_to_le64(up->tx_journal_count ?
-                                up->tx_journal_total - up->tx_journal_count + 1 : 0);
-        header.last_seq = cpu_to_le64(up->tx_journal_total);
-        memcpy(buf, &header, sizeof(header));
-        start = (up->tx_journal_head + EUD_TX_JOURNAL_DEPTH - up->tx_journal_count) %
-                EUD_TX_JOURNAL_DEPTH;
-        for (i = 0; i < up->tx_journal_count; i++)
-                memcpy(buf + sizeof(header) + i * sizeof(struct eud_tx_record),
-                       &up->tx_journal[(start + i) % EUD_TX_JOURNAL_DEPTH],
-                       sizeof(struct eud_tx_record));
-        header.crc = cpu_to_le32(crc32_le(~0, buf, size) ^ ~0);
-        memcpy(buf, &header, sizeof(header));
-        uart_port_unlock_irqrestore(&up->port, flags);
-        return size;
-}
-static BIN_ATTR_RO(tx_journal, sizeof(struct eud_tx_journal_header) +
-                             EUD_TX_JOURNAL_DEPTH * sizeof(struct eud_tx_record));
-
 static struct attribute *eud_attrs[] = {
         &dev_attr_rx_stats.attr,
-        &dev_attr_irq_watch.attr,
-        &dev_attr_irq_state.attr,
         NULL,
 };
-static const struct bin_attribute *const eud_bin_attrs[] = {
-        &bin_attr_tx_journal,
-        NULL,
-};
-static const struct attribute_group eud_group = {
-        .attrs = eud_attrs,
-        .bin_attrs = eud_bin_attrs,
-};
-__ATTRIBUTE_GROUPS(eud);
+ATTRIBUTE_GROUPS(eud);
 
 /* Logdump-only diagnostic for the current firmware DT, which omits this IRQ.
  * The matching RMX1931 vendor DT specifies SPI 492 (GIC hardware ID 524),

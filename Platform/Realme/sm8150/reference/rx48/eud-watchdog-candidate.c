@@ -28,7 +28,6 @@
 
 #include <linux/circ_buf.h>
 #include <linux/console.h>
-#include <linux/crc32.h>
 #include <linux/delay.h>
 #include <linux/device.h>
 #include <linux/init.h>
@@ -73,25 +72,6 @@
 #define EUD_TX_CHUNK           4u      /* data bytes per frame: six entries */
 #define EUD_TX_BYTE_US         200
 #define EUD_TX_FRAME_US        2000
-#define EUD_TX_JOURNAL_DEPTH   512
-#define EUD_TX_SOURCE_TTY      1
-#define EUD_TX_SOURCE_CONSOLE  2
-
-struct eud_tx_record {
-        u8 len;
-        u8 source;
-        u8 data[EUD_TX_CHUNK];
-};
-
-/* Version 1 binary snapshot: 48-byte LE header, then oldest-first records.
- * CRC32/IEEE covers the entire snapshot with the crc field zeroed.
- */
-struct eud_tx_journal_header {
-        u8 magic[8];
-        __le32 version, size, count, record_size;
-        __le64 first_seq, last_seq;
-        __le32 crc, reserved;
-} __packed;
 
 #define EUD_RX_POLL_MS         20
 #define EUD_RX_MAX_FRAME       14    /* MAX_FIFO_SIZE in kernel/msm */
@@ -140,10 +120,6 @@ struct eud_port {
         struct uart_port port;
         struct work_struct tx_work;
         struct delayed_work rx_work;
-        u64 tx_journal_total;
-        u32 tx_journal_head;
-        u32 tx_journal_count;
-        struct eud_tx_record tx_journal[EUD_TX_JOURNAL_DEPTH];
         u32 rx_polls;
         u32 rx_reports;
         u32 rx_last_status;
@@ -220,11 +196,8 @@ static inline void eud_put(void __iomem *base, unsigned int off, unsigned int v)
         writel_relaxed(v, base + off);
 }
 
-static void eud_send_frame(struct uart_port *port, const u8 *s, unsigned int n,
-                            u8 source)
+static void eud_send_frame(struct uart_port *port, const u8 *s, unsigned int n)
 {
-        struct eud_port *up = to_eud_port(port);
-        struct eud_tx_record *record;
         void __iomem *base = port->membase;
         unsigned int i;
 
@@ -234,19 +207,6 @@ static void eud_send_frame(struct uart_port *port, const u8 *s, unsigned int n,
                 eud_put(base, EUD_REG_COM_TX_DAT, s[i]);
 
         udelay(EUD_TX_FRAME_US);
-
-        /* Software evidence of the issued MMIO values, not a device ACK.
-         * Both writers hold the UART lock; do not print or change pacing.
-         */
-        record = &up->tx_journal[up->tx_journal_head];
-        memset(record, 0, sizeof(*record));
-        record->len = n;
-        record->source = source;
-        memcpy(record->data, s, n);
-        up->tx_journal_head = (up->tx_journal_head + 1) % EUD_TX_JOURNAL_DEPTH;
-        up->tx_journal_count = min_t(u32, up->tx_journal_count + 1,
-                                    EUD_TX_JOURNAL_DEPTH);
-        up->tx_journal_total++;
 }
 
 /* tty write path: a workqueue, because the pacing sleeps between frames */
@@ -281,7 +241,7 @@ static void eud_tx_work(struct work_struct *work)
                         break;
 
                 uart_port_lock_irqsave(port, &flags);
-            eud_send_frame(port, buf, n, EUD_TX_SOURCE_TTY);
+            eud_send_frame(port, buf, n);
             uart_port_unlock_irqrestore(port, flags);
         }
 
@@ -357,7 +317,7 @@ static void eud_shutdown(struct uart_port *port)
                         break;
 
                 uart_port_lock_irqsave(port, &flags);
-            eud_send_frame(port, buf, n, EUD_TX_SOURCE_TTY);
+            eud_send_frame(port, buf, n);
             uart_port_unlock_irqrestore(port, flags);
         }
 }
@@ -428,7 +388,7 @@ static void eud_console_write(struct console *co, const char *s,
         while (count) {
                 unsigned int n = min_t(unsigned int, count, EUD_TX_CHUNK);
 
-                eud_send_frame(port, (const u8 *)s, n, EUD_TX_SOURCE_CONSOLE);
+                eud_send_frame(port, (const u8 *)s, n);
                 s += n;
                 count -= n;
         }
@@ -906,84 +866,12 @@ static ssize_t irq_watch_show(struct device *dev, struct device_attribute *attr,
 }
 static DEVICE_ATTR_RO(irq_watch);
 
-/* Explicit live, read-only chip snapshot; irq_watch itself stays software-only. */
-static ssize_t irq_state_show(struct device *dev, struct device_attribute *attr,
-                              char *buf)
-{
-        struct eud_port *up = to_eud_port(dev_get_drvdata(dev));
-        unsigned long flags;
-        u8 state = 0;
-        int error = -ENXIO;
-
-        uart_port_lock_irqsave(&up->port, &flags);
-        if (up->rx_irq_requested) {
-                state = eud_rx_gic_snapshot_locked(up);
-                error = state & 0x80 ? 0 : up->rx_gic_error;
-        }
-        uart_port_unlock_irqrestore(&up->port, flags);
-        return sysfs_emit(buf, "gic=%02x err=%d\n", state, error);
-}
-static DEVICE_ATTR_RO(irq_state);
-
-/* One atomic read into a buffer large enough for the entire snapshot.
- * Save it to tmpfs before transporting it through EUD: CRC detects loss in
- * the subsequent base64 output. No register reads/writes occur here.
- */
-static ssize_t tx_journal_read(struct file *file, struct kobject *kobj,
-                               const struct bin_attribute *attr, char *buf,
-                               loff_t off, size_t count)
-{
-        struct eud_port *up = to_eud_port(dev_get_drvdata(kobj_to_dev(kobj)));
-        struct eud_tx_journal_header header = {};
-        unsigned long flags;
-        unsigned int i, start, size;
-
-        if (off)
-                return 0;
-        uart_port_lock_irqsave(&up->port, &flags);
-        size = sizeof(header) + up->tx_journal_count * sizeof(struct eud_tx_record);
-        if (count < size) {
-                uart_port_unlock_irqrestore(&up->port, flags);
-                return -EINVAL;
-        }
-        memcpy(header.magic, "EUDTXJ48", sizeof(header.magic));
-        header.version = cpu_to_le32(1);
-        header.size = cpu_to_le32(size);
-        header.count = cpu_to_le32(up->tx_journal_count);
-        header.record_size = cpu_to_le32(sizeof(struct eud_tx_record));
-        header.first_seq = cpu_to_le64(up->tx_journal_count ?
-                                up->tx_journal_total - up->tx_journal_count + 1 : 0);
-        header.last_seq = cpu_to_le64(up->tx_journal_total);
-        memcpy(buf, &header, sizeof(header));
-        start = (up->tx_journal_head + EUD_TX_JOURNAL_DEPTH - up->tx_journal_count) %
-                EUD_TX_JOURNAL_DEPTH;
-        for (i = 0; i < up->tx_journal_count; i++)
-                memcpy(buf + sizeof(header) + i * sizeof(struct eud_tx_record),
-                       &up->tx_journal[(start + i) % EUD_TX_JOURNAL_DEPTH],
-                       sizeof(struct eud_tx_record));
-        header.crc = cpu_to_le32(crc32_le(~0, buf, size) ^ ~0);
-        memcpy(buf, &header, sizeof(header));
-        uart_port_unlock_irqrestore(&up->port, flags);
-        return size;
-}
-static BIN_ATTR_RO(tx_journal, sizeof(struct eud_tx_journal_header) +
-                             EUD_TX_JOURNAL_DEPTH * sizeof(struct eud_tx_record));
-
 static struct attribute *eud_attrs[] = {
         &dev_attr_rx_stats.attr,
         &dev_attr_irq_watch.attr,
-        &dev_attr_irq_state.attr,
         NULL,
 };
-static const struct bin_attribute *const eud_bin_attrs[] = {
-        &bin_attr_tx_journal,
-        NULL,
-};
-static const struct attribute_group eud_group = {
-        .attrs = eud_attrs,
-        .bin_attrs = eud_bin_attrs,
-};
-__ATTRIBUTE_GROUPS(eud);
+ATTRIBUTE_GROUPS(eud);
 
 /* Logdump-only diagnostic for the current firmware DT, which omits this IRQ.
  * The matching RMX1931 vendor DT specifies SPI 492 (GIC hardware ID 524),

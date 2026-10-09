@@ -11,7 +11,14 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 47](sessions/47-native-terminal-session-boundary.md)。**
+> **当前入口：[session 48](sessions/48-irq-grace-and-tx-journal.md)。**
+> 当前 logdump-rx48-tx-journal.img 保留 TOP_CFG=0x11/整帧 RX、console/F1、TX 节奏。
+> watchdog 首次 pending 只记录，100 ms 未受理才退回；waits=0，相关分支尚未实测。
+> 新只读 TX 软件快照 CRC 有效，512 个已发 MMIO 帧全部与同一 owner 的 raw 匹配；
+> 本样本没重现旧缺字，不能宣布根因/稳定性已解决。30 行输出、兼容、IRQ F1、重启
+> 与最终原生 echo 成功，兼容启动重试一次。仅刷 logdump，无新管理员抓包。
+>
+> **历史上一轮：[session 47](sessions/47-native-terminal-session-boundary.md)。**
 > 现有 ETW 显示串口会话边界有 IN/OUT 端点清 halt/pipe reset；微软文档提供数据翻转
 > 不同步丢包的依据，物理 DATA0/1 尚未测到，不能称根因已证明。持续打开的原生帧
 > 成功，重开后的命令和首个 Ctrl-U 没有设备 RX；原生终端现有 `-Native` 启动同步。

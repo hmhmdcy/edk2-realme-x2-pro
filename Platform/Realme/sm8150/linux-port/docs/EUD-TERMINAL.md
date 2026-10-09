@@ -2,13 +2,16 @@
 
 > session 47 加入 `-Native`：启动时先用 Ctrl-U 同步，持续打开同一个串口，
 > 粘贴/命令模式按最多 14 字节原生帧发送；两字节尾片拆成 1+1，保留 F1。
-> 默认仍为兼容单字节输入。当前 RX46 IRQ B 真机已验证命令、长命令、交互清行、
+> 默认仍为兼容单字节输入。RX47 在 RX46 IRQ B 真机验证命令、长命令、交互清行、
 > 重启后 20 行输出与 shell 状态读回，但长状态输出仍有实际 TX 缺字，且曾触发
 > 看门狗退回轮询。可用路径已有，稳定性尚未彻底解决。
 > 证据、限制和最终状态见 [session 47](../../sessions/47-native-terminal-session-boundary.md)。
 
 2026-10-09，默认模式兼容 rx33；`-Native` 需要 RX41 之后的完整 payload 修复和回执。
-当前实测镜像为 `logdump-rx46-rx-irq-b.img`，TOP_CFG=0x11 方法保留。
+当前实测镜像为 `logdump-rx48-tx-journal.img`，TOP_CFG=0x11 方法保留。
+主机终端仍是 RX47 同一源码；RX48 新诊断、CRC 快照、兼容/F1/重启结果和限制见
+[session 48](../../sessions/48-irq-grace-and-tx-journal.md)。其 512 个发送记录全匹配 raw，
+但未重现此前 TX 缺字，宽限等待分支也未触发，稳定性仍开放。
 工具的原始源码与测量见
 `../../sessions/33-rx-access-and-production-policy.md`、
 [session 34](../../sessions/34-temporary-eud-terminal.md)。
@@ -88,8 +91,25 @@ TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μ
 Ctrl-C/Ctrl-U 仍会取消主机未发送队列。
 
 现有内核回执没有序号/去重，延迟的同值回执仍是协议限制；两种模式都不承诺
-exactly-once。长 TX 输出还可能丢失完整帧，本轮已保留真实缺字样本。
+exactly-once。长 TX 输出还可能丢失完整帧，RX47 已保留真实缺字样本。
 `-Native` 是主机使用已验证整帧 RX 的方式，不代替 TOP_CFG=0x11 设备修复。
+
+## 只读发送诊断（RX48）
+
+在一个已同步的交互 owner 里先保存快照，再传输临时文件：
+
+```sh
+P=/sys/bus/platform/devices/88e0000.serial
+cat $P/irq_watch
+cat $P/irq_state
+dd if=$P/tx_journal of=/tmp/R48J1 bs=4096 count=1
+base64 /tmp/R48J1
+```
+
+文件名使用新名字；binary sysfs 必须 offset=0 一次提供足够空间，最大 3120 字节。
+不要直接 cat 二进制到终端。用 reference/rx48/analyze-journal.py 验版本、长度和 CRC
+后才比对原始帧；校验失败不能作丢帧定位。记录证明已发 MMIO 值，不是 USB ACK。
+irq_watch 是软件计数，irq_state 是显式只读 GIC 查询；详见 session 48 的位义/限制。
 
 ## 日志与后续工作
 

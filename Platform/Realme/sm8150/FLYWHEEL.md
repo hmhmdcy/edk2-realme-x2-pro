@@ -14,12 +14,13 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/47-native-terminal-session-boundary.md`：持续打开串口的原生终端
-已实测，`eud-terminal.cmd -Native` 启动先同步，之后命令帧只提交一次。重开首帧丢失
-与已有 ETW 端点 reset 相符，但物理数据翻转未证明。IRQ B 未改、未刷机。
-本轮 F1 分别经 IRQ 与 watchdog 退回后的轮询进入 fastboot，两次同镜像重启与最终
-原生命令已核对。长状态输出实际缺字及 fault=4 仍未解；串口 finally 关闭。
-勿重复仅掩码/reset 实验；下一步审查 TX 缺完整帧与看门狗观察 pending 的竞态。
+当前交接看 `sessions/48-irq-grace-and-tx-journal.md`：本轮只刷 logdump 的 A/B 诊断，
+当前为 rx48-tx-journal。IRQ watchdog 保留首次 pending 并给 100 ms 服务机会，
+但 waits=0，相关分支未验证。CRC 有效的 512 个软件已发 TX 帧与 raw 完全一致；
+没有重现 RX47 的实际缺字，不能据此称已修复。F1 经 IRQ 进入独立确认的 fastboot，
+重启同一 B 后最终原生 echo 完整；兼容启动曾重试一次，所有串口 finally 关闭。
+`eud-terminal.cmd -Native` 持续 owner、启动同步、数据只发一次的用法不变。
+旧 ETW reset/数据翻转假设仍未物理验证，勿重复仅掩码/reset/旧零等待实验。
 
 计数边界看 `sessions/44-rx-receipt-counters.md`：只读计数把失败原生命令定位到
 没有观测到 pending/头部拒绝/tty 投递的边界，成功 echo 的帧/字节计数准确。

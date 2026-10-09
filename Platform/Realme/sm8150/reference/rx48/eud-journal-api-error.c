@@ -357,7 +357,7 @@ static void eud_shutdown(struct uart_port *port)
                         break;
 
                 uart_port_lock_irqsave(port, &flags);
-            eud_send_frame(port, buf, n, EUD_TX_SOURCE_TTY);
+            eud_send_frame(port, buf, n);
             uart_port_unlock_irqrestore(port, flags);
         }
 }
