@@ -16,12 +16,14 @@ upstream project.
 
 Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
 
-Current EUD stability handoff: [session 57](sessions/57-driver-raw-logging-boundary.md).
+Current EUD stability handoff: [session 58](sessions/58-reopen-first-frame-and-driver-completion-gates.md).
 TOP_CFG=0x11 whole-frame RX and console-boundary RX repairs remain verified;
-startup missing receipts and actual TX frame gaps remain unresolved. The built-in
-pre-buffer logger is now measured: 9550 driver/counter/raw bytes and all 512
-journal records match in a passing sample. Temporary logging settings are restored;
-no stability repair installed. Retail fuse/debug-policy causation is unproved.
+startup missing receipts and actual TX frame gaps remain unresolved. All three
+CRC-proven gaps share the first status frame after Windows reopen. Exact driver
+failure gates are audited, but no fault-time failed partial read is measured.
+The joint first-status ETW/logger plan is prepared and awaiting new permission;
+logging is restored off, artifacts unchanged. No stability repair or fuse cause
+is established.
 
 | Feature | Status | Notes |
 |---|---|---|

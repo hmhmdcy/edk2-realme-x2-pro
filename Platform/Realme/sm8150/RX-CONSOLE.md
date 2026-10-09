@@ -11,12 +11,13 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 57](sessions/57-driver-raw-logging-boundary.md)。**
-> 实装驱动前缓冲原始日志已实际抓取：9550 字节与 GET_STATS/raw 完全一致，512 个
-> 软件发送帧直接匹配。旧缺回执/TX 缺口未重现，不是稳定性修复。首轮启动脚本误判
-> PnP 返回对象；独立确认恢复、修正且另获单次 UAC 后完成一个有界 owner。两项临时
-> 日志配置已移除、串口/帮助进程关闭、三节点 OK；未刷机/手机重启/换驱动或安装终端。
-> 下一项真实缺口的日志→受理计数→raw 边界，避免原样循环通过样本；详见 reference/rx57。
+> **当前入口：[session 58](sessions/58-reopen-first-frame-and-driver-completion-gates.md)。**
+> 三次 CRC 真缺帧都在重开 Windows 后首条 Ctrl-U 状态的第一个 console 帧；
+> 其余 511 帧直接匹配。RX53 首同步已受理，不能强行合并 RX/TX 两故障。
+> 精确驱动失败读只记录四字节状态且后续跳过正文入缓冲；故障期是否走此分支未测。
+> 新首状态 ETW/原始日志联合方案已准备、模拟检查，等待独立单次 UAC，尚未执行。
+> RX57 的 9550 字节/512 帧 passing 对照及配置恢复保留；三节点正常、无 owner，
+> 未改源码/终端/镜像或刷机。缺原始日志正文不能独自判 EUD/物理 USB 丢失。
 >
 > **上一轮来源审查：[session 56](sessions/56-source-boundaries-and-focused-research.md)。**
 > 只读审查/收敛搜索：实装 reset selector=2 对应 URB=0x1e，找到有条件的受理缓冲前

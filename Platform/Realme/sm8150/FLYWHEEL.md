@@ -14,7 +14,12 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/57-driver-raw-logging-boundary.md`：一个有界 Windows owner 已取得
+当前交接看 `sessions/58-reopen-first-frame-and-driver-completion-gates.md`：只读对照发现三次真实 TX 缺口均为重开后的
+首条状态首帧，511 其余帧直接匹配；首同步 RX 失败不是必要条件。精确驱动非成功读
+日志缺正文/长度且后段不入串口缓冲，故障期因果未测。联合 ETW/logger 首状态方案
+已准备未执行、待独立新 UAC；不能复用 RX57 已用授权。手机/配置/终端未改。
+
+前一轮交接看 `sessions/57-driver-raw-logging-boundary.md`：一个有界 Windows owner 已取得
 实装驱动受理前原始日志，9550 字节与计数/raw 一致、512 软件发送帧直接匹配。
 旧故障未重现，不算稳定性修复；首轮 PnP 返回值误判已记录并修正，两个单次 UAC 均已用。
 两项临时 COM14 配置已恢复、串口/帮助进程关闭、三节点 OK；未刷机/手机重启或换驱动。

@@ -17,7 +17,21 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current handoff: sessions/57-driver-raw-logging-boundary.md.
+Current handoff: sessions/58-reopen-first-frame-and-driver-completion-gates.md.
+Read-only replay: all three CRC-proven TX gaps are the first console timestamp
+frame of the first status after a Windows reopen; 511 other records match
+directly. RX53 accepted the first Ctrl-U, so TX loss does not require startup
+RX loss. Exact installed-driver audit binds the L1 indirect read callback:
+nonzero completion logs status only and skips payload insertion into vPut.
+No fault-time failed partial transfer is measured; this is a candidate, not a
+repair. RX57's raw logger passing sample remains valid and limited.
+New joint ETW/logger first-status plan is prepared/mocked but not executed,
+awaiting separate single UAC permission; both old RX57 approvals were used.
+Three nodes OK, no owner, Shared/not Attached, logging off, artifacts unchanged.
+See reference/rx58. Do not repeat ordinary passing echo or assume missing logger
+payload alone proves physical/EUD loss.
+
+Previous measured logger: sessions/57-driver-raw-logging-boundary.md.
 Built-in pre-buffer driver logging is now measured in one bounded Windows
 owner: 9550 successful-read/counter/raw bytes agree; 512 journal records match
 directly. Old startup/TX faults did not recur; no stability repair. Initial
@@ -251,7 +265,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 738845e  eud: consolidate faults and audit pre-buffer receive boundaries
+    master = e7de5a3  eud: measure pre-buffer driver logging and restored capture
+             738845e  eud: consolidate faults and audit pre-buffer receive boundaries
              691126b  eud: locate reproduced TX gap before Windows accepted-buffer count
              45d96fc  eud: validate repeated console RX and F1, audit host receive counters
              9943786  eud: service RX at console frame boundaries and retain TX loss evidence
@@ -274,7 +289,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              703469c  eud: record pre-Linux RX failure and USB boundary comparisons
              9d01126  eud: audit native RX sources and PHY lifecycle
 
-    86 commits ahead of upstream origin/master, as of the tip named above;
+    87 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
