@@ -11,7 +11,13 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 55](sessions/55-windows-perf-counter-and-reproduced-tx-gap.md)。**
+> **当前入口：[session 56](sessions/56-source-boundaries-and-focused-research.md)。**
+> 只读审查/收敛搜索：实装 reset selector=2 对应 URB=0x1e，找到有条件的受理缓冲前
+> 原始日志路径；padding 单独解释不了 RX55 整帧缺口。未启用日志/改注册表/开串口/刷机。
+> 新资料含 QUIC COM issue/未完成示例与 OpenOCD SWD 实现，没有现成 COM 丢包修复。
+> 下一项取得真实缺口的前缓冲字节边界，不复做普通成功命令；整体仍未解决。
+>
+> **上一轮：[session 55](sessions/55-windows-perf-counter-and-reproduced-tx-gap.md)。**
 > 同 RX53 候选/安装终端，未刷机/重启/reset。单 Windows owner 实测 6 次只读
 > GET_STATS；新缺 seq7376 的 `[ 16`，其余 511 帧直接匹配。首状态 raw 和驱动受理
 > 缓冲计数均 309 线缆字节，软件发送记录应为 315；缺口在计数之前，排除纯终端

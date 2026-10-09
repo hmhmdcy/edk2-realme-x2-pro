@@ -14,7 +14,12 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/55-windows-perf-counter-and-reproduced-tx-gap.md`：未刷机/重启，
+当前交接看 `sessions/56-source-boundaries-and-focused-research.md`：本轮只读，未开串口/
+attach/刷机/重启/改驱动或注册表。审查得受理缓冲前日志路径、reset selector 与 padding
+边界，合并旧结论做针对性搜索；未取得新修复。下一项要在真实缺帧时区分 USB 到主机
+与驱动前段丢失，普通 passing/F1/reset 循环不再算进展。
+
+上一轮 `sessions/55-windows-perf-counter-and-reproduced-tx-gap.md`：未刷机/重启，
 同 RX53 候选与安装终端。新 TX 缺 seq7376 在 raw 和 GET_STATS 受理缓冲计数中
 均少 6 线缆字节；已排除纯终端显示/读取丢失，EUD/USB/驱动前段仍未区分。
 启动首 Ctrl-U 仍可能未受理；只重试同步，后续数据只发一次。finally 关闭串口，

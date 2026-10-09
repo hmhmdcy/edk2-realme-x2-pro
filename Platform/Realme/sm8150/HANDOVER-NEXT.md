@@ -17,7 +17,14 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current session-55 handoff: sessions/55-windows-perf-counter-and-reproduced-tx-gap.md.
+Current handoff: sessions/56-source-boundaries-and-focused-research.md.
+Read-only consolidation/search: exact reset selector 2 maps to URB 0x1e;
+conditional pre-buffer raw logger identified, padding cannot alone remove
+RX55's six-byte frame. No runtime logging/PID proof or repair; old ETW totals
+489 bytes equal its raw. Next establish a pre-buffer byte observation during
+an actual gap, not another ordinary passing command. See reference/rx56.
+
+Previous session-55 reproduced-gap evidence: sessions/55-windows-perf-counter-and-reproduced-tx-gap.md.
 Same logdump-rx53-console-rx.img and installed terminal; no flash/reboot/reset.
 One bounded Windows owner adds read-only GET_STATS on its existing overlapped
 handle, with an isolated manual event/low bit to suppress CLR completion-port
@@ -235,7 +242,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 45d96fc  eud: validate repeated console RX and F1, audit host receive counters
+    master = 691126b  eud: locate reproduced TX gap before Windows accepted-buffer count
+             45d96fc  eud: validate repeated console RX and F1, audit host receive counters
              9943786  eud: service RX at console frame boundaries and retain TX loss evidence
                f081526  eud: isolate same-owner RX loss and continuous USB IN effects
              d97bc81  eud: reproduce console-overlap RX loss and a missing issued TX frame
@@ -256,7 +264,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              703469c  eud: record pre-Linux RX failure and USB boundary comparisons
              9d01126  eud: audit native RX sources and PHY lifecycle
 
-    84 commits ahead of upstream origin/master, as of the tip named above;
+    85 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -425,6 +433,8 @@ the only copy.
 | 52 | Same-owner busy-console RX loss with complete OUT/IN; continuous IN improves requeue gap and TX match in one contrast, RX remains unresolved | `sessions/52-same-owner-usb-overlap-and-continuous-in.md` |
 | 53 | Console-boundary whole-frame RX succeeds on USB/Windows, compatibility/F1/reboot preserved; final issued four-byte TX prefix still lost | `sessions/53-console-boundary-rx-service.md` |
 | 54 | Nine manual console RX overlaps and console F1 pass on unchanged candidate; six credited empties, exact Windows worker/GET_STATS audit, TX gap still open | `sessions/54-console-rx-regression-and-host-counter-audit.md` |
+| 55 | Reproduced seq7376 TX gap before Windows accepted-buffer count; first startup receipt still missing, unchanged candidate | `sessions/55-windows-perf-counter-and-reproduced-tx-gap.md` |
+| 56 | Repair/measurement synthesis, exact pre-buffer/reset/padding boundaries and focused new sources; read-only, no stability fix | `sessions/56-source-boundaries-and-focused-research.md` |
 
 Rules that keep this file from growing again:
 

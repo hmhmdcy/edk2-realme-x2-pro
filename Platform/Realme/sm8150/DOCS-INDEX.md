@@ -50,6 +50,7 @@
 | sessions/53-console-boundary-rx-service.md、reference/rx53/ | console 帧边界整帧 RX 在 USB/Windows 同触发通过；兼容/F1/重启保留，最后仍缺一个已发 TX 前缀 |
 | sessions/54-console-rx-regression-and-host-counter-audit.md、reference/rx54/ | 9 次手动 console RX/F1 回归通过、6 次空 IRQ 正确计数；实装 Windows worker/累计接收计数审查，未刷机、TX 缺口仍开放 |
 | sessions/55-windows-perf-counter-and-reproduced-tx-gap.md、reference/rx55/ | 同 owner GET_STATS/raw/CRC 快照重现缺 TX seq7376，缺口在驱动受理缓冲计数之前；启动首 Ctrl-U 仍未受理，未刷机/重启 |
+| sessions/56-source-boundaries-and-focused-research.md、reference/rx56/ | 修复/测量结论收敛与定向新资料；实装 pre-buffer/reset/padding 审查、旧 ETW 489 字节离线复核，只读未修复 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
@@ -75,4 +76,4 @@
 
 - HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
 - 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD 打开时占 USB，彻底断电要长按电源约 15 s。
-- 待办：HANDOVER-NEXT.md 第 1 节、sessions/55-windows-perf-counter-and-reproduced-tx-gap.md。保留 TOP_CFG=0x11/RX53 console RX 修复/现有终端与 RX48 回退；TX 缺帧已重现并定位到受理缓冲计数之前，启动首回执也仍开放。下一项审查精确驱动前段，不重复普通成功样本、reset/旧零等待。
+- 待办：HANDOVER-NEXT.md 第 1 节、sessions/55-windows-perf-counter-and-reproduced-tx-gap.md。保留 TOP_CFG=0x11/RX53 console RX 修复/现有终端与 RX48 回退；TX 缺帧已重现并定位到受理缓冲计数之前，启动首回执也仍开放。当前来源审查见 sessions/56-source-boundaries-and-focused-research.md；下一项真实缺口的受理前字节观测，不重复普通成功样本、reset/旧零等待。

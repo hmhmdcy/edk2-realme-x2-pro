@@ -16,6 +16,12 @@ upstream project.
 
 Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
 
+Current EUD stability handoff: [session 56](sessions/56-source-boundaries-and-focused-research.md).
+TOP_CFG=0x11 whole-frame RX and console-boundary RX repairs remain verified;
+startup missing receipts and actual TX frame gaps remain unresolved. This
+read-only source/research audit identifies a conditional pre-buffer logger;
+it installs no repair. Retail fuse/debug-policy causation has not been proved.
+
 | Feature | Status | Notes |
 |---|---|---|
 | UEFI boot (Boot Manager / EFI Shell) | ✅ works | reaches the shell, `map`/`blk` show all UFS partitions |
@@ -208,9 +214,10 @@ Registers, caveats and host-side OpenOCD setup: `Platform/Realme/sm8150/EUD.md`.
 Current status of the SWD/JTAG half (2026-10-08): the SWD (9504) and JTAG (9503)
 functions can be enabled and driven from the PC (DAP route payload 0x00100445 /
 JTAG 0x00000090), but the AP CoreSight DAP does not answer on this retail unit:
-`ack = 0`, `freezio_latch = 1`, DPIDR reads 0. The AP debug path is gated by
-the `APPS_DBGEN_DISABLE` fuse and by OPPO's signed APDP debug policy (`dpAP.mbn`
-in the F.14 package), so SWD/JTAG cannot halt this phone. EUD COM therefore
+`ack = 0`, `freezio_latch = 1`, DPIDR reads 0. The `APPS_DBGEN_DISABLE` fuse and
+signed APDP debug policy (`dpAP.mbn` in the F.14 package) are possible
+restrictions; the device fuse state was not read and policy causation was not
+established. These tests did not obtain AP halt. EUD COM therefore
 remains the working debug channel here; the SWD/JTAG host tooling is kept for
 debug-enabled devices. Never switch the internal DAP mux while Android is
 running - it hangs the AP and needs a full power cycle. Details in RX-CONSOLE.md.
@@ -325,7 +332,7 @@ Windows 化还需专属 DSDT。
   a firmware that is stuck before BDS, where neither adb nor fastboot exists.
 * Details, evidence and the unattended flywheel plan: HANDOVER-NEXT.md section 28.
 
-## Status update 2026-10-08 (SWD/JTAG transport verified; AP DAP is fused off)
+## Status update 2026-10-08 (SWD/JTAG transport verified; AP DAP unresponsive)
 
 * Both EUD debug peripherals can be brought up from Windows: SWD 9504 with
   `CTLOUT_CLR 0x000E0090` + `CTLOUT_SET 0x00100445` (DAP route, no VBUS pulse)
@@ -337,8 +344,9 @@ Windows 化还需专属 DSDT。
   `data = 0x00000000, status = 0x00010020, ack = 0, freezio_latch = 1` in
   every state tried, including with SRST/TRST held over SWD bitbang. Switching
   the internal DAP mux while Android runs hangs the AP (black screen).
-* Root cause: Qualcomm fuses (`APPS_DBGEN_DISABLE` disables AP invasive debug)
-  plus an OEM-signed debug policy in the `apdp` partition. This phone's F.14
+* Possible restrictions: Qualcomm debug fuses and an OEM-signed policy in
+  `apdp`; neither was established as the cause of this unit's failed DAP reads.
+  This phone's F.14
   package carries `dpAP.mbn`, a signed ELF with the OPPO CA chain, so it cannot
   be replaced. OpenOCD's own quickstart enables EUD at the U-Boot stage and
   expects DPIDR 0x5ba02477, i.e. it targets debug-enabled devices.
@@ -348,8 +356,9 @@ Windows 化还需专属 DSDT。
   `maxcpus=1` when debugging the Linux SMP bring-up.
 * Final confirmation 2026-10-08, UEFI stage: the officially recommended flow was
   tested too - flash the firmware, let BDS enable EUD, then attach. The result is
-  identical (`data = 0x00000000, status = 0x00010020, ack = 0`). The gate is in
-  XBL (fuse + signed debug policy), before UEFI, so no boot stage helps.
+  identical (`data = 0x00000000, status = 0x00010020, ack = 0`). This repetition
+  does not locate the gate or prove a fuse/policy cause. See SWD-JTAG.md for
+  the current evidence limits; no fuse or APDP modification is proposed.
 
 
 ## Status update 2026-10-08 (EUD is a real console: ttyEUD0, /dev/console, RX commands)
