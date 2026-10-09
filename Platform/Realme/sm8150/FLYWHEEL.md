@@ -14,11 +14,12 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/49-usb-in-and-partial-timeout-audit.md`：本轮未刷机或重启手机，
-保留 rx48-tx-journal。持续 libusb 的 60 行输出、CRC 有效的 512 个已发 TX 帧和
-全部虚拟 USB IN/raw 匹配；一次取消带 6 字节也正确保留。不是物理 ACK 或 qcusbser
-证明，旧缺字未重现，IRQ 宽限相关分支仍未触发。USB owner 正常关闭/detach 后，
-Windows 原生 echo 正常、串口 finally 关闭。RX48 的 IRQ F1/同镜像重启验证仍保留。
+当前交接看 `sessions/50-windows-receive-and-driver-buffer-audit.md`：当前连接正常，
+本轮未刷机/重启/新管理员抓包，保留 rx48-tx-journal 和安装终端。单次 Windows 诊断
+owner 的完整状态输出、287 个重叠已发帧与 raw 匹配，未观察到串口错误；原查询会
+清除未记录错误的细节已在实际程序集/精确匹配驱动 PDB 核对。它只是新观测，旧
+缺字未重现、长期稳定性未证实；串口 finally 关闭，正常使用现有终端。
+RX49 的完整虚拟 IN/部分取消核对、RX48 的 IRQ F1/同镜像重启实测仍保留。
 `eud-terminal.cmd -Native` 持续 owner、启动同步、数据只发一次的用法不变。
 旧 ETW reset/数据翻转假设仍未物理验证，勿重复仅掩码/reset/旧零等待实验。
 

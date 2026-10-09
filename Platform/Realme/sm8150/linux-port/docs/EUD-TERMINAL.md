@@ -15,6 +15,9 @@
 RX49 在不改内核的持续 libusb 对照中，进一步匹配了完整 USB IN/raw 与发送快照，
 并实测保留部分取消数据；切回此 Windows 终端后原生 echo 正常。边界与限制见
 [session 49](../../sessions/49-usb-in-and-partial-timeout-audit.md)，不扩大为长期无损保证。
+RX50 的一次 Windows 诊断会话正常，完整状态输出与 287 个重叠发送记录匹配。
+新错误/队列观测仅在独立诊断副本中，未替换本终端；当前可正常使用，旧故障没有
+复现。见 [session 50](../../sessions/50-windows-receive-and-driver-buffer-audit.md)。
 工具的原始源码与测量见
 `../../sessions/33-rx-access-and-production-policy.md`、
 [session 34](../../sessions/34-temporary-eud-terminal.md)。
@@ -38,7 +41,7 @@ TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μ
 
 ```powershell
 & 'E:\eud-host\eud-terminal.cmd' -Reconnect
-# 当前 RX46 IRQ B 上使用原生输入；保持终端打开后连续输入命令。
+# 当前 RX48 B 上使用原生输入；保持终端打开后连续输入命令。
 & 'E:\eud-host\eud-terminal.cmd' -Native -Port COM14
 ```
 

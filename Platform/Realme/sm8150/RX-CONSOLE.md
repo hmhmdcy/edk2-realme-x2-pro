@@ -11,7 +11,14 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session 49](sessions/49-usb-in-and-partial-timeout-audit.md)。**
+> **当前入口：[session 50](sessions/50-windows-receive-and-driver-buffer-audit.md)。**
+> 当前连接正常，旧缺回执/缺字未重现；未改手机镜像或安装终端。独立 Windows 诊断
+> 记录接收队列/错误/读取时序，完整状态输出与重叠的 287 个已发帧匹配，最大队列
+> 150 字节、无观察到的串口错误。实际程序集与精确匹配 PDB 说明原查询会清错误
+> 而旧终端未记录；这补齐诊断，不证明溢出是根因。串口 finally 关闭，正常使用现有
+> 终端；长期稳定性仍开放，不再重复已成功样本当进展。
+>
+> **历史上一轮：[session 49](sessions/49-usb-in-and-partial-timeout-audit.md)。**
 > 未改 RX48 B、未刷机或重启手机。7 组旧 IN/raw 离线逐字节匹配；持续 libusb owner
 > 的 60 行输出、CRC 有效 512 帧记录及全部 11,066 字节 IN/raw 也匹配。一次取消 IN
 > 仍返回 6 字节，安装的 PyUSB 正确保留，不能把所有 timeout 都当丢失。它只定位到
