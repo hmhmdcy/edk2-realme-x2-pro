@@ -29,6 +29,13 @@
 
 ---
 
+> **session 37 源码搜索：** 同机型原厂代码和较新厂商树没有提供新的 DAT 推进握手。
+> 2026-09-29 PHY v9 系列提供 EUD 独立管理 PHY 的依据，但未改 COM RX；本机旧启动
+> 记录也有 USB/PHY probe 延迟，下一步先核实当前资源链和接管状态。更正旧记录：
+> QUIC COM timeout 调用正确的两参数 WriteCommand，不受三参数覆盖 opcode 的 bug 影响。
+> 本轮无串口操作、无刷机，仍未修复原生多字节；详见
+> [session 37](sessions/37-rx-source-search-and-phy-lifecycle.md)。
+
 ## RX side: registers, framing and the console driver (2026-10-08)
 
 本节至「命令通道打通」是同日较早阶段的历史记录；当前实测结论见文首及末节。

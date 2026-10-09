@@ -31,6 +31,7 @@
 | sessions/34-temporary-eud-terminal.md | TX/RX 区分、临时键盘/命令终端、tty/console 真机输出与退出验证 |
 | sessions/35-rx-next-session-handoff.md | 下一会话原生 RX 排查交接、已排除路径、所需新证据与短提示词 |
 | sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md、reference/rx36/ | 实机 USB 描述符、旧 WDM qcusbser / SM8150 审查；libusb/WSL 完整 OUT 受理后仍多字节失败 |
+| sessions/37-rx-source-search-and-phy-lifecycle.md、reference/rx37/ | 同机型源码、QUIC 重载更正、2026-09-29 PHY v9 与本机历史 probe 延迟；未取得原生 RX 修复 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
@@ -56,4 +57,4 @@
 
 - HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
 - 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD 打开时占 USB，彻底断电要长按电源约 15 s。
-- 待办：HANDOVER-NEXT.md 第 1 节。先用临时终端继续驱动移植（linux-port/docs/EUD-TERMINAL.md）；原生多字节 RX 仍待 USB OUT 与芯片握手的新证据，不再阻塞全部工作。
+- 待办：HANDOVER-NEXT.md 第 1 节。先用临时终端继续驱动移植（linux-port/docs/EUD-TERMINAL.md）；原生多字节 RX 仍待芯片握手/初始化的新证据。session 36 已取得 libusb OUT 受理后失败的对照，session 37 提供 PHY 生命周期方向；不再阻塞全部工作。

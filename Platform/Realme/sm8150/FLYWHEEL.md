@@ -8,6 +8,10 @@
 
 ## 0. 一句话
 
+2026-10-09 session 37 仅搜索和审查源码，没有串口操作或刷机。原生多字节 RX 仍未修复；
+PHY 接管涉及当前 EUD 的 reset，先核实资源/状态再设计实验，不能直接覆盖现有 F1/console。
+来源与下一步见 `sessions/37-rx-source-search-and-phy-lifecycle.md`。
+
 手机能从 Linux **自己**重启进 fastboot。主机通过 EUD COM 发一帧 `[0x90][0x02]`，
 驱动打印 `eud: reboot2 bootloader requested`，先写 `CSR_EUD_EN(0x1014)=0` 把 USB PHY
 交还常规通道，再 `kernel_restart("bootloader")`；PMIC PON 的 magic 由 reboot-mode

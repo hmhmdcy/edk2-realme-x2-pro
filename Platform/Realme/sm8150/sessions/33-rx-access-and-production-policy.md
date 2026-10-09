@@ -98,9 +98,10 @@ TX 定时器。本轮审查的 Linux/EDK2 源码未找到第二个 RX 消费者�
 交给 USB pipe，但版本不同，不能据此证明已安装旧二进制的线上行为相同。
 本轮未取得 USB 线上的 OUT 数据包，Windows 驱动这一层仍未完全排除。
 
-另外发现 QUIC 库 `src/eud.cpp` 的 8 位 opcode/data WriteCommand 重载有具体错误：
+另外发现 QUIC 库 `src/eud.cpp` 的三参数 8 位 opcode/data/response WriteCommand 重载有具体错误：
 先设置 opcode，随后 `memcpy(data_out_p, data, payload_sz - 1)` 又从首字节覆盖它；
-目标应从 data_out_p+1 起。COM timeout API 使用该重载，且 COM 实现仍有原型代码。
+目标应从 data_out_p+1 起。**session 37 更正：COM timeout API 实际调用正确的两参数
+版本（memcpy 从 data_out_p+1 开始），没有调用上述错误重载。** COM 实现仍有原型代码。
 **我们的 PowerShell 原始帧和 comtool 不调用这个重载**，所以它不能解释本轮现象。
 未修改这份外部库，也没有把它记为已应用修复。
 [QUIC COM issue #6](https://github.com/quic/eud/issues/6) 也未提供可用的接收实现答复。

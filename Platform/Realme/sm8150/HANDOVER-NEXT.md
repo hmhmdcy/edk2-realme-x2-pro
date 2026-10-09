@@ -79,6 +79,13 @@ RX on this unit is still open.
 comparison and returned Windows state, and session 35 for excluded experiments.
 The temporary terminal remains available; native multi-byte RX is still open.
 
+Session 37 searched the actual Realme X2 Pro source and the 2026-09-29 PHY v9
+series. No verified COM RX fix emerged. Read sessions/37 and reference/rx37 for
+the PHY lifecycle candidate, historical USB probe delays, and the correction
+that COM timeout uses the correct two-argument QUIC WriteCommand overload.
+Next check live HS PHY/QMP/DWC3 resources before considering a reset-sensitive
+PHY handoff experiment. Session 37 did not open a serial port or flash.
+
 1. Resume native multi-byte RX investigation using sessions 35/36. The temporary
    terminal remains available for driver bring-up:
    `E:\eud-host\eud-terminal.cmd -Reconnect` (guide: linux-port/docs/EUD-TERMINAL.md).
@@ -170,7 +177,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 0915f34  eud: confirm native RX failure without qcusbser
+    master = ed31013  docs: normalize RX evidence manifests
+             0915f34  eud: confirm native RX failure without qcusbser
              e606a99  eud: audit legacy qcusbser and prepare USB OUT comparison
              1e54944  docs: hand off native EUD RX investigation
              0e4a8cc  eud: add temporary interactive terminal for single-byte RX
@@ -178,9 +186,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              79b0f9d  eud: protect RX header access and record FIFO investigations
              f9b6f8a  eud: fix single-character RX and record hardware probe evidence
              649c90d  linux-port: mirror the Linux side of the port into the repo
-             2184dc1  docs: anchor the Repo state count to the tip the block names
 
-    63 commits ahead of upstream origin/master, as of the tip named above;
+    64 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -328,6 +335,7 @@ the only copy.
 | 34 | Temporary host terminal; multi-byte TX, single-byte RX bridge, tty/console and keyboard verification | `sessions/34-temporary-eud-terminal.md` |
 | 35 | Next-session RX handoff: retained state, excluded paths, new evidence needed and short prompt | `sessions/35-rx-next-session-handoff.md` |
 | 36 | Actual USB descriptors, legacy qcusbser/SM8150 audit; accepted libusb/WSL ABC and DEFG still fail | `sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md` |
+| 37 | Native RX source search: actual OEM bugs, QUIC overload correction, PHY v9 lifecycle candidate | `sessions/37-rx-source-search-and-phy-lifecycle.md` |
 
 Rules that keep this file from growing again:
 
