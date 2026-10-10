@@ -11,11 +11,12 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前内核入口：[session67](sessions/67-usb-provider-and-dtb-activation.md)。**
-> HS PHY 内建后 #60 已绑定 PHY/dwc3，有 UDC，当前 deferred 为空；完整 53788 字节
-> dmesg 的设备 SHA256/gzip CRC 通过，taint=0，实际 USB 功能仍未验证。CPU7 OPP
-> 候选未进入固件提供的 live DT，警告仍在。COM14 已交回 Windows，finally 释放/detach。
-> 不增加 EUD 实验，保留 RX53/TOP_CFG0x11/整帧/F1/两种终端；证据见 reference/kernel67。
+> **当前内核入口：[session68](sessions/68-firmware-dtb-and-cpu7-opp-verified.md)。**
+> 仅更新 boot 固件 DTB，CPU7 新节点/live调频表/max2956800已通过，启动OPP警告消失。
+> 同 #60 Image，新的52842字节完整日志设备SHA256/gzip CRC通过，taint=0，UDC仍在。
+> 高频负载和实际USB通信仍未验证，失败抓取不补字。COM14已交回Windows，finally释放/detach。
+> 不增加EUD实验，保留RX53/TOP_CFG0x11/整帧/F1/两种终端；证据reference/kernel68。
+> 前次HS PHY提供者内建见session67/reference/kernel67。
 > 前次 OSM L3/ADC5/early mapping 三项修复见 session66/reference/kernel66。
 >
 > **前次 EUD 入口：[session65](sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md)。**

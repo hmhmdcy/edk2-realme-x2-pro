@@ -17,24 +17,29 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current kernel handoff: sessions/67-usb-provider-and-dtb-activation.md,
-reference/kernel67 and offline verify.py. One config change, matching SM8150
-SNPS Femto V2 HS PHY m->y, restores HS PHY/dwc3 binding and creates a UDC.
-Current devices_deferred is empty; USB functions/peripheral traffic are untested.
-Last boot #60, boot_id 28e3bd68-2dd4-46f5-a24b-95f237ec070b, taint0. Complete
-53788-byte dmesg passes device SHA256 and gzip CRC; old dwc3 core failure gone.
-CPU7 2956800 kHz OPP warnings remain. A pinned-source OPP candidate compiled
-and was copied to FAT, but verified live DT says OPP_ABSENT: the current EFI
-loader takes the firmware DTB. Do not repeat FAT-DTB-only flashing or claim
-that candidate is runtime verified. Windows DTS mirror was stale; EUD/PON/
-bootargs synchronization is existing actual-tree content, not new fixes.
-Two logdump-only flashes; no boot/userdata/GPT or Windows driver change.
+Current kernel handoff: sessions/68-firmware-dtb-and-cpu7-opp-verified.md,
+reference/kernel68 and offline verify.py. The actual firmware DTB now includes
+CPU7 opp-2956800000; live node and policy7 table/max=2956800 kHz verified.
+Complete 52842-byte dmesg passes device SHA256/gzip CRC; old OPP/initial-frequency
+warnings gone. Same #60 Image/config/init, new boot_id afbbf870-b998-43d8-ab3d-
+42b3c68c0122, taint0, six UFS LUNs and USB UDC retained. High-frequency stress
+and actual USB communication remain untested. One boot-only flash; logdump/
+userdata/GPT untouched. Core executable bytes unchanged except version strings;
+DTB semantic change is only the CPU7 OPP. Original F1 firmware rollback preserved.
+Failed captures/exports retained, not filled. Existing compatible/native Windows
+terminal independently exported the saved new log after WSL corruption/partial
+receipts. No new EUD experiments, tools, parameters or Windows driver changes.
 All owners finally closed/detached; COM14 Windows, three nodes OK, Shared.
 Preserve actual init/EUD/earlycon pacing/TOP_CFG0x11/whole-frame/RX53/F1/terminals.
 User requires Android and all data preserved. No safe large rootfs partition
-established; see linux-port/docs/ROOTFS-PRESERVE-ANDROID.md. Next verify CPU7
-DTB deployment, USB role/function communication, PM8009 and native hardware
-using board evidence; do not guess voltage or delete nodes to silence errors.
+established; see linux-port/docs/ROOTFS-PRESERVE-ANDROID.md. Next verify USB role/
+function communication, PM8009 and native hardware using board evidence.
+
+Previous kernel handoff: sessions/67-usb-provider-and-dtb-activation.md,
+reference/kernel67. Matching SM8150 SNPS Femto V2 HS PHY m->y restores PHY/dwc3
+binding/UDC. Its CPU7 candidate only in FAT was OPP_ABSENT; session68 activates
+the firmware DTB. Do not repeat FAT-DTB-only flashing. Two logdump-only flashes;
+stale Windows DTS EUD/PON/bootargs were synchronized from the actual tree.
 
 Previous kernel handoff: sessions/66-verified-kernel-logs-and-builtins.md,
 reference/kernel66. OSM L3, ADC5/VADC_COMMON and paired early mapping were
@@ -156,11 +161,11 @@ EUD native multi-byte RX now has a verified method (session 41):
 
 ## 1. What to do next, in order
 
-Latest steering and verified results: read session66 and reference/kernel66
-first. Next audit CPU7's missing 2956800 kHz OPP and interconnect requirements,
-then USB Type-C/DP/provider topology, PM8009 cmd-db mismatch and board-specific
-fuel gauge/panel/touch. The source-audit lists evidence and authoritative
-repositories; rootfs research must preserve Android and all data.
+Latest steering and verified results: read session68/reference/kernel68 first,
+then session67/66. CPU7 firmware-DTB deployment/table/boot warnings are verified;
+high-frequency load remains untested. Next inspect USB role/function providers,
+PM8009 cmd-db mismatch and board-specific fuel gauge/panel/touch. The source
+audits list evidence and authoritative repositories; preserve Android/all data.
 Keep the last working #59 logdump and existing rollback images. For logs use
 the unchanged manual helper, a persistent WSL shell, independently verified
 9505 enumeration and one owner. Wait for target END marker and shell prompt,
@@ -321,7 +326,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = fd78c01  linux: verify logs and restore cpufreq, PMIC ADC and early mapping
+    master = 2d389cf  samurai: build in USB HS PHY and record active DTB evidence
+             fd78c01  linux: verify logs and restore cpufreq, PMIC ADC and early mapping
              3e22a55  eud: record WSL full-packet acceptance and continuous tty TX loss
              6e74a65  eud: record verified driver-loading blocker and full acceptance audit
              32ae015  eud: audit driver compatibility and prepare single-device trial tools
@@ -329,9 +335,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              ac16146  eud: prepare dedicated WDF package and supported build environment
              6f8ec50  eud: confirm even reopen reversal and prepare toggle-preserving candidate
              da915a8  eud: reproduce odd-frame reopen loss with matched driver and USB trace
-             7c43d67  eud: align reopen first-frame gaps and audit failed-read gates
 
-    96 commits ahead of upstream origin/master, as of the tip named above;
+    97 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro

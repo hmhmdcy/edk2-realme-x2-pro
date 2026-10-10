@@ -14,15 +14,16 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前内核交接看 [session67](sessions/67-usb-provider-and-dtb-activation.md)：
-HS PHY 单项内建后 #60 已绑定 PHY/dwc3，有 UDC，当前 deferred 为空，实际通信待验。
-完整日志通过长度/SHA256/gzip CRC，taint=0。CPU7 OPP 候选只换 FAT DTB 未生效；
-当前 EFI loader 使用固件配置表中的 DTB，先验证 live DT，不能重复 FAT-only 刷机。
+当前内核交接看 [session68](sessions/68-firmware-dtb-and-cpu7-opp-verified.md)：
+仅一次boot固件DTB更新使CPU7新OPP生效，live节点/调频表/max2956800及启动警告消失已验。
+同 #60 Image，新完整52842字节日志通过设备SHA256/gzip CRC，taint=0，UDC仍在。
+高频负载和实际USB通信待验。EFI loader使用固件DTB，不能重复FAT-only刷机。
+前次HS PHY提供者内建见session67。
 前次 CPU 调频提供者、PMIC ADC、earlycon 映射三项修复见 session66。
 使用既有手动工具，一个连接 owner，finally close/dispose/detach；WSL shell 要保持
 运行，attach 后先 lsusb 确认 9505。host COMMAND> 不代表 target 导出结束，必须等
 实际 END 标记和 shell 提示符。只读 GPT 不可把“前34扇区”当成无分区数据的范围。
-当前证据以 session67/reference/kernel67 为准，rootfs 限制仍见 session66；不做 EUD 参数实验。
+当前证据以session68/reference/kernel68为准，rootfs限制仍见session66；不做EUD参数实验。
 
 前次 EUD 交接看 `sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md`：
 WSL一次busy-console原生LEN14/wire16输入正确受理并执行，990个零完整；同一owner

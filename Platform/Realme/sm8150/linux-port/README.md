@@ -1,11 +1,11 @@
 # Linux 移植工作区（Realme X2 Pro / RMX1931 / samurai）
 
-当前内核入口：[session67](../sessions/67-usb-provider-and-dtb-activation.md)。
-`kernel67-builtins.config` 只有 SM8150 HS PHY 的 m->y：#60 已绑定 PHY/dwc3、有 UDC，
-当前 deferred 为空，实际 USB 通信尚待验证；完整 53788 字节 dmesg 哈希/CRC 通过，
-taint=0。CPU7 OPP 候选在本 DTS 和 `patches/0006-sm8150-ac-cpu7-opp-candidate.patch`，
-编译/FAT 抽取已核对，但 live DT 没有新节点：EFI stub 当前取固件 DTB，不能称修复。
-Windows DTS 的 EUD/PON/bootargs 已从原实际树同步，不是本轮新增硬件改动。
+当前内核入口：[session68](../sessions/68-firmware-dtb-and-cpu7-opp-verified.md)。
+仅更新boot固件DTB，live CPU7新OPP/调频表/max2956800已通过，原启动报错消失。
+同 #60 Image/config/init，完整52842字节日志哈希/CRC通过、taint=0，UDC仍在。
+高频负载/实际USB通信待验。0006补丁保留原candidate文件名，其实际固件部署本轮已验证。
+前次 `kernel67-builtins.config` 只有SM8150 HS PHY的m->y；EUD/PON/bootargs镜像同步
+来自既有实际树，非本轮改动。不重复只换FAT DTB的无效部署。
 COM14 已释放给 Windows；不运行旧 build-image.sh，真实 initramfs 与 EUD 修复保留。
 
 前次已验证内核修复：[session66](../sessions/66-verified-kernel-logs-and-builtins.md)。

@@ -21,7 +21,8 @@
 | `EDK2-KERNEL-EMBED.md` | how the kernel is embedded in the firmware volume |
 | `OLD-PROJECT-VERIFICATION.md` | the earlier (2026-10-05) project: what is reusable, what is wrong |
 | `ROOTFS-PRESERVE-ANDROID.md` | session66 rootfs research with Android/all-data preservation; no large safe rootfs partition verified |
-| `../../sessions/67-usb-provider-and-dtb-activation.md` | current kernel handoff: USB PHY/dwc3/UDC verified, CPU7 candidate FAT DTB not active; evidence in reference/kernel67 |
+| `../../sessions/68-firmware-dtb-and-cpu7-opp-verified.md` | current kernel handoff: firmware DTB activates CPU7 OPP/table/max, complete verified log, boot-only update; evidence in reference/kernel68 |
+| `../../sessions/67-usb-provider-and-dtb-activation.md` | USB PHY/dwc3/UDC verified; CPU7 candidate FAT DTB was inactive before session68; evidence in reference/kernel67 |
 
 Rules: one section, one file; never append a section back into the handover.
 `scripts/sync-docs-to-repo.sh` mirrors the top-level documents, and
