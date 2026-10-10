@@ -1,0 +1,86 @@
+[
+  {
+    "private_filename": "Image-before",
+    "bytes": 36719104,
+    "sha256": "97611f95a26866b54ba1330e370cb387fdbeff954ec1f56b4b8d13d1e6c4c4ee",
+    "published": false
+  },
+  {
+    "private_filename": "Image-watchdog",
+    "bytes": 36719104,
+    "sha256": "7def19605ac17482528049a6956144abc075a9727d3da2e771cce6a4fcab9e89",
+    "published": false
+  },
+  {
+    "private_filename": "config-before",
+    "bytes": 212470,
+    "sha256": "a19260711d578f1c348091b205476cf56d9878a4fd5b57c2dd7068b648ad0881",
+    "published": false
+  },
+  {
+    "private_filename": "cpio-before",
+    "bytes": 2510336,
+    "sha256": "74052b3e705e5af1c2268590206da264a339cf4e042e5ed601c54f56ad66b102",
+    "published": false
+  },
+  {
+    "private_filename": "dpu_encoder-before.c",
+    "bytes": 84824,
+    "sha256": "61694c7539ae4f043590281a839052aff7c2daf18bc59d0faeb0bfde7aaf1d6b",
+    "published": false
+  },
+  {
+    "private_filename": "dpu_trace-before.h",
+    "bytes": 28736,
+    "sha256": "55aebdeeefc408a2ae7b549d8d05b5aa6611a892dad7fc1939ec8d6ea2beee17",
+    "published": false
+  },
+  {
+    "private_filename": "preserved-before.json",
+    "bytes": 15865,
+    "sha256": "25870835d12e46bed1aaef84bbf51ce47d0184ce70102f02b2d184c780c357f0",
+    "published": false
+  },
+  {
+    "private_filename": "wifi-candidate.config",
+    "bytes": 213753,
+    "sha256": "cf4f09376fdcdcef2cfd8b7923407c59d6506c36764877a54609b6ade156409c",
+    "published": false
+  },
+  {
+    "private_filename": "wifi-candidate-attempt1.config",
+    "bytes": 214407,
+    "sha256": "2f559596205e1520bd6b4a884ea6def4709c9fe8128222bbcfbdb3d7df5e31da",
+    "published": false
+  },
+  {
+    "private_filename": "wifi-candidate-attempt2.config",
+    "bytes": 212718,
+    "sha256": "785e851f2d8c656c08aae2e77aef2a93d66e8b16c1ac4d5539273edc0fb4851f",
+    "published": false
+  },
+  {
+    "private_filename": "attempt3-wifi-candidate.config",
+    "bytes": 214462,
+    "sha256": "ba0faad583d2048e28807f58f0336f0856455b2fdedb3ac58e636bed05664867",
+    "published": false
+  },
+  {
+    "private_filename": "attempt3-wifi-kconfig.log",
+    "bytes": 86,
+    "sha256": "80386fda50a2d38cc63808ca929ff406e7b63bcbf1e7cfce93cbdd0c450f35ef",
+    "published": false
+  },
+  {
+    "private_filename": "attempt3-wifi-profile-audit.json",
+    "bytes": 5128,
+    "sha256": "d20c06feb2ed8160de2edfe0f5c98be718ff616fb0878f0a9db1389758143ef5",
+    "published": false
+  },
+  {
+    "private_filename": "wifi-kconfig-attempt1.log",
+    "bytes": 148,
+    "sha256": "3b80a83dbfb6ada72f28f1664d8edd56bd4906640c3373b21a752a94aaefc284",
+    "published": false
+  }
+]

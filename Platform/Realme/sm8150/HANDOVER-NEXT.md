@@ -7,47 +7,51 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10, session86 input and real snapshot)
+## 0. TL;DR - where the project stands (2026-10-10, session87 wrap-up and Wi-Fi)
 
-session86沿用Android R/cyborg固定来源，纠正MP2650输入有效位解释，读取输入ADC并接入观测驱动。
-当前#86，boot ID=32bf2d8f-8dde-47dc-9b88-e87db9e95198；末次515.97秒taint0、显示超时2/下溢0。
-display已停止on0、2051KiB/CPU、snapshot:count=0，首次真实超时快照已保存且后续逐字节一致。
-快照显示done callback、进入idle关IRQ、随后timeout；根因未定，没有新光学确认。
-MP软件绑定曾测得ONLINE1/Full，各5次成功；ADC变化导致EAGAIN、3份空uevent，完整接口失败。
-修正版#87最多3次一致性尝试、无ADC数据返回ENODATA，已编译但未部署/实机验收。
-当前MP客户端已释放、无持久DT节点；11个配置值保持，REG13曾0f/1f/0f，状态变化不是配置写入。
-电量99%、包8.636V、31.5°C、平均0mA；不能证明充电慢，控制/保护/USB输入预算仍未验收。
-原厂头文件VIN有效宏与MPS手册反向，未证明Android运行时受其影响；PDF仅有索引文字，未下载/视觉验证。
-无充电配置/NVM/OTP/FET/OTG/GPIO/MCU操作；只读I2C仍含寄存器选择写帧。
-当前logdump完整64MiB sha=cf11644e32a138ff1319fe9e44529f1ef7b2a1907c1f8876c597f970a526d286。
-原#85回退kernel86/logdump-before.img sha=60e183a6780945885a738ac1bd0c7e23ed41515bca662cb50a831ede3b57302b。
-boot前缀6682624字节sha=08edf9bcc1c55977169b0a8fd9f963805ba98d0423929e09e17bb9f811ca7405保持。
-第二次F1序列在OUT前中断，没重启/第二次刷写；已显式detach，flash-final.ps1已设置停止保护。
-完整证据见sessions/86-mp2650-input-status-and-real-display-timeout-snapshot.md与reference/kernel86。
+session87按用户要求收尾充电阶段，下一项硬件优先Wi-Fi，不继续重复充电查询。
+手机仍#86，boot ID=32bf2d8f-8dde-47dc-9b88-e87db9e95198；2140.55秒taint0、超时2/下溢0。
+display实例on0/count=0，首次真实故障快照摘要与86一致；未清空、重武装、开关屏或重启。
+花屏在75非连续DSI时钟修正后得到光学确认；后续显示超时仍开放，无本轮新光学验收。
+宿主#88显示timer候选编译通过，旧函数回归失败/候选六场景通过；未部署或实机验证。
+原trace在日志/快照之后，86的timeout时间不是回调开始时间；根因不能由此前时间差确定。
+既有dirty修复、30源文件模式、14个initramfs文件/308链接及config/CPIO保留，仅两DPU源改动。
+电量等标准属性可读；86 MP ONLINE/Full成功但ADC导致空uevent，完整接口失败。
+MP修正版#87未部署，手机没有MP客户端/持久DT节点；控制、保护、输入预算等仍在待办。
+此前99%/8.636V/31.5°C/平均0mA属于近满电观测，不能判慢充；原厂继承配置不视为安全验收。
+Wi-Fi当前WLAN关闭，QRTR/QMI/PAS/PD等为模块，宿主initramfs/实机无/lib/modules。
+最小诊断片段已实际Kconfig解析通过，27符号变化；该Wi-Fi配置尚未构建Image或部署。
+35项本机私人固件重新校验；四路供电已继承，Wi-Fi/MPSS仍禁用，实际QMI chip/board ID未知。
+本轮无分区写/充电配置/NVM/OTP/FET/OTG/GPIO/MCU操作；不启动modem/rmtfs。
+现场/构建/回归/边界见sessions/87-stage-wrap-up-and-wifi-prerequisites.md及reference/kernel87。
 
 ## 1. What to do next, in order
 
-1. 先通过169.254.42.1密钥SSH确认当前boot ID、完整dmesg、encoder状态和display实例。
-   当前超时2、snapshot:count=0、on0；不得清空/重新武装/自动开关屏或重复刷写。
-   先读86首次真实故障的prefinal/fault trace/snapshot、kms/state/clk和results-audit.json。
-   核对完成中断与timer/忙标志/idle关IRQ并发，pp_tx_done的new_count是布尔返回而非计数。
-   两份快照字节一致；快照历史有环形覆盖，不能称全程完整。77/80/86显示故障均开放。
-2. 显示故障审阅后，用新会话的新守卫验证#87观测修正版；当前候选未部署，旧守卫不能复用。
-   不运行flash-final.ps1绕过其停止保护。先保存新故障，独立检查原生命令退出码后才进入下一步。
-   Native#86完整uevent失败；ONLINE/Full个别成功不等于完整接口可用。MP当前无0-005c客户端，
-   QUP1=/dev/i2c-0，gauge QUP15=/dev/i2c-2、2-0055；所有工具按of_node/所有权守卫，不用FORCE。
-   #87不写硬件配置，后续还需持久DT、实际输入预算、热敏校准、2719保护/短路通信及失联安全。
-   OEM驱动probe会复位/关闭安全计时器，不直接运行。58首次ENXIO不盲目重试/扫描。
-3. 继续无线WLFW/PD/TFTP和本机板数据，再音频/蜂窝/相机等14组硬件；Wi-Fi/MPSS禁用，
-   35项固件仍私人归档。90Hz、休眠、GPU频点/压力、触摸校准、OTG/USB3仍需独立验收。
+1. 先继续Wi-Fi适配：读87的wifi-prerequisites.config/prepare-wifi-profile.py/audit和81固件/供电。
+   WLAN/SNOC及QRTR/GLINK/QMI/PAS/SYSMON/PD候选内建；RFKILL与SYSMON原模块依赖已处理。
+   先构建隔离的诊断依赖镜像并审查固件服务；现有#88不含Wi-Fi配置，不能直接称无线候选。
+   复用原始init/USB hook/SSH身份、全部现有修复和本机供电/保留区，不使用旧build-image.sh。
+2. 验证本机WLFW/PD/TFTP链和chip/board ID，再选精确板数据、无线接口/扫描/连接及流量。
+   不从35个bdwlan文件任挑默认，不混用他机mdsp；SNOC firmware-name当前用于板名。
+   tqftpserv原实现支持WRQ/存储写，必须审阅并准备明确拒绝写的服务；当前未构建/运行。
+   MPSS节点仍disabled且PAS默认auto_boot=false；不要自动启动未审阅的rmtfs等存储服务。
+3. 显示与充电保留为待办，不再作为无线前置验收；全硬件目标继续，然后蓝牙/音频等。
+   显示#88只是候选，真正timer/IRQ/idle根因未定；同一故障快照保持，重启前先保存现场。
+   不清空/重武装/自动开关屏。Native#86完整uevent失败，MP #87同样未部署/验收。
+   后续仍需ADC事件、持久DT、实际USB预算、热敏校准、2719/短路保护及失联安全。
 
 Linux源码/home/cy122/x2pro-linux/linux，initramfs/home/cy122/x2pro-linux/initramfs。
-保留全部dirty修复、init/USB hook/SSH身份及0011/0012/0013/0014，不运行旧build-image.sh。
-源码Image当前是未部署#87，手机仍#86，不能把宿主产物当实机状态。EUD TOP_CFG0x11、
-整帧/RX53/F1/两终端保持，必要时既有com-up只恢复COM/VBUS，不写CHGR；只允许已授权
-boot/logdump部署，按PARTNAME/大小/序列/哈希规则；保留Android/数据/GPT。只发布fork/master。
-二进制/镜像/全配置/完整源码、Android DT/固件和身份密钥保留私人目录。权限足够、gh可用；
-没有审批阻挡。原厂NTC/watchdog继承关闭等不是推荐设置，近满电平均0mA不是充电速率验收。
+手机仍#86，宿主Image#88未部署，私人wifi-candidate.config尚未构建；务必区分三者。
+先SSH确认boot ID、完整dmesg、encoder和display实例。EUD TOP_CFG0x11、整帧/RX53/F1/
+两终端保持，必要时既有com-up只恢复COM/VBUS，不写CHGR。未来只用新会话的新守卫；
+kernel86/flash-final.ps1的停止保护保持，不复用旧OUT序列，逐项检查原生命令退出码。
+只允许已授权boot/logdump部署；按PARTNAME/大小/序列/哈希核对，保留Android/数据/GPT。
+当前logdump最近实测sha=cf11644e32a138ff1319fe9e44529f1ef7b2a1907c1f8876c597f970a526d286；
+原#85回退kernel86/logdump-before.img sha=60e183a6780945885a738ac1bd0c7e23ed41515bca662cb50a831ede3b57302b。
+这些分区摘要在86采集，本轮未重新读整分区。boot前缀摘要/大小见86，不把宿主候选当部署证据。
+二进制/镜像/完整配置/源码/生成头、Android DT/固件/身份留私人目录；只发布fork/master。
+无审批阻挡，权限足够。充电不写配置/解封/NVM/OTP/FET/OTG/GPIO/MCU，不运行OEM charger probe，
+不读0051/0053/0072或故障REG14，不使用I2C_FORCE。历史85/86封存保持。
 
 ## 2. Verified hardware facts (do not re-derive)
 
@@ -95,7 +99,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 60e5b9f  samurai: verify OEM chemistry and short-IC observations
+    master = b3e3f11  samurai: observe MP2650 input and preserve real display timeout
+             60e5b9f  samurai: verify OEM chemistry and short-IC observations
              3e308c0  samurai: deploy boot display traces and timeout snapshots
              7c53c0b  samurai: compare Android R and cyborg charging sources
              1d1bc31  samurai: audit charge policy units and Android backup provenance
@@ -113,7 +118,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
              218812b  samurai: audit USB gadget state and EUD coordination
 
-    116 commits ahead of upstream origin/master, as of the tip named above;
+    117 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro

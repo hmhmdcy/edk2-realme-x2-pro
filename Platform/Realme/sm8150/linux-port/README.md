@@ -1,15 +1,11 @@
 # Linux 移植工作区（Realme X2 Pro / RMX1931 / samurai）
 
-当前硬件接入：[session75](../sessions/75-a640-render-and-sofef03f-clock-fix.md)。
-当前#76：A640/GMU已启用，本机签名固件加载和Turnip真实渲染通过，
-累计39096次交替红/绿三角形渲染、4096像素读回及fence校验成功。
-用户照片及纯白测试曾确认静止彩色噪点；关闭EOT单独无效，补齐原厂非连续DSI时钟并
-清除继承的controller/PHY强制时钟位后，用户确认全白及重新启动后的首次彩条正常。
-最终两次#76启动完整日志无DSI worker错误、SMMU context fault或Oops，taint0；
-混合GPU/显示回归共12次显示关闭/开启通过。当前boot_id=af922f36-bacd-481d-a5c5-21c8e3fada65。
-DTB只有GPU/GMU status及板级ZAP路径三处语义变化；EUD、触摸、RPMh、init/SSH身份保留。
-仅部署boot一次/logdump七次，Android/全部数据/GPT保留；专有固件及密钥不入Git。
-下一项电池/充电、无线/音频等；冷断电、90Hz、休眠、全部GPU频点压力仍未验收。
+当前状态：[session87](../sessions/87-stage-wrap-up-and-wifi-prerequisites.md)。手机仍#86，触摸/USB NCM/SSH、60Hz显示及A640真实渲染已有实机证据。
+75的非连续DSI时钟修正已获光学确认；后续显示超时仍开放，当前超时2/下溢0、故障快照保持。
+宿主显示#88候选编译/回归通过但未部署；MP完整观测接口和充电控制/保护尚未验收。
+按用户要求，充电阶段收尾，下一项优先Wi-Fi：已定位WLAN关闭/依赖模块缺失，最小候选配置
+Kconfig解析及35项本机固件重验通过；尚未构建该Wi-Fi配置Image、启动远端或无线验收。
+保留Android/数据/GPT及密钥，固件与二进制留私人目录。
 
 硬件功能清单：[HARDWARE-STATUS](docs/HARDWARE-STATUS.md)。
 
