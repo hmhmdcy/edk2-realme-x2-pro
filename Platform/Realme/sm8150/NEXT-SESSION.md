@@ -1,4 +1,16 @@
-# 下一阶段：本机充电保护链和安全控制方案（session79）
+# 下一阶段：电量计身份兼容性和充电保护链（session80）
+
+先读sessions/80-gauge-identity-and-stock-cell-observations.md、reference/kernel80/README.md。
+本轮手机未刷写、重启或开关屏，仍是session79 boot。原厂固定电芯查询已实测：
+4321mV+4321mV=8642mV，与同次标准总电压一致；没有保护/温控/均衡或充电验收。
+旧式DeviceType当场为FFA5；两次扩展为2719（有效回显、长度、checksum），TI官方2610。
+FirmwareVersion有效负载2719000400060003850200，未猜测字段含义或确切芯片。
+因此完整005x/0072未查询；status原型遇到非2610停止。原厂固定身份/固件/0071请求
+含I2C写帧但不改充电参数；没有解封、NVM/OTP、FET/OTG/复位/快充MCU操作。
+电池更换记录已询问，尚未取得答复；不预设更换或真伪，不因提高授权跳过兼容性验证。
+扩展编号的明确来源、独立温度和保护链、USB预算/失联仍要核实；权限足够，无审批阻挡。
+最终1772.71秒taint0/DSI错误0，8.641V/99%/30°C/平均电流0，MP2650十二字段与79一致。
+Image/config/显示源保留。无新光学/GPU/pageflip验收，session77间歇显示失败仍开放。
 
 先读sessions/79-mp2650-read-only-bus-and-current-settings.md、reference/kernel79/README.md，
 再看session76充电来源、session77电量计/失败及session78显示对照。

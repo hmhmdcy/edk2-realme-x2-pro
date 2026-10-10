@@ -1,4 +1,10 @@
-继续无人硬件接入目标。先读NEXT-SESSION.md、sessions/79和reference/kernel79，再读76/77/78。
+继续无人硬件接入目标。先读NEXT-SESSION.md、sessions/80和reference/kernel80，再读79/76/77/78。
+session80未刷写/重启：原厂电芯接口4321+4321=8642mV，与标准总电压一致。
+旧式DeviceType为FFA5，扩展2719有效但未映射到确切芯片/固件；TI官方型号2610。
+FW有效负载2719000400060003850200未解码，005x/0072未查询；不可绕过status身份门槛。
+优先核实兼容性、独立温度和保护链；不预设电池更换/真伪，不提高权限跳过硬件依据。
+权限足够。可继续有依据的固定原厂测量，禁止解封/NVM/OTP/FET/OTG/MCU试探。
+最终1772.71秒taint0/DSI错误0，MP寄存器与79一致；没有新光学/GPU/pageflip测试。
 当前boot为session79仅总线候选，Image/config/logdump仍#76。MP2650 QUP1=/dev/i2c-0，
 gauge QUP15=/dev/i2c-2、2-0055，触摸1-0020；按of_node找总线，旧硬编码脚本不能直接运行。
 MP2650三次36组合读成功，当前NTC/watchdog关闭、终止/12小时安全计时器开启。

@@ -7,7 +7,14 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10, session79 MP2650 observations)
+## 0. TL;DR - where the project stands (2026-10-10, session80 gauge identity and cell observations)
+
+session80未刷写/重启；原厂电芯接口4321+4321=8642mV，与标准总电压一致。
+旧式身份FFA5、扩展2719（两次校验一致），与TI官方2610不同；确切版本仍待核实。
+FW负载2719000400060003850200未解码，完整005x/0072没有查询；勿绕过status身份门槛。
+权限足够；差异不自动证明电池更换/真伪，独立温度/保护链和USB预算仍未验收。
+最终1772.71秒taint0/DSI错误0，8.641V/99%/30°C/平均电流0；MP2650字段与79一致。
+详见sessions/80-gauge-identity-and-stock-cell-observations.md、reference/kernel80。
 
 已部署session79仅QUP1总线boot，Image/config/logdump仍#76；无充电器子节点。
 MP2650三次36组合读成功、配置一致；NTC/watchdog关闭，终止/12小时安全计时器开启。
@@ -92,7 +99,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 3dd07f4  samurai: record first-boot controls and event-checked page flips
+    master = ce1352f  samurai: enable bounded MP2650 observations and record current settings
+             3dd07f4  samurai: record first-boot controls and event-checked page flips
              efeba61  samurai: enable BQ28Z610 monitoring and record display regression
              136157b  samurai: audit charging sources and safety boundaries
              89ab2a5  samurai: normalize session75 evidence file modes
@@ -104,7 +112,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
              218812b  samurai: audit USB gadget state and EUD coordination
 
-    109 commits ahead of upstream origin/master, as of the tip named above;
+    110 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
