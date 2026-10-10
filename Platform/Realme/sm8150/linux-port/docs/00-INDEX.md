@@ -1,10 +1,12 @@
 # linux-port/docs - index
 
-当前诊断状态：[session84](../../sessions/84-display-boot-tracing-and-timeout-snapshots.md)。
-#85保留既有硬件代码/DT/initramfs，仅替换logdump的Image。首次跟踪与超时快照配置已验证，
-两次600翻页CRC通过，扩大运行时缓冲后的探测无事件损失；早期显示故障仍开放。
-MP2650十二值保持，充电控制未验收；来源对照见[session83](../../sessions/83-androidr-and-cyborg-charging-source-comparison.md)。
-历史触摸接入基线见[session71](../../sessions/71-native-s3706-touch-bringup.md)。
+当前观测：[session85](../../sessions/85-oem-chemistry-and-short-ic-observations.md)。
+58身份ENXIO后停止，原厂004b=LION/0054位28=0；本机Android归档未选择均衡温补。
+MP配置/分区哈希保持，充电控制及保护未验收；满电0mA不能判断充电速率。
+沿用[session84](../../sessions/84-display-boot-tracing-and-timeout-snapshots.md)的#85显示诊断，
+2477.32秒超时0、snapshot:count=1待触发；77/80早期故障仍开放。
+参考来源见[session83](../../sessions/83-androidr-and-cyborg-charging-source-comparison.md)，
+历史触摸基线见[session71](../../sessions/71-native-s3706-touch-bringup.md)。
 
 硬件功能清单：[HARDWARE-STATUS](HARDWARE-STATUS.md)。
 
