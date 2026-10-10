@@ -1,5 +1,10 @@
 # EUD RX side: registers, framing and the console driver
 
+当前日志/USB功能入口：[session69](sessions/69-usb-gadget-state-and-eud-coordination-audit.md)。
+69499字节设备保存日志哈希/CRC通过；同 #60，COM14 Windows/Shared/未Attached，owner关闭。
+UDC存在但gadget为空；实际legacy glue设VBUS override，EUD/普通USB互斥尚未证明。
+只读审查，无刷机/新gadget/EUD参数实验；TOP_CFG/整帧/RX53/F1/两种终端保留。
+
 > Split out of EUD.md on 2026-10-08; verbatim from there.  The TX side and the firmware
 > log ring are in EUD.md.
 

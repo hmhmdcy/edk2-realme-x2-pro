@@ -17,7 +17,20 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current kernel handoff: sessions/68-firmware-dtb-and-cpu7-opp-verified.md,
+Current kernel handoff: sessions/69-usb-gadget-state-and-eud-coordination-audit.md,
+reference/kernel69. Same #60/boot_id/taint0; latest complete 69499-byte device-saved
+dmesg passes SHA256/gzip CRC and lengths. COM14 Windows/Shared/not Attached,
+three nodes OK and all owners closed. Configfs mounted/UDC registered, but gadget
+directory empty; no ordinary USB function configured. Actual glue is
+dwc3-qcom-legacy, confirmed on device, and it sets VBUS override in peripheral
+mode. QUIC describes ordinary USB through EUD; tty-only VBUS forwarding is
+absent, but neither hardware exclusivity nor its root cause is proved.
+User's Android EUD/ADB exclusivity observation retained; no gadget bind/EUD
+control change/flash/kernel modification. Do not load the upstream EUD control
+driver alongside the custom tty on the same CSR/IRQ. Source/log audit and
+postmarketOS USB-network/SSH explanation recorded; hardware goal remains open.
+
+Previous kernel handoff: sessions/68-firmware-dtb-and-cpu7-opp-verified.md,
 reference/kernel68 and offline verify.py. The actual firmware DTB now includes
 CPU7 opp-2956800000; live node and policy7 table/max=2956800 kHz verified.
 Complete 52842-byte dmesg passes device SHA256/gzip CRC; old OPP/initial-frequency
@@ -161,8 +174,11 @@ EUD native multi-byte RX now has a verified method (session 41):
 
 ## 1. What to do next, in order
 
-Latest steering and verified results: read session68/reference/kernel68 first,
-then session67/66. CPU7 firmware-DTB deployment/table/boot warnings are verified;
+Latest steering and verified results: read session69/reference/kernel69 first,
+then session68/67/66. Empty gadget is a configuration prerequisite, not a proved
+USB failure. EUD/ordinary USB coordination remains untested; keep legacy VBUS
+override and the user's Android observation in scope, without control/mask
+experiments. CPU7 firmware-DTB deployment/table/boot warnings are verified;
 high-frequency load remains untested. Next inspect USB role/function providers,
 PM8009 cmd-db mismatch and board-specific fuel gauge/panel/touch. The source
 audits list evidence and authoritative repositories; preserve Android/all data.

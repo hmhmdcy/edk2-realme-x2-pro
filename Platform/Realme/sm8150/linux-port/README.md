@@ -1,6 +1,10 @@
 # Linux 移植工作区（Realme X2 Pro / RMX1931 / samurai）
 
-当前内核入口：[session68](../sessions/68-firmware-dtb-and-cpu7-opp-verified.md)。
+当前只读诊断：[session69](../sessions/69-usb-gadget-state-and-eud-coordination-audit.md)。
+69499字节设备保存dmesg哈希/CRC通过；UDC/configfs存在但未配置普通USB功能。
+实际legacy glue/VBUS override已核对，EUD与普通USB共存尚未验证；无内核修改/刷机。
+
+前次内核修复：[session68](../sessions/68-firmware-dtb-and-cpu7-opp-verified.md)。
 仅更新boot固件DTB，live CPU7新OPP/调频表/max2956800已通过，原启动报错消失。
 同 #60 Image/config/init，完整52842字节日志哈希/CRC通过、taint=0，UDC仍在。
 高频负载/实际USB通信待验。0006补丁保留原candidate文件名，其实际固件部署本轮已验证。

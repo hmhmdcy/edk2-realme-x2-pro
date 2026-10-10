@@ -8,6 +8,11 @@
 
 ## 0. 一句话
 
+最新只读日志/USB审查看 [session69](sessions/69-usb-gadget-state-and-eud-coordination-audit.md)。
+69499字节完整日志哈希/CRC通过，同 #60/taint0；UDC存在但未配置gadget。
+实际legacy glue和EUD通知路径已核对，普通USB共存仍未验证；无刷机/控制切换/新EUD实验。
+COM14 Windows/Shared/未Attached，owner关闭；postmarketOS的USB网络/SSH是后续通道前提。
+
 2026-10-09 session 41 找到原生多字节 RX 方法：SM8150 SOUTH TOP_CFG=0x11，
 整帧在 TX 锁内读取后再打印/交给 tty。UEFI 跨重启与 Linux 的 ABC/DEFG 正确，
 原生多字节 shell 赋值也已执行。len=2 的 [90][02] 仍保留 F1；驱动在交还 PHY

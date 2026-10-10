@@ -16,7 +16,13 @@ upstream project.
 
 Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
 
-Current kernel work: [session68](sessions/68-firmware-dtb-and-cpu7-opp-verified.md).
+Current kernel audit: [session69](sessions/69-usb-gadget-state-and-eud-coordination-audit.md).
+Device-saved 69499-byte dmesg passes SHA256/gzip CRC; same #60/taint0, no flash
+or kernel change. UDC/configfs exist but no gadget function is configured.
+Actual DWC3 legacy glue/VBUS override and EUD notification paths were audited;
+ordinary USB coexistence remains untested. COM14 Windows/Shared, owners closed.
+
+Latest kernel fix: [session68](sessions/68-firmware-dtb-and-cpu7-opp-verified.md).
 The firmware DTB activates CPU7's 2.9568 GHz OPP; live DT/table/max are verified
 and its boot warnings disappear. Same #60 kernel, fresh boot_id, taint0; complete
 52842-byte log passes device SHA256/gzip CRC. One boot-only flash; logdump and
