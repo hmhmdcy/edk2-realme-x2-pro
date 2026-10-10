@@ -8,7 +8,11 @@
 
 ## 0. 一句话
 
-最新只读日志/USB审查看 [session69](sessions/69-usb-gadget-state-and-eud-coordination-audit.md)。
+最新只读日志/供电/触摸前提审查看 [session70](sessions/70-pm8009-resource-and-touch-prerequisites.md)。
+85404字节完整日志及cmd-db校验通过；PM8009无F资源/DT供电消费者，降为P3。
+GENI/RMI4/i2c17尚未使触摸进入探测；无内核修改/刷机/新EUD实验，owner均已释放。
+
+前次只读日志/USB审查看 [session69](sessions/69-usb-gadget-state-and-eud-coordination-audit.md)。
 69499字节完整日志哈希/CRC通过，同 #60/taint0；UDC存在但未配置gadget。
 实际legacy glue和EUD通知路径已核对，普通USB共存仍未验证；无刷机/控制切换/新EUD实验。
 COM14 Windows/Shared/未Attached，owner关闭；postmarketOS的USB网络/SSH是后续通道前提。

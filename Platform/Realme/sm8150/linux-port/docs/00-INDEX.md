@@ -20,8 +20,9 @@
 | `ANDROID-DT-REFERENCE.md` | where the Android downstream DTS lives and what was cherry-picked |
 | `EDK2-KERNEL-EMBED.md` | how the kernel is embedded in the firmware volume |
 | `OLD-PROJECT-VERIFICATION.md` | the earlier (2026-10-05) project: what is reusable, what is wrong |
-| `ROOTFS-PRESERVE-ANDROID.md` | session66 rootfs research with Android/all-data preservation; no large safe rootfs partition verified |
-| `../../sessions/69-usb-gadget-state-and-eud-coordination-audit.md` | current read-only log/USB audit: 69499-byte verified dmesg, empty gadget, actual legacy glue and EUD coordination limits; evidence in reference/kernel69 |
+| `ROOTFS-PRESERVE-ANDROID.md` | session66/70 rootfs research and offline capacity with Android/all-data preservation; no large safe rootfs partition verified |
+| `../../sessions/70-pm8009-resource-and-touch-prerequisites.md` | verified cmd-db/full dmesg, PM8009 impact/priority, native touch prerequisites and rootfs capacity; reference/kernel70 |
+| `../../sessions/69-usb-gadget-state-and-eud-coordination-audit.md` | previous read-only log/USB audit: 69499-byte verified dmesg, empty gadget, actual legacy glue and EUD coordination limits; evidence in reference/kernel69 |
 | `../../sessions/68-firmware-dtb-and-cpu7-opp-verified.md` | firmware DTB activates CPU7 OPP/table/max, complete verified log, boot-only update; evidence in reference/kernel68 |
 | `../../sessions/67-usb-provider-and-dtb-activation.md` | USB PHY/dwc3/UDC verified; CPU7 candidate FAT DTB was inactive before session68; evidence in reference/kernel67 |
 

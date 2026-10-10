@@ -1,8 +1,10 @@
 # postmarketOS 持久 rootfs：保留 Android 和全部数据
 
-2026-10-10，session 66。用户明确选择保留 Android 和全部数据；当前只允许刷 boot/logdump。本轮没有格式化、缩容、改 GPT 或写 userdata。
+2026-10-10，session66研究、session70只读容量复核。用户明确选择保留 Android 和全部数据；当前只允许刷 boot/logdump。session68曾更新boot固件DTB；rootfs未部署，没有格式化、缩容、改 GPT 或写 userdata。
 
 目前没有确认可直接刷入完整持久 postmarketOS 的空闲分区。继续使用 RAM initramfs；下一步评估 logdump 内极小的只读 rootfs，或 USB 可用后的外置存储。普通发行版、固件、模块、图形界面与更新空间不能按一个最小 Alpine 压缩包的大小估计。
+
+session70只读检查保留的64 MiB logdump-k67-usb.img，Image=30185984字节、DTB=94803字节，FAT空闲36737024字节（约35.04 MiB）。镜像哈希保持；这不是重新扫描手机文件系统或GPT，也不证明能容纳完整pmOS或持久更新空间。证据在reference/kernel70/filesystem-capacity.json；本轮无刷机。
 
 ## 分区证据及候选
 
@@ -11,7 +13,7 @@
 | 位置 | 备份所见容量 | 保留数据时的判断 |
 |---|---:|---|
 | logdump | 64 MiB | 当前承载 FAT、约 30 MiB 内核和 DTB。可能容纳极小压缩 rootfs；未制作或验证持久方案，不能保证完整发行版可用。 |
-| boot | 96 MiB | 引导分区，不作为普通可写 rootfs。当前没有刷 boot。 |
+| boot | 96 MiB | 引导分区，不作为普通可写 rootfs。session68更新过固件DTB，未刷入rootfs。 |
 | cache | 512 MiB | 未证明为空或 Android/OTA 不再使用；不格式化，也不凭名称认定安全。 |
 | userdata | 约 110.9 GiB | 保留全部数据，禁止覆盖或缩容。文件内 rootfs 需先证明 Linux 能读取 Android 数据及加密格式。 |
 | system/vendor/odm | 4280/1632/256 MiB | Android 使用，排除重用。 |

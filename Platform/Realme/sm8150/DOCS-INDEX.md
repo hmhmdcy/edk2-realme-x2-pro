@@ -63,7 +63,8 @@
 | sessions/66-verified-kernel-logs-and-builtins.md、reference/kernel66/ | 完整日志校验、CPU/PMIC内建依赖和early mapping三项真机修复；实际异常优先级、失败证据与关闭状态 |
 | sessions/67-usb-provider-and-dtb-activation.md、reference/kernel67/ | HS PHY 单项内建后 PHY/dwc3/UDC 真机通过，完整日志校验；CPU7 FAT-DTB 候选未激活、缺回执/损坏导出保留、COM14 回归 Windows |
 | sessions/68-firmware-dtb-and-cpu7-opp-verified.md、reference/kernel68/ | boot固件DTB激活CPU7高OPP，live节点/调频表/max与完整日志真机通过；其余模块仅版本字符串变动，失败证据保留，COM14回Windows |
-| sessions/69-usb-gadget-state-and-eud-coordination-audit.md、reference/kernel69/ | 当前只读日志/USB功能审查：69499字节完整日志校验、gadget为空、实际legacy glue/VBUS override；EUD共存尚未证明，普通USB网络/SSH路径说明 |
+| sessions/69-usb-gadget-state-and-eud-coordination-audit.md、reference/kernel69/ | 前次只读日志/USB功能审查：69499字节完整日志校验、gadget为空、实际legacy glue/VBUS override；EUD共存尚未证明，普通USB网络/SSH路径说明 |
+| sessions/70-pm8009-resource-and-touch-prerequisites.md、reference/kernel70/ | 当前资源/触摸前提审查：85404字节日志及cmd-db校验，无PM8009 F资源/DT消费者，降为P3；GENI/RMI4/i2c17未启用，rootfs剩余容量核对 |
 | linux-port/docs/ROOTFS-PRESERVE-ANDROID.md | 保留Android和全部数据的rootfs研究：GPT备份边界、logdump小rootfs/外置/文件方案，未确认安全大分区 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
@@ -89,5 +90,5 @@
 ## 5. 安全与待办
 
 - HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
-- 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD 打开时占 USB，彻底断电要长按电源约 15 s。
+- 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD连接保持单一owner，普通USB/EUD共存尚未验收；彻底断电要长按电源约 15 s。
 - 待办：HANDOVER-NEXT.md 第 1 节、sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md。用户最新优先Linux内核具体问题，收束EUD实验，关键日志保存设备侧完整副本并校验导出。保留TOP_CFG0x11/RX53 console IRQ/F1/现有终端/RX48回退；连续WSL TX请求/取消/FIFO审查及Windows受支持环境的开关/完整原生/回退验收保留独立待办；不重复旧passing/reset/零等待。

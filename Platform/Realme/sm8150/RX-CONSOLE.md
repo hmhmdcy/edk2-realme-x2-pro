@@ -1,6 +1,11 @@
 # EUD RX side: registers, framing and the console driver
 
-当前日志/USB功能入口：[session69](sessions/69-usb-gadget-state-and-eud-coordination-audit.md)。
+当前日志入口：[session70](sessions/70-pm8009-resource-and-touch-prerequisites.md)。
+85404字节完整dmesg及cmd-db/状态副本哈希CRC通过，同 #60/taint0。
+PM8009无F资源/DT供电消费者，优先级下调；原生触摸探测前提尚未启用。
+无内核修改/刷机/新EUD实验，九个owner均finally释放；COM14 Windows/Shared/未Attached。
+
+前次日志/USB功能入口：[session69](sessions/69-usb-gadget-state-and-eud-coordination-audit.md)。
 69499字节设备保存日志哈希/CRC通过；同 #60，COM14 Windows/Shared/未Attached，owner关闭。
 UDC存在但gadget为空；实际legacy glue设VBUS override，EUD/普通USB互斥尚未证明。
 只读审查，无刷机/新gadget/EUD参数实验；TOP_CFG/整帧/RX53/F1/两种终端保留。

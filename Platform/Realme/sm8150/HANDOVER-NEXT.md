@@ -17,7 +17,18 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current kernel handoff: sessions/69-usb-gadget-state-and-eud-coordination-audit.md,
+Current kernel handoff: sessions/70-pm8009-resource-and-touch-prerequisites.md,
+reference/kernel70. Fresh 85404-byte dmesg and 139-entry cmd-db dump pass device
+SHA256/gzip CRC/lengths; same #60/boot_id/taint0, six UFS disks, no panic/Oops.
+No F resources and no PM8009 DT supply consumers in the active firmware DTB or
+saved Android tree; lower this warning to P3 without deleting nodes or claiming
+physical PMIC absence. GENI I2C is modular, RMI4 off, i2c17 disabled, no adapter;
+native touch has not been probed. Audit its board power/GPIO/RMI dependencies
+before enabling. Preserved logdump image has 36737024 free bytes, not a proved
+full/persistent pmOS layout. No kernel changes/flash/gadget/EUD experiments;
+all owners closed, COM14 Windows/Shared/unattached. Android/all data preserved.
+
+Previous kernel handoff: sessions/69-usb-gadget-state-and-eud-coordination-audit.md,
 reference/kernel69. Same #60/boot_id/taint0; latest complete 69499-byte device-saved
 dmesg passes SHA256/gzip CRC and lengths. COM14 Windows/Shared/not Attached,
 three nodes OK and all owners closed. Configfs mounted/UDC registered, but gadget
@@ -174,13 +185,17 @@ EUD native multi-byte RX now has a verified method (session 41):
 
 ## 1. What to do next, in order
 
-Latest steering and verified results: read session69/reference/kernel69 first,
-then session68/67/66. Empty gadget is a configuration prerequisite, not a proved
+Latest steering and verified results: read session70/reference/kernel70 first,
+then session69/68/67/66. PM8009 F resources are absent and have no current DT
+supply consumers: P3, not a reason to delete nodes or invent voltages. Native
+touch lacks GENI/RMI4 and enabled i2c17/DT client prerequisites; audit board
+GPIO/power, QUP/GPI DMA and RMI queries before a minimal candidate. Empty
+gadget is a configuration prerequisite, not a proved
 USB failure. EUD/ordinary USB coordination remains untested; keep legacy VBUS
 override and the user's Android observation in scope, without control/mask
 experiments. CPU7 firmware-DTB deployment/table/boot warnings are verified;
-high-frequency load remains untested. Next inspect USB role/function providers,
-PM8009 cmd-db mismatch and board-specific fuel gauge/panel/touch. The source
+high-frequency load remains untested. Next inspect USB role/function providers
+and board-specific fuel gauge/panel/touch. The source
 audits list evidence and authoritative repositories; preserve Android/all data.
 Keep the last working #59 logdump and existing rollback images. For logs use
 the unchanged manual helper, a persistent WSL shell, independently verified
@@ -524,6 +539,7 @@ the only copy.
 | 55 | Reproduced seq7376 TX gap before Windows accepted-buffer count; first startup receipt still missing, unchanged candidate | `sessions/55-windows-perf-counter-and-reproduced-tx-gap.md` |
 | 56 | Repair/measurement synthesis, exact pre-buffer/reset/padding boundaries and focused new sources; read-only, no stability fix | `sessions/56-source-boundaries-and-focused-research.md` |
 | 57 | Built-in pre-buffer logger measured; 9550 driver/counter/raw bytes and 512 journal matches, restored configuration; old faults untriggered | `sessions/57-driver-raw-logging-boundary.md` |
+| 70 | Verified cmd-db/full dmesg, unused PM8009 resource warning lowered to P3, native touch prerequisites and rootfs capacity audited | `sessions/70-pm8009-resource-and-touch-prerequisites.md` |
 
 Rules that keep this file from growing again:
 

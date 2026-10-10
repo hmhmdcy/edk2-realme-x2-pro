@@ -16,7 +16,14 @@ upstream project.
 
 Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
 
-Current kernel audit: [session69](sessions/69-usb-gadget-state-and-eud-coordination-audit.md).
+Current kernel audit: [session70](sessions/70-pm8009-resource-and-touch-prerequisites.md).
+Fresh 85404-byte dmesg/cmd-db pass device SHA256/gzip CRC. No PM8009 F resources
+or current DT supply consumers: lower its warning to P3 without removing nodes.
+Native touch lacks enabled GENI/RMI4/bus prerequisites; hardware remains untested.
+Preserved logdump image has 36737024 free bytes, not a verified full pmOS layout.
+No kernel changes/flash/EUD experiments; COM14 Windows/Shared, owners released.
+
+Previous kernel audit: [session69](sessions/69-usb-gadget-state-and-eud-coordination-audit.md).
 Device-saved 69499-byte dmesg passes SHA256/gzip CRC; same #60/taint0, no flash
 or kernel change. UDC/configfs exist but no gadget function is configured.
 Actual DWC3 legacy glue/VBUS override and EUD notification paths were audited;

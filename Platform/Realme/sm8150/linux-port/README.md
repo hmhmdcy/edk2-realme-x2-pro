@@ -1,6 +1,11 @@
 # Linux 移植工作区（Realme X2 Pro / RMX1931 / samurai）
 
-当前只读诊断：[session69](../sessions/69-usb-gadget-state-and-eud-coordination-audit.md)。
+当前只读诊断：[session70](../sessions/70-pm8009-resource-and-touch-prerequisites.md)。
+85404字节完整日志及cmd-db/状态副本校验通过；PM8009无F资源/DT供电消费者，降为P3。
+GENI/RMI4及i2c17前提尚未启用，触摸未进入正常探测；本轮无源码变更或刷机。
+logdump离线镜像空闲36737024字节，仍无已确认的大持久rootfs分区。
+
+前次只读诊断：[session69](../sessions/69-usb-gadget-state-and-eud-coordination-audit.md)。
 69499字节设备保存dmesg哈希/CRC通过；UDC/configfs存在但未配置普通USB功能。
 实际legacy glue/VBUS override已核对，EUD与普通USB共存尚未验证；无内核修改/刷机。
 
