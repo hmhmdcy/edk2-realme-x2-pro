@@ -1,12 +1,12 @@
 # linux-port/docs - index
 
-当前观测：[session85](../../sessions/85-oem-chemistry-and-short-ic-observations.md)。
-58身份ENXIO后停止，原厂004b=LION/0054位28=0；本机Android归档未选择均衡温补。
-MP配置/分区哈希保持，充电控制及保护未验收；满电0mA不能判断充电速率。
-沿用[session84](../../sessions/84-display-boot-tracing-and-timeout-snapshots.md)的#85显示诊断，
-2477.32秒超时0、snapshot:count=1待触发；77/80早期故障仍开放。
-参考来源见[session83](../../sessions/83-androidr-and-cyborg-charging-source-comparison.md)，
-历史触摸基线见[session71](../../sessions/71-native-s3706-touch-bringup.md)。
+当前证据：[session86](../../sessions/86-mp2650-input-status-and-real-display-timeout-snapshot.md)。
+手机#86、候选#87未部署；MP输入/Full成功，但ADC导致事件为空，完整接口仍待验证。
+首次真实显示超时快照已保存，末次超时2/下溢0；实例停止、count=0，不清空/自动开关屏。
+充电控制、输入预算及保护未验收；原厂协议/安全边界见[session85](../../sessions/85-oem-chemistry-and-short-ic-observations.md)、
+[session83](../../sessions/83-androidr-and-cyborg-charging-source-comparison.md)，显示跟踪部署见
+[session84](../../sessions/84-display-boot-tracing-and-timeout-snapshots.md)。
+触摸基线见[session71](../../sessions/71-native-s3706-touch-bringup.md)。
 
 硬件功能清单：[HARDWARE-STATUS](HARDWARE-STATUS.md)。
 
