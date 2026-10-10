@@ -1,6 +1,14 @@
 # Linux 移植工作区（Realme X2 Pro / RMX1931 / samurai）
 
-当前内核入口：[session66](../sessions/66-verified-kernel-logs-and-builtins.md)。
+当前内核入口：[session67](../sessions/67-usb-provider-and-dtb-activation.md)。
+`kernel67-builtins.config` 只有 SM8150 HS PHY 的 m->y：#60 已绑定 PHY/dwc3、有 UDC，
+当前 deferred 为空，实际 USB 通信尚待验证；完整 53788 字节 dmesg 哈希/CRC 通过，
+taint=0。CPU7 OPP 候选在本 DTS 和 `patches/0006-sm8150-ac-cpu7-opp-candidate.patch`，
+编译/FAT 抽取已核对，但 live DT 没有新节点：EFI stub 当前取固件 DTB，不能称修复。
+Windows DTS 的 EUD/PON/bootargs 已从原实际树同步，不是本轮新增硬件改动。
+COM14 已释放给 Windows；不运行旧 build-image.sh，真实 initramfs 与 EUD 修复保留。
+
+前次已验证内核修复：[session66](../sessions/66-verified-kernel-logs-and-builtins.md)。
 校验完整日志后依次内建 OSM L3、ADC5/VADC_COMMON，修正 earlycon CSR 的临时映射。
 真机 #59 已有 CPU policy0/4/7 和三路 PMIC 温度，taint=0，完整 dmesg 的设备哈希/CRC
 通过；CPU7 2956800 kHz OPP 与 USB deferred 仍待查。配置增量是

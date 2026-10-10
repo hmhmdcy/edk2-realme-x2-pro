@@ -17,24 +17,29 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current kernel handoff: sessions/66-verified-kernel-logs-and-builtins.md,
-with evidence in reference/kernel66 and offline verify.py. Three logdump-only
-steps verified on hardware: built-in OSM L3 creates CPU policies 0/4/7;
-ADC5/VADC_COMMON creates three PMIC temperatures; paired early mapping removes
-the setup_earlycon ioremap warning and taint becomes 0. Last boot #59,
-boot_id 87a7b341-6139-4afd-9ca2-3c0b20493e68. Its complete 53866-byte dmesg
-matches device SHA256 and gzip CRC; CPU-step complete dmesg also validates.
-CPU7 2956800 kHz OPP and persistent USB/dwc3 defer remain. Priorities and
-source authority are in reference/kernel66/source-audit.md. Do not guess CPU
-voltages/bandwidth or delete inherited PM8009 nodes without board evidence.
+Current kernel handoff: sessions/67-usb-provider-and-dtb-activation.md,
+reference/kernel67 and offline verify.py. One config change, matching SM8150
+SNPS Femto V2 HS PHY m->y, restores HS PHY/dwc3 binding and creates a UDC.
+Current devices_deferred is empty; USB functions/peripheral traffic are untested.
+Last boot #60, boot_id 28e3bd68-2dd4-46f5-a24b-95f237ec070b, taint0. Complete
+53788-byte dmesg passes device SHA256 and gzip CRC; old dwc3 core failure gone.
+CPU7 2956800 kHz OPP warnings remain. A pinned-source OPP candidate compiled
+and was copied to FAT, but verified live DT says OPP_ABSENT: the current EFI
+loader takes the firmware DTB. Do not repeat FAT-DTB-only flashing or claim
+that candidate is runtime verified. Windows DTS mirror was stale; EUD/PON/
+bootargs synchronization is existing actual-tree content, not new fixes.
+Two logdump-only flashes; no boot/userdata/GPT or Windows driver change.
+All owners finally closed/detached; COM14 Windows, three nodes OK, Shared.
+Preserve actual init/EUD/earlycon pacing/TOP_CFG0x11/whole-frame/RX53/F1/terminals.
 User requires Android and all data preserved. No safe large rootfs partition
-established; see linux-port/docs/ROOTFS-PRESERVE-ANDROID.md. No boot/userdata/GPT
-write, no Windows driver change. All owners finally closed, USBIP detached,
-COM14 and three nodes OK; finish-state.json is after the three flashes.
-The older final-state.json is only the pre-fix collection end state.
-Actual init/DTB/eud.c and TOP_CFG0x11/whole-frame/RX53/F1/terminals retained.
-Windows earlycon mirror was stale and now matches the actual existing paced
-implementation plus the minimal early-map fix; no new TX delay tuning.
+established; see linux-port/docs/ROOTFS-PRESERVE-ANDROID.md. Next verify CPU7
+DTB deployment, USB role/function communication, PM8009 and native hardware
+using board evidence; do not guess voltage or delete nodes to silence errors.
+
+Previous kernel handoff: sessions/66-verified-kernel-logs-and-builtins.md,
+reference/kernel66. OSM L3, ADC5/VADC_COMMON and paired early mapping were
+verified on hardware. Its finish-state.json is after three flashes;
+the older final-state.json is only the pre-fix collection end state.
 
 Previous EUD handoff: sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md.
 User-selected WSL route now measured: one busy-console native14/wire16 probe
@@ -316,7 +321,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 3e22a55  eud: record WSL full-packet acceptance and continuous tty TX loss
+    master = fd78c01  linux: verify logs and restore cpufreq, PMIC ADC and early mapping
+             3e22a55  eud: record WSL full-packet acceptance and continuous tty TX loss
              6e74a65  eud: record verified driver-loading blocker and full acceptance audit
              32ae015  eud: audit driver compatibility and prepare single-device trial tools
              727657e  eud: build and validate toggle-preserving test driver package
@@ -324,9 +330,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              6f8ec50  eud: confirm even reopen reversal and prepare toggle-preserving candidate
              da915a8  eud: reproduce odd-frame reopen loss with matched driver and USB trace
              7c43d67  eud: align reopen first-frame gaps and audit failed-read gates
-             e7de5a3  eud: measure pre-buffer driver logging and restored capture
 
-    95 commits ahead of upstream origin/master, as of the tip named above;
+    96 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro

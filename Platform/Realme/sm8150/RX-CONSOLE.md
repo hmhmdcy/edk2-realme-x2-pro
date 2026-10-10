@@ -11,10 +11,12 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前内核入口：[session66](sessions/66-verified-kernel-logs-and-builtins.md)。**
-> 校验完整日志后依次修复 OSM L3/ADC5 内建和 earlycon 临时映射。#59 完整 dmesg
-> 长度/SHA256/gzip CRC 通过，taint=0；CPU7 OPP 与 USB deferred 仍在。
-> 不增加 EUD 实验，保留 RX53/TOP_CFG0x11/整帧/F1/两种终端；证据见 reference/kernel66。
+> **当前内核入口：[session67](sessions/67-usb-provider-and-dtb-activation.md)。**
+> HS PHY 内建后 #60 已绑定 PHY/dwc3，有 UDC，当前 deferred 为空；完整 53788 字节
+> dmesg 的设备 SHA256/gzip CRC 通过，taint=0，实际 USB 功能仍未验证。CPU7 OPP
+> 候选未进入固件提供的 live DT，警告仍在。COM14 已交回 Windows，finally 释放/detach。
+> 不增加 EUD 实验，保留 RX53/TOP_CFG0x11/整帧/F1/两种终端；证据见 reference/kernel67。
+> 前次 OSM L3/ADC5/early mapping 三项修复见 session66/reference/kernel66。
 >
 > **前次 EUD 入口：[session65](sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md)。**
 > 用户选择WSL后实测：长日志期间一次14字节整包via=console受理，BusyBox读回正确，

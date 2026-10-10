@@ -16,11 +16,13 @@ upstream project.
 
 Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
 
-Current kernel work: [session66](sessions/66-verified-kernel-logs-and-builtins.md).
-Three logdump-only changes restore CPU cpufreq policies and PMIC temperature
-readings, and remove the early mapping WARN (taint=0). Complete #59 boot logs
-pass device SHA256 and gzip CRC. CPU7's high OPP and USB initialization remain
-open; EUD stability is unresolved. [Rootfs research](linux-port/docs/ROOTFS-PRESERVE-ANDROID.md)
+Current kernel work: [session67](sessions/67-usb-provider-and-dtb-activation.md).
+Built-in SM8150 HS PHY restores PHY/dwc3 binding and creates a UDC; actual USB
+function traffic remains untested. Complete #60 logs pass device SHA256 and
+gzip CRC, taint=0. CPU7's high OPP remains open: its candidate FAT DTB is not
+the active firmware DTB. Previous [session66](sessions/66-verified-kernel-logs-and-builtins.md)
+restored CPU policies/PMIC temperatures and removed the early mapping WARN.
+Only logdump flashed; EUD stability remains unresolved. [Rootfs research](linux-port/docs/ROOTFS-PRESERVE-ANDROID.md)
 preserves Android and all data; no safe large partition has been established.
 
 Previous EUD stability handoff: [session65](sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md).
