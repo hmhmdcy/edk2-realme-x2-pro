@@ -1,16 +1,18 @@
-继续无人全硬件目标。先读NEXT-SESSION.md、sessions/82与reference/kernel82，再读81/80/79/76/77/78。
-本轮session82核对充电保护链，手机仍79 boot、#76，没有分区写/重启/充电参数改变。
-5598秒taint0、8.639V/99%/30.8°C/平均0，MP十二字段保持；显示超时仍2、underrun0。
-Android存档温控普通分支的removed/cold原始值190/20实际为−19/−2°C；各字段为0.1°C。
-原厂双串策略以最高单节电压判断，主线接口报告包总电压µV，不能直接套用阈值。
-离线原函数故障/25边界测试通过；旧温度首错回缓存、次错−40°C，主线TEMP直接传播errno。
-USB gadget实际声明100mA，供电预算未核实；Type-C类为空、power_supply仅电量计。
-重要来源纠正：boot_stock_RMX1931.img的同一历史SHA内嵌DroidSpaces/KernelSU第三方内核，
-只能称Android回滚备份，不能凭文件名称OEM出厂镜像。其OPLUS保护选项启用，旧OPPO选项关闭。
-早期官方短路源码是占位；同机型维护OPLUS有完整实现及均衡温度补偿，精确映射/硬件待核实。
-未读0x58、未改保护/电量计NVM/FET/OTG/MCU。充电控制未验收；全硬件目标继续active。
-下一步保持显示超时诊断优先，并核对OPLUS本机保护链、温度来源/补偿、USB预算和失联行为。
-详见sessions/82-charging-policy-units-and-android-backup-provenance.md、reference/kernel82。
+继续无人全硬件目标。先读NEXT-SESSION.md、sessions/83与reference/kernel83，再读82/81/80/79/76/77/78。
+本轮session83依据用户确认的Android11底包，定位官方Android R与cyborgdc2000内核/设备树。
+官方4.14.190与cyborg 4.14.356-openela-rc1固定快照的电量计/短路保护源码完全相同。
+两套19781板的14项选定充电策略原始值均与本机Android归档一致，QUP1/5c、QUP15/55/58对应。
+cyborg的oppo DT前缀与oplus OF表不同，但I2C名称后缀可命中id_table，不能据此前缀认定未绑定。
+MP2650初始化不同，且两套都会关闭硬件安全计时器；禁止直接运行写配置初始化。
+旧4.14.83占位保护只作历史参考；主要依据改为Android R、用户作者固定源码及本机存档。
+尚未证明备份对应精确构建提交，2719身份/保护阈值、热敏补偿、USB预算及失联安全待核实。
+本轮无设备访问；最新实机记录仍82的5598秒taint0、8.639V/99%/30.8°C，MP保持、显示超时2。
+充电控制未验收，权限足够；不解封/NVM/OTP/FET/OTG/MCU试探，全硬件目标保持active。
+详见sessions/83-androidr-and-cyborg-charging-source-comparison.md、reference/kernel83。
+
+保留82温控负幅值/包电压单位与错误路径测试、Android回滚备份来源纠正及USB100mA声明依据。
+普通温控removed/cold为−19/−2°C；双串最高单节电压与主线包电压µV不能直接套阈值。
+显示77首次接管失败和80两次超时继续开放；准备保留既有修复的FTRACE诊断。
 
 保留81原厂0054/57和标准温度依据，完整80status门槛不放宽；未知2719/FW不能推断真伪。
 77首次接管失败和80两次帧超时继续开放；81复测600事件/CRC通过，计数2未增加。
