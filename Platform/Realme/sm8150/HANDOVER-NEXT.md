@@ -7,7 +7,7 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10, session75)
+## 0. TL;DR - where the project stands (2026-10-10, session76 research / session75 hardware)
 
 当前#76：A640/GMU已启用，本机签名固件加载和Turnip真实渲染通过，
 累计39096次交替红/绿三角形渲染、4096像素读回及fence校验成功。
@@ -19,6 +19,10 @@ DTB只有GPU/GMU status及板级ZAP路径三处语义变化；EUD、触摸、RPM
 仅部署boot一次/logdump七次，Android/全部数据/GPT保留；专有固件及密钥不入Git。
 下一项电池/充电、无线/音频等；冷断电、90Hz、休眠、全部GPU频点压力仍未验收。
 
+session76已完成充电源码/安全只读审查，设备未改动；详见
+sessions/76-charging-source-and-safety-review.md、reference/kernel76/README.md。
+下一步从BQ28Z610标准只读电量/温度开始；MP2650不可直接套原厂probe或其它芯片驱动。
+
 补丁0011在旧命令帧无法排空时停TE/trigger，且必须成功复位覆盖对应INTF的CTL；
 保留0010双复位/清输出顺序，换IOMMU域前完成，并修正初始化失败时private object二次释放。
 补丁0012设置NO_EOT_PACKET/CLOCK_NON_CONTINUOUS，并显式清除继承的强制时钟请求。
@@ -28,7 +32,8 @@ session74的数字CRC证据不代表当时已通过光学验收；session75的�
 ## 1. What to do next, in order
 
 1. 通过169.254.42.1密钥SSH保存新日志，保留#76可显示/可GPU渲染基线。
-2. 优先查本机电池电量计/MP2650、原厂配置及主线支持，再推进无线/音频等硬件。
+2. 按session76研究先接入BQ28Z610只读电量计，核对电池包电压/温度/电流单位。
+   MP2650和PM8150b/SMB5仍需独立适配；原厂probe会写配置并关闭安全计时器。
    禁止套用其它手机的电压/充电参数；不把注册节点或warning消失当成功。
 3. 后续独立完成90Hz、休眠恢复、GPU各频点压力、触摸校准和OTG/USB3。
 
@@ -86,19 +91,17 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master: session75 checkpoint; use git log -1 for the published commit
+    master = 89ab2a5  samurai: normalize session75 evidence file modes
+             c2564b6  samurai: validate A640 rendering and fix SOFEF03F DSI clock mode
+             20a1d60  samurai: quiesce SM8150 boot display before IOMMU handoff
+             523d195  samurai: enable native SOFEF03F DSC display and record hardware tests
              bd23aaa  samurai: enable automatic USB NCM and public-key SSH
              964362e  samurai: enable native S3706 touch and record hardware handover
              0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
              218812b  samurai: audit USB gadget state and EUD coordination
              aa5db85  samurai: activate firmware DTB for CPU7 high OPP
-             2d389cf  samurai: build in USB HS PHY and record active DTB evidence
-             fd78c01  linux: verify logs and restore cpufreq, PMIC ADC and early mapping
-             3e22a55  eud: record WSL full-packet acceptance and continuous tty TX loss
-             6e74a65  eud: record verified driver-loading blocker and full acceptance audit
-             32ae015  eud: audit driver compatibility and prepare single-device trial tools
 
-    Local master tracks fork/master; upstream origin/master is not a push target;
+    106 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -266,6 +269,7 @@ the only copy.
 | 56 | Repair/measurement synthesis, exact pre-buffer/reset/padding boundaries and focused new sources; read-only, no stability fix | `sessions/56-source-boundaries-and-focused-research.md` |
 | 57 | Built-in pre-buffer logger measured; 9550 driver/counter/raw bytes and 512 journal matches, restored configuration; old faults untriggered | `sessions/57-driver-raw-logging-boundary.md` |
 | 70 | Verified cmd-db/full dmesg, unused PM8009 resource warning lowered to P3, native touch prerequisites and rootfs capacity audited | `sessions/70-pm8009-resource-and-touch-prerequisites.md` |
+| 76 | Charging sources, own archived DT differences, BQ28Z610 mainline path and MP2650 safety boundaries; read-only, hardware unchanged | `sessions/76-charging-source-and-safety-review.md` |
 
 Rules that keep this file from growing again:
 

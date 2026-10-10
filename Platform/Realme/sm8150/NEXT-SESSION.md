@@ -1,4 +1,11 @@
-# 下一阶段交接：电池/充电与剩余硬件（session75）
+# 下一阶段交接：电池/充电与剩余硬件（session76研究，session75硬件基线）
+
+先读sessions/76-charging-source-and-safety-review.md及reference/kernel76/README.md。
+本轮仅只读研究：本机原厂BQ28Z610与MP2650配置已核对，相关OPPO/OnePlus及主线
+来源已固定提交；主线电量计可先行，MP2650/PM8150b-SMB5不能套其它驱动。
+下一步先审查并接入&i2c15/0x55上的只读电量计，保持NVM更新关闭、不解封。
+原厂MP2650 probe会复位/启用充电/关闭安全计时器，不可直接绑定探测；看门狗超时
+恢复默认模式也不保证充电关闭。其他安全边界及本机温区差异见session76。
 
 当前#76：A640/GMU已启用，本机签名固件加载和Turnip真实渲染通过，
 累计39096次交替红/绿三角形渲染、4096像素读回及fence校验成功。
@@ -31,4 +38,4 @@ EUD重启先com-up，早期verbose输出需排完才发原生命令；COM和USB�
 最终boot sha43ddcba2444e1672cd95205f6984c761eaeb59c83162cffdffb371c50a29c37b，
 logdump sha607fc6b4b0caba8ca5c7ea6677fd8259c81a216f91b2d6de7603e3f56d9881d0。
 回退GPU关闭基线使用本地kernel75/boot-before.img与logdump-before.img，见final-validation。
-全硬件目标仍active；下一轮从原厂电量计/MP2650资料和真实日志推进，不按注册数量验收。
+全硬件目标仍active；下一轮从只读电量计和真实日志推进，不按注册数量验收。
