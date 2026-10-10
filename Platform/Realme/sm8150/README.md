@@ -16,17 +16,20 @@ upstream project.
 
 Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
 
-Current EUD stability handoff: [session63](sessions/63-single-device-driver-compatibility-and-trial-tools.md).
-RX64 [blocked audit](reference/rx64/README.md): same supported-loading condition
-persists across three goal turns; fresh host/device state unchanged, no live
-job/owner. Offline preparation complete; the original repair remains unproved.
-RX62's built/test-signed candidate remains unloaded. RX63's native SetupAPI
-audits recognize both exact candidate and rollback nodes for current 9505.
-Single-device trial tools default to Audit; 15 gate cases pass, zero actual
-stage/bind calls. Current CI confirms TESTSIGN off/HVCI enforced; selected
-loading environment is pending. ZLP loads at DeviceAdd, not ordinary reopen.
-Keep primary toggle comparison separate; full original acceptance is open.
-Original driver/terminal/firmware and TOP_CFG/RX53/F1/rollback are preserved.
+Current EUD stability handoff: [session65](sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md).
+WSL busy-console native14/wire16 input succeeds and executes; all990 console
+digits arrive. The same continuous owner still loses nine tty TX frames/36
+payload bytes: valid512-record journal matches the other503 directly, complete
+positive virtual IN equals raw. This gap needs neither qcusbser nor reopen;
+WSL retains Windows USB/IP/lower USB. Current tty/console is not reliably
+lossless and requires dedicated EUD90/LEN framing tools; generic terminals
+would need a future COM/PTY bridge. Original driver/terminal/firmware and
+TOP_CFG/RX53/F1/rollback remain preserved; all owners finally disposed/detached.
+No flash or new driver/security setting. User now prioritizes Linux kernel
+issues; EUD experiments are deferred. Use EUD as auxiliary observation and
+preserve device-side critical logs with verified exports.
+RX62/63 Windows candidate remains unloaded/unvalidated; the supported loading
+environment and full original acceptance matrix remain separate open work.
 
 | Feature | Status | Notes |
 |---|---|---|

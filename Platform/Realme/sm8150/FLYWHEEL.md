@@ -14,16 +14,19 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/63-single-device-driver-compatibility-and-trial-tools.md`：
-RX64 受阻审查在 reference/rx64：连续三轮同一加载环境条件；无现存运行任务。
-离线准备已完成，等待所选受支持环境后继续完整真机验收，勿自动重复旧实验。
-RX62 已构建/校验/测试签名的候选仍未安装；RX63 原生 SetupAPI 只读识别候选和回退
-各一节点。单设备试装/回退工具默认只读，15 保护用例通过，实际暂存/安装调用为 0。
-当前 CI=F401，测试签名未开/HVCI 强制/Secure Boot1；同一个加载环境选择仍待答复。
-ZLP 必须 DeviceAdd 才读取，普通重开不刷新；与每次打开读取的保留翻转开关分开测。
-无新手机实验/换驱动/信任或安全设置/UAC/刷机/重启，三节点 OK、无 owner/日志/ETW。
-保留 TOP_CFG0x11/整帧/RX53 console/IRQ/F1/原生兼容终端/RX48 回退；方案在
-reference/rx63/trial-review.md。下一项实际受支持环境的开关对照及完整原生验收。
+当前交接看 `sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md`：
+WSL一次busy-console原生LEN14/wire16输入正确受理并执行，990个零完整；同一owner
+仍缺9个tty TX帧/36字节，CRC有效512记录中另外503直接匹配。全部正长度IN等于raw，
+这次缺口不需要qcusbser或reopen。WSL保留Windows USB/IP下层，整体仍未解决。
+首导出CRC失败保留，独立压缩导出同一快照通过。现有专用终端负责EUD帧协议，
+不能直接当普通UART用通用终端；以后COM/PTY转接也不能代替丢帧修复。
+一次现有镜像reboot及正常com-up，无刷机/新驱动/UAC/安全设置变化，finally释放/
+detach，三节点OK、COM14旧绑定、Shared/not Attached，无owner/日志/ETW。
+用户最新优先Linux内核问题，收束EUD实验；连续TX请求/取消/FIFO审查保留待办。
+EUD仅辅助观察，关键日志在设备侧保留完整副本并校验导出，勿重复旧passing实验。
+RX62/63候选仍未加载，RX64的受支持加载环境要求和完整Windows原生验收独立保留。
+ZLP在DeviceAdd读取，不能和FileCreate保留翻转开关混测；方案reference/rx63/trial-review.md。
+保留TOP_CFG0x11/整帧/RX53 console IRQ/F1/原生兼容终端/RX48回退。
 
 前一轮交接看 `sessions/57-driver-raw-logging-boundary.md`：一个有界 Windows owner 已取得
 实装驱动受理前原始日志，9550 字节与计数/raw 一致、512 软件发送帧直接匹配。

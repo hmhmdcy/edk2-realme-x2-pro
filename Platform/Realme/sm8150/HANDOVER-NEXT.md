@@ -17,31 +17,38 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current handoff: sessions/63-single-device-driver-compatibility-and-trial-tools.md.
-RX64 blocked audit: reference/rx64. Same loading-environment condition remains
-after RX62/RX63/RX64; fresh CI F401/Secure Boot1/test cert absent, old COM14
-binding and packages unchanged. No live job/owner or new phone experiment.
-Offline preparation exhausted; full stability goal unproved, awaiting the
-selected supported environment. Do not continue repetitive automatic probes.
-RX62 built/test-signed the unchanged RX60 toggle candidate; no kernel loading
-or repair yet. RX63 native SetupAPI recognizes exactly one candidate/rollback
-driver node for current 9505, with matching packages and unchanged binding.
-Prepared single-device stage/bind/restore tools default to Audit; 15 pure gate
-cases pass. Native install/restore unexecuted; actual stage/install calls zero.
-PnPUtil alone does not force lower-ranked rollback; explicit device/driver API
-is prepared. Port is read from hardware parameters; flags from PnP software key.
-Current CI F401: TESTSIGN off/HVCI enforced, Secure Boot1, cert gate unmet.
-Same environment-choice question remains pending; no UAC/security/trust/BCD,
-driver-store/registry, flash/reboot or serial/USB data change. Three nodes OK,
-no owner/logging/ETW, Shared/not Attached; old driver/terminal/logdump unchanged.
-Exact RX62 signed package/RX61 rollback remain external; source/binaries intact.
-Separate ZLP DWORD loads at DeviceAdd, not FileCreate or assumed power restart.
-Primary same-binary flag-off/on keeps ZLP default; later prove actual reread
-and zero-byte OUT behavior. Full native max14 acceptance remains open.
+Current handoff: sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md.
+User-selected WSL route now measured: one busy-console native14/wire16 probe
+accepted via=console, BusyBox variable correct, all990 log digits complete.
+Same continuous owner loses nine source1 tty TX frames,36 payload/54 wire
+bytes; CRC44ba763a journal seq7868..8379 directly matches the other503 records.
+Complete virtual HCD positive IN equals raw, including two canceled partial
+returns. This TX gap needs neither qcusbser nor ordinary serial reopen.
+WSL bypasses that driver but retains Windows USB/IP/lower USB; no universal
+repair or sole-side attribution. Initial snapshot export fails CRC; independent
+compressed export of the same saved snapshot passes, without filling raw.
+Latest user priority: stop adding EUD experiments. In the next session read
+and verify existing logs first, then identify Linux kernel issues; none is
+preselected or established yet. EUD is auxiliary observation; preserve device-side log copies
+and verify exports. The continuous TX request/cancel/FIFO audit is deferred,
+with its evidence retained; no speculative reset/delay sweeps or old loops.
+Current tty/console still not reliably lossless; EUD90/LEN framing requires
+the existing dedicated terminal/libusb helper. Generic terminals need a future
+COM/PTY protocol bridge, which would not repair the underlying loss.
+One existing-image fastboot reboot and normal cold-start com-up; no flash,
+Windows COM open, new driver/UAC/security change. Finally all owners disposed/
+detached; final three nodes OK, COM14 old binding, Shared/not Attached,
+no logging/ETW, original driver/terminal/logdump hashes unchanged.
 Preserve TOP_CFG0x11/whole-frame/RX53 console/IRQ/F1/terminals/RX48 rollback.
-Next selected supported environment, guarded single-device trial, observed
-reset/first-frame contrast and full RX62 validation matrix. See reference/rx63
-trial-review.md. No repeated old passing/odd-even hardware samples; goal open.
+
+Windows candidate remains uninstalled/unvalidated: RX62 actual build/signing,
+RX63 unique candidate/rollback matches and15 guarded cases, RX64 loading audit
+CI F401/Secure Boot1/test cert absent. Selected supported loading environment
+is still required for same-binary reset-flag off/on, first-frame causality,
+actual rollback and the full RX62 matrix; WSL LEN14 passing is not a substitute.
+Exact signed/rollback packages remain external. ZLP loads at DeviceAdd;
+keep it separate from FileCreate's reset option. See reference/rx63/trial-review.md.
+Original full stability goal remains unachieved; do not repeat old probes.
 
 Previous measured logger: sessions/57-driver-raw-logging-boundary.md.
 Built-in pre-buffer driver logging is now measured in one bounded Windows
@@ -125,6 +132,13 @@ EUD native multi-byte RX now has a verified method (session 41):
   are in sessions/41-rx-ahb2phy-wait-state-fix.md and reference/rx41.
 
 ## 1. What to do next, in order
+
+Latest steering after RX65: in the next session read and verify logs, then
+decide what kernel issue the actual evidence supports. No kernel symptom has
+been specified or established. Do not continue the historical EUD experiment sequence
+below. EUD TX remains lossy; use it as auxiliary observation, save critical
+logs on the device and verify exported contents. Keep the EUD fixes/evidence
+and Windows candidate/rollback plan intact for a later specifically scoped task.
 
 Process rule agreed on 2026-10-08: when an experiment has failed two or three
 times in a row, STOP and search for an existing implementation or document
@@ -277,7 +291,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 32ae015  eud: audit driver compatibility and prepare single-device trial tools
+    master = 6e74a65  eud: record verified driver-loading blocker and full acceptance audit
+             32ae015  eud: audit driver compatibility and prepare single-device trial tools
              727657e  eud: build and validate toggle-preserving test driver package
              ac16146  eud: prepare dedicated WDF package and supported build environment
              6f8ec50  eud: confirm even reopen reversal and prepare toggle-preserving candidate
@@ -285,9 +300,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              7c43d67  eud: align reopen first-frame gaps and audit failed-read gates
              e7de5a3  eud: measure pre-buffer driver logging and restored capture
              738845e  eud: consolidate faults and audit pre-buffer receive boundaries
-             691126b  eud: locate reproduced TX gap before Windows accepted-buffer count
 
-    93 commits ahead of upstream origin/master, as of the tip named above;
+    94 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro

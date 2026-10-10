@@ -11,17 +11,20 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session63](sessions/63-single-device-driver-compatibility-and-trial-tools.md)。**
-> RX64 受阻审查见 reference/rx64：连续三轮同一加载环境条件；最新 CI/Secure Boot/
-> 旧 COM14 绑定和包均未变，无运行任务或新手机实验。离线准备完成，完整稳定性未证实。
-> RX62 完整构建/校验/文件内签名的候选未安装；RX63 原生 SetupAPI 只读识别候选/
-> 回退各唯一匹配当前 9505，包字节与实装旧驱动不变。单设备试装/回退工具默认 Audit，
-> 15 保护用例通过；实际暂存/安装调用 0，不能当作加载或稳定性证明。
-> 当前内核 CI=F401，测试签名未开/HVCI 强制，Secure Boot1；环境选择仍待答复。
-> ZLP 配置在 DeviceAdd 读取，关闭重开不生效；先保持默认做翻转开关对照，再单独测。
-> 没有新手机输入、UAC/换驱动/信任或安全设置/刷机/重启；三节点 OK、无 owner/日志。
-> 保留 TOP_CFG0x11/整帧/RX53 console/IRQ/F1/原生兼容终端/RX48 回退与 finally 关闭。
-> 方案 reference/rx63/trial-review.md；原始验收矩阵未缩小，修复仍未真机证实。
+> **当前入口：[session65](sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md)。**
+> 用户选择WSL后实测：长日志期间一次14字节整包via=console受理，BusyBox读回正确，
+> 990个零完整；但同一持续owner仍缺9个tty TX帧/36字节。CRC44ba763a快照512记录中
+> 另外503直接匹配；全部正长度虚拟IN等于raw，包括取消部分数据。此缺口不需要
+> qcusbser/串口重开，WSL仍经过Windows USB/IP下层，不能宣布已修好或单侧根因。
+> 首次快照导出CRC失败保留，独立压缩导出同一文件通过，没有补原始字节。
+> 当前tty/console仍非可靠无损；EUD90/LEN协议需要现有专用终端/libusb工具，通用
+> 串口终端需以后增加COM/PTY转接。用户最新决定优先Linux内核问题，收束EUD实验；
+> 连续TX请求/取消/FIFO审查保留待办，关键日志在设备侧保存完整副本并校验导出。
+> 一次现有镜像reboot及正常com-up，无刷机/新驱动/UAC/安全设置变化；finally释放/
+> detach，三节点OK、COM14旧绑定、无owner/日志/ETW，原文件哈希不变。
+> RX62/63候选仍未加载，RX64加载环境问题独立保留；完整Windows开关/回退/原生
+> 验收仍需受支持环境，ZLP在DeviceAdd读取不能与FileCreate开关混测。
+> 保留TOP_CFG0x11/整帧/RX53 console IRQ/F1/原生兼容终端/RX48回退，整体未解决。
 >
 > **上一轮来源审查：[session 56](sessions/56-source-boundaries-and-focused-research.md)。**
 > 只读审查/收敛搜索：实装 reset selector=2 对应 URB=0x1e，找到有条件的受理缓冲前

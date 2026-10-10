@@ -59,6 +59,7 @@
 | sessions/62-eud-wdf-build-and-test-signed-package.md、reference/rx62/ | 真实九模块 WDK 构建、Win11 INF/catalog、文件内测试签名与 PE 核对通过；未安装/上机，加载环境待决定 |
 | sessions/63-single-device-driver-compatibility-and-trial-tools.md、reference/rx63/ | 原生只读候选/回退匹配、当前 CI 策略、单设备试装工具 15 保护用例；ZLP 读取阶段明确，安装与上机未运行 |
 | reference/rx64/ | 同一加载环境连续三轮受阻审查、最新只读设备/策略状态、完整原始验收仍未完成 |
+| sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md、reference/rx65/ | WSL长console整包LEN14正确受理/执行，但持续owner缺9个tty TX帧；CRC有效快照503/512直接匹配，完整虚拟IN等于raw，仍需专用帧协议工具 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 
@@ -84,4 +85,4 @@
 
 - HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
 - 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD 打开时占 USB，彻底断电要长按电源约 15 s。
-- 待办：HANDOVER-NEXT.md 第 1 节、sessions/63-single-device-driver-compatibility-and-trial-tools.md。保留 TOP_CFG=0x11/RX53 console RX 修复/现有终端与 RX48 回退；TX 缺帧及启动缺回执仍开放。前缓冲日志方法已实测、临时配置已恢复；已取得真缺口联合边界与偶数反向验证，候选已构建/校验/测试签名并完成只读匹配与试装保护用例，下一项选定加载环境后单设备加载与同一二进制开关对照；不重复普通 passing/同一个偶数对照或 reset/旧零等待。
+- 待办：HANDOVER-NEXT.md 第 1 节、sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md。用户最新优先Linux内核具体问题，收束EUD实验，关键日志保存设备侧完整副本并校验导出。保留TOP_CFG0x11/RX53 console IRQ/F1/现有终端/RX48回退；连续WSL TX请求/取消/FIFO审查及Windows受支持环境的开关/完整原生/回退验收保留独立待办；不重复旧passing/reset/零等待。
