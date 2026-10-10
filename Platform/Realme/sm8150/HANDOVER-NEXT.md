@@ -7,19 +7,25 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10, session81 stock gauge state and display timeout review)
+## 0. TL;DR - where the project stands (2026-10-10, session82 charging policy units and Android backup provenance)
 
-用户确认电池从未更换。81未刷写/重启/开关屏或改充电参数，仍79 boot、#76。
-本机FFA5/2719/精确FW守卫后，原厂0054/57实测封存位3、计量启用1；两块校验通过。
-标准电池温度约30.6°C、内部29.4°C；温度选择/热敏/保护阈值和USB预算仍待核实。
-完整status门槛保持，0051/0053/0072未查询；没有解封/NVM/OTP/FET/OTG/MCU操作。
-3608秒taint0、8.639V/99%/30.6°C/平均0、MP十二字段保持；权限足够、充电控制未验收。
-80旧日志已有两次frame done timeout，先前检查漏掉；81保留历史并补检查。
-当前超时计数2，DSI错误/underrun0；600事件/CRC复测通过且计数未增，无开关屏。
-优先查空闲/控制台更新后kickoff/IRQ/电源恢复；当前FTRACE关闭，根因仍未建立。
-本机Wi-Fi四项供电已继承，35项固件仅私人只读提取；源分区哈希保持、均已卸载。
-wifi/MPSS仍禁用，远端服务/板数据尚未实测，无无线验收。
-详见sessions/81-stock-gauge-state-temperature-and-display-timeouts.md、reference/kernel81。
+本轮session82核对充电保护链，手机仍79 boot、#76，没有分区写/重启/充电参数改变。
+5598秒taint0、8.639V/99%/30.8°C/平均0，MP十二字段保持；显示超时仍2、underrun0。
+Android存档温控普通分支的removed/cold原始值190/20实际为−19/−2°C；各字段为0.1°C。
+原厂双串策略以最高单节电压判断，主线接口报告包总电压µV，不能直接套用阈值。
+离线原函数故障/25边界测试通过；旧温度首错回缓存、次错−40°C，主线TEMP直接传播errno。
+USB gadget实际声明100mA，供电预算未核实；Type-C类为空、power_supply仅电量计。
+重要来源纠正：boot_stock_RMX1931.img的同一历史SHA内嵌DroidSpaces/KernelSU第三方内核，
+只能称Android回滚备份，不能凭文件名称OEM出厂镜像。其OPLUS保护选项启用，旧OPPO选项关闭。
+早期官方短路源码是占位；同机型维护OPLUS有完整实现及均衡温度补偿，精确映射/硬件待核实。
+未读0x58、未改保护/电量计NVM/FET/OTG/MCU。充电控制未验收；全硬件目标继续active。
+下一步保持显示超时诊断优先，并核对OPLUS本机保护链、温度来源/补偿、USB预算和失联行为。
+详见sessions/82-charging-policy-units-and-android-backup-provenance.md、reference/kernel82。
+
+用户确认电池从未更换；不从2719身份判断真伪或替代型号。81原厂0054/57守卫查询确认
+封存位3/计量启用1，0051/0053/0072未查询，完整80状态原型的2610门槛保持。
+81的600事件/CRC通过且超时计数2不增；77首次接管失败、80两次帧超时继续开放。
+Wi-Fi四项供电已继承，35项本机固件只读私人提取，wifi/MPSS仍禁用、无线未验收。
 
 已部署session79仅QUP1总线boot，Image/config/logdump仍#76；无充电器子节点。
 MP2650三次36组合读成功、配置一致；NTC/watchdog关闭，终止/12小时安全计时器开启。
@@ -105,7 +111,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 2f82b23  samurai: verify stock cell reads and record gauge identity difference
+    master = 3e3c0cf  samurai: record stock gauge state and display timeout evidence
+             2f82b23  samurai: verify stock cell reads and record gauge identity difference
              ce1352f  samurai: enable bounded MP2650 observations and record current settings
              3dd07f4  samurai: record first-boot controls and event-checked page flips
              efeba61  samurai: enable BQ28Z610 monitoring and record display regression
@@ -119,7 +126,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
              218812b  samurai: audit USB gadget state and EUD coordination
 
-    111 commits ahead of upstream origin/master, as of the tip named above;
+    112 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -155,7 +162,7 @@ overrides, PlatformBm.c, EUD.md) is in git log and in sessions/15-17.
 | EDK2 build tree (WSL) | /home/cy122/edk2-samurai/repo |
 | Build script / log | /home/cy122/build-eudcom.sh -> build-eudcom.log |
 | Images / backups (Windows) | E:\edk2-samurai-out\ |
-| Stock boot (back to Android) | E:\edk2-samurai-out\backup\boot_stock_RMX1931.img |
+| Android rollback boot (custom kernel) | E:\edk2-samurai-out\backup\boot_stock_RMX1931.img |
 | EUD host tools | E:\eud-host\ (eudtool, comtool, comrecv, comlog) |
 | MSYS2 / UCRT64 toolchain | E:\msys64 |
 | quic/eud clone + libeud.dll | E:\eud-host\quic-eud |

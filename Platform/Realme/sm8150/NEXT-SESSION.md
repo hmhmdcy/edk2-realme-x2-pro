@@ -1,27 +1,26 @@
-# 下一阶段：显示超时与本机充电保护链（session81）
+# 下一阶段：显示超时与 OPLUS 本机保护链（session82）
 
-先读sessions/81-stock-gauge-state-temperature-and-display-timeouts.md和reference/kernel81。
-用户确认电池从未更换；不从扩展2719推断真伪/替代型号。手机仍session79 boot、#76内核。
-本轮只做有依据的查询及固件只读提取，没有分区写、重启、充电配置或开关屏。
-原厂0054 payload386封存位=3，0057 payload18计量启用位=1；回显/长度/checksum均通过。
-先用旧式FFA5、扩展2719及精确FW指纹守卫，再限于这两个原厂R请求；80完整status
-门槛未放宽，0051/0053/0072未查询。固定MAC请求含I2C写帧，不是配置/NVM写。
-标准06温度3037(约30.6°C)、28内部3025(约29.4°C)，不能据此认定TS1/保护已验收。
-MP2650十二字段与79/80一致；3608秒taint0、8.639V/99%/30.6°C/平均0、Not charging。
+先读sessions/82-charging-policy-units-and-android-backup-provenance.md、reference/kernel82，
+再读81的显示/Wi-Fi证据和80/79/76。当前状态与边界：
 
-重要纠正：80原始日志已有1545.683499/1775.069790秒两次frame done timeout，先前
-DSI等模式检查漏掉这类DRM错误；历史文件不改。encoder的frame_done_cnt实际累计超时。
-81保存当前kms/state/clk_summary后600事件/CRC通过、1199行全对应已知缓冲，20.044934秒；
-超时计数前后2、underrun0，无显式disable/开关屏。没有新光学/GPU验收，故障仍开放。
-优先跟踪空闲/控制台更新后的kickoff/IRQ/电源恢复；当前FTRACE关闭，可准备诊断内核。
-不要把持续刷新通过当成根因已修复，也不要把后续快照当成故障瞬间寄存器。
+本轮session82核对充电保护链，手机仍79 boot、#76，没有分区写/重启/充电参数改变。
+5598秒taint0、8.639V/99%/30.8°C/平均0，MP十二字段保持；显示超时仍2、underrun0。
+Android存档温控普通分支的removed/cold原始值190/20实际为−19/−2°C；各字段为0.1°C。
+原厂双串策略以最高单节电压判断，主线接口报告包总电压µV，不能直接套用阈值。
+离线原函数故障/25边界测试通过；旧温度首错回缓存、次错−40°C，主线TEMP直接传播errno。
+USB gadget实际声明100mA，供电预算未核实；Type-C类为空、power_supply仅电量计。
+重要来源纠正：boot_stock_RMX1931.img的同一历史SHA内嵌DroidSpaces/KernelSU第三方内核，
+只能称Android回滚备份，不能凭文件名称OEM出厂镜像。其OPLUS保护选项启用，旧OPPO选项关闭。
+早期官方短路源码是占位；同机型维护OPLUS有完整实现及均衡温度补偿，精确映射/硬件待核实。
+未读0x58、未改保护/电量计NVM/FET/OTG/MCU。充电控制未验收；全硬件目标继续active。
+下一步保持显示超时诊断优先，并核对OPLUS本机保护链、温度来源/补偿、USB预算和失联行为。
+详见sessions/82-charging-policy-units-and-android-backup-provenance.md、reference/kernel82。
 
-无线：本机四项供电由MTP正确继承；保留区9b000000+180000、原厂MSA请求100000。
-从本机modem vfat ro提取wlanmdsp和34项bdwlan，35项仅私人归档，未安装/加载。
-vendor ro,noload和modem ro的前后整分区哈希一致且已卸载。当前wifi/MPSS仍禁用，
-ath10k未启用；PD mapper有modem/wlan_pd，PAS auto_boot=false，远端加载链仍要实测。
-没有运行tqftpserv/rmtfs或开启无线；只能在受限方案下继续，不能写Android存储/校准数据。
-权限足够，保护链/温度选择/校准/USB预算和失联仍需依据；不通过提高授权绕过验证。
+81确认原厂封存/计量位，电池与内部温度不同，但温度选择/校准/独立保护仍未验收。
+77间歇性首次接管问题和80两次frame-done timeout仍开放，81的600翻转通过不等于根因修复。
+下一步可准备保留既有修复的FTRACE诊断内核；当前FTRACE关闭，不能自动开关屏掩盖故障。
+Wi-Fi四轨已继承，本机35项固件私人归档、未装载；远端WLFW/PD/TFTP和板数据仍需受限实测。
+全硬件目标active，显示/充电/无线及音频、蜂窝、摄像头等尚未全部完成。
 
 先读sessions/79-mp2650-read-only-bus-and-current-settings.md、reference/kernel79/README.md，
 再看session76充电来源、session77电量计/失败及session78显示对照。
