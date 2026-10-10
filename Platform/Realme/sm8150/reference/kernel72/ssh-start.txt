@@ -1,0 +1,50 @@
+[ 1785.236915] eud: tty byte=15 polls=70247 pending=307 bad=0 frames=307 bytes=3945 tty_before=3944 no_tty=0 overrun=0 bad_id=00 bad_len=0 irqs=307 irq_frames=307 poll_frames=0 empty=0 watchdog=0 drops=0 fault=0 active=1
+[ 1785.553634] eud: rx frame len=14 data=65 63 68 6f 20 4b 37 32 53 53 48 3b 20 73 s1_after=06060606 via=irq
+echo K72SSH; s[ 1785.875622] eud: rx frame len=14 data=68 61 32 35 36 73 75 6d 20 2f 74 6d 70 2f s1_after=06060606 via=irq
+ha256sum /tmp/[ 1786.167525] eud: rx frame len=14 data=4b 37 32 2f 64 72 6f 70 62 65 61 72 6d 75 s1_after=06060606 via=irq
+K72/dropbear
+mu[ 1786.521760] eud: rx frame len=14 data=6c 74 69 3b 20 74 65 73 74 20 22 24 28 73 s1_after=06060606 via=irq
+lti; test "$(s[ 1786.878296] eud: rx frame len=14 data=68 61 32 35 36 73 75 6d 20 2f 74 6d 70 2f s1_after=06060606 via=irq
+ha256sum /tmp/[ 1787.186243] eud: rx frame len=14 data=4b 37 32 2f 64 72 6f 70 62 65 61 72 6d 75 s1_after=06060606 via=irq
+K72/dropbearmu[ 1787.463872] eud: rx frame len=14 data=6c 74 69 20 7c 20 63 75 74 20 2d 64 20 22 s1_after=06060606 via=irq
+lti | cut -d "[ 1787.773845] eud: rx frame len=14 data=20 22 20 2d 66 31 29 22 20 3d 20 63 32 62 s1_after=06060606 via=irq
+ " -f1)" = c2b[ 1788.158037] eud: rx frame len=14 data=61 33 65 32 34 66 31 66 34 61 61 35 34 33 s1_after=06060606 via=irq
+a3e24f1f
+4aa543[ 1788.544543] eud: rx frame len=14 data=39 32 66 33 38 37 31 62 64 30 61 36 31 37 s1_after=06060606 via=irq
+92f3871bd0a617[ 1788.870193] eud: rx frame len=14 data=66 65 62 64 62 31 34 35 31 35 62 61 37 36 s1_after=06060606 via=irq
+febdb14515ba76[ 1789.243585] eud: rx frame len=14 data=35 37 65 30 31 35 62 65 32 37 35 37 33 61 s1_after=06060606 via=irq
+57e015be27573a[ 1789.555584] eud: rx frame len=14 data=35 38 31 62 62 20 26 26 20 63 68 6d 6f 64 s1_after=06060606 via=irq
+581bb && chmod[ 1789.912265] eud: rx frame len=14 data=20 37 35 35 20 2f 74 6d 70 2f 4b 37 32 2f s1_after=06060606 via=irq
+ 755 /tmp/K72/[ 1790.252518] eud: rx frame len=14 data=64 72 6f 70 62 65 61 72 6d 75 6c 74 69 20 s1_after=06060606 via=irq
+drop
+bearmulti [ 1790.562370] eud: rx frame len=14 data=26 26 20 2f 74 6d 70 2f 4b 37 32 2f 64 72 s1_after=06060606 via=irq
+&& /tmp/K72/dr[ 1790.950668] eud: rx frame len=14 data=6f 70 62 65 61 72 6d 75 6c 74 69 20 64 72 s1_after=06060606 via=irq
+opbearmulti dr[ 1791.259725] eud: rx frame len=14 data=6f 70 62 65 61 72 6b 65 79 20 2d 74 20 65 s1_after=06060606 via=irq
+opbearkey -t e[ 1791.554189] eud: rx frame len=14 data=64 32 35 35 31 39 20 2d 66 20 2f 65 74 63 s1_after=06060606 via=irq
+d25519 -f /etc[ 1791.850430] eud: rx frame len=14 data=2f 64 72 6f 70 62 65 61 72 2f 64 72 6f 70 s1_after=06060606 via=irq
+/dropbear/drop
+[ 1792.193772] eud: rx frame len=14 data=62 65 61 72 5f 65 64 32 35 35 31 39 5f 68 s1_after=06060606 via=irq
+bear_ed25519_h[ 1792.566292] eud: rx frame len=14 data=6f 73 74 5f 6b 65 79 20 26 26 20 2f 74 6d s1_after=06060606 via=irq
+ost_key && /tm[ 1792.922097] eud: rx frame len=14 data=70 2f 4b 37 32 2f 64 72 6f 70 62 65 61 72 s1_after=06060606 via=irq
+p/K72/dropbear[ 1793.219321] eud: rx frame len=14 data=6d 75 6c 74 69 20 64 72 6f 70 62 65 61 72 s1_after=06060606 via=irq
+multi dropbear[ 1793.559596] eud: rx frame len=14 data=20 2d 46 20 2d 45 20 2d 73 20 2d 6a 20 2d s1_after=06060606 via=irq
+ -F -E -s -j -[ 1793.870995] eud: rx frame len=14 data=6b 20 2d 70 20 31 36 39 2e 32 35 34 2e 34 s1_after=06060606 via=irq
+k -p 169.2
+54.4[ 1794.182142] eud: rx frame len=14 data=32 2e 31 3a 32 32 20 2d 72 20 2f 65 74 63 s1_after=06060606 via=irq
+2.1:22 -r /etc[ 1794.492926] eud: rx frame len=14 data=2f 64 72 6f 70 62 65 61 72 2f 64 72 6f 70 s1_after=06060606 via=irq
+/dropbear/drop[ 1794.818991] eud: rx frame len=14 data=62 65 61 72 5f 65 64 32 35 35 31 39 5f 68 s1_after=06060606 via=irq
+bear_ed25519_h[ 1795.114318] eud: rx frame len=14 data=6f 73 74 5f 6b 65 79 20 2d 50 20 2f 74 6d s1_after=06060606 via=irq
+ost_key -P /tm[ 1795.440483] eud: rx frame len=14 data=70 2f 4b 37 32 2f 64 72 6f 70 62 65 61 72 s1_after=06060606 via=irq
+p/K72/dropbear[ 1795.781062] eud: rx frame len=14 data=2e 70 69 64 20 3e 2f 74 6d 70 2f 4b 37 32 s1_after=06060606 via=irq
+.pid >
+/tmp/K72[ 1796.091556] eud: rx frame len=14 data=2f 64 72 6f 70 62 65 61 72 2e 6c 6f 67 20 s1_after=06060606 via=irq
+/dropbear.log [ 1796.403805] eud: rx frame len=14 data=32 3e 26 31 20 26 20 65 63 68 6f 20 4b 37 s1_after=06060606 via=irq
+2>&1 & echo K7[ 1796.761304] eud: rx frame len=14 data=32 53 54 41 52 54 52 45 51 55 45 53 54 0a s1_after=06060606 via=irq
+2STARTREQUEST
+K72SSH
+c2ba3e24f1f4aa54392f3871bd0a617febdb14515ba7657e015be27573a581bb  /tmp/K72/dropbearmulti
+K72STARTREQUEST
+/sys/kernel/config/usb_gadget/samurai # Generating 256 bit ed25519 key, this may take a while...
+[6nPublic key portion is:
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH5KhHTetg3njIVkPyYvGtViiVycVkW0V94DfL6uLnn/ root@(none)
+Fingerprint: SHA256:ut86Otbbi2PUTNd8pYNK2Is7nEFYPWOQLS+roYLdfe8

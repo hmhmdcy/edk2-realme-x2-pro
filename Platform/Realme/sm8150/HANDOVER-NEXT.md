@@ -7,51 +7,45 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10)
+## 0. TL;DR - where the project stands (2026-10-10, session72)
 
-Linux现在进入initramfs用户态，当前是真机内核#61。**本轮实际接通了原生触摸**：
-GENI/GPI DMA/RMI4内建、本机DTS/供电及reset GPIO补丁已经部署到boot/logdump。
-设备报告S3706A、fw3078696，F01/F12绑定；用户点按/滑动后取得完整输入事件，
-基本点按、移动、释放和多点通路通过。屏幕仍显示诊断控制台，触摸不会让现有画面
-滚动或变成GUI；原生显示面板/GPU尚未接入。
+手机运行Linux **#62**，本轮普通USB网络/SSH已从空gadget推进到真实可用。
+NCM以Windows系统UsbNcm驱动工作，EUD/COM14共存；部署前后各一对4MiB随机文件
+SHA256全部通过、收发错误0。独立同镜像重启后，没有host com-up仍可枚举和认证SSH。
+最终boot_id=5ecfab9e-fa56-4ead-acf8-a5147904980e、taint=0，53594字节完整dmesg和2285字节facts
+经设备保存、SSH/SCP导出、设备SHA/gzip CRC/长度校验。证据见sessions/72、reference/kernel72。
 
-当前证据是sessions/71-native-s3706-touch-bringup.md、reference/kernel71。
-初始完整dmesg54413字节、后续日志见该会话，设备保存后压缩导出并逐项校验。
-event2原文306744字节/12781记录通过SHA/gzip CRC/长度，970个SYN_REPORT，
-241个contact全部释放，坐标在1080×2400内；记录最多5触点，但不是严格五指/精度
-验收。当前boot_id=a31c1158-fbca-4515-83ac-1a3b40ee808e、taint=0。
+实际initramfs仅在原configfs挂载后加异步USB hook，并加入静态公钥SSH/PTY支持。
+客户端私钥留本地，唯一手机主机私钥仅在本地initramfs/构建目录；都未入Git。
+内核配置只修改initramfs UID/GID映射以正确打包root权限；EUD/RMI/DTS/DTB哈希不变。
+仅刷一次logdump，boot仍为session71触摸固件，Android和全部数据保留。
 
-已有基础能力是UEFI、六个UFS LUN、CPU三个调频policy和CPU7最高2956800kHz表、
-三路PMIC温度、simpledrm帧缓冲、EUD交互及F1。除触摸基础通路外，按用户功能
-分组还有13类待接入/验收，详见linux-port/docs/HARDWARE-STATUS.md。
-普通USB的HS PHY/DWC3/UDC已绑定，但gadget目录为空，尚无USB网络/SSH；
-Wi-Fi/GPU/DSP等也还不是可用系统。完整postmarketOS/rootfs没有安装，保留的
-64MiB logdump新镜像空闲36605952字节，尚无证明安全的大持久rootfs位置。
+已有基础能力：UEFI、六个UFS盘、三CPU policy与CPU7最高2956800kHz表、三路PMIC
+温度、simpledrm、EUD/F1、S3706A基本触摸，以及本轮NCM/SSH/SCP。
+屏幕仍是诊断控制台，原生SOFEF03F面板/DSI/DSC与GPU尚未接入；没有完整桌面/rootfs。
+OTG/USB3/休眠恢复、触摸精度/触点数量等还没验收，整体硬件目标仍在进行。
+logdump FAT空闲36016128字节（约34.35MiB），大持久rootfs位置仍未证明安全。
 
-历史修复：session66是调频/ADC/earlycon，67是HS PHY，68是实际固件DTB/CPU7 OPP，
-69是USB/EUD协调审查，70把PM8009警告降为P3并查清触摸接线，71完成触摸实现。
-RPMh读回-95、PM8009、QMP/aux_bridge等仍按影响范围排优先级，没删节点静音。
-EUD TX仍可能缺帧，session65有确证；本轮成功校验导出不等于EUD已无损。
+旧RPMh读回-95、PM8009、QMP/aux_bridge等按影响范围保留，没有删节点静音。
+Windows单次F1仍会无回执，WSL原工具F1保留；EUD偶发TX缺帧没有被本轮宣称修复。
+下一轮应通过新的普通USB SSH通道获取完整内核日志，优先继续硬件实现。
 
 ## 1. What to do next, in order
 
 直接交接见NEXT-SESSION.md，复制提示词见NEXT-SESSION-PROMPT.md。
 
-1. 核实手机当前模式和连接owner，读session71及校验日志，承接已经部署的#61。
-   本轮最后COM14交回Windows、Shared/未Attached，三节点OK、owner释放；以新会话
-   的实时枚举/新回执确认，不依据旧截图或PID单独判断系统模式。
-2. 优先把普通USB变成可实际传输日志的网络/SSH通道。现有UDC存在但无gadget函数；
-   先明确configfs函数与内建配置，再做小范围实现、构建、上机和电脑端真实流量验收。
-   实际glue是dwc3-qcom-legacy，EUD与普通USB共存尚未证明；不要预设它一定互斥。
-3. 随后推进本机SOFEF03F原生面板/DSI/DSC和GPU，电池/充电，再无线、音频及其它
-   功能。优先现有主线/维护者实现和Realme本机源码；每轮交付实现和真实结果。
-   触摸后续补方向/边缘/触点数量及休眠恢复验收，不能把目前基本输入当全面完成。
+1. 优先通过169.254.42.1的密钥SSH取得新的boot_id/taint/完整dmesg；自动NCM/SSH
+   已实测，Windows无额外驱动/网络配置。EUD回到Windows Shared/未Attached，无host owner。
+2. 推进本机SOFEF03F原生面板/DSI/DSC与Adreno/GMU，搜索主线/维护者和Realme本机
+   实现，按供电/时钟/固件和真实图像数据流验证。随后电池/充电、无线/音频及其它功能。
+3. 触摸补方向/边缘/严格触点数量/休眠恢复；USB补OTG/休眠/长期稳定性，不把当前
+   设备模式NCM成功扩大成全部USB功能完成。
 
-执行边界集中在这里：保留Android/全部数据；刷机仅boot/logdump；现有EUD读取工具
-与TOP_CFG0x11/整帧/RX53/F1/原生兼容终端保持，串口/USB一个owner并finally释放。
-真实initramfs在/home/cy122/x2pro-linux/initramfs，实际内核在/home/cy122/x2pro-linux/linux；
-设备树要更新实际UEFI固件，FAT-only不会激活。结论/源码增量仅推fork/master。
-这些是部署边界；当前工作重点是继续实现和验收硬件，不是恢复历史EUD实验序列。
+执行边界：保留Android/全部数据；部署仅boot/logdump；保留既有TOP_CFG0x11/整帧/
+RX53/F1/两终端，串口/对应USB接口单owner并finally释放。实际源码在
+/home/cy122/x2pro-linux/linux，initramfs在/home/cy122/x2pro-linux/initramfs。
+本轮真实init加入USB hook，其余逻辑逐字保留；不要运行旧build-image.sh覆盖它。
+DT变化必须更新实际UEFI固件，FAT-only不会激活；源码/证据仅推fork/master。
 
 ## 2. Verified hardware facts (do not re-derive)
 
@@ -99,17 +93,17 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
+    master = 964362e  samurai: enable native S3706 touch and record hardware handover
+             0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
+             218812b  samurai: audit USB gadget state and EUD coordination
+             aa5db85  samurai: activate firmware DTB for CPU7 high OPP
+             2d389cf  samurai: build in USB HS PHY and record active DTB evidence
              fd78c01  linux: verify logs and restore cpufreq, PMIC ADC and early mapping
              3e22a55  eud: record WSL full-packet acceptance and continuous tty TX loss
              6e74a65  eud: record verified driver-loading blocker and full acceptance audit
              32ae015  eud: audit driver compatibility and prepare single-device trial tools
-             727657e  eud: build and validate toggle-preserving test driver package
-             ac16146  eud: prepare dedicated WDF package and supported build environment
-             6f8ec50  eud: confirm even reopen reversal and prepare toggle-preserving candidate
-             da915a8  eud: reproduce odd-frame reopen loss with matched driver and USB trace
 
-    100 commits ahead of upstream origin/master, as of the tip named above;
+    101 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -198,15 +192,14 @@ overrides, PlatformBm.c, EUD.md) is in git log and in sessions/15-17.
 
 ## 7. Open questions
 
-* Which ordinary USB gadget function/configuration will provide reliable
-  network/SSH on this Windows host, and how will actual USB/EUD role signaling
-  behave? UDC exists; configured functions and real traffic are missing.
+* How should USB OTG, suspend/resume and long-term stability be enabled and verified?
+  CDC NCM/SSH/SCP with Windows UsbNcm and EUD coexistence now work; USB3 remains unverified.
 * Does the new touch input retain correct physical contact count, orientation,
   edge accuracy and suspend/resume behavior? Basic recorded input now works.
 * What board-native panel/DSI/DSC, GPU firmware and power descriptions are
   needed to replace the inherited framebuffer with accelerated native display?
 * How can a full persistent rootfs be provided while preserving Android and all
-  data? The current logdump FAT only has about34.91MiB free; userdata FBE/ICE
+  data? The current logdump FAT only has about34.35MiB free; userdata FBE/ICE
   access and a safe large layout have not been established.
 * CPU high-frequency load, battery/charging and the remaining functional groups
   still need board-specific implementation and acceptance; see HARDWARE-STATUS.

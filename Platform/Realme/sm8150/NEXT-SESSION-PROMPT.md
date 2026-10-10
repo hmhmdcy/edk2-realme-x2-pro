@@ -1,5 +1,6 @@
-# 下次复制这个短提示词
-
-继续 RealmeX2Pro edk2 Linux 硬件移植。先读 NEXT-SESSION.md、session71 和 HARDWARE-STATUS.md。
-当前 #61 已打通 S3706A 触摸基本输入，日志和事件已校验；下一步优先实作普通 USB 网络/SSH，再原生显示/GPU。
-核实实时模式与连接后，小步实现、构建、上机验证，别只检测。保留 Android/全部数据和现有 EUD 修复，只刷 boot/logdump，修改推 fork/master。
+继续无人硬件接入目标。先读NEXT-SESSION.md、sessions/72和reference/kernel72。
+当前#62已经有普通USB NCM/自动密钥SSH/SCP，可用169.254.42.1获取完整日志；
+无需host com-up的重启/SSH已实测，EUD共存，双向4MiB校验通过。下一项本机
+SOFEF03F原生显示/DSI/DSC和GPU，之后电池/充电、无线/音频等。保留Android/所有
+数据，仅boot/logdump，保留EUD/RX53/F1/真实init，单接口owner并finally释放，
+只推fork/master。不要运行旧build-image.sh，不把USB设备模式或触摸基本通路称为全面验收。

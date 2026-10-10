@@ -1,10 +1,11 @@
 # EUD RX side: registers, framing and the console driver
 
-当前硬件接入：[session71](sessions/71-native-s3706-touch-bringup.md)。
-已实现并部署GENI/GPI DMA/RMI4内建、本机触摸供电/DTS及可选reset GPIO；只刷
-boot/logdump。新#61/taint0，54413字节完整dmesg校验通过，S3706A/fw3078696、
-F01/F12/event2注册。306744字节真实事件校验通过，点按/移动/释放/多点通路已验；其它13类功能仍待推进。
-Android/全部数据、TOP_CFG0x11/整帧/RX53/F1/两终端保留，无新EUD实验。
+当前硬件接入：[session72](sessions/72-usb-ncm-and-autonomous-ssh.md)。
+普通USB NCM/密钥SSH/SCP已实现并部署到#62，Windows系统UsbNcm与EUD共存。
+部署前后双向4MiB SHA校验通过、错误计数0；另一次重启无需host com-up就能SSH认证。
+最终53594字节dmesg和2285字节facts校验通过，taint=0；原触摸/CPU/UFS保留。
+本轮仅刷一次logdump，Android/全部数据、boot固件、EUD/RX53/F1/两终端保留。
+下一项原生显示/GPU；触摸精度、OTG及其它硬件仍须接入/验收。
 
 
 前次日志入口：[session70](sessions/70-pm8009-resource-and-touch-prerequisites.md)。

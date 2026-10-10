@@ -1,0 +1,46 @@
+ê[ 15ê90.2ê3463ê4] eêud: êtty êbyteê=15 êpollês=62ê399 êpendêing=ê251 êbad=ê0 frêamesê=251ê bytêes=3ê237 êtty_êbefoêre=3ê236 êno_têty=0ê oveêrrunê=0 bêad_iêd=00ê badê_lenê=0 iêrqs=ê251 êirq_êframêes=2ê51 pêoll_êframêes=0ê empêty=0ê watêchdoêg=0 êdropês=0 êfaulêt=0 êactiêve=1ê
+ê[ 15ê90.5ê4962ê2] eêud: êrx fêrameê lenê=14 êdataê=65 ê63 6ê8 6fê 20 ê4b 3ê7 32ê 4e ê45 5ê4 3bê 20 ê63 sê1_afêter=ê0606ê0606ê viaê=irqê
+êechoê K72êNET;ê cê[ 15ê90.9ê0699ê7] eêud: êrx fêrameê lenê=14 êdataê=61 ê74 2ê0 2fê 73 ê79 7ê3 2fê 63 ê6c 6ê1 73ê 73 ê2f sê1_afêter=ê0606ê0606ê viaê=irqê
+êat /êsys/êclasês/ê[ 15ê91.2ê7969ê2] eêud: êrx fêrameê lenê=14 êdataê=75 ê64 6ê3 2fê 61 ê36 3ê0 30ê 30 ê30 3ê0 2eê 75 ê73 sê1_afêter=ê0606ê0606ê viaê=irqê
+êudc/êa600ê000.ê
+uêsê[ 15ê91.6ê3446ê4] eêud: êrx fêrameê lenê=14 êdataê=62 ê2f 7ê3 74ê 61 ê74 6ê5 20ê 2f ê73 7ê9 73ê 2f ê63 sê1_afêter=ê0606ê0606ê viaê=irqê
+êb/stêate ê/sysê/cê[ 15ê91.9ê4262ê6] eêud: êrx fêrameê lenê=14 êdataê=6c ê61 7ê3 73ê 2f ê75 6ê4 63ê 2f ê61 3ê6 30ê 30 ê30 sê1_afêter=ê0606ê0606ê viaê=irqê
+êlassê/udcê/a60ê00ê[ 15ê92.2ê5396ê7] eêud: êrx fêrameê lenê=14 êdataê=30 ê30 2êe 75ê 73 ê62 2êf 63ê 75 ê72 7ê2 65ê 6e ê74 sê1_afêter=ê0606ê0606ê viaê=irqê
+ê00.uêsb/cêurreêntê[ 15ê92.5ê6347ê8] eêud: êrx fêrameê lenê=14 êdataê=5f ê73 7ê0 65ê 65 ê64 2ê0 2fê 73 ê79 7ê3 2fê 63 ê6c sê1_afêter=ê0606ê0606ê viaê=irqê
+ê_speêed /êsys/êclê[ 15ê92.9ê2135ê2] eêud: êrx fêrameê lenê=14 êdataê=61 ê73 7ê3 2fê 6e ê65 7ê4 2fê 75 ê73 6ê2 30ê 2f ê63 sê1_afêter=ê0606ê0606ê viaê=irqê
+êass/ênet/êusb0ê/cê[ 15ê93.2ê6636ê4] eêud: êrx fêrameê lenê=14 êdataê=61 ê72 7ê2 69ê 65 ê72 3êb 20ê 69 ê70 2ê0 61ê 64 ê64 sê1_afêter=ê0606ê0606ê viaê=irqê
+êarriêer; ê
+iêp adêdê[ 15ê93.6ê0519ê0] eêud: êrx fêrameê lenê=14 êdataê=72 ê20 7ê3 68ê 6f ê77 2ê0 75ê 73 ê62 3ê0 3bê 20 ê6e sê1_afêter=ê0606ê0606ê viaê=irqê
+êr shêow uêsb0;ê nê[ 15ê93.9ê4466ê0] eêud: êrx fêrameê lenê=14 êdataê=63 ê20 2êd 2dê 68 ê65 6êc 70ê 3b ê20 6ê5 63ê 68 ê6f sê1_afêter=ê0606ê0606ê viaê=irqê
+êc --êhelpê; ecêhoê[ 15ê94.2ê5426ê3] eêud: êrx fêrameê lenê=8 dêata=ê20 4êb 37ê 32 ê45 4êe 44ê 0a ês1_aêfterê=060ê6060ê6 viêa=irêq
+ê K72êENDê
+êK72NêET
+êconfêigurêed
+êhighê-speêed
+ê1
+2ê: usêb0: ê<BROêADCAêST,MêULTIêCASTê,UP,êLOWEêR_UPê> mtêu 15ê00 qêdiscê pfiêfo_fêast êstatêe UPê qleên 10ê00
+ê    êlinkê/ethêer 0ê2:62ê:bc:ê28:aê1:01ê brdê ff:êff:fêf:ffê:ff:êff
+ê    êinetê 169ê.254ê.42.ê1/16ê scoêpe gêlobaêl usêb0
+ê    ê   vêalidê_lftê forêeverê preêferrêed_lêft fêorevêer
+ê    êinetê6 feê80::ê62:bêcff:êfe28ê:a10ê1/64ê scoêpe lêink ê
+  ê    ê valêid_lêft fêorevêer pêrefeêrredê_lftê forêeverê
+BuêsyBoêx v1ê.37.ê0 (2ê026-ê01-1ê0 15ê:38:ê28 UêTC) êmultêi-caêll bêinarêy.
+ê
+Usêage:ê nc ê[OPTêIONSê] HOêST PêORT ê - cêonneêct
+ênc [êOPTIêONS]ê -l ê-p PêORT ê[HOSêT] [êPORTê]  -ê lisêtenê
+
+	ê-e PêROG	êRun êPROGê aftêer cêonneêct (êmustê be êlastê)
+	ê-l	Lêisteên moêde, êfor êinboêund êconnêectsê
+	-êlk	Wêith ê-e, êprovêidesê perêsistêent êservêer
+ê	-p êPORTê	Locêal pêortê
+	-sê ADDêR	Loêcal êaddrêessê
+	-wê SECê	Timêeoutê forê conênectês anêd fiênal ênet êreadês
+	ê-i SêEC	Dêelayê intêervaêl foêr liênes êsentê
+	-ên	Doên't êdo DêNS rêesolêutioên
+	ê-u	UêDP mêodeê
+	-bê	Allêow bêroadêcastês
+	ê-v	Vêerboêse
+ê	-o êFILEê	Hexê dumêp trêaffiêc
+	ê-z	Zêero-êI/O êmodeê (scêanniêng)ê
+K72êENDê
+/syês/keêrnelê/conêfig/êusb_êgadgêet/sêamurêai #ê [6ên
