@@ -7,6 +7,9 @@
 
 | 文件 | 内容 |
 |---|---|
+| sessions/71-native-s3706-touch-bringup.md、reference/kernel71/ | 原生S3706触摸代码/供电/总线接入、boot/logdump部署、完整日志与输入事件校验 |
+| linux-port/docs/HARDWARE-STATUS.md | 按用户功能分组的14类硬件接入/验收状态与优先级 |
+| NEXT-SESSION.md、NEXT-SESSION-PROMPT.md | session71结束状态、触摸真机进展、后续USB/显示实作与短提示词 |
 | HANDOVER-NEXT.md | 交接入口：第 0–7 节 = 当前状态 / 下一步 / 仓库状态 / 工具 / 坑 / 安全 / 未决；末尾是 history index（旧第 8–30 节 → 文件） |
 | README.md | 项目门面：fork 介绍、构建、刷机、各阶段 status update |
 | DOCS-INDEX.md | 本文：文档地图、同步方式与维护规则 |

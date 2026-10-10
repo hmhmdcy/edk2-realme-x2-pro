@@ -1,5 +1,12 @@
 # EDK2 / UEFI firmware for the realme X2 Pro (RMX1931 · "samurai")
 
+当前硬件接入：[session71](sessions/71-native-s3706-touch-bringup.md)。
+已实现并部署GENI/GPI DMA/RMI4内建、本机触摸供电/DTS及可选reset GPIO；只刷
+boot/logdump。新#61/taint0，54413字节完整dmesg校验通过，S3706A/fw3078696、
+F01/F12/event2注册。306744字节真实事件校验通过，点按/移动/释放/多点通路已验；其它13类功能仍待推进。
+Android/全部数据、TOP_CFG0x11/整帧/RX53/F1/两终端保留，无新EUD实验。
+
+
 Unofficial EDK2/UEFI port for the **realme X2 Pro (RMX1931 / RMX1931CN)**, Qualcomm
 **Snapdragon 855+ (SM8150-AC)**, platform **msmnile**, codename **"samurai"**.
 
@@ -16,7 +23,7 @@ upstream project.
 
 Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
 
-Current kernel audit: [session70](sessions/70-pm8009-resource-and-touch-prerequisites.md).
+Previous kernel audit: [session70](sessions/70-pm8009-resource-and-touch-prerequisites.md).
 Fresh 85404-byte dmesg/cmd-db pass device SHA256/gzip CRC. No PM8009 F resources
 or current DT supply consumers: lower its warning to P3 without removing nodes.
 Native touch lacks enabled GENI/RMI4/bus prerequisites; hardware remains untested.
@@ -29,7 +36,7 @@ or kernel change. UDC/configfs exist but no gadget function is configured.
 Actual DWC3 legacy glue/VBUS override and EUD notification paths were audited;
 ordinary USB coexistence remains untested. COM14 Windows/Shared, owners closed.
 
-Latest kernel fix: [session68](sessions/68-firmware-dtb-and-cpu7-opp-verified.md).
+Previous kernel fix: [session68](sessions/68-firmware-dtb-and-cpu7-opp-verified.md).
 The firmware DTB activates CPU7's 2.9568 GHz OPP; live DT/table/max are verified
 and its boot warnings disappear. Same #60 kernel, fresh boot_id, taint0; complete
 52842-byte log passes device SHA256/gzip CRC. One boot-only flash; logdump and

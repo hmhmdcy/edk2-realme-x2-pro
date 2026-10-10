@@ -1,5 +1,11 @@
 # postmarketOS 持久 rootfs：保留 Android 和全部数据
 
+Session71只刷boot/logdump接入触摸，Android/全部userdata保留；没有安装rootfs。
+新64MiB logdump镜像内Image30317056/DTB95933字节，FAT空闲36605952字节
+（约34.91MiB），旧session70的36737024字节是其保留旧镜像容量，仍然有效。
+两者均不足以证明完整、可持久更新的postmarketOS布局。
+
+
 2026-10-10，session66研究、session70只读容量复核。用户明确选择保留 Android 和全部数据；当前只允许刷 boot/logdump。session68曾更新boot固件DTB；rootfs未部署，没有格式化、缩容、改 GPT 或写 userdata。
 
 目前没有确认可直接刷入完整持久 postmarketOS 的空闲分区。继续使用 RAM initramfs；下一步评估 logdump 内极小的只读 rootfs，或 USB 可用后的外置存储。普通发行版、固件、模块、图形界面与更新空间不能按一个最小 Alpine 压缩包的大小估计。

@@ -1,6 +1,15 @@
 # Linux 移植工作区（Realme X2 Pro / RMX1931 / samurai）
 
-当前只读诊断：[session70](../sessions/70-pm8009-resource-and-touch-prerequisites.md)。
+当前硬件接入：[session71](../sessions/71-native-s3706-touch-bringup.md)。
+已实现并部署GENI/GPI DMA/RMI4内建、本机触摸供电/DTS及可选reset GPIO；只刷
+boot/logdump。新#61/taint0，54413字节完整dmesg校验通过，S3706A/fw3078696、
+F01/F12/event2注册。306744字节真实事件校验通过，点按/移动/释放/多点通路已验；其它13类功能仍待推进。
+Android/全部数据、TOP_CFG0x11/整帧/RX53/F1/两终端保留，无新EUD实验。
+
+硬件功能清单：[HARDWARE-STATUS](docs/HARDWARE-STATUS.md)。
+
+
+前次只读诊断：[session70](../sessions/70-pm8009-resource-and-touch-prerequisites.md)。
 85404字节完整日志及cmd-db/状态副本校验通过；PM8009无F资源/DT供电消费者，降为P3。
 GENI/RMI4及i2c17前提尚未启用，触摸未进入正常探测；本轮无源码变更或刷机。
 logdump离线镜像空闲36737024字节，仍无已确认的大持久rootfs分区。

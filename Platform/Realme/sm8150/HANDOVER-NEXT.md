@@ -9,307 +9,49 @@
 
 ## 0. TL;DR - where the project stands (2026-10-10)
 
-Boots and runs:
+Linux现在进入initramfs用户态，当前是真机内核#61。**本轮实际接通了原生触摸**：
+GENI/GPI DMA/RMI4内建、本机DTS/供电及reset GPIO补丁已经部署到boot/logdump。
+设备报告S3706A、fw3078696，F01/F12绑定；用户点按/滑动后取得完整输入事件，
+基本点按、移动、释放和多点通路通过。屏幕仍显示诊断控制台，触摸不会让现有画面
+滚动或变成GUI；原生显示面板/GPU尚未接入。
 
-* EDK2/UEFI boots on hardware; all three side buttons work; UFS and the GPT are
-  enumerated; USB mass storage mode works; the UEFI menu boots the mainline
-  Linux kernel from the FAT inside the logdump partition.
-* Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
-  interactive shell in the initramfs.
+当前证据是sessions/71-native-s3706-touch-bringup.md、reference/kernel71。
+初始完整dmesg54413字节、后续日志见该会话，设备保存后压缩导出并逐项校验。
+event2原文306744字节/12781记录通过SHA/gzip CRC/长度，970个SYN_REPORT，
+241个contact全部释放，坐标在1080×2400内；记录最多5触点，但不是严格五指/精度
+验收。当前boot_id=a31c1158-fbca-4515-83ac-1a3b40ee808e、taint=0。
 
-Current kernel handoff: sessions/70-pm8009-resource-and-touch-prerequisites.md,
-reference/kernel70. Fresh 85404-byte dmesg and 139-entry cmd-db dump pass device
-SHA256/gzip CRC/lengths; same #60/boot_id/taint0, six UFS disks, no panic/Oops.
-No F resources and no PM8009 DT supply consumers in the active firmware DTB or
-saved Android tree; lower this warning to P3 without deleting nodes or claiming
-physical PMIC absence. GENI I2C is modular, RMI4 off, i2c17 disabled, no adapter;
-native touch has not been probed. Audit its board power/GPIO/RMI dependencies
-before enabling. Preserved logdump image has 36737024 free bytes, not a proved
-full/persistent pmOS layout. No kernel changes/flash/gadget/EUD experiments;
-all owners closed, COM14 Windows/Shared/unattached. Android/all data preserved.
+已有基础能力是UEFI、六个UFS LUN、CPU三个调频policy和CPU7最高2956800kHz表、
+三路PMIC温度、simpledrm帧缓冲、EUD交互及F1。除触摸基础通路外，按用户功能
+分组还有13类待接入/验收，详见linux-port/docs/HARDWARE-STATUS.md。
+普通USB的HS PHY/DWC3/UDC已绑定，但gadget目录为空，尚无USB网络/SSH；
+Wi-Fi/GPU/DSP等也还不是可用系统。完整postmarketOS/rootfs没有安装，保留的
+64MiB logdump新镜像空闲36605952字节，尚无证明安全的大持久rootfs位置。
 
-Previous kernel handoff: sessions/69-usb-gadget-state-and-eud-coordination-audit.md,
-reference/kernel69. Same #60/boot_id/taint0; latest complete 69499-byte device-saved
-dmesg passes SHA256/gzip CRC and lengths. COM14 Windows/Shared/not Attached,
-three nodes OK and all owners closed. Configfs mounted/UDC registered, but gadget
-directory empty; no ordinary USB function configured. Actual glue is
-dwc3-qcom-legacy, confirmed on device, and it sets VBUS override in peripheral
-mode. QUIC describes ordinary USB through EUD; tty-only VBUS forwarding is
-absent, but neither hardware exclusivity nor its root cause is proved.
-User's Android EUD/ADB exclusivity observation retained; no gadget bind/EUD
-control change/flash/kernel modification. Do not load the upstream EUD control
-driver alongside the custom tty on the same CSR/IRQ. Source/log audit and
-postmarketOS USB-network/SSH explanation recorded; hardware goal remains open.
-
-Previous kernel handoff: sessions/68-firmware-dtb-and-cpu7-opp-verified.md,
-reference/kernel68 and offline verify.py. The actual firmware DTB now includes
-CPU7 opp-2956800000; live node and policy7 table/max=2956800 kHz verified.
-Complete 52842-byte dmesg passes device SHA256/gzip CRC; old OPP/initial-frequency
-warnings gone. Same #60 Image/config/init, new boot_id afbbf870-b998-43d8-ab3d-
-42b3c68c0122, taint0, six UFS LUNs and USB UDC retained. High-frequency stress
-and actual USB communication remain untested. One boot-only flash; logdump/
-userdata/GPT untouched. Core executable bytes unchanged except version strings;
-DTB semantic change is only the CPU7 OPP. Original F1 firmware rollback preserved.
-Failed captures/exports retained, not filled. Existing compatible/native Windows
-terminal independently exported the saved new log after WSL corruption/partial
-receipts. No new EUD experiments, tools, parameters or Windows driver changes.
-All owners finally closed/detached; COM14 Windows, three nodes OK, Shared.
-Preserve actual init/EUD/earlycon pacing/TOP_CFG0x11/whole-frame/RX53/F1/terminals.
-User requires Android and all data preserved. No safe large rootfs partition
-established; see linux-port/docs/ROOTFS-PRESERVE-ANDROID.md. Next verify USB role/
-function communication, PM8009 and native hardware using board evidence.
-
-Previous kernel handoff: sessions/67-usb-provider-and-dtb-activation.md,
-reference/kernel67. Matching SM8150 SNPS Femto V2 HS PHY m->y restores PHY/dwc3
-binding/UDC. Its CPU7 candidate only in FAT was OPP_ABSENT; session68 activates
-the firmware DTB. Do not repeat FAT-DTB-only flashing. Two logdump-only flashes;
-stale Windows DTS EUD/PON/bootargs were synchronized from the actual tree.
-
-Previous kernel handoff: sessions/66-verified-kernel-logs-and-builtins.md,
-reference/kernel66. OSM L3, ADC5/VADC_COMMON and paired early mapping were
-verified on hardware. Its finish-state.json is after three flashes;
-the older final-state.json is only the pre-fix collection end state.
-
-Previous EUD handoff: sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md.
-User-selected WSL route now measured: one busy-console native14/wire16 probe
-accepted via=console, BusyBox variable correct, all990 log digits complete.
-Same continuous owner loses nine source1 tty TX frames,36 payload/54 wire
-bytes; CRC44ba763a journal seq7868..8379 directly matches the other503 records.
-Complete virtual HCD positive IN equals raw, including two canceled partial
-returns. This TX gap needs neither qcusbser nor ordinary serial reopen.
-WSL bypasses that driver but retains Windows USB/IP/lower USB; no universal
-repair or sole-side attribution. Initial snapshot export fails CRC; independent
-compressed export of the same saved snapshot passes, without filling raw.
-Latest user priority: stop adding EUD experiments. Kernel anomalies and three
-verified fixes are now recorded in session66. EUD is auxiliary observation; preserve device-side log copies
-and verify exports. The continuous TX request/cancel/FIFO audit is deferred,
-with its evidence retained; no speculative reset/delay sweeps or old loops.
-Current tty/console still not reliably lossless; EUD90/LEN framing requires
-the existing dedicated terminal/libusb helper. Generic terminals need a future
-COM/PTY protocol bridge, which would not repair the underlying loss.
-One existing-image fastboot reboot and normal cold-start com-up; no flash,
-Windows COM open, new driver/UAC/security change. Finally all owners disposed/
-detached; final three nodes OK, COM14 old binding, Shared/not Attached,
-no logging/ETW, original driver/terminal/logdump hashes unchanged.
-Preserve TOP_CFG0x11/whole-frame/RX53 console/IRQ/F1/terminals/RX48 rollback.
-
-Windows candidate remains uninstalled/unvalidated: RX62 actual build/signing,
-RX63 unique candidate/rollback matches and15 guarded cases, RX64 loading audit
-CI F401/Secure Boot1/test cert absent. Selected supported loading environment
-is still required for same-binary reset-flag off/on, first-frame causality,
-actual rollback and the full RX62 matrix; WSL LEN14 passing is not a substitute.
-Exact signed/rollback packages remain external. ZLP loads at DeviceAdd;
-keep it separate from FileCreate's reset option. See reference/rx63/trial-review.md.
-Original full stability goal remains unachieved; do not repeat old probes.
-
-Previous measured logger: sessions/57-driver-raw-logging-boundary.md.
-Built-in pre-buffer driver logging is now measured in one bounded Windows
-owner: 9550 successful-read/counter/raw bytes agree; 512 journal records match
-directly. Old startup/TX faults did not recur; no stability repair. Initial
-setup's PassThru output-object error was corrected after independent restoration
-and separate UAC approval. Both temporary COM14 values are removed; three nodes
-OK, serial/helpers closed, same candidate/terminal. See reference/rx57.
-
-Previous source audit: sessions/56-source-boundaries-and-focused-research.md.
-Read-only consolidation/search: exact reset selector 2 maps to URB 0x1e;
-conditional pre-buffer raw logger identified, padding cannot alone remove
-RX55's six-byte frame. No runtime logging/PID proof or repair; old ETW totals
-489 bytes equal its raw. Next establish a pre-buffer byte observation during
-an actual gap, not another ordinary passing command. See reference/rx56.
-
-Previous session-55 reproduced-gap evidence: sessions/55-windows-perf-counter-and-reproduced-tx-gap.md.
-Same logdump-rx53-console-rx.img and installed terminal; no flash/reboot/reset.
-One bounded Windows owner adds read-only GET_STATS on its existing overlapped
-handle, with an isolated manual event/low bit to suppress CLR completion-port
-notification. Six drained samples complete; all received deltas equal raw.
-
-TX loss recurs: seq 7376 console `[ 16`, six wire bytes absent. The other 511
-journal records match directly (27 previous/484 current). First-status raw and
-accepted-buffer receive delta are both 309 bytes, versus 315 CPU-issued bytes.
-The gap is before that counter, excluding a loss solely in app Read/decoder/
-display. EUD/physical USB/early driver refusal remain unresolved; zero observed
-errors is not proof against every early refusal. See session 55/reference/rx55.
-
-The first of two startup Ctrl-U writes still lacks RX acceptance; all nineteen
-once-only data frames receive receipts, IRQ active=1/fault=0. Long-console RX
-remains improved by RX53 and RX54's nine overlaps/console F1; it is not a global
-TX/session-start fix. TOP_CFG=0x11/whole-frame payload/F1/compatible/native
-terminal and unchanged RX48 rollback are retained. Finally COM14 closes/probes
-dispose; three nodes OK, no owner, Shared/not Attached. No new admin ETW.
-
-The dual-worker pre-buffer logger has now been measured; next obtain its byte
-boundary during an actual reproduced gap. Both UAC attempts are used and logging
-is restored off. Do not repeat RX57's passing capture as a repair. Preserve startup OUT/RX
-count distinction. Do not repeat masks/reset/ZLP/old zero-wait or ordinary
-passing commands as proof; open/reset code alone does not measure data toggles.
-
-RX45's mask-only candidate was insufficient; RX46 introduced real IRQ
-entries/frame counts and deferred tty/F1. One completed administrator ETW
-capture has successful 12/3/3-byte OUT completions but only echo plus one
-Ctrl-U adds IRQ frames. Original payload bytes remain unverified. All-device
-ETL/XML stay local. Do not repeat mask-only, reset/ZLP or old zero-wait probes.
-
-Previous audit: sessions/43-native-terminal-evidence-audit.md. RX41's native
-id/echo/console output failures were misreported: unchanged raw captures contain
-their complete responses. The decoder had hidden them only from stdout; fixed.
-Whole-frame payload advancement remains verified. Intermittent missing receipts
-remain on both Windows and libusb. A failed Windows echo is also absent from a
-later complete device dmesg tail, narrowing that sample to before the accepted
-RX log, without identifying USB/EUD reception versus STATUS1/header gating.
-
-EUD native multi-byte RX now has a verified method (session 41):
-
-* Stock RMX1931 SM8150 DAL maps SOUTH SWMAN at 0x088ee000. The matching
-  vendor USB driver defines TOP_CFG +0x10, one read/write wait state 0x11.
-  A read-only UEFI snapshot measured zero; setting 0x088ee010 to 0x11 with
-  matching readback makes the unchanged RX39 burst loop advance correctly.
-* Two UEFI boots each accepted ABC=41 42 43 and DEFG=44 45 46 47, then restored
-  zero before Linux. Linux independently accepted two ABC and three DEFG
-  probes, and a full 14-byte payload. Only low COM field bytes are interpreted;
-  upper lanes need not replicate after the FIFO starts advancing.
-* The Linux driver sets/verifies the wait state, buffers the complete frame
-  under the TX lock before logging, and restores the original configuration
-  on F1/remove. Native multi-byte X=ok\n executed in the shell and a later
-  single-byte terminal command read back ok. RX43 also verified the original
-  native id, 14-byte echo and console responses in their unchanged raw captures.
-* Length 1 and 3..14 carry tty input; length 2 remains the header-only F1
-  command [90][02]. Never send a two-character tty frame. The existing
-  terminal defaults to compatible single-byte input; -Native uses whole frames.
-* Host OUT acceptance is still intermittent and needs device receipts plus
-  bounded retry. Empty captures are inconclusive. 0 stray does not prove
-  lossless TX. Do not repeat the old 0-wait DAT/latency/flag guesses unchanged.
-* Only logdump was flashed in session 41. Firmware boot, DTB, actual working
-  initramfs, existing kernel changes and backups are preserved. COM owners
-  always close/dispose in finally. Current artifact/state and raw verification
-  are in sessions/41-rx-ahb2phy-wait-state-fix.md and reference/rx41.
+历史修复：session66是调频/ADC/earlycon，67是HS PHY，68是实际固件DTB/CPU7 OPP，
+69是USB/EUD协调审查，70把PM8009警告降为P3并查清触摸接线，71完成触摸实现。
+RPMh读回-95、PM8009、QMP/aux_bridge等仍按影响范围排优先级，没删节点静音。
+EUD TX仍可能缺帧，session65有确证；本轮成功校验导出不等于EUD已无损。
 
 ## 1. What to do next, in order
 
-Latest steering and verified results: read session70/reference/kernel70 first,
-then session69/68/67/66. PM8009 F resources are absent and have no current DT
-supply consumers: P3, not a reason to delete nodes or invent voltages. Native
-touch lacks GENI/RMI4 and enabled i2c17/DT client prerequisites; audit board
-GPIO/power, QUP/GPI DMA and RMI queries before a minimal candidate. Empty
-gadget is a configuration prerequisite, not a proved
-USB failure. EUD/ordinary USB coordination remains untested; keep legacy VBUS
-override and the user's Android observation in scope, without control/mask
-experiments. CPU7 firmware-DTB deployment/table/boot warnings are verified;
-high-frequency load remains untested. Next inspect USB role/function providers
-and board-specific fuel gauge/panel/touch. The source
-audits list evidence and authoritative repositories; preserve Android/all data.
-Keep the last working #59 logdump and existing rollback images. For logs use
-the unchanged manual helper, a persistent WSL shell, independently verified
-9505 enumeration and one owner. Wait for target END marker and shell prompt,
-not merely host COMMAND>, before the next command. Failed exports remain
-unverified; never fill missing characters into proof. Save on-device copies,
-compress and check lengths/SHA/CRC. Only boot/logdump may be flashed.
-Do not continue the historical EUD experiment sequence below. The Windows
-candidate/rollback plan remains deferred for a later specifically scoped task.
+直接交接见NEXT-SESSION.md，复制提示词见NEXT-SESSION-PROMPT.md。
 
-Process rule agreed on 2026-10-08: when an experiment has failed two or three
-times in a row, STOP and search for an existing implementation or document
-before spending another hardware cycle. The downstream `drivers/soc/qcom/eud.c`
-and QUIC host library established the register layout and framing; session 41
-verified native payload advancement with the SM8150 AHB2PHY wait state.
+1. 核实手机当前模式和连接owner，读session71及校验日志，承接已经部署的#61。
+   本轮最后COM14交回Windows、Shared/未Attached，三节点OK、owner释放；以新会话
+   的实时枚举/新回执确认，不依据旧截图或PID单独判断系统模式。
+2. 优先把普通USB变成可实际传输日志的网络/SSH通道。现有UDC存在但无gadget函数；
+   先明确configfs函数与内建配置，再做小范围实现、构建、上机和电脑端真实流量验收。
+   实际glue是dwc3-qcom-legacy，EUD与普通USB共存尚未证明；不要预设它一定互斥。
+3. 随后推进本机SOFEF03F原生面板/DSI/DSC和GPU，电池/充电，再无线、音频及其它
+   功能。优先现有主线/维护者实现和Realme本机源码；每轮交付实现和真实结果。
+   触摸后续补方向/边缘/触点数量及休眠恢复验收，不能把目前基本输入当全面完成。
 
-**Native FIFO advancement has a working method; read session 41 first.**
-Sessions 35-40 remain the history of excluded paths and source limits. The new
-SM8150 map plus actual zero/0x11 readbacks supplied evidence missing from the
-older SDM845 register table. No PHY/clock reset, filter change or force bind.
-
-1. Read sessions 41, 42, the RX43 corrections, RX44 counters, RX45 mask exclusion,
-   RX46 IRQ evidence, RX47 session-boundary/TX/fallback, RX48 journal and RX49
-   complete IN/partial-timeout findings, then RX50's Windows observation and
-   exact installed-driver audit. First verify
-   live device enumeration, serial ownership and a fresh bounded device receipt.
-   Use the verified wait-state plus whole-frame RX method. The remaining
-   question is intermittent missing frame receipts. Read RX43's correction of
-   the old missing-output claims and actual BusyBox/tty/TX audit before assigning
-   a shell failure. Both host paths have bounded missing receipts; one failed
-   Windows payload is absent from the device RX log. USB/EUD versus STATUS1/
-   header gating was unresolved in RX43. RX44 now records no pending/header
-   rejection for two failed native inputs, and correct frame/tty totals for
-   a successful native echo. RX46 implements measured IRQ reception: SPI 492,
-   hwirq 524, RX-only mask 01 and work-context dispatch. A failed command
-   still added no IRQ entry, pending/header/frame or tty count. Distinguish
-   host delivery from missing notification before handler entry.
-   Read-only stats are at /sys/class/tty/ttyEUD0/device/rx_stats and on Ctrl-U.
-   RX45 set only INT1 RX before arrival with readback; a failed command still
-   added no pending/frame/tty counts. Mask-only candidate was reverted. RX47's
-   existing ETW audit shows endpoint resets at serial session boundaries;
-   continuous-owner native input works after startup sync, while reopened
-   inputs can be absent from device counts. Physical data toggle is unmeasured.
-   RX48 permits 100 ms of IRQ progress before pending fallback and records
-   issued TX values; waits were zero, not proof of the hypothesized race fix.
-   A CRC-valid 512-frame journal matched host raw; historical TX loss remains
-   unlocalized. RX49 also matched the issued window and all captured virtual
-   USB IN data, including a canceled partial read; it did not reproduce loss.
-   RX50's Windows diagnostic also matched the overlapping 287 records and
-   complete status output, with no observed queue error; old faults did not
-   recur. BytesToRead previously cleared unrecorded errors; the new separate
-   diagnostic saves flags/queue/timing, without replacing the ordinary terminal.
-   RX51 now reproduces a missing 7-byte input during long console output, and
-   its immutable journal identifies one issued 4-byte frame absent from Windows
-   raw. The legacy console holds the UART lock for the whole record and this
-   non-RT printk core disables IRQs outside it; actual IRQ delay is unmeasured.
-   RX52 repeats this marker trigger with complete target USB OUT/IN in one
-   owner: the 7-byte probe is absent from RX/tty in both host paths and manual
-   Ctrl-U recovers without reopen. Each adds an empty IRQ. Continuous IN reduces
-   requeue gaps and matches all 512 TX records in one contrast, but RX still
-   fails in RX52. RX53 installs that targeted console-boundary collector:
-   the same 7-byte overlap succeeds via=console on both paths, with complete
-   RX/tty/variable readback and 512 direct TX matches per owner. RX54 now passes
-   nine manual distinct 9-byte overlaps, six credited empty IRQs, and console F1
-   into independent fastboot. It does not induce eight consecutive empty IRQs.
-   Final RX53 installed raw still loses seq 7287 `[   `; 511 other records
-   match across boot/affected/recovery owners. RX55 uses RX54's exact-driver
-   SerialGetStats boundary: new missing seq7376 has 309 received/raw bytes
-   versus 315 CPU-issued bytes, 511 other records directly match. This excludes
-   a gap solely after the accepted-buffer count, not EUD/physical USB/early
-   driver refusal. One startup Ctrl-U is still unaccepted; nineteen data frames
-   execute once. Next audit the exact worker/completion path before acceptance.
-   See session 55/reference/rx55; physical acceptance/full stability are unproven.
-   Ordinary idle use works; avoid repeating passing samples as stability proof.
-   Preserve the current diagnostic and compare software records with actual IN;
-   the matching vendor DT specifies SPI 492 level high. RX46 supplies a
-   board-specific mapping because the actual mainline node lacks interrupts.
-   Compare one variable at a time and classify each result by evidence stage
-   (sessions 42/43), without treating empty captures as proof of USB rejection.
-   Preserve receipt boundaries and reserved length-2 F1. The native host sends
-   data once, stopping on missing receipt; only startup Ctrl-U is retried.
-   Continue Linux port work with E:\eud-host\eud-terminal.cmd -Native -Port COM14,
-   or its unchanged default compatible mode (linux-port/docs/EUD-TERMINAL.md).
-   For native frames use the bounded eud-step helper and fresh capture names;
-   RetryJitterMs is optional, not proof of reliable delivery.
-2. Current candidate is logdump-rx53-console-rx.img; exact source/Image hashes,
-   captures, console RX improvement and remaining TX gap are in session 53.
-   Immediate rollback is unchanged logdump-rx48-tx-journal.img/source, backed up
-   before RX53. RX48's earlier rollback is logdump-rx46-rx-irq-b.img/source,
-   backed up before RX48. Its earlier rollback
-   is logdump-rx44-rx-stats-ctrl-u.img/source, backed up before RX46. It retains
-   the RX41 hardware method, console/F1 and actual initramfs; receipt stability
-   is not fixed. RX44's own rollback is logdump-rx41-native-ordered-tty.img.
-   Session 41 builds that image; its verification and
-   final live-device state are recorded in the session. Rollback remains the
-   unchanged logdump-rx33-console.img (SHA256 d5a36aa2...). Do not run the old
-   build-image.sh: it would replace the actual working initramfs with a stale
-   mirror. Build incrementally from the current WSL source and package only
-   the new FAT Image, keeping the DTB byte-identical.
-3. DONE 2026-10-08 evening: PON reboot-mode plus the two DT mode lines are in and
-   verified.  `[90][02]` on the EUD command channel reboots Linux straight into
-   fastboot with no key presses, and no reboot2 helper was needed (the driver is
-   built in, so it calls kernel_restart("bootloader") directly).  The hands-free
-   flywheel is closed - FLYWHEEL.md, sessions/31-flywheel-f1-verified.md.
-4. Continue the port work with that terminal: panel SOFEF03F_M, touch S3706, WCN3990, charger,
-   sensors, and the device-tree clean-ups
-   (`sessions/27-userspace-and-shortcuts.md`, 27.4 goal 2).
-5. Optional: a samurai DSDT for Windows, a startup.nsh for the EFI shell, a
-   persistent UEFI variable store, and the ESP + GRUB end state.
-
-Normal iterations use [90][02] -> fastboot, flash logdump, then reboot. A full
-power cycle is a fallback for a wedged EUD block (hold Power ~15 s, then
-Vol-Down + Power for fastboot). Never flash anything but boot and logdump; see
-section 6 for the safety rules.
+执行边界集中在这里：保留Android/全部数据；刷机仅boot/logdump；现有EUD读取工具
+与TOP_CFG0x11/整帧/RX53/F1/原生兼容终端保持，串口/USB一个owner并finally释放。
+真实initramfs在/home/cy122/x2pro-linux/initramfs，实际内核在/home/cy122/x2pro-linux/linux；
+设备树要更新实际UEFI固件，FAT-only不会激活。结论/源码增量仅推fork/master。
+这些是部署边界；当前工作重点是继续实现和验收硬件，不是恢复历史EUD实验序列。
 
 ## 2. Verified hardware facts (do not re-derive)
 
@@ -357,7 +99,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 2d389cf  samurai: build in USB HS PHY and record active DTB evidence
+    master = 0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
              fd78c01  linux: verify logs and restore cpufreq, PMIC ADC and early mapping
              3e22a55  eud: record WSL full-packet acceptance and continuous tty TX loss
              6e74a65  eud: record verified driver-loading blocker and full acceptance audit
@@ -367,7 +109,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              6f8ec50  eud: confirm even reopen reversal and prepare toggle-preserving candidate
              da915a8  eud: reproduce odd-frame reopen loss with matched driver and USB trace
 
-    97 commits ahead of upstream origin/master, as of the tip named above;
+    100 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -429,10 +171,9 @@ overrides, PlatformBm.c, EUD.md) is in git log and in sessions/15-17.
    FVMAIN.Fv or the module .obj instead.
 5. The submodule files must be committed in the submodule repo, not just the
    parent (this is why the blobs "would not upload" earlier).
-6. While EUD is enabled it owns the USB port. The verified [90][02] handler
-   disables EUD before restarting to bootloader; an ordinary warm reboot can
-   leave EUD on and hide fastboot. Use the flywheel first, full power cycle as
-   a fallback.
+6. F1 explicitly releases EUD before restarting to bootloader. This is verified
+   on this handset. EUD being enumerated does not establish that ordinary Linux
+   USB must be exclusive; the actual gadget/role path is still untested.
 
 7. Trial and error instead of looking it up.  The EUD RX protocol took many
    hardware cycles of guessing (burst reads, status gating, header-change
@@ -457,29 +198,26 @@ overrides, PlatformBm.c, EUD.md) is in git log and in sessions/15-17.
 
 ## 7. Open questions
 
-* Can the log channel survive the UEFI -> OS handoff (useful for Linux boot
-  debugging), and what does the Android kernel ttyEUD see at that point?
-* Which layer causes intermittent whole OUT frames without a receipt, and
-  how can TX responses be checked for exact continuity? Do not conflate this
-  with the now-verified AHB2PHY FIFO advancement method (session 41).
-* RX43 corrected the supposed missing native id/echo/console responses by
-  auditing unchanged raw files. Full-chain responses now repeat on both host
-  paths and after reboot; longer-term TX continuity still needs evidence.
-* Move the SM8150 shared bridge configuration to appropriate platform/DT
-  resource management before generalizing the board-specific driver.
+* Which ordinary USB gadget function/configuration will provide reliable
+  network/SSH on this Windows host, and how will actual USB/EUD role signaling
+  behave? UDC exists; configured functions and real traffic are missing.
+* Does the new touch input retain correct physical contact count, orientation,
+  edge accuracy and suspend/resume behavior? Basic recorded input now works.
+* What board-native panel/DSI/DSC, GPU firmware and power descriptions are
+  needed to replace the inherited framebuffer with accelerated native display?
+* How can a full persistent rootfs be provided while preserving Android and all
+  data? The current logdump FAT only has about34.91MiB free; userdata FBE/ICE
+  access and a safe large layout have not been established.
+* CPU high-frequency load, battery/charging and the remaining functional groups
+  still need board-specific implementation and acceptance; see HARDWARE-STATUS.
 
-Answered since; kept here so nobody re-opens them:
-
-* EUD COM drain speed with full DEBUG on: fine now - paced writes, and a 210 s
-  capture reassembles with 0 resyncs (sessions/15, sessions/16).
-* EUD SWD/JTAG USB transport works; the tested AP DAP does not answer in
-  Android or UEFI. Fuse/policy is a plausible cause, but this unit's fuse
-  values were not read. No demonstrated unlock method; TRACE unvalidated.
-  See SWD-JTAG.md for the qualified evidence and source limits.
-
+The EUD console reaches Linux userspace and F1 returns to independently
+enumerated fastboot. Native RX advancement and RX53 console/IRQ are verified;
+intermittent TX loss remains documented in session65. The deferred EUD/Windows
+driver work is background evidence, not the next hardware implementation task.
+Historical SWD/JTAG evidence and its unresolved AP DAP response stay in SWD-JTAG.md.
 
 ---
-
 
 ## History index (the former sections 8-30)
 

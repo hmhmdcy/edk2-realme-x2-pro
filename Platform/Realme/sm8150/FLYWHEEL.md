@@ -1,5 +1,12 @@
 # 免按键测试飞轮：Linux → fastboot → 刷机 → 再启动
 
+当前硬件接入：[session71](sessions/71-native-s3706-touch-bringup.md)。
+已实现并部署GENI/GPI DMA/RMI4内建、本机触摸供电/DTS及可选reset GPIO；只刷
+boot/logdump。新#61/taint0，54413字节完整dmesg校验通过，S3706A/fw3078696、
+F01/F12/event2注册。306744字节真实事件校验通过，点按/移动/释放/多点通路已验；其它13类功能仍待推进。
+Android/全部数据、TOP_CFG0x11/整帧/RX53/F1/两终端保留，无新EUD实验。
+
+
 > 2026-10-08 建立（F1 核心已在真机验证）。用途：把「改代码 → 上机验证」从
 > 5–10 分钟的人肉操作（断电 15 s + Vol-Down + Power + 手刷），压到 **1–4 分钟、
 > 无人值守**的一轮。
@@ -8,7 +15,7 @@
 
 ## 0. 一句话
 
-最新只读日志/供电/触摸前提审查看 [session70](sessions/70-pm8009-resource-and-touch-prerequisites.md)。
+前次只读日志/供电/触摸前提审查看 [session70](sessions/70-pm8009-resource-and-touch-prerequisites.md)。
 85404字节完整日志及cmd-db校验通过；PM8009无F资源/DT供电消费者，降为P3。
 GENI/RMI4/i2c17尚未使触摸进入探测；无内核修改/刷机/新EUD实验，owner均已释放。
 
