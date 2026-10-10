@@ -20,6 +20,7 @@
 | `ANDROID-DT-REFERENCE.md` | where the Android downstream DTS lives and what was cherry-picked |
 | `EDK2-KERNEL-EMBED.md` | how the kernel is embedded in the firmware volume |
 | `OLD-PROJECT-VERIFICATION.md` | the earlier (2026-10-05) project: what is reusable, what is wrong |
+| `ROOTFS-PRESERVE-ANDROID.md` | session66 rootfs research with Android/all-data preservation; no large safe rootfs partition verified |
 
 Rules: one section, one file; never append a section back into the handover.
 `scripts/sync-docs-to-repo.sh` mirrors the top-level documents, and

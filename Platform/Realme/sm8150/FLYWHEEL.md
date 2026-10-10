@@ -14,7 +14,15 @@
 给 ABL 前恢复原 TOP_CFG。本轮只刷 logdump，来源、逐步验证和最终设备状态见
 `sessions/41-rx-ahb2phy-wait-state-fix.md`、reference/rx41。
 
-当前交接看 `sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md`：
+当前内核交接看 [session66](sessions/66-verified-kernel-logs-and-builtins.md)：
+三个小步仅刷 logdump，CPU 调频提供者、PMIC ADC 和 earlycon 映射已验证。
+#59 完整日志通过长度/SHA256/gzip CRC，taint=0；CPU7 OPP/USB 仍待查。
+使用既有手动工具，一个连接 owner，finally close/dispose/detach；WSL shell 要保持
+运行，attach 后先 lsusb 确认 9505。host COMMAND> 不代表 target 导出结束，必须等
+实际 END 标记和 shell 提示符。只读 GPT 不可把“前34扇区”当成无分区数据的范围。
+证据和 rootfs 保留数据限制以 session66/reference/kernel66 为准，不做 EUD 参数实验。
+
+前次 EUD 交接看 `sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md`：
 WSL一次busy-console原生LEN14/wire16输入正确受理并执行，990个零完整；同一owner
 仍缺9个tty TX帧/36字节，CRC有效512记录中另外503直接匹配。全部正长度IN等于raw，
 这次缺口不需要qcusbser或reopen。WSL保留Windows USB/IP下层，整体仍未解决。

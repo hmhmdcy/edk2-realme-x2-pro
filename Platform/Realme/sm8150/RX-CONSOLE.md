@@ -11,7 +11,12 @@
 > 证据、输出验证及最终镜像状态见 [session 41](sessions/41-rx-ahb2phy-wait-state-fix.md)、reference/rx41。
 > 以下 session 32-40 的“未修复”结论保留为当时的历史观测。
 
-> **当前入口：[session65](sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md)。**
+> **当前内核入口：[session66](sessions/66-verified-kernel-logs-and-builtins.md)。**
+> 校验完整日志后依次修复 OSM L3/ADC5 内建和 earlycon 临时映射。#59 完整 dmesg
+> 长度/SHA256/gzip CRC 通过，taint=0；CPU7 OPP 与 USB deferred 仍在。
+> 不增加 EUD 实验，保留 RX53/TOP_CFG0x11/整帧/F1/两种终端；证据见 reference/kernel66。
+>
+> **前次 EUD 入口：[session65](sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md)。**
 > 用户选择WSL后实测：长日志期间一次14字节整包via=console受理，BusyBox读回正确，
 > 990个零完整；但同一持续owner仍缺9个tty TX帧/36字节。CRC44ba763a快照512记录中
 > 另外503直接匹配；全部正长度虚拟IN等于raw，包括取消部分数据。此缺口不需要

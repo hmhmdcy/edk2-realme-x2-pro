@@ -17,7 +17,26 @@ Boots and runs:
 * Mainline Linux (7.3-rc6) reaches userspace and stays there, with an
   interactive shell in the initramfs.
 
-Current handoff: sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md.
+Current kernel handoff: sessions/66-verified-kernel-logs-and-builtins.md,
+with evidence in reference/kernel66 and offline verify.py. Three logdump-only
+steps verified on hardware: built-in OSM L3 creates CPU policies 0/4/7;
+ADC5/VADC_COMMON creates three PMIC temperatures; paired early mapping removes
+the setup_earlycon ioremap warning and taint becomes 0. Last boot #59,
+boot_id 87a7b341-6139-4afd-9ca2-3c0b20493e68. Its complete 53866-byte dmesg
+matches device SHA256 and gzip CRC; CPU-step complete dmesg also validates.
+CPU7 2956800 kHz OPP and persistent USB/dwc3 defer remain. Priorities and
+source authority are in reference/kernel66/source-audit.md. Do not guess CPU
+voltages/bandwidth or delete inherited PM8009 nodes without board evidence.
+User requires Android and all data preserved. No safe large rootfs partition
+established; see linux-port/docs/ROOTFS-PRESERVE-ANDROID.md. No boot/userdata/GPT
+write, no Windows driver change. All owners finally closed, USBIP detached,
+COM14 and three nodes OK; finish-state.json is after the three flashes.
+The older final-state.json is only the pre-fix collection end state.
+Actual init/DTB/eud.c and TOP_CFG0x11/whole-frame/RX53/F1/terminals retained.
+Windows earlycon mirror was stale and now matches the actual existing paced
+implementation plus the minimal early-map fix; no new TX delay tuning.
+
+Previous EUD handoff: sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md.
 User-selected WSL route now measured: one busy-console native14/wire16 probe
 accepted via=console, BusyBox variable correct, all990 log digits complete.
 Same continuous owner loses nine source1 tty TX frames,36 payload/54 wire
@@ -27,9 +46,8 @@ returns. This TX gap needs neither qcusbser nor ordinary serial reopen.
 WSL bypasses that driver but retains Windows USB/IP/lower USB; no universal
 repair or sole-side attribution. Initial snapshot export fails CRC; independent
 compressed export of the same saved snapshot passes, without filling raw.
-Latest user priority: stop adding EUD experiments. In the next session read
-and verify existing logs first, then identify Linux kernel issues; none is
-preselected or established yet. EUD is auxiliary observation; preserve device-side log copies
+Latest user priority: stop adding EUD experiments. Kernel anomalies and three
+verified fixes are now recorded in session66. EUD is auxiliary observation; preserve device-side log copies
 and verify exports. The continuous TX request/cancel/FIFO audit is deferred,
 with its evidence retained; no speculative reset/delay sweeps or old loops.
 Current tty/console still not reliably lossless; EUD90/LEN framing requires
@@ -133,12 +151,19 @@ EUD native multi-byte RX now has a verified method (session 41):
 
 ## 1. What to do next, in order
 
-Latest steering after RX65: in the next session read and verify logs, then
-decide what kernel issue the actual evidence supports. No kernel symptom has
-been specified or established. Do not continue the historical EUD experiment sequence
-below. EUD TX remains lossy; use it as auxiliary observation, save critical
-logs on the device and verify exported contents. Keep the EUD fixes/evidence
-and Windows candidate/rollback plan intact for a later specifically scoped task.
+Latest steering and verified results: read session66 and reference/kernel66
+first. Next audit CPU7's missing 2956800 kHz OPP and interconnect requirements,
+then USB Type-C/DP/provider topology, PM8009 cmd-db mismatch and board-specific
+fuel gauge/panel/touch. The source-audit lists evidence and authoritative
+repositories; rootfs research must preserve Android and all data.
+Keep the last working #59 logdump and existing rollback images. For logs use
+the unchanged manual helper, a persistent WSL shell, independently verified
+9505 enumeration and one owner. Wait for target END marker and shell prompt,
+not merely host COMMAND>, before the next command. Failed exports remain
+unverified; never fill missing characters into proof. Save on-device copies,
+compress and check lengths/SHA/CRC. Only boot/logdump may be flashed.
+Do not continue the historical EUD experiment sequence below. The Windows
+candidate/rollback plan remains deferred for a later specifically scoped task.
 
 Process rule agreed on 2026-10-08: when an experiment has failed two or three
 times in a row, STOP and search for an existing implementation or document
@@ -291,7 +316,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 6e74a65  eud: record verified driver-loading blocker and full acceptance audit
+    master = 3e22a55  eud: record WSL full-packet acceptance and continuous tty TX loss
+             6e74a65  eud: record verified driver-loading blocker and full acceptance audit
              32ae015  eud: audit driver compatibility and prepare single-device trial tools
              727657e  eud: build and validate toggle-preserving test driver package
              ac16146  eud: prepare dedicated WDF package and supported build environment
@@ -299,9 +325,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              da915a8  eud: reproduce odd-frame reopen loss with matched driver and USB trace
              7c43d67  eud: align reopen first-frame gaps and audit failed-read gates
              e7de5a3  eud: measure pre-buffer driver logging and restored capture
-             738845e  eud: consolidate faults and audit pre-buffer receive boundaries
 
-    94 commits ahead of upstream origin/master, as of the tip named above;
+    95 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro

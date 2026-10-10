@@ -1,5 +1,15 @@
 # Linux 移植工作区（Realme X2 Pro / RMX1931 / samurai）
 
+当前内核入口：[session66](../sessions/66-verified-kernel-logs-and-builtins.md)。
+校验完整日志后依次内建 OSM L3、ADC5/VADC_COMMON，修正 earlycon CSR 的临时映射。
+真机 #59 已有 CPU policy0/4/7 和三路 PMIC 温度，taint=0，完整 dmesg 的设备哈希/CRC
+通过；CPU7 2956800 kHz OPP 与 USB deferred 仍待查。配置增量是
+`kernel66-builtins.config`，映射补丁 `patches/0005-eud-early-csr-mapping.patch` 针对实际
+earlycon 基线 SHA `f0de320d4028d180099d0251b115371ca68bc84b51757910e6b0cdf94a9ddd53`，
+不直接 git am 到旧 0001。实测前后源码与构建脚本见 `../reference/kernel66`；不要
+运行旧 build-image.sh 或用落后的 Windows initramfs 覆盖实际 WSL initramfs。
+rootfs 保留 Android/全部数据的结论见 [ROOTFS-PRESERVE-ANDROID](docs/ROOTFS-PRESERVE-ANDROID.md)。
+
 > 2026-10-09 session 41：`eud.c` 接入实际 SM8150 SOUTH AHB2PHY TOP_CFG=0x11
 > 并验证回读，在 TX 锁内一次读取整帧，读完才记录回执/投递 tty。UEFI 跨重启和 Linux
 > 的 ABC/DEFG 均正确；原生多字节 shell 赋值已执行。len=2 保留 F1，len=1、3..14 为 tty。
@@ -15,7 +25,7 @@
 `-RetryJitterMs 800` 仅改变有界重试时间，不保证所有 OUT 都受理。
 不要使用旧 build-image.sh 重建 initramfs；本轮保留真实 WSL initramfs 和原 DTB。
 
-当前交接见 [session 49](../sessions/49-usb-in-and-partial-timeout-audit.md)。本轮不改内核、
+历史交接见 [session 49](../sessions/49-usb-in-and-partial-timeout-audit.md)。当轮不改内核、
 未刷机或重启手机；持续 libusb 的 CRC 发送记录与全部 IN/raw 对应，部分取消数据
 实测保留，但未重现旧缺字或触发宽限。Windows 原生终端已恢复、COM14 关闭。
 诊断变更见 [session 48](../sessions/48-irq-grace-and-tx-journal.md)。本 eud.c 为 RX48 B

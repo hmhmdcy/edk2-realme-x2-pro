@@ -60,6 +60,8 @@
 | sessions/63-single-device-driver-compatibility-and-trial-tools.md、reference/rx63/ | 原生只读候选/回退匹配、当前 CI 策略、单设备试装工具 15 保护用例；ZLP 读取阶段明确，安装与上机未运行 |
 | reference/rx64/ | 同一加载环境连续三轮受阻审查、最新只读设备/策略状态、完整原始验收仍未完成 |
 | sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md、reference/rx65/ | WSL长console整包LEN14正确受理/执行，但持续owner缺9个tty TX帧；CRC有效快照503/512直接匹配，完整虚拟IN等于raw，仍需专用帧协议工具 |
+| sessions/66-verified-kernel-logs-and-builtins.md、reference/kernel66/ | 完整日志校验、CPU/PMIC内建依赖和early mapping三项真机修复；实际异常优先级、失败证据与关闭状态 |
+| linux-port/docs/ROOTFS-PRESERVE-ANDROID.md | 保留Android和全部数据的rootfs研究：GPT备份边界、logdump小rootfs/外置/文件方案，未确认安全大分区 |
 | archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
 | HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
 

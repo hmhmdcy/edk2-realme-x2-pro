@@ -16,7 +16,14 @@ upstream project.
 
 Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
 
-Current EUD stability handoff: [session65](sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md).
+Current kernel work: [session66](sessions/66-verified-kernel-logs-and-builtins.md).
+Three logdump-only changes restore CPU cpufreq policies and PMIC temperature
+readings, and remove the early mapping WARN (taint=0). Complete #59 boot logs
+pass device SHA256 and gzip CRC. CPU7's high OPP and USB initialization remain
+open; EUD stability is unresolved. [Rootfs research](linux-port/docs/ROOTFS-PRESERVE-ANDROID.md)
+preserves Android and all data; no safe large partition has been established.
+
+Previous EUD stability handoff: [session65](sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md).
 WSL busy-console native14/wire16 input succeeds and executes; all990 console
 digits arrive. The same continuous owner still loses nine tty TX frames/36
 payload bytes: valid512-record journal matches the other503 directly, complete
