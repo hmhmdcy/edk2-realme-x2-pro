@@ -7,17 +7,21 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10, session78 first-boot controls)
+## 0. TL;DR - where the project stands (2026-10-10, session79 MP2650 observations)
 
-当前仍用session77的boot与#76 Image/config/logdump；BQ28Z610标准只读监测保持。
-session78没有分区写入，连续三次相同镜像首次启动DSI错误0；第三次600次双缓冲
-页面翻转/完成事件及CRC通过，未请求开关屏。一次旧帧停滞仍可正常刷新，根因未定。
-session77两次失败证据保留，间歇性首次接管故障仍开放，尚未取得新故障的寄存器快照。
-当前boot_id=e1a36cea-f401-41f2-bd1a-1eedf1282e96，taint0；约669秒时DSI0，电池包
-8.645V、SOC100%、29.7°C、电流0。充电控制未接入，Charging/Good不是安全验收。
-实际PHY是7nm-8150/V4.0，10nm关闭；不沿用未核对的源码HEAD/上游SHA。
-详见sessions/78-first-boot-display-controls-and-pageflips.md及reference/kernel78。
-session75的39096次GPU渲染及用户光学验收是历史基线，本轮未重新取得光学观察。
+已部署session79仅QUP1总线boot，Image/config/logdump仍#76；无充电器子节点。
+MP2650三次36组合读成功、配置一致；NTC/watchdog关闭，终止/12小时安全计时器开启。
+充电控制未验收，当前字段不是推荐参数。下一步核实本机保护链、输入预算和失联状态。
+当前MP2650为/dev/i2c-0，gauge为/dev/i2c-2、2-0055，触摸1-0020；按of_node找总线。
+boot_id=87753933-4992-45d2-aaf5-d9db9c11d1a3、taint0；约196秒DSI0、panel enable1，
+600双缓冲完成事件及CRC通过；电池包8.643V、SOC99%、30°C，sysfs偶见-2mA。
+session77间歇性首次接管失败仍开放，没有新光学观察或GPU压力/休眠/充电验收。
+gh API已成功，权限足够；本轮仅boot写入，充电配置/电量计NVM/OTG GPIO未写。
+当前boot sha08edf9bcc1c55977169b0a8fd9f963805ba98d0423929e09e17bb9f811ca7405，
+回退kernel79/boot-before.img sha3fbbd0eecf7e793f97920d55bd9ec2a30329d6e53edb307200160a23e1de923e。
+logdump仍607fc6b4b0caba8ca5c7ea6677fd8259c81a216f91b2d6de7603e3f56d9881d0，两者已回读。
+详见sessions/79-mp2650-read-only-bus-and-current-settings.md及reference/kernel79。
+实际PHY7nm-8150/V4.0、10nm关闭；session75是历史光学/GPU回退基线。
 
 补丁0011在旧命令帧无法排空时停TE/trigger，且必须成功复位覆盖对应INTF的CTL；
 保留0010双复位/清输出顺序，换IOMMU域前完成，并修正初始化失败时private object二次释放。
@@ -30,7 +34,7 @@ session74的数字CRC证据不代表当时已通过光学验收；session75的�
 1. 通过169.254.42.1密钥SSH保存新日志，保留#76可显示/可GPU渲染基线。
 2. 首次启动DSI下溢重现时，恢复前先保存kms/state/clk_summary及完整日志；必要时
    做受限FIFO原始位诊断。保留电量计读取，不能用自动开关屏替代首次接管验收。
-   确认温度/输入电源/故障行为后再做MP2650充电控制。
+   核实热敏电阻/双串保护/SMB5输入预算/默认来源/故障语义和失联后再做充电控制。
    禁止套用其它板参数、解封/NVM更新；原厂MP2650 probe会写配置并关闭安全计时器。
 3. 后续独立完成90Hz、休眠恢复、GPU各频点压力、触摸校准和OTG/USB3。
 
@@ -88,7 +92,9 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 136157b  samurai: audit charging sources and safety boundaries
+    master = 3dd07f4  samurai: record first-boot controls and event-checked page flips
+             efeba61  samurai: enable BQ28Z610 monitoring and record display regression
+             136157b  samurai: audit charging sources and safety boundaries
              89ab2a5  samurai: normalize session75 evidence file modes
              c2564b6  samurai: validate A640 rendering and fix SOFEF03F DSI clock mode
              20a1d60  samurai: quiesce SM8150 boot display before IOMMU handoff
@@ -98,7 +104,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
              218812b  samurai: audit USB gadget state and EUD coordination
 
-    107 commits ahead of upstream origin/master, as of the tip named above;
+    109 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
