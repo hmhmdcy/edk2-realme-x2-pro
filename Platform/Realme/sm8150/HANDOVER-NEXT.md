@@ -7,21 +7,17 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10, session76 research / session75 hardware)
+## 0. TL;DR - where the project stands (2026-10-10, session77 gauge / display regression)
 
-当前#76：A640/GMU已启用，本机签名固件加载和Turnip真实渲染通过，
-累计39096次交替红/绿三角形渲染、4096像素读回及fence校验成功。
-用户照片及纯白测试曾确认静止彩色噪点；关闭EOT单独无效，补齐原厂非连续DSI时钟并
-清除继承的controller/PHY强制时钟位后，用户确认全白及重新启动后的首次彩条正常。
-最终两次#76启动完整日志无DSI worker错误、SMMU context fault或Oops，taint0；
-混合GPU/显示回归共12次显示关闭/开启通过。当前boot_id=af922f36-bacd-481d-a5c5-21c8e3fada65。
-DTB只有GPU/GMU status及板级ZAP路径三处语义变化；EUD、触摸、RPMh、init/SSH身份保留。
-仅部署boot一次/logdump七次，Android/全部数据/GPT保留；专有固件及密钥不入Git。
-下一项电池/充电、无线/音频等；冷断电、90Hz、休眠、全部GPU频点压力仍未验收。
-
-session76已完成充电源码/安全只读审查，设备未改动；详见
-sessions/76-charging-source-and-safety-review.md、reference/kernel76/README.md。
-下一步从BQ28Z610标准只读电量/温度开始；MP2650不可直接套原厂probe或其它芯片驱动。
+当前仍用#76 Image/config/logdump；BQ28Z610已接入，两个启动45个连续样本与
+标准寄存器读值/单位对应。仅刷boot一次，第二次仅重启；未写充电/保护参数。
+当前boot_id=aada8705-14a3-4012-bf84-eeb0f7987b96，taint0；末次电池包8.649V、
+SOC100%、温度29.3°C、电流0。充电控制尚未接入，Charging/Good不能作安全验收。
+两次首次启动出现DSI FIFO/MDP FIFO下溢，完整开关屏后停止；新GPU12次读回/fence
+与两次数字彩条/电源循环通过。当前DSI累计194条已停止增加，首次接管回归仍开放。
+session75曾完成39096次GPU渲染、用户纯白及fresh-boot彩条光学验收；它是回退基线，
+不能替代本轮首次启动的验收。详见sessions/77-bq28z610-live-gauge-and-display-regression.md、
+reference/kernel77/README.md。下一步优先定位显示启动回归，再推进MP2650安全控制。
 
 补丁0011在旧命令帧无法排空时停TE/trigger，且必须成功复位覆盖对应INTF的CTL；
 保留0010双复位/清输出顺序，换IOMMU域前完成，并修正初始化失败时private object二次释放。
@@ -32,9 +28,9 @@ session74的数字CRC证据不代表当时已通过光学验收；session75的�
 ## 1. What to do next, in order
 
 1. 通过169.254.42.1密钥SSH保存新日志，保留#76可显示/可GPU渲染基线。
-2. 按session76研究先接入BQ28Z610只读电量计，核对电池包电压/温度/电流单位。
-   MP2650和PM8150b/SMB5仍需独立适配；原厂probe会写配置并关闭安全计时器。
-   禁止套用其它手机的电压/充电参数；不把注册节点或warning消失当成功。
+2. 先定位session77两次首次启动的DSI下溢；保留已验证电量计读取，不用自动
+   开关屏掩盖首次接管问题。确认温度/输入电源/故障行为后再做MP2650充电控制。
+   禁止套用其它板参数、解封/NVM更新；原厂MP2650 probe会写配置并关闭安全计时器。
 3. 后续独立完成90Hz、休眠恢复、GPU各频点压力、触摸校准和OTG/USB3。
 
 实际Linux源码/home/cy122/x2pro-linux/linux，initramfs/home/cy122/x2pro-linux/initramfs。
@@ -91,7 +87,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 89ab2a5  samurai: normalize session75 evidence file modes
+    master = 136157b  samurai: audit charging sources and safety boundaries
+             89ab2a5  samurai: normalize session75 evidence file modes
              c2564b6  samurai: validate A640 rendering and fix SOFEF03F DSI clock mode
              20a1d60  samurai: quiesce SM8150 boot display before IOMMU handoff
              523d195  samurai: enable native SOFEF03F DSC display and record hardware tests
@@ -99,9 +96,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              964362e  samurai: enable native S3706 touch and record hardware handover
              0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
              218812b  samurai: audit USB gadget state and EUD coordination
-             aa5db85  samurai: activate firmware DTB for CPU7 high OPP
 
-    106 commits ahead of upstream origin/master, as of the tip named above;
+    107 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
@@ -270,6 +266,7 @@ the only copy.
 | 57 | Built-in pre-buffer logger measured; 9550 driver/counter/raw bytes and 512 journal matches, restored configuration; old faults untriggered | `sessions/57-driver-raw-logging-boundary.md` |
 | 70 | Verified cmd-db/full dmesg, unused PM8009 resource warning lowered to P3, native touch prerequisites and rootfs capacity audited | `sessions/70-pm8009-resource-and-touch-prerequisites.md` |
 | 76 | Charging sources, own archived DT differences, BQ28Z610 mainline path and MP2650 safety boundaries; read-only, hardware unchanged | `sessions/76-charging-source-and-safety-review.md` |
+| 77 | Live BQ28Z610 gauge, two boots/45 samples, boot-only deployment; fresh-boot DSI underflow remains open | `sessions/77-bq28z610-live-gauge-and-display-regression.md` |
 
 Rules that keep this file from growing again:
 
