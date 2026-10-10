@@ -1,10 +1,10 @@
 # linux-port/docs - index
 
-当前硬件接入：[session71](../../sessions/71-native-s3706-touch-bringup.md)。
-已实现并部署GENI/GPI DMA/RMI4内建、本机触摸供电/DTS及可选reset GPIO；只刷
-boot/logdump。新#61/taint0，54413字节完整dmesg校验通过，S3706A/fw3078696、
-F01/F12/event2注册。306744字节真实事件校验通过，点按/移动/释放/多点通路已验；其它13类功能仍待推进。
-Android/全部数据、TOP_CFG0x11/整帧/RX53/F1/两终端保留，无新EUD实验。
+当前诊断状态：[session84](../../sessions/84-display-boot-tracing-and-timeout-snapshots.md)。
+#85保留既有硬件代码/DT/initramfs，仅替换logdump的Image。首次跟踪与超时快照配置已验证，
+两次600翻页CRC通过，扩大运行时缓冲后的探测无事件损失；早期显示故障仍开放。
+MP2650十二值保持，充电控制未验收；来源对照见[session83](../../sessions/83-androidr-and-cyborg-charging-source-comparison.md)。
+历史触摸接入基线见[session71](../../sessions/71-native-s3706-touch-bringup.md)。
 
 硬件功能清单：[HARDWARE-STATUS](HARDWARE-STATUS.md)。
 

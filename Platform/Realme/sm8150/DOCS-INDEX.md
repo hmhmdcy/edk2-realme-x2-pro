@@ -7,6 +7,7 @@
 
 | 文件 | 内容 |
 |---|---|
+| sessions/84-display-boot-tracing-and-timeout-snapshots.md、reference/kernel84/ | #85首次启动事件/超时快照、两次600翻页与完整跟踪、失败迭代及MP配置保持 |
 | sessions/83-androidr-and-cyborg-charging-source-comparison.md、reference/kernel83/ | 官方Android R与用户cyborg源码定位、14项本机策略对照、驱动相同/初始化差异及I2C匹配边界 |
 | sessions/82-charging-policy-units-and-android-backup-provenance.md、reference/kernel82/ | 温控负值/单节与包电压单位、原函数错误路径测试、OPLUS保护来源及Android备份来源纠正 |
 | sessions/81-stock-gauge-state-temperature-and-display-timeouts.md、reference/kernel81/ | 原厂封存/计量与标准温度、两次既有DRM超时纠正、600翻转对照及本机无线固件准备 |
@@ -21,7 +22,7 @@
 | sessions/72-usb-ncm-and-autonomous-ssh.md、reference/kernel72/ | CDC NCM/密钥SSH自动启动、双向4MiB校验、EUD共存及仅logdump部署 |
 | sessions/71-native-s3706-touch-bringup.md、reference/kernel71/ | 原生S3706触摸代码/供电/总线接入、boot/logdump部署、完整日志与输入事件校验 |
 | linux-port/docs/HARDWARE-STATUS.md | 按用户功能分组的14类硬件接入/验收状态与优先级 |
-| NEXT-SESSION.md、NEXT-SESSION-PROMPT.md | session83 Android R/cyborg本机充电来源，82单位/备份纠正及81显示超时/无线准备、自动USB SSH与提示词 |
+| NEXT-SESSION.md、NEXT-SESSION-PROMPT.md | session84显示启动/空闲快照，83 Android R/cyborg充电来源和82单位/备份边界、自动USB SSH与提示词 |
 | HANDOVER-NEXT.md | 交接入口：第 0–7 节 = 当前状态 / 下一步 / 仓库状态 / 工具 / 坑 / 安全 / 未决；末尾是 history index（旧第 8–30 节 → 文件） |
 | README.md | 项目门面：fork 介绍、构建、刷机、各阶段 status update |
 | DOCS-INDEX.md | 本文：文档地图、同步方式与维护规则 |

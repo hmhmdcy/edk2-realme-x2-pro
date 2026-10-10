@@ -7,65 +7,41 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10, session83 Android R and cyborg charging source comparison)
+## 0. TL;DR - where the project stands (2026-10-10, session84 display boot tracing)
 
-本轮session83依据用户确认的Android11底包，定位官方Android R与cyborgdc2000内核/设备树。
-官方4.14.190与cyborg 4.14.356-openela-rc1固定快照的电量计/短路保护源码完全相同。
-两套19781板的14项选定充电策略原始值均与本机Android归档一致，QUP1/5c、QUP15/55/58对应。
-cyborg的oppo DT前缀与oplus OF表不同，但I2C名称后缀可命中id_table，不能据此前缀认定未绑定。
-MP2650初始化不同，且两套都会关闭硬件安全计时器；禁止直接运行写配置初始化。
-旧4.14.83占位保护只作历史参考；主要依据改为Android R、用户作者固定源码及本机存档。
-尚未证明备份对应精确构建提交，2719身份/保护阈值、热敏补偿、USB预算及失联安全待核实。
-本轮无设备访问；最新实机记录仍82的5598秒taint0、8.639V/99%/30.8°C，MP保持、显示超时2。
-充电控制未验收，权限足够；不解封/NVM/OTP/FET/OTG/MCU试探，全硬件目标保持active。
-详见sessions/83-androidr-and-cyborg-charging-source-comparison.md、reference/kernel83。
-
-保留82温控负幅值/包电压单位与错误路径测试、Android回滚备份来源纠正及USB100mA声明依据。
-普通温控removed/cold为−19/−2°C；双串最高单节电压与主线包电压µV不能直接套阈值。
-显示77首次接管失败和80两次超时继续开放；准备保留既有修复的FTRACE诊断。
-
-用户确认电池从未更换；不从2719身份判断真伪或替代型号。81原厂0054/57守卫查询确认
-封存位3/计量启用1，0051/0053/0072未查询，完整80状态原型的2610门槛保持。
-81的600事件/CRC通过且超时计数2不增；77首次接管失败、80两次帧超时继续开放。
-Wi-Fi四项供电已继承，35项本机固件只读私人提取，wifi/MPSS仍禁用、无线未验收。
-
-已部署session79仅QUP1总线boot，Image/config/logdump仍#76；无充电器子节点。
-MP2650三次36组合读成功、配置一致；NTC/watchdog关闭，终止/12小时安全计时器开启。
-充电控制未验收，当前字段不是推荐参数。下一步核实本机保护链、输入预算和失联状态。
-当前MP2650为/dev/i2c-0，gauge为/dev/i2c-2、2-0055，触摸1-0020；按of_node找总线。
-boot_id=87753933-4992-45d2-aaf5-d9db9c11d1a3、taint0；约196秒DSI0、panel enable1，
-600双缓冲完成事件及CRC通过；电池包8.643V、SOC99%、30°C，sysfs偶见-2mA。
-session77间歇性首次接管失败仍开放，没有新光学观察或GPU压力/休眠/充电验收。
-gh API已成功，权限足够；session79仅boot写入，充电配置/电量计NVM/OTG GPIO未写。
-当前boot sha08edf9bcc1c55977169b0a8fd9f963805ba98d0423929e09e17bb9f811ca7405，
-回退kernel79/boot-before.img sha3fbbd0eecf7e793f97920d55bd9ec2a30329d6e53edb307200160a23e1de923e。
-logdump仍607fc6b4b0caba8ca5c7ea6677fd8259c81a216f91b2d6de7603e3f56d9881d0，两者已回读。
-详见sessions/79-mp2650-read-only-bus-and-current-settings.md及reference/kernel79。
-实际PHY7nm-8150/V4.0、10nm关闭；session75是历史光学/GPU回退基线。
-
-补丁0011在旧命令帧无法排空时停TE/trigger，且必须成功复位覆盖对应INTF的CTL；
-保留0010双复位/清输出顺序，换IOMMU域前完成，并修正初始化失败时private object二次释放。
-补丁0012设置NO_EOT_PACKET/CLOCK_NON_CONTINUOUS，并显式清除继承的强制时钟请求。
-PPS、DSC几何、DSI链路频率、电压、EUD传输保持；只读DSC寄存器诊断已从最终版本移除。
-session74的数字CRC证据不代表当时已通过光学验收；session75的用户观察单独保存。
+session84已部署保留现有硬件修复的#85诊断Image，仅两次写logdump；boot保持session79。
+当前boot ID=f02d218a-cc7d-4b92-8858-c8eeaeab5777，404.09秒完整采集、513.90秒复查均taint0、
+显示超时0/underrun0。首次65.28秒跟踪21409事件、无缓冲丢失，snapshot:count=1实际安装。
+两个600翻页/CRC均通过；第一次跟踪覆盖6055事件，运行时扩为2051KiB/CPU后第二次无损。
+display事件实例已重新开启，一次性快照待真实超时验证；77首次接管/80两次超时仍开放。
+#84缺HIST_TRIGGERS/DRM通配失败、EUD等待过短及一次SCP中断均保留，不自动开关屏。
+源码/DTS/initramfs CPIO/SSH身份保留；FUNCTION_TRACER关闭，当前FTRACE事件跟踪已启用。
+boot前缀sha08edf9bcc1c55977169b0a8fd9f963805ba98d0423929e09e17bb9f811ca7405（6682624字节），
+当前64MiB logdump sha60e183a6780945885a738ac1bd0c7e23ed41515bca662cb50a831ede3b57302b。
+回退kernel84/logdump-before.img sha607fc6b4b0caba8ca5c7ea6677fd8259c81a216f91b2d6de7603e3f56d9881d0。
+充电控制未启用；404.09秒8.638V/99%/31.4°C/0mA，MP2650十二个固定值与部署前相同。
+session83官方Android R/cyborg及Android11底包对照有效；2719/短路保护、温度补偿、USB预算
+和失联安全仍未验收。未更换电池不用于推断器件真伪；不解封/NVM/OTP/FET/OTG/MCU试探。
+详见sessions/84-display-boot-tracing-and-timeout-snapshots.md、reference/kernel84；全硬件目标active。
 
 ## 1. What to do next, in order
 
-1. 通过169.254.42.1密钥SSH保存新日志，保留#76可显示/可GPU渲染基线。
-2. 先查已存在的两次frame-done timeout及空闲/控制台路径；FTRACE当前关闭。
-   首次启动DSI下溢重现时，恢复前先保存kms/state/clk_summary及完整日志；必要时
-   做受限FIFO原始位诊断。保留电量计读取，不能用自动开关屏替代首次接管验收。
-   核实热敏电阻/双串保护/SMB5输入预算/默认来源/故障语义和失联后再做充电控制。
-   禁止套用其它板参数、解封/NVM更新；原厂MP2650 probe会写配置并关闭安全计时器。
-3. 后续独立完成90Hz、休眠恢复、GPU各频点压力、触摸校准和OTG/USB3。
+1. 先通过169.254.42.1密钥SSH读取uptime、完整dmesg、encoder状态和display实例trigger。
+   如出现超时/首次接管故障，先停止实例并保存trace/snapshot、kms/state/clk_summary和原始日志，
+   保留快照，不自动开关屏、不重跑历史刷写脚本。当前on1，snapshot:count=1；空闲环形缓冲
+   允许自然覆盖旧事件。运行时2051KiB/CPU不持久，重启仍513KiB/CPU。
+2. 没有新增故障则继续Android R/cyborg保护链、热敏/均衡温补/USB预算与失联语义核实，
+   再推进无线WLFW/PD/TFTP和本机板数据。Wi-Fi/MPSS仍禁用，35项本机固件仅私人归档。
+   不直接绑定会复位/写配置/关闭安全计时器的MP2650或OPLUS保护初始化。
+3. 独立完成90Hz、休眠、GPU各频点压力、触摸校准及OTG/USB3，再音频/蜂窝/摄像头等。
 
 实际Linux源码/home/cy122/x2pro-linux/linux，initramfs/home/cy122/x2pro-linux/initramfs。
-不运行旧build-image.sh；保留init/USB hook/SSH身份、TOP_CFG0x11/整帧/RX53/F1/两终端。
-只写boot/logdump，按PARTNAME核对，保留Android/全部数据/GPT；只推fork/master。
-临时Turnip测试包仅位于本地kernel75和手机/tmp，不代表完整桌面/rootfs已经建立。
-回退GPU关闭基线需同时使用kernel75/boot-before.img与logdump-before.img，两个哈希见
-reference/kernel75/final-validation.json；最终可显示基线为kernel75/boot-k75-gpu.img+
-logdump-k75-final.img。COM/USB owner必须finally释放；早期console未排完时不能称启动失败。
+不运行旧build-image.sh；保留全部dirty修复、init/USB hook/SSH身份及0011/0012/0013/0014。
+EUD TOP_CFG0x11/整帧/RX53/F1/两终端保持；COM/NCM重启可能需既有com-up恢复。
+该流程只写COM/VBUS控制位，不写CHGR_EN/INT；F1回执后设备离开EIO不应重复F1。
+只写boot/logdump且按PARTNAME/大小/序列/哈希核对，保留Android/全部数据/GPT，仅fork/master。
+当前MP2650 QUP1=/dev/i2c-0、gauge QUP15=/dev/i2c-2、2-0055、触摸1-0020；按of_node守卫。
+镜像、完整配置、initramfs身份清单、固件、二进制工具和密钥留在私人目录。
 
 ## 2. Verified hardware facts (do not re-derive)
 
@@ -113,7 +89,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 1d1bc31  samurai: audit charge policy units and Android backup provenance
+    master = 7c53c0b  samurai: compare Android R and cyborg charging sources
+             1d1bc31  samurai: audit charge policy units and Android backup provenance
              2f82b23  samurai: verify stock cell reads and record gauge identity difference
              ce1352f  samurai: enable bounded MP2650 observations and record current settings
              3dd07f4  samurai: record first-boot controls and event-checked page flips
@@ -128,7 +105,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
              218812b  samurai: audit USB gadget state and EUD coordination
 
-    113 commits ahead of upstream origin/master, as of the tip named above;
+    114 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
