@@ -1,13 +1,14 @@
 # EUD RX side: registers, framing and the console driver
 
-当前硬件接入：[session73](sessions/73-native-sofef03f-dsi-dsc-display.md)。
-SOFEF03F原生DSI/DSC面板已部署到#64，1080×2400@60自动接管msmdrmfb。
-两次启动的彩条—白屏—彩条硬件CRC一致，每次三次关闭/开启与60次vblank等待通过。
-亮度120/256/400写入成功；面板DCS电源状态0x9c。没有人工光学验收或亮度硬件读回。
-最终boot_id=fc4fe164-1e90-402a-b841-ce870ba9ddfb、taint0，59284字节完整dmesg和
-5492字节facts通过设备SHA/gzip CRC/长度；触摸、CPU、六UFS、NCM/SSH与EUD保留。
-启动显示接管阶段记录10条SMMU fault，后续测试未复现，仍须修复；GPU/90Hz/休眠待验。
-本轮一次boot和两次logdump部署，Android/全部数据保留。下一项显示交接与GPU/GMU。
+当前硬件接入：[session74](sessions/74-sm8150-display-boot-handoff.md)。
+#68已自动完成SM8150显示接管：两次启动完整日志均无SMMU context fault、DSI错误或
+vblank WARNING；每次三组彩条—白屏—彩条、九次显示关闭/开启，合计18次通过。
+原生SOFEF03F 1080×2400@60 DSC、面板状态0x9c、120/256/400亮度写入保留。
+最终boot_id=2412cbe2-9f1d-4ea4-9c0b-8a19d4ff6568、taint0，56978字节dmesg和
+5493字节facts通过设备SHA/gzip CRC/长度与实际boot/logdump哈希核对。
+本轮四次logdump写入，boot、Android/全部数据/GPT保持。失败#65/#66/#67均归档。
+GPU固件七个哈希/分段及MDT loader几何已核对；GPU/GMU仍disabled，尚无渲染验证。
+下一项Adreno640/GMU真实渲染，然后电池/充电、无线/音频等；90Hz/休眠仍待验。
 
 
 前次日志入口：[session70](sessions/70-pm8009-resource-and-touch-prerequisites.md)。

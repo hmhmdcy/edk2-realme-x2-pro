@@ -7,47 +7,44 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10, session73)
+## 0. TL;DR - where the project stands (2026-10-10, session74)
 
-SOFEF03F原生DSI/DSC面板已部署到#64，1080×2400@60自动接管msmdrmfb。
-两次启动的彩条—白屏—彩条硬件CRC一致，每次三次关闭/开启与60次vblank等待通过。
-亮度120/256/400写入成功；面板DCS电源状态0x9c。没有人工光学验收或亮度硬件读回。
-最终boot_id=fc4fe164-1e90-402a-b841-ce870ba9ddfb、taint0，59284字节完整dmesg和
-5492字节facts通过设备SHA/gzip CRC/长度；触摸、CPU、六UFS、NCM/SSH与EUD保留。
-启动显示接管阶段记录10条SMMU fault，后续测试未复现，仍须修复；GPU/90Hz/休眠待验。
-本轮一次boot和两次logdump部署，Android/全部数据保留。下一项显示交接与GPU/GMU。
+#68已自动完成SM8150显示接管：两次启动完整日志均无SMMU context fault、DSI错误或
+vblank WARNING；每次三组彩条—白屏—彩条、九次显示关闭/开启，合计18次通过。
+原生SOFEF03F 1080×2400@60 DSC、面板状态0x9c、120/256/400亮度写入保留。
+最终boot_id=2412cbe2-9f1d-4ea4-9c0b-8a19d4ff6568、taint0，56978字节dmesg和
+5493字节facts通过设备SHA/gzip CRC/长度与实际boot/logdump哈希核对。
+本轮四次logdump写入，boot、Android/全部数据/GPT保持。失败#65/#66/#67均归档。
+GPU固件七个哈希/分段及MDT loader几何已核对；GPU/GMU仍disabled，尚无渲染验证。
+下一项Adreno640/GMU真实渲染，然后电池/充电、无线/音频等；90Hz/休眠仍待验。
 
-原生显示驱动、binding、板级DT和内建依赖已实现。原厂live DT的51条初始化命令、
-GPIO6/25/152/TE8、L14A1.8V/L17A3V、DSI L3C1.2V/PHY L5A0.88V逐项核对。
-DSC PPS在真机生成后与原厂128字节比较通过。屏幕仍是诊断控制台，没有完整GUI/rootfs。
-完整代码/构建/FFS与实际分区哈希、失败记录见sessions/73与reference/kernel73。
-首版#63因REFGEN为模块及10秒defer时限失效，#64内建REFGEN并延长到60秒后自动绑定。
-启动SMMU故障位于旧splash缓冲区，仅出现在首次接管时；不能据此称全日志无错误。
+显示交接补丁0010在IOMMU换域前停止本机遗留INTF1自动刷新，等待旧帧结束，
+清空旧CTL0图层/INTF/DSC，提交后再次复位以取消等待TE的空kickoff。
+最终两次自动启动和18次显示电源循环通过；不再需要手动reprobe或首次电源循环修复。
+保留了前三种真机失败；局部CRC通过不能替代完整启动日志。补丁只启用sm8150-dpu，
+命令模式已验，video-mode/其它板/实际冷断电/休眠和无缝保留splash未验。
 
-旧CPU/温度、触摸基本输入和自动密钥NCM/SSH保持。客户端/手机主机私钥均未入Git；
-COM14回Windows/Shared/未Attached，无host连接owner。EUD原生命令与三次F1均有回执。
-立即回退需成对恢复kernel73/boot-before.img和logdump-before.img（session72状态）；
-当前boot-k73-display.img与logdump-k73-display-deps.img是已验的原生显示基线。
-logdump仍只有约33.5MiB空闲，未确定安全的大持久rootfs位置。
+原生面板代码/51条本机命令、GPIO/DSI供电、REFGEN内建/defer60秒与session73相同。
+触摸/CPU/三路温度/六UFS/NCM SSH/EUD保持；新F1、原生命令和释放证据均归档。
+GPU固件仍只在本地，不入Git；全ELF与分段MDT内容一致，LOAD需4KiB，
+本机gpu_mem为8KiB，布局匹配loader，不代表PAS认证、GMU启动或渲染已经通过。
+立即回退只需kernel74/logdump-before.img（已验#64），boot仍是session73原生显示版本。
 
 ## 1. What to do next, in order
 
 直接交接见NEXT-SESSION.md，复制提示词见NEXT-SESSION-PROMPT.md。
 
-1. 从169.254.42.1密钥SSH取得新boot_id/taint/完整日志。先查显示接管SMMU故障：
-   旧splash地址0x9dxxxxxx、SID0x800/0xc20，停止旧DPU路径或保留映射需源码与真机验证。
-   不套用其它DPU代际的CTL_FETCH_ACTIVE补丁或通过关闭IOMMU隐藏问题。
-2. 接入本机Adreno640/GMU并验证真实渲染。vendor仅以ro,noload临时挂载获取本机固件，
-   已卸载；固件在本地kernel73/gpu-firmware-stock.tar，哈希/ELF几何已归档，未入Git。
-   GPU/GMU DT仍disabled；renderD128存在来自MSM注册，不证明GPU可用。
-3. 随后电池/充电、无线/音频等。显示90Hz/休眠/光学输出、触摸精度和USB OTG/USB3
-   仍需单独验收；当前60Hz模式成功不等于整个硬件组完成。
+1. 从169.254.42.1密钥SSH获取新boot_id/完整日志，保留#68显示接管基线。
+   接入本机Adreno640/GMU和签名固件，验证实际GPU任务/渲染及恢复。renderD128本身
+   不能证明GPU成功；DT仍disabled。固件只读提取包在本地kernel73/gpu-firmware-stock.tar。
+2. 随后电池/充电、无线/音频等14组功能。保留已有触摸、显示、USB的验收边界。
+   显示90Hz/休眠/光学图像和亮度硬件读回、触摸精度、OTG/USB3仍需独立完成。
 
-执行边界：保留Android/全部数据；部署仅boot/logdump；保留既有TOP_CFG0x11/整帧/
-RX53/F1/两终端，串口/对应USB接口单owner并finally释放。实际源码在
+执行边界：保留Android/全部数据；部署仅boot/logdump；保留TOP_CFG0x11/整帧/
+RX53/F1/两终端；串口和对应USB接口单owner并finally释放。实际源码在
 /home/cy122/x2pro-linux/linux，initramfs在/home/cy122/x2pro-linux/initramfs。
-不要运行旧build-image.sh覆盖真实init。DT变化必须更新实际UEFI固件，FAT-only不会
-激活；源码/证据仅推fork/master。读分区先按PARTNAME核对，不能猜sde编号。
+不要运行旧build-image.sh覆盖真实init。DT变化必须更新实际UEFI固件；源码/证据
+仅推fork/master。读分区按PARTNAME核对，不能猜sde编号。
 
 ## 2. Verified hardware facts (do not re-derive)
 
@@ -95,7 +92,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = bd23aaa  samurai: enable automatic USB NCM and public-key SSH
+    master = 523d195  samurai: enable native SOFEF03F DSC display and record hardware tests
+             bd23aaa  samurai: enable automatic USB NCM and public-key SSH
              964362e  samurai: enable native S3706 touch and record hardware handover
              0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
              218812b  samurai: audit USB gadget state and EUD coordination
@@ -106,7 +104,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              6e74a65  eud: record verified driver-loading blocker and full acceptance audit
              32ae015  eud: audit driver compatibility and prepare single-device trial tools
 
-    102 commits ahead of upstream origin/master, as of the tip named above;
+    103 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
