@@ -7,6 +7,7 @@
 
 | 文件 | 内容 |
 |---|---|
+| sessions/81-stock-gauge-state-temperature-and-display-timeouts.md、reference/kernel81/ | 原厂封存/计量与标准温度、两次既有DRM超时纠正、600翻转对照及本机无线固件准备 |
 | sessions/80-gauge-identity-and-stock-cell-observations.md、reference/kernel80/ | 旧式FFA5/扩展2719身份差异、原厂双电芯实测、USB输入来源；权限足够 |
 | sessions/79-mp2650-read-only-bus-and-current-settings.md、reference/kernel79/ | QUP1仅总线部署、MP2650三次实测配置和充电保护边界；gh API成功 |
 | sessions/78-first-boot-display-controls-and-pageflips.md、reference/kernel78/ | 三次相同镜像首次启动对照、600双缓冲翻转/CRC、7nm绑定核对；间歇性故障仍开放 |
@@ -18,7 +19,7 @@
 | sessions/72-usb-ncm-and-autonomous-ssh.md、reference/kernel72/ | CDC NCM/密钥SSH自动启动、双向4MiB校验、EUD共存及仅logdump部署 |
 | sessions/71-native-s3706-touch-bringup.md、reference/kernel71/ | 原生S3706触摸代码/供电/总线接入、boot/logdump部署、完整日志与输入事件校验 |
 | linux-port/docs/HARDWARE-STATUS.md | 按用户功能分组的14类硬件接入/验收状态与优先级 |
-| NEXT-SESSION.md、NEXT-SESSION-PROMPT.md | session80身份/电芯、session79充电配置/保护链及77/78显示对照、自动USB SSH与提示词 |
+| NEXT-SESSION.md、NEXT-SESSION-PROMPT.md | session81状态/温度/显示超时与无线准备，80身份/电芯及既有保护链/显示对照、自动USB SSH与提示词 |
 | HANDOVER-NEXT.md | 交接入口：第 0–7 节 = 当前状态 / 下一步 / 仓库状态 / 工具 / 坑 / 安全 / 未决；末尾是 history index（旧第 8–30 节 → 文件） |
 | README.md | 项目门面：fork 介绍、构建、刷机、各阶段 status update |
 | DOCS-INDEX.md | 本文：文档地图、同步方式与维护规则 |

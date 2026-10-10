@@ -1,16 +1,27 @@
-# 下一阶段：电量计身份兼容性和充电保护链（session80）
+# 下一阶段：显示超时与本机充电保护链（session81）
 
-先读sessions/80-gauge-identity-and-stock-cell-observations.md、reference/kernel80/README.md。
-本轮手机未刷写、重启或开关屏，仍是session79 boot。原厂固定电芯查询已实测：
-4321mV+4321mV=8642mV，与同次标准总电压一致；没有保护/温控/均衡或充电验收。
-旧式DeviceType当场为FFA5；两次扩展为2719（有效回显、长度、checksum），TI官方2610。
-FirmwareVersion有效负载2719000400060003850200，未猜测字段含义或确切芯片。
-因此完整005x/0072未查询；status原型遇到非2610停止。原厂固定身份/固件/0071请求
-含I2C写帧但不改充电参数；没有解封、NVM/OTP、FET/OTG/复位/快充MCU操作。
-电池更换记录已询问，尚未取得答复；不预设更换或真伪，不因提高授权跳过兼容性验证。
-扩展编号的明确来源、独立温度和保护链、USB预算/失联仍要核实；权限足够，无审批阻挡。
-最终1772.71秒taint0/DSI错误0，8.641V/99%/30°C/平均电流0，MP2650十二字段与79一致。
-Image/config/显示源保留。无新光学/GPU/pageflip验收，session77间歇显示失败仍开放。
+先读sessions/81-stock-gauge-state-temperature-and-display-timeouts.md和reference/kernel81。
+用户确认电池从未更换；不从扩展2719推断真伪/替代型号。手机仍session79 boot、#76内核。
+本轮只做有依据的查询及固件只读提取，没有分区写、重启、充电配置或开关屏。
+原厂0054 payload386封存位=3，0057 payload18计量启用位=1；回显/长度/checksum均通过。
+先用旧式FFA5、扩展2719及精确FW指纹守卫，再限于这两个原厂R请求；80完整status
+门槛未放宽，0051/0053/0072未查询。固定MAC请求含I2C写帧，不是配置/NVM写。
+标准06温度3037(约30.6°C)、28内部3025(约29.4°C)，不能据此认定TS1/保护已验收。
+MP2650十二字段与79/80一致；3608秒taint0、8.639V/99%/30.6°C/平均0、Not charging。
+
+重要纠正：80原始日志已有1545.683499/1775.069790秒两次frame done timeout，先前
+DSI等模式检查漏掉这类DRM错误；历史文件不改。encoder的frame_done_cnt实际累计超时。
+81保存当前kms/state/clk_summary后600事件/CRC通过、1199行全对应已知缓冲，20.044934秒；
+超时计数前后2、underrun0，无显式disable/开关屏。没有新光学/GPU验收，故障仍开放。
+优先跟踪空闲/控制台更新后的kickoff/IRQ/电源恢复；当前FTRACE关闭，可准备诊断内核。
+不要把持续刷新通过当成根因已修复，也不要把后续快照当成故障瞬间寄存器。
+
+无线：本机四项供电由MTP正确继承；保留区9b000000+180000、原厂MSA请求100000。
+从本机modem vfat ro提取wlanmdsp和34项bdwlan，35项仅私人归档，未安装/加载。
+vendor ro,noload和modem ro的前后整分区哈希一致且已卸载。当前wifi/MPSS仍禁用，
+ath10k未启用；PD mapper有modem/wlan_pd，PAS auto_boot=false，远端加载链仍要实测。
+没有运行tqftpserv/rmtfs或开启无线；只能在受限方案下继续，不能写Android存储/校准数据。
+权限足够，保护链/温度选择/校准/USB预算和失联仍需依据；不通过提高授权绕过验证。
 
 先读sessions/79-mp2650-read-only-bus-and-current-settings.md、reference/kernel79/README.md，
 再看session76充电来源、session77电量计/失败及session78显示对照。

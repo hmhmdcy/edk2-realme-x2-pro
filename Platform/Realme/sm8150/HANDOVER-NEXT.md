@@ -7,14 +7,19 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10, session80 gauge identity and cell observations)
+## 0. TL;DR - where the project stands (2026-10-10, session81 stock gauge state and display timeout review)
 
-session80未刷写/重启；原厂电芯接口4321+4321=8642mV，与标准总电压一致。
-旧式身份FFA5、扩展2719（两次校验一致），与TI官方2610不同；确切版本仍待核实。
-FW负载2719000400060003850200未解码，完整005x/0072没有查询；勿绕过status身份门槛。
-权限足够；差异不自动证明电池更换/真伪，独立温度/保护链和USB预算仍未验收。
-最终1772.71秒taint0/DSI错误0，8.641V/99%/30°C/平均电流0；MP2650字段与79一致。
-详见sessions/80-gauge-identity-and-stock-cell-observations.md、reference/kernel80。
+用户确认电池从未更换。81未刷写/重启/开关屏或改充电参数，仍79 boot、#76。
+本机FFA5/2719/精确FW守卫后，原厂0054/57实测封存位3、计量启用1；两块校验通过。
+标准电池温度约30.6°C、内部29.4°C；温度选择/热敏/保护阈值和USB预算仍待核实。
+完整status门槛保持，0051/0053/0072未查询；没有解封/NVM/OTP/FET/OTG/MCU操作。
+3608秒taint0、8.639V/99%/30.6°C/平均0、MP十二字段保持；权限足够、充电控制未验收。
+80旧日志已有两次frame done timeout，先前检查漏掉；81保留历史并补检查。
+当前超时计数2，DSI错误/underrun0；600事件/CRC复测通过且计数未增，无开关屏。
+优先查空闲/控制台更新后kickoff/IRQ/电源恢复；当前FTRACE关闭，根因仍未建立。
+本机Wi-Fi四项供电已继承，35项固件仅私人只读提取；源分区哈希保持、均已卸载。
+wifi/MPSS仍禁用，远端服务/板数据尚未实测，无无线验收。
+详见sessions/81-stock-gauge-state-temperature-and-display-timeouts.md、reference/kernel81。
 
 已部署session79仅QUP1总线boot，Image/config/logdump仍#76；无充电器子节点。
 MP2650三次36组合读成功、配置一致；NTC/watchdog关闭，终止/12小时安全计时器开启。
@@ -23,7 +28,7 @@ MP2650三次36组合读成功、配置一致；NTC/watchdog关闭，终止/12小
 boot_id=87753933-4992-45d2-aaf5-d9db9c11d1a3、taint0；约196秒DSI0、panel enable1，
 600双缓冲完成事件及CRC通过；电池包8.643V、SOC99%、30°C，sysfs偶见-2mA。
 session77间歇性首次接管失败仍开放，没有新光学观察或GPU压力/休眠/充电验收。
-gh API已成功，权限足够；本轮仅boot写入，充电配置/电量计NVM/OTG GPIO未写。
+gh API已成功，权限足够；session79仅boot写入，充电配置/电量计NVM/OTG GPIO未写。
 当前boot sha08edf9bcc1c55977169b0a8fd9f963805ba98d0423929e09e17bb9f811ca7405，
 回退kernel79/boot-before.img sha3fbbd0eecf7e793f97920d55bd9ec2a30329d6e53edb307200160a23e1de923e。
 logdump仍607fc6b4b0caba8ca5c7ea6677fd8259c81a216f91b2d6de7603e3f56d9881d0，两者已回读。
@@ -39,7 +44,8 @@ session74的数字CRC证据不代表当时已通过光学验收；session75的�
 ## 1. What to do next, in order
 
 1. 通过169.254.42.1密钥SSH保存新日志，保留#76可显示/可GPU渲染基线。
-2. 首次启动DSI下溢重现时，恢复前先保存kms/state/clk_summary及完整日志；必要时
+2. 先查已存在的两次frame-done timeout及空闲/控制台路径；FTRACE当前关闭。
+   首次启动DSI下溢重现时，恢复前先保存kms/state/clk_summary及完整日志；必要时
    做受限FIFO原始位诊断。保留电量计读取，不能用自动开关屏替代首次接管验收。
    核实热敏电阻/双串保护/SMB5输入预算/默认来源/故障语义和失联后再做充电控制。
    禁止套用其它板参数、解封/NVM更新；原厂MP2650 probe会写配置并关闭安全计时器。
@@ -99,7 +105,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = ce1352f  samurai: enable bounded MP2650 observations and record current settings
+    master = 2f82b23  samurai: verify stock cell reads and record gauge identity difference
+             ce1352f  samurai: enable bounded MP2650 observations and record current settings
              3dd07f4  samurai: record first-boot controls and event-checked page flips
              efeba61  samurai: enable BQ28Z610 monitoring and record display regression
              136157b  samurai: audit charging sources and safety boundaries
@@ -112,7 +119,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
              218812b  samurai: audit USB gadget state and EUD coordination
 
-    110 commits ahead of upstream origin/master, as of the tip named above;
+    111 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
