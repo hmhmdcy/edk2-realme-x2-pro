@@ -1,14 +1,15 @@
 # 免按键测试飞轮：Linux → fastboot → 刷机 → 再启动
 
-当前硬件接入：[session74](sessions/74-sm8150-display-boot-handoff.md)。
-#68已自动完成SM8150显示接管：两次启动完整日志均无SMMU context fault、DSI错误或
-vblank WARNING；每次三组彩条—白屏—彩条、九次显示关闭/开启，合计18次通过。
-原生SOFEF03F 1080×2400@60 DSC、面板状态0x9c、120/256/400亮度写入保留。
-最终boot_id=2412cbe2-9f1d-4ea4-9c0b-8a19d4ff6568、taint0，56978字节dmesg和
-5493字节facts通过设备SHA/gzip CRC/长度与实际boot/logdump哈希核对。
-本轮四次logdump写入，boot、Android/全部数据/GPT保持。失败#65/#66/#67均归档。
-GPU固件七个哈希/分段及MDT loader几何已核对；GPU/GMU仍disabled，尚无渲染验证。
-下一项Adreno640/GMU真实渲染，然后电池/充电、无线/音频等；90Hz/休眠仍待验。
+当前硬件接入：[session75](sessions/75-a640-render-and-sofef03f-clock-fix.md)。
+当前#76：A640/GMU已启用，本机签名固件加载和Turnip真实渲染通过，
+累计39096次交替红/绿三角形渲染、4096像素读回及fence校验成功。
+用户照片及纯白测试曾确认静止彩色噪点；关闭EOT单独无效，补齐原厂非连续DSI时钟并
+清除继承的controller/PHY强制时钟位后，用户确认全白及重新启动后的首次彩条正常。
+最终两次#76启动完整日志无DSI worker错误、SMMU context fault或Oops，taint0；
+混合GPU/显示回归共12次显示关闭/开启通过。当前boot_id=af922f36-bacd-481d-a5c5-21c8e3fada65。
+DTB只有GPU/GMU status及板级ZAP路径三处语义变化；EUD、触摸、RPMh、init/SSH身份保留。
+仅部署boot一次/logdump七次，Android/全部数据/GPT保留；专有固件及密钥不入Git。
+下一项电池/充电、无线/音频等；冷断电、90Hz、休眠、全部GPU频点压力仍未验收。
 
 
 > 2026-10-08 建立（F1 核心已在真机验证）。用途：把「改代码 → 上机验证」从

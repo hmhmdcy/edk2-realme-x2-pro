@@ -1,38 +1,34 @@
-# 下一阶段交接：Adreno640/GMU（2026-10-10，session74）
+# 下一阶段交接：电池/充电与剩余硬件（session75）
 
-当前#68，boot_id=2412cbe2-9f1d-4ea4-9c0b-8a19d4ff6568、taint0。两次自动启动无SMMU context fault、
-DSI错误、vblank WARNING；每次三组A/B/A CRC和九次显示电源循环通过，合计18次。
-SOFEF03F 1080×2400@60 DSC、面板0x9c、120/256/400亮度写入保持。
-最终dmesg 56978字节/facts 5493字节，设备SHA/gzip CRC/长度均通过。
-这只证明已捕获的启动和显示测试；冷断电、90Hz、休眠、光学图像、亮度硬件读回未验。
+当前#76：A640/GMU已启用，本机签名固件加载和Turnip真实渲染通过，
+累计39096次交替红/绿三角形渲染、4096像素读回及fence校验成功。
+用户照片及纯白测试曾确认静止彩色噪点；关闭EOT单独无效，补齐原厂非连续DSI时钟并
+清除继承的controller/PHY强制时钟位后，用户确认全白及重新启动后的首次彩条正常。
+最终两次#76启动完整日志无DSI worker错误、SMMU context fault或Oops，taint0；
+混合GPU/显示回归共12次显示关闭/开启通过。当前boot_id=af922f36-bacd-481d-a5c5-21c8e3fada65。
+DTB只有GPU/GMU status及板级ZAP路径三处语义变化；EUD、触摸、RPMh、init/SSH身份保留。
+仅部署boot一次/logdump七次，Android/全部数据/GPT保留；专有固件及密钥不入Git。
+下一项电池/充电、无线/音频等；冷断电、90Hz、休眠、全部GPU频点压力仍未验收。
 
-0010增量补丁实现IOMMU换域前停止INTF1自动刷新、按旧vdisplay等候帧结束（最多50ms）、
-关闭TE，清空旧CTL0的LM/INTF/DSC，刷新/提交后再复位，取消等待TE的空kickoff。
-仅sm8150-dpu执行。#65启动成功但暖重启vblank失败，#66无start产生iova0 fault，
-#67停TE/解除输出后仍有DSI下溢；均保留完整日志，不是成功基线。
-#68两次自动启动成功，不要回退为那些中间候选。实际Linux源保留已有EUD/RMI/RPMh补丁。
+先读sessions/75-a640-render-and-sofef03f-clock-fix.md与reference/kernel75/README.md。
+实际#76源码与配置、DTB/FW、FAT Image/CPIO及分区回读均已核对；0011/0012补丁对
+session74基线精确应用复现当前源码，checkpatch零错误/警告。GPU-SUDO没有启用。
+GMU固件v2.0.261；本机a630_sqe.fw/a640_gmu.bin/完整签名a640_zap.mbn仅本地，
+七固件预检及MDT可重定位4KiB LOAD适配8KiB carveout，真实渲染已验证认证路径。
+CPU framebuffer正常但物理噪点，证明截图/CRC不是屏幕验收。EOT-only失败；最后
+非连续时钟+清继承位在纯白和fresh-boot彩条通过。不要再改DSC PPS/时钟频率来猜测。
+#75诊断版早期有147条DSI worker消息，首次电源循环后结束；最终#76两次日志均为零。
+#69 drain超时导致旧private-object二次释放，F1后shutdown阻塞，曾用sysrq b恢复fastboot；
+之后cleanup和对应INTF复位修复。#71只构建未刷；一次EOT部署F1回执未捕获，采用单次
+OUT完成+独立fastboot枚举验证，日志没有伪造回执。其余最终F1均有回执/枚举。
 
-下一项GPU/GMU。DTS仍disabled，renderD128来自MSM注册，不表示GPU成功。
-本机vendor曾以ro,noload挂载提取固件并卸载，本地
-E:\edk2-samurai-out\kernel73\gpu-firmware-stock.tar，SHA83df98ec…；专有blob不入Git。
-reference/kernel73/gpu-firmware-manifest.json与kernel74/gpu-loader-validation.json
-已核对七文件哈希、ELF/分段/metadata相等、可重定位LOAD需4KiB，gpu_mem
-0x99515000+0x2000足够。可以保留全ELF内容按板级firmware-name命名，但PAS认证、
-GMU启动和实际渲染必须真机验证。不要使用其它板的签名zap固件。
-主线a640.1使用a630_sqe.fw/a640_gmu.bin，优先核对板级供电/OPP/内建依赖后接入。
-
-SSH用reference/kernel72/usb-ssh.ps1，169.254.42.1/16；SCP用scp-usb.ps1（-O）。
-本地客户端私钥/known_hosts在kernel72，手机主机身份跨重启保留；别改默认路由。
-Windows系统UsbNcm自动APIPA；服务以实际密钥认证为准。重启后先eudtool com-up，
-再用新F1前缀与有界fastboot枚举确认；最终COM14在Windows Shared/未Attached、
-相关五PnP节点OK，所有任务连接owner已释放。
-
-实际内核/home/cy122/x2pro-linux/linux；真实initramfs在/home/cy122/x2pro-linux/initramfs，
-保留init/USB hook/SSH身份，别运行旧build-image.sh。保留REFGEN=y/defer60秒。
-本轮未改DTS、面板、配置、UEFI或boot，只四次logdump部署；同镜像复测只reboot。
-已部署kernel74/logdump-k74-drain.img：8e43d13658a1d332c441f68a6008e7ebb855177b59fbeb447a196195239f1ee5。
-boot仍kernel73/boot-k73-display.img：57508887131ae55cf9465fa1a44280fa45b507a3439345ffe635dc7544eaa999。
-实际分区哈希在final-facts；按PARTNAME查找，本机logdump=/dev/sde32、boot=/dev/sde11。
-立即回退只刷kernel74/logdump-before.img（c7778d45…），保留当前boot。
-仅boot/logdump、保留Android/全部数据/GPT、TOP_CFG0x11/整帧/RX53/F1/两终端，
-单owner/finally释放，只推fork/master。全硬件目标仍active，GPU后推进电池/充电等。
+SSH/SCP工具在reference/kernel72；地址169.254.42.1，私钥/known_hosts仅本地kernel72。
+真实内核/home/cy122/x2pro-linux/linux、initramfs/home/cy122/x2pro-linux/initramfs，
+实际Git /home/cy122/edk2-samurai/repo；Windows镜像不是Git。保持REFGEN内建/defer60秒。
+EUD重启先com-up，早期verbose输出需排完才发原生命令；COM和USB接口单owner/finally释放。
+专有blob/完整Image/logdump/CPIO/SSH身份不发布。只boot/logdump写入且PARTNAME核对，
+本机boot=/dev/sde11、logdump=/dev/sde32；不要猜DSP或其它分区。保留Android/数据/GPT。
+最终boot sha43ddcba2444e1672cd95205f6984c761eaeb59c83162cffdffb371c50a29c37b，
+logdump sha607fc6b4b0caba8ca5c7ea6677fd8259c81a216f91b2d6de7603e3f56d9881d0。
+回退GPU关闭基线使用本地kernel75/boot-before.img与logdump-before.img，见final-validation。
+全硬件目标仍active；下一轮从原厂电量计/MP2650资料和真实日志推进，不按注册数量验收。

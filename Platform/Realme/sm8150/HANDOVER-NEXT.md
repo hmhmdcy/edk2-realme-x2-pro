@@ -7,44 +7,38 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10, session74)
+## 0. TL;DR - where the project stands (2026-10-10, session75)
 
-#68已自动完成SM8150显示接管：两次启动完整日志均无SMMU context fault、DSI错误或
-vblank WARNING；每次三组彩条—白屏—彩条、九次显示关闭/开启，合计18次通过。
-原生SOFEF03F 1080×2400@60 DSC、面板状态0x9c、120/256/400亮度写入保留。
-最终boot_id=2412cbe2-9f1d-4ea4-9c0b-8a19d4ff6568、taint0，56978字节dmesg和
-5493字节facts通过设备SHA/gzip CRC/长度与实际boot/logdump哈希核对。
-本轮四次logdump写入，boot、Android/全部数据/GPT保持。失败#65/#66/#67均归档。
-GPU固件七个哈希/分段及MDT loader几何已核对；GPU/GMU仍disabled，尚无渲染验证。
-下一项Adreno640/GMU真实渲染，然后电池/充电、无线/音频等；90Hz/休眠仍待验。
+当前#76：A640/GMU已启用，本机签名固件加载和Turnip真实渲染通过，
+累计39096次交替红/绿三角形渲染、4096像素读回及fence校验成功。
+用户照片及纯白测试曾确认静止彩色噪点；关闭EOT单独无效，补齐原厂非连续DSI时钟并
+清除继承的controller/PHY强制时钟位后，用户确认全白及重新启动后的首次彩条正常。
+最终两次#76启动完整日志无DSI worker错误、SMMU context fault或Oops，taint0；
+混合GPU/显示回归共12次显示关闭/开启通过。当前boot_id=af922f36-bacd-481d-a5c5-21c8e3fada65。
+DTB只有GPU/GMU status及板级ZAP路径三处语义变化；EUD、触摸、RPMh、init/SSH身份保留。
+仅部署boot一次/logdump七次，Android/全部数据/GPT保留；专有固件及密钥不入Git。
+下一项电池/充电、无线/音频等；冷断电、90Hz、休眠、全部GPU频点压力仍未验收。
 
-显示交接补丁0010在IOMMU换域前停止本机遗留INTF1自动刷新，等待旧帧结束，
-清空旧CTL0图层/INTF/DSC，提交后再次复位以取消等待TE的空kickoff。
-最终两次自动启动和18次显示电源循环通过；不再需要手动reprobe或首次电源循环修复。
-保留了前三种真机失败；局部CRC通过不能替代完整启动日志。补丁只启用sm8150-dpu，
-命令模式已验，video-mode/其它板/实际冷断电/休眠和无缝保留splash未验。
-
-原生面板代码/51条本机命令、GPIO/DSI供电、REFGEN内建/defer60秒与session73相同。
-触摸/CPU/三路温度/六UFS/NCM SSH/EUD保持；新F1、原生命令和释放证据均归档。
-GPU固件仍只在本地，不入Git；全ELF与分段MDT内容一致，LOAD需4KiB，
-本机gpu_mem为8KiB，布局匹配loader，不代表PAS认证、GMU启动或渲染已经通过。
-立即回退只需kernel74/logdump-before.img（已验#64），boot仍是session73原生显示版本。
+补丁0011在旧命令帧无法排空时停TE/trigger，且必须成功复位覆盖对应INTF的CTL；
+保留0010双复位/清输出顺序，换IOMMU域前完成，并修正初始化失败时private object二次释放。
+补丁0012设置NO_EOT_PACKET/CLOCK_NON_CONTINUOUS，并显式清除继承的强制时钟请求。
+PPS、DSC几何、DSI链路频率、电压、EUD传输保持；只读DSC寄存器诊断已从最终版本移除。
+session74的数字CRC证据不代表当时已通过光学验收；session75的用户观察单独保存。
 
 ## 1. What to do next, in order
 
-直接交接见NEXT-SESSION.md，复制提示词见NEXT-SESSION-PROMPT.md。
+1. 通过169.254.42.1密钥SSH保存新日志，保留#76可显示/可GPU渲染基线。
+2. 优先查本机电池电量计/MP2650、原厂配置及主线支持，再推进无线/音频等硬件。
+   禁止套用其它手机的电压/充电参数；不把注册节点或warning消失当成功。
+3. 后续独立完成90Hz、休眠恢复、GPU各频点压力、触摸校准和OTG/USB3。
 
-1. 从169.254.42.1密钥SSH获取新boot_id/完整日志，保留#68显示接管基线。
-   接入本机Adreno640/GMU和签名固件，验证实际GPU任务/渲染及恢复。renderD128本身
-   不能证明GPU成功；DT仍disabled。固件只读提取包在本地kernel73/gpu-firmware-stock.tar。
-2. 随后电池/充电、无线/音频等14组功能。保留已有触摸、显示、USB的验收边界。
-   显示90Hz/休眠/光学图像和亮度硬件读回、触摸精度、OTG/USB3仍需独立完成。
-
-执行边界：保留Android/全部数据；部署仅boot/logdump；保留TOP_CFG0x11/整帧/
-RX53/F1/两终端；串口和对应USB接口单owner并finally释放。实际源码在
-/home/cy122/x2pro-linux/linux，initramfs在/home/cy122/x2pro-linux/initramfs。
-不要运行旧build-image.sh覆盖真实init。DT变化必须更新实际UEFI固件；源码/证据
-仅推fork/master。读分区按PARTNAME核对，不能猜sde编号。
+实际Linux源码/home/cy122/x2pro-linux/linux，initramfs/home/cy122/x2pro-linux/initramfs。
+不运行旧build-image.sh；保留init/USB hook/SSH身份、TOP_CFG0x11/整帧/RX53/F1/两终端。
+只写boot/logdump，按PARTNAME核对，保留Android/全部数据/GPT；只推fork/master。
+临时Turnip测试包仅位于本地kernel75和手机/tmp，不代表完整桌面/rootfs已经建立。
+回退GPU关闭基线需同时使用kernel75/boot-before.img与logdump-before.img，两个哈希见
+reference/kernel75/final-validation.json；最终可显示基线为kernel75/boot-k75-gpu.img+
+logdump-k75-final.img。COM/USB owner必须finally释放；早期console未排完时不能称启动失败。
 
 ## 2. Verified hardware facts (do not re-derive)
 
@@ -92,7 +86,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 523d195  samurai: enable native SOFEF03F DSC display and record hardware tests
+    master: session75 checkpoint; use git log -1 for the published commit
              bd23aaa  samurai: enable automatic USB NCM and public-key SSH
              964362e  samurai: enable native S3706 touch and record hardware handover
              0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
@@ -104,7 +98,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              6e74a65  eud: record verified driver-loading blocker and full acceptance audit
              32ae015  eud: audit driver compatibility and prepare single-device trial tools
 
-    103 commits ahead of upstream origin/master, as of the tip named above;
+    Local master tracks fork/master; upstream origin/master is not a push target;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
