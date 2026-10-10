@@ -1,7 +1,7 @@
 # 交接方案评估 + 本轮执行结果（realme X2 Pro / samurai / SM8150）
 
 当前优先级（2026-10-10）：按用户要求，充电阶段收尾，下一项优先Wi-Fi。
-最新实机/候选/未解决项见[session87](sessions/87-stage-wrap-up-and-wifi-prerequisites.md)和
+最新实机/候选/未解决项见[session88](sessions/88-wifi-dependency-build-and-read-only-firmware-service.md)和
 [硬件状态](linux-port/docs/HARDWARE-STATUS.md)。下文为此前评估，涉及旧状态时以最新记录为准。
 
 

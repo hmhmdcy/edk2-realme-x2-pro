@@ -7,51 +7,50 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10, session87 wrap-up and Wi-Fi)
+## 0. TL;DR - where the project stands (2026-10-10, session88 Wi-Fi build and handover)
 
-session87按用户要求收尾充电阶段，下一项硬件优先Wi-Fi，不继续重复充电查询。
-手机仍#86，boot ID=32bf2d8f-8dde-47dc-9b88-e87db9e95198；2140.55秒taint0、超时2/下溢0。
-display实例on0/count=0，首次真实故障快照摘要与86一致；未清空、重武装、开关屏或重启。
-花屏在75非连续DSI时钟修正后得到光学确认；后续显示超时仍开放，无本轮新光学验收。
-宿主#88显示timer候选编译通过，旧函数回归失败/候选六场景通过；未部署或实机验证。
-原trace在日志/快照之后，86的timeout时间不是回调开始时间；根因不能由此前时间差确定。
-既有dirty修复、30源文件模式、14个initramfs文件/308链接及config/CPIO保留，仅两DPU源改动。
-电量等标准属性可读；86 MP ONLINE/Full成功但ADC导致空uevent，完整接口失败。
-MP修正版#87未部署，手机没有MP客户端/持久DT节点；控制、保护、输入预算等仍在待办。
-此前99%/8.636V/31.5°C/平均0mA属于近满电观测，不能判慢充；原厂继承配置不视为安全验收。
-Wi-Fi当前WLAN关闭，QRTR/QMI/PAS/PD等为模块，宿主initramfs/实机无/lib/modules。
-最小诊断片段已实际Kconfig解析通过，27符号变化；该Wi-Fi配置尚未构建Image或部署。
-35项本机私人固件重新校验；四路供电已继承，Wi-Fi/MPSS仍禁用，实际QMI chip/board ID未知。
-本轮无分区写/充电配置/NVM/OTP/FET/OTG/GPIO/MCU操作；不启动modem/rmtfs。
-现场/构建/回归/边界见sessions/87-stage-wrap-up-and-wifi-prerequisites.md及reference/kernel87。
+session88继续Wi-Fi适配；充电阶段保持收尾，显示与充电未解决项保留待办。
+手机仍#86，boot ID=32bf2d8f-8dde-47dc-9b88-e87db9e95198；3984.69秒taint0。
+当前网络接口只有lo/usb0，Wi-Fi未上线；显示超时2/下溢0，display on0/count=0。
+真实显示故障快照摘要与86/87一致；本轮没有清空/重武装、开关屏、重启或分区写入。
+宿主Wi-Fi依赖内核#89编译完成，27项配置变化；QRTR/QMI/GLINK/PAS/SYSMON/PD和ath10k SNOC内建。
+保留全部此前源码修复/模式、14个initramfs文件/308链接及原CPIO；本轮源码仅MPSS DTS增量。
+#89候选MPSS节点okay、同机modem.mdt路径，但PAS auto_boot=false；Wi-Fi节点仍disabled。
+33项本机MPSS分段固件只读归档/哈希通过，ELF可重定位范围160MiB正好适合既有保留区。
+本机msm/modem/wlan_pd、实例180与当前主线PD mapper对应；35项Wi-Fi固件沿用81/87校验。
+静态AArch64 qrtr-lookup/tqftpserv-ro构建完成；真实翻译/WRQ函数本地测试拒绝写、越界和符号链接。
+测试使用本地文件与socket桩，未验证实际QRTR服务；工具/固件尚未安装，MPSS尚未启动。
+关键发现：实际Linux DT来自EDK2内嵌DTB，单改logdump FAT中的DTB不能激活MPSS。
+EDK2内嵌DTB未改，boot固件未构建，#89尚未打包/部署；chip/board ID及扫描/连接/流量均未知。
+Image-wifi sha=02fbe7e5d20cc2a0f5b55e08511ee9a1a39d2c47516079569fe8dc2368360ea0。
+完整构建/固件/测试/现场/边界见sessions/88-wifi-dependency-build-and-read-only-firmware-service.md。
 
 ## 1. What to do next, in order
 
-1. 先继续Wi-Fi适配：读87的wifi-prerequisites.config/prepare-wifi-profile.py/audit和81固件/供电。
-   WLAN/SNOC及QRTR/GLINK/QMI/PAS/SYSMON/PD候选内建；RFKILL与SYSMON原模块依赖已处理。
-   先构建隔离的诊断依赖镜像并审查固件服务；现有#88不含Wi-Fi配置，不能直接称无线候选。
-   复用原始init/USB hook/SSH身份、全部现有修复和本机供电/保留区，不使用旧build-image.sh。
-2. 验证本机WLFW/PD/TFTP链和chip/board ID，再选精确板数据、无线接口/扫描/连接及流量。
-   不从35个bdwlan文件任挑默认，不混用他机mdsp；SNOC firmware-name当前用于板名。
-   tqftpserv原实现支持WRQ/存储写，必须审阅并准备明确拒绝写的服务；当前未构建/运行。
-   MPSS节点仍disabled且PAS默认auto_boot=false；不要自动启动未审阅的rmtfs等存储服务。
-3. 显示与充电保留为待办，不再作为无线前置验收；全硬件目标继续，然后蓝牙/音频等。
-   显示#88只是候选，真正timer/IRQ/idle根因未定；同一故障快照保持，重启前先保存现场。
-   不清空/重武装/自动开关屏。Native#86完整uevent失败，MP #87同样未部署/验收。
-   后续仍需ADC事件、持久DT、实际USB预算、热敏校准、2719/短路保护及失联安全。
+1. 先读sessions/88、reference/kernel88与kernel88私人目录；再读87依赖、81固件/供电、79和68实际DT路径。
+   宿主#89已经构建，先核对Image/config/DTB/CPIO哈希和保留审计，不重复运行拒绝覆盖的构建脚本。
+   #89含87显示timer候选和86 MP观测修正，均未实机验收；不把构建通过当硬件通过。
+2. 下一步构建实际boot固件：备份EDK2内嵌DTB/FV/boot，采用#89 DTB，审查语义仅MPSS两个属性变化。
+   实际入口为Platform/Realme/sm8150/FdtBlob/samurai/sm8150-realme-samurai.dtb；兼容DTB保持。
+   参考79/68的FV/模块/BootShim/Android头/版本差异验证；不要复用旧会话的固定守卫。
+   当前EDK2仓库HEAD=a9e7e86；本次文档提交后固件版本字符串可能变化，应以实际构建HEAD重新核对。
+   生成私有boot及logdump候选，#89 Image/DTB放入原FAT，检查容量、来源和全部保留项。
+3. 刷写前重新确认手机boot ID、保存完整dmesg/display snapshot/trace/DRM状态，并备份当前#86 boot/logdump。
+   用新会话新守卫核对PARTNAME/大小/序列/UFS型号/哈希；逐项检查原生命令退出码，F1后finally释放。
+   仅已授权boot/logdump，保留Android/数据/GPT；kernel86/flash-final.ps1停止保护保持，不重放旧OUT。
+   #89启动后先验证/proc/device-tree实际MPSS节点、remoteproc offline、QRTR与USB/EUD/触摸/电量计。
+4. 固件/工具仅临时RAM目录部署并核对哈希，配置SAMURAI_TFTP_FIRMWARE_ROOT；不提供可写存储服务。
+   重新审查显式MPSS启动条件，观察WLFW/PD/TFTP和运行时故障，再取实际chip/board ID选择精确板数据。
+   PAS auto_boot=false，Wi-Fi仍disabled；不任挑35个bdwlan之一，不混用他机mdsp，不启动未审阅rmtfs/NV服务。
+   接着接入Wi-Fi节点、无线接口、扫描/连接及实际流量；这些步骤当前都尚未通过。
+5. 充电和显示保留待办；继续全硬件目标，Wi-Fi之后再蓝牙/音频等，避免重复消耗在充电状态查询上。
 
-Linux源码/home/cy122/x2pro-linux/linux，initramfs/home/cy122/x2pro-linux/initramfs。
-手机仍#86，宿主Image#88未部署，私人wifi-candidate.config尚未构建；务必区分三者。
-先SSH确认boot ID、完整dmesg、encoder和display实例。EUD TOP_CFG0x11、整帧/RX53/F1/
-两终端保持，必要时既有com-up只恢复COM/VBUS，不写CHGR。未来只用新会话的新守卫；
-kernel86/flash-final.ps1的停止保护保持，不复用旧OUT序列，逐项检查原生命令退出码。
-只允许已授权boot/logdump部署；按PARTNAME/大小/序列/哈希核对，保留Android/数据/GPT。
-当前logdump最近实测sha=cf11644e32a138ff1319fe9e44529f1ef7b2a1907c1f8876c597f970a526d286；
-原#85回退kernel86/logdump-before.img sha=60e183a6780945885a738ac1bd0c7e23ed41515bca662cb50a831ede3b57302b。
-这些分区摘要在86采集，本轮未重新读整分区。boot前缀摘要/大小见86，不把宿主候选当部署证据。
-二进制/镜像/完整配置/源码/生成头、Android DT/固件/身份留私人目录；只发布fork/master。
-无审批阻挡，权限足够。充电不写配置/解封/NVM/OTP/FET/OTG/GPIO/MCU，不运行OEM charger probe，
-不读0051/0053/0072或故障REG14，不使用I2C_FORCE。历史85/86封存保持。
+Linux源码/home/cy122/x2pro-linux/linux；initramfs/home/cy122/x2pro-linux/initramfs。
+私有产物E:/edk2-samurai-out/kernel88；公开只发布增量源码/patch/摘要/证据/doc到fork/master。
+完整固件/源码/配置/生成头/镜像/可执行工具/身份留私有目录；历史85/86/87封存不改。
+EUD TOP_CFG0x11、整帧/RX53/F1/两终端保持；既有com-up只恢复COM/VBUS，不写CHGR。
+充电不写配置/解封/NVM/OTP/FET/OTG/GPIO/MCU，不跑OEM charger probe，不读0051/0053/0072或REG14，不用I2C_FORCE。
+最新已采分区摘要见88提取记录与86；部署前必须重新读并核对，不能以旧摘要代替新守卫。
 
 ## 2. Verified hardware facts (do not re-derive)
 
@@ -99,7 +98,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = b3e3f11  samurai: observe MP2650 input and preserve real display timeout
+    master = a9e7e86  samurai: close charging stage and prioritize Wi-Fi prerequisites
+             b3e3f11  samurai: observe MP2650 input and preserve real display timeout
              60e5b9f  samurai: verify OEM chemistry and short-IC observations
              3e308c0  samurai: deploy boot display traces and timeout snapshots
              7c53c0b  samurai: compare Android R and cyborg charging sources
@@ -118,7 +118,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
              218812b  samurai: audit USB gadget state and EUD coordination
 
-    117 commits ahead of upstream origin/master, as of the tip named above;
+    118 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro

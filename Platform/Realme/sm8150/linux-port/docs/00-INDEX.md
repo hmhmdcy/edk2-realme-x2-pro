@@ -1,12 +1,12 @@
 # linux-port/docs - index
 
-当前证据：[session87](../../sessions/87-stage-wrap-up-and-wifi-prerequisites.md)。
-充电阶段收尾，下一项优先Wi-Fi：依赖缺口已定位，最小配置解析/35项固件校验通过，未构建该配置Image或部署。
-手机仍#86，显示超时2/下溢0、故障快照保持；宿主显示#88候选编译/回归通过，未实机验收。
-充电完整接口、控制/保护仍待办；来源/边界见[session86](../../sessions/86-mp2650-input-status-and-real-display-timeout-snapshot.md)、
-[session85](../../sessions/85-oem-chemistry-and-short-ic-observations.md)。无线固件/供电见
-[session81](../../sessions/81-stock-gauge-state-temperature-and-display-timeouts.md)，显示光学修复见
-[session75](../../sessions/75-a640-render-and-sofef03f-clock-fix.md)。
+当前证据：[session88](../../sessions/88-wifi-dependency-build-and-read-only-firmware-service.md)。
+#89 Wi-Fi依赖内核与只读固件服务已构建、本地测试通过；33项MPSS固件校验，PD域/实例对应。
+手机仍#86，无Wi-Fi接口；实际DT来自EDK2内嵌，新boot/#89尚未部署；MPSS/WLFW与chip/board ID待实测。
+显示故障快照保持，超时2/下溢0；显示候选与充电未解决项保留待办，未新增硬件验收。
+前阶段：[session87](../../sessions/87-stage-wrap-up-and-wifi-prerequisites.md)；
+固件/供电：[session81](../../sessions/81-stock-gauge-state-temperature-and-display-timeouts.md)；
+实际DT路径：[session68](../../sessions/68-firmware-dtb-and-cpu7-opp-verified.md)。
 
 硬件功能清单：[HARDWARE-STATUS](HARDWARE-STATUS.md)。
 

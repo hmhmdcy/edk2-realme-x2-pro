@@ -1,0 +1,92 @@
+[
+  {
+    "private_filename": "Image-before",
+    "bytes": 36719104,
+    "sha256": "7def19605ac17482528049a6956144abc075a9727d3da2e771cce6a4fcab9e89",
+    "published": false
+  },
+  {
+    "private_filename": "Image-wifi",
+    "bytes": 39160320,
+    "sha256": "02fbe7e5d20cc2a0f5b55e08511ee9a1a39d2c47516079569fe8dc2368360ea0",
+    "published": false
+  },
+  {
+    "private_filename": "samurai-before.dtb",
+    "bytes": 96880,
+    "sha256": "872fd9f83382143977c2406c0a869bcac5c051f0f27350ddf3676f043572587b",
+    "published": false
+  },
+  {
+    "private_filename": "samurai-wifi.dtb",
+    "bytes": 96892,
+    "sha256": "7a5e5ffb15baf3548b92671fb6f638a587911b40e936ce2ddf92ff13728096d9",
+    "published": false
+  },
+  {
+    "private_filename": "samurai-before.dts",
+    "bytes": 12915,
+    "sha256": "72495220de1c2fae0b389e2884d1b235a37735af11cabee3cfa04d627ab6bb23",
+    "published": false
+  },
+  {
+    "private_filename": "config-before",
+    "bytes": 212470,
+    "sha256": "a19260711d578f1c348091b205476cf56d9878a4fd5b57c2dd7068b648ad0881",
+    "published": false
+  },
+  {
+    "private_filename": "config-wifi",
+    "bytes": 213762,
+    "sha256": "981b4b828e5e6a8a108a7bff1c8fa7ccb8133abcf6ffd0ec0c631fbbca4f44ff",
+    "published": false
+  },
+  {
+    "private_filename": "config-wifi-before-header-normalization",
+    "bytes": 213753,
+    "sha256": "cf4f09376fdcdcef2cfd8b7923407c59d6506c36764877a54609b6ade156409c",
+    "published": false
+  },
+  {
+    "private_filename": "cpio-before",
+    "bytes": 2510336,
+    "sha256": "74052b3e705e5af1c2268590206da264a339cf4e042e5ed601c54f56ad66b102",
+    "published": false
+  },
+  {
+    "private_filename": "mpss-firmware-stock.tar",
+    "bytes": 77637120,
+    "sha256": "8fcddffc38adb569180091751787748a6dd11959962ec2afd10c540c6c8e4c9f",
+    "published": false
+  },
+  {
+    "private_filename": "mpss-firmware-manifest.json",
+    "bytes": 14130,
+    "sha256": "f44e0661f3d4224570c5b65a634d04331fc3a9f8882f2624dab01bba252fe6d5",
+    "published": false
+  },
+  {
+    "private_filename": "qrtr-lookup",
+    "bytes": 851096,
+    "sha256": "11f5a225470b536b5dd0a9e181059447b696f4e89c2884ee28e5d6d48bb32074",
+    "published": false
+  },
+  {
+    "private_filename": "tqftpserv-ro",
+    "bytes": 922824,
+    "sha256": "274fd4fd849fb9e49853eefd7923f86a7554af9ecf664a324ae72b498f19ec18",
+    "published": false
+  },
+  {
+    "private_filename": "handover.tar",
+    "bytes": 15622144,
+    "sha256": "d8ffe0229c6971c95f7105362129dd471f4a50bf763828eb1dfbe47ab0485385",
+    "published": false
+  },
+  {
+    "private_filename": "preserved-before.json",
+    "bytes": 15951,
+    "sha256": "4e336f101d0348cc67e3dd6c537e7f770ae5624844dfabfe1164857f2396931e",
+    "published": false
+  }
+]

@@ -7,6 +7,7 @@
 
 | 文件 | 内容 |
 |---|---|
+| sessions/88-wifi-dependency-build-and-read-only-firmware-service.md、reference/kernel88/ | #89依赖内核、只读固件服务与本地拒写测试、33项MPSS固件校验、实际内嵌DTB部署前交接 |
 | sessions/87-stage-wrap-up-and-wifi-prerequisites.md、reference/kernel87/ | 阶段收尾、未部署的DPU候选与回归、Wi-Fi依赖缺口/候选配置和固件校验 |
 | sessions/86-mp2650-input-status-and-real-display-timeout-snapshot.md、reference/kernel86/ | MPS输入位核实、ADC实测、只读接口失败/候选修正及首次真实显示超时快照 |
 | sessions/85-oem-chemistry-and-short-ic-observations.md、reference/kernel85/ | 58身份ENXIO、LION/0054实测、原厂温补缺省和失联容错、安全与充电状态边界 |
@@ -25,7 +26,7 @@
 | sessions/72-usb-ncm-and-autonomous-ssh.md、reference/kernel72/ | CDC NCM/密钥SSH自动启动、双向4MiB校验、EUD共存及仅logdump部署 |
 | sessions/71-native-s3706-touch-bringup.md、reference/kernel71/ | 原生S3706触摸代码/供电/总线接入、boot/logdump部署、完整日志与输入事件校验 |
 | linux-port/docs/HARDWARE-STATUS.md | 按用户功能分组的14类硬件接入/验收状态与优先级 |
-| NEXT-SESSION.md、NEXT-SESSION-PROMPT.md | session87收尾及Wi-Fi优先级；81无线固件/供电、86保留现场及充电待办 |
+| NEXT-SESSION.md、NEXT-SESSION-PROMPT.md | session88当前进展/短提示词；#89未部署、EDK2内嵌DTB、MPSS/WLFW验证与保留边界 |
 | HANDOVER-NEXT.md | 交接入口：第 0–7 节 = 当前状态 / 下一步 / 仓库状态 / 工具 / 坑 / 安全 / 未决；末尾是 history index（旧第 8–30 节 → 文件） |
 | README.md | 项目门面：fork 介绍、构建、刷机、各阶段 status update |
 | DOCS-INDEX.md | 本文：文档地图、同步方式与维护规则 |

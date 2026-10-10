@@ -1,10 +1,12 @@
 # EDK2 / UEFI firmware for the realme X2 Pro (RMX1931 · "samurai")
 
-当前状态：[session87](sessions/87-stage-wrap-up-and-wifi-prerequisites.md)。手机仍#86，触摸/USB NCM/SSH、60Hz显示及A640真实渲染已有实机证据。
-75的非连续DSI时钟修正已获光学确认；后续显示超时仍开放，当前超时2/下溢0、故障快照保持。
-宿主显示#88候选编译/回归通过但未部署；MP完整观测接口和充电控制/保护尚未验收。
-按用户要求，充电阶段收尾，下一项优先Wi-Fi：已定位WLAN关闭/依赖模块缺失，最小候选配置
-Kconfig解析及35项本机固件重验通过；尚未构建该Wi-Fi配置Image、启动远端或无线验收。
+当前状态：[session88](sessions/88-wifi-dependency-build-and-read-only-firmware-service.md)。
+手机仍#86，Wi-Fi只有部署前进展：宿主#89依赖内核已编译，MPSS候选手动启动、Wi-Fi节点仍关闭。
+33项本机MPSS固件校验及PD域/实例对应确认；只读固件服务与QRTR工具已构建、本地拒写测试通过。
+实际Linux设备树由EDK2内嵌，单改logdump DTB无效；新boot固件尚未构建，#89尚未打包/部署。
+实际MPSS/WLFW服务、chip/board ID、无线接口/扫描/连接/流量均待验证；当前没有可用Wi-Fi。
+显示超时2/下溢0、故障快照保持；87显示timer候选及MP修正随#89保留，仍未实机验收。
+充电阶段按用户要求收尾，控制/保护问题保留待办；本轮无重启/分区写/充电配置操作。
 保留Android/数据/GPT及密钥，固件与二进制留私人目录。
 
 
