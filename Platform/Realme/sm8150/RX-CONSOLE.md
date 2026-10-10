@@ -1,11 +1,13 @@
 # EUD RX side: registers, framing and the console driver
 
-当前硬件接入：[session72](sessions/72-usb-ncm-and-autonomous-ssh.md)。
-普通USB NCM/密钥SSH/SCP已实现并部署到#62，Windows系统UsbNcm与EUD共存。
-部署前后双向4MiB SHA校验通过、错误计数0；另一次重启无需host com-up就能SSH认证。
-最终53594字节dmesg和2285字节facts校验通过，taint=0；原触摸/CPU/UFS保留。
-本轮仅刷一次logdump，Android/全部数据、boot固件、EUD/RX53/F1/两终端保留。
-下一项原生显示/GPU；触摸精度、OTG及其它硬件仍须接入/验收。
+当前硬件接入：[session73](sessions/73-native-sofef03f-dsi-dsc-display.md)。
+SOFEF03F原生DSI/DSC面板已部署到#64，1080×2400@60自动接管msmdrmfb。
+两次启动的彩条—白屏—彩条硬件CRC一致，每次三次关闭/开启与60次vblank等待通过。
+亮度120/256/400写入成功；面板DCS电源状态0x9c。没有人工光学验收或亮度硬件读回。
+最终boot_id=fc4fe164-1e90-402a-b841-ce870ba9ddfb、taint0，59284字节完整dmesg和
+5492字节facts通过设备SHA/gzip CRC/长度；触摸、CPU、六UFS、NCM/SSH与EUD保留。
+启动显示接管阶段记录10条SMMU fault，后续测试未复现，仍须修复；GPU/90Hz/休眠待验。
+本轮一次boot和两次logdump部署，Android/全部数据保留。下一项显示交接与GPU/GMU。
 
 
 前次日志入口：[session70](sessions/70-pm8009-resource-and-touch-prerequisites.md)。

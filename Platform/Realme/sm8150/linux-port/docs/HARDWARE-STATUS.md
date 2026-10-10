@@ -1,14 +1,15 @@
-# RMX1931 Linux 硬件接入清单（2026-10-10，session72）
+# RMX1931 Linux 硬件接入清单（2026-10-10，session73）
 
-按用户能使用的功能分组共14类。触摸基本输入与普通USB NCM/SSH/SCP已打通；
-这些组内仍有精度、OTG、休眠等待验，其余功能需继续板级接入和真实数据流验证。
-本轮#62/taint0，设备保存53594字节完整日志通过SHA/CRC/长度；同镜像重启无需
-host com-up也能认证SSH，双向4MiB随机文件部署前后全部校验通过。详见sessions/72。
+按用户能使用的功能分组共14类。触摸基本输入、普通USB NCM/SSH/SCP与原生60Hz
+DSI/DSC显示输出已经通过实际数据流验证；每组的精度、休眠或其它模式仍待验。
+本轮#64/taint0、两次启动各三次显示电源循环和A—B—A硬件CRC通过；59284字节
+完整日志与5492字节facts校验通过。启动显示交接仍有SMMU fault，GPU尚未启用。
+详见sessions/73/reference/kernel73；此前触摸/USB功能证据见sessions/71、72。
 
 | 功能组 | 当前可证明的状态 | 接下来必须完成的工作 |
 |---|---|---|
 | 触摸 | 本轮驱动/供电/DTS已部署，S3706A/F01/F12/event2注册；真实点按/移动/释放/多点通路通过 | 触点数量/方向/边缘校准，休眠/唤醒与长期稳定性 |
-| 原生显示面板 | UEFI遗留帧缓冲/simpledrm能显示 | SOFEF03F面板、电源、DSI/DSC、背光/亮度及刷新率 |
+| 原生显示面板 | SOFEF03F 1080×2400@60 DSC、DCS状态0x9c、硬件CRC、两启动各三次电源循环及亮度写入通过 | 首次接管SMMU fault、90Hz、亮度硬件读回/光学输出及休眠恢复 |
 | GPU | 设备树禁用，未验收 | GMU/Adreno固件及供电、MSM DRM、渲染/恢复 |
 | 普通USB与OTG | CDC NCM/high-speed、Windows系统UsbNcm、自动密钥SSH/SCP及EUD共存已实测，双向4MiB校验通过 | OTG/外设、USB3、休眠恢复和长期稳定性 |
 | Wi-Fi | 禁用，未验收 | 本机固件/板级数据、WCN3990/PCIe、电源和网络流量 |
@@ -23,13 +24,13 @@ host com-up也能认证SSH，双向4MiB随机文件部署前后全部校验通�
 | GNSS定位 | 未验收 | 本机固件/调制解调器接口、用户态和实际定位 |
 
 已有基础能力：进入initramfs用户态、六个UFS LUN、CPU三个调频policy及CPU7最高
-2956800kHz表、三路PMIC温度、simpledrm屏幕、EUD交互和F1。Linux按键输入设备已
+2956800kHz表、三路PMIC温度、原生60Hz显示输出、EUD交互和F1。Linux按键输入设备已
 注册，UEFI三侧键已实测；CPU高频压力、UFS持续读写、Linux按键事件等仍有验收边界。
 
 剩余warning不等于剩余硬件数：PM8009无已发现DT消费者，P3；RPMh读回-95是固件
 能力限制证据；QMP/aux_bridge与实际USB/显示功能需分别验证。不能用删除warning
 代替接入硬件。详见sessions/70、71和reference/kernel70、71的校验日志。
 
-触摸基本输入、普通USB NCM/自动SSH与文件传输已通过；接下来优先原生显示/GPU、
+触摸基本输入、普通USB NCM/自动SSH与文件传输、原生60Hz显示输出已通过；优先显示交接/GPU、
 电池/充电、无线/音频，再推进蜂窝、摄像头及其它外设。每步做实现、构建、
 boot/logdump部署和设备端日志校验，保留Android和全部数据。

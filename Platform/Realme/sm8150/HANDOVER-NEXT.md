@@ -7,45 +7,47 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10, session72)
+## 0. TL;DR - where the project stands (2026-10-10, session73)
 
-手机运行Linux **#62**，本轮普通USB网络/SSH已从空gadget推进到真实可用。
-NCM以Windows系统UsbNcm驱动工作，EUD/COM14共存；部署前后各一对4MiB随机文件
-SHA256全部通过、收发错误0。独立同镜像重启后，没有host com-up仍可枚举和认证SSH。
-最终boot_id=5ecfab9e-fa56-4ead-acf8-a5147904980e、taint=0，53594字节完整dmesg和2285字节facts
-经设备保存、SSH/SCP导出、设备SHA/gzip CRC/长度校验。证据见sessions/72、reference/kernel72。
+SOFEF03F原生DSI/DSC面板已部署到#64，1080×2400@60自动接管msmdrmfb。
+两次启动的彩条—白屏—彩条硬件CRC一致，每次三次关闭/开启与60次vblank等待通过。
+亮度120/256/400写入成功；面板DCS电源状态0x9c。没有人工光学验收或亮度硬件读回。
+最终boot_id=fc4fe164-1e90-402a-b841-ce870ba9ddfb、taint0，59284字节完整dmesg和
+5492字节facts通过设备SHA/gzip CRC/长度；触摸、CPU、六UFS、NCM/SSH与EUD保留。
+启动显示接管阶段记录10条SMMU fault，后续测试未复现，仍须修复；GPU/90Hz/休眠待验。
+本轮一次boot和两次logdump部署，Android/全部数据保留。下一项显示交接与GPU/GMU。
 
-实际initramfs仅在原configfs挂载后加异步USB hook，并加入静态公钥SSH/PTY支持。
-客户端私钥留本地，唯一手机主机私钥仅在本地initramfs/构建目录；都未入Git。
-内核配置只修改initramfs UID/GID映射以正确打包root权限；EUD/RMI/DTS/DTB哈希不变。
-仅刷一次logdump，boot仍为session71触摸固件，Android和全部数据保留。
+原生显示驱动、binding、板级DT和内建依赖已实现。原厂live DT的51条初始化命令、
+GPIO6/25/152/TE8、L14A1.8V/L17A3V、DSI L3C1.2V/PHY L5A0.88V逐项核对。
+DSC PPS在真机生成后与原厂128字节比较通过。屏幕仍是诊断控制台，没有完整GUI/rootfs。
+完整代码/构建/FFS与实际分区哈希、失败记录见sessions/73与reference/kernel73。
+首版#63因REFGEN为模块及10秒defer时限失效，#64内建REFGEN并延长到60秒后自动绑定。
+启动SMMU故障位于旧splash缓冲区，仅出现在首次接管时；不能据此称全日志无错误。
 
-已有基础能力：UEFI、六个UFS盘、三CPU policy与CPU7最高2956800kHz表、三路PMIC
-温度、simpledrm、EUD/F1、S3706A基本触摸，以及本轮NCM/SSH/SCP。
-屏幕仍是诊断控制台，原生SOFEF03F面板/DSI/DSC与GPU尚未接入；没有完整桌面/rootfs。
-OTG/USB3/休眠恢复、触摸精度/触点数量等还没验收，整体硬件目标仍在进行。
-logdump FAT空闲36016128字节（约34.35MiB），大持久rootfs位置仍未证明安全。
-
-旧RPMh读回-95、PM8009、QMP/aux_bridge等按影响范围保留，没有删节点静音。
-Windows单次F1仍会无回执，WSL原工具F1保留；EUD偶发TX缺帧没有被本轮宣称修复。
-下一轮应通过新的普通USB SSH通道获取完整内核日志，优先继续硬件实现。
+旧CPU/温度、触摸基本输入和自动密钥NCM/SSH保持。客户端/手机主机私钥均未入Git；
+COM14回Windows/Shared/未Attached，无host连接owner。EUD原生命令与三次F1均有回执。
+立即回退需成对恢复kernel73/boot-before.img和logdump-before.img（session72状态）；
+当前boot-k73-display.img与logdump-k73-display-deps.img是已验的原生显示基线。
+logdump仍只有约33.5MiB空闲，未确定安全的大持久rootfs位置。
 
 ## 1. What to do next, in order
 
 直接交接见NEXT-SESSION.md，复制提示词见NEXT-SESSION-PROMPT.md。
 
-1. 优先通过169.254.42.1的密钥SSH取得新的boot_id/taint/完整dmesg；自动NCM/SSH
-   已实测，Windows无额外驱动/网络配置。EUD回到Windows Shared/未Attached，无host owner。
-2. 推进本机SOFEF03F原生面板/DSI/DSC与Adreno/GMU，搜索主线/维护者和Realme本机
-   实现，按供电/时钟/固件和真实图像数据流验证。随后电池/充电、无线/音频及其它功能。
-3. 触摸补方向/边缘/严格触点数量/休眠恢复；USB补OTG/休眠/长期稳定性，不把当前
-   设备模式NCM成功扩大成全部USB功能完成。
+1. 从169.254.42.1密钥SSH取得新boot_id/taint/完整日志。先查显示接管SMMU故障：
+   旧splash地址0x9dxxxxxx、SID0x800/0xc20，停止旧DPU路径或保留映射需源码与真机验证。
+   不套用其它DPU代际的CTL_FETCH_ACTIVE补丁或通过关闭IOMMU隐藏问题。
+2. 接入本机Adreno640/GMU并验证真实渲染。vendor仅以ro,noload临时挂载获取本机固件，
+   已卸载；固件在本地kernel73/gpu-firmware-stock.tar，哈希/ELF几何已归档，未入Git。
+   GPU/GMU DT仍disabled；renderD128存在来自MSM注册，不证明GPU可用。
+3. 随后电池/充电、无线/音频等。显示90Hz/休眠/光学输出、触摸精度和USB OTG/USB3
+   仍需单独验收；当前60Hz模式成功不等于整个硬件组完成。
 
 执行边界：保留Android/全部数据；部署仅boot/logdump；保留既有TOP_CFG0x11/整帧/
 RX53/F1/两终端，串口/对应USB接口单owner并finally释放。实际源码在
 /home/cy122/x2pro-linux/linux，initramfs在/home/cy122/x2pro-linux/initramfs。
-本轮真实init加入USB hook，其余逻辑逐字保留；不要运行旧build-image.sh覆盖它。
-DT变化必须更新实际UEFI固件，FAT-only不会激活；源码/证据仅推fork/master。
+不要运行旧build-image.sh覆盖真实init。DT变化必须更新实际UEFI固件，FAT-only不会
+激活；源码/证据仅推fork/master。读分区先按PARTNAME核对，不能猜sde编号。
 
 ## 2. Verified hardware facts (do not re-derive)
 
@@ -93,7 +95,8 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
 
 ## 3. Repo state
 
-    master = 964362e  samurai: enable native S3706 touch and record hardware handover
+    master = bd23aaa  samurai: enable automatic USB NCM and public-key SSH
+             964362e  samurai: enable native S3706 touch and record hardware handover
              0819bd5  samurai: audit PM8009 resource scope and native touch prerequisites
              218812b  samurai: audit USB gadget state and EUD coordination
              aa5db85  samurai: activate firmware DTB for CPU7 high OPP
@@ -103,7 +106,7 @@ Windows driver for 9505 (installed here, see EUD.md for the full recipe):
              6e74a65  eud: record verified driver-loading blocker and full acceptance audit
              32ae015  eud: audit driver compatibility and prepare single-device trial tools
 
-    101 commits ahead of upstream origin/master, as of the tip named above;
+    102 commits ahead of upstream origin/master, as of the tip named above;
     all of them are on the fork.
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
