@@ -7,17 +7,17 @@
 > Companion documents: DOCS-INDEX.md, README.md, EUD.md, BINARIES.md,
 > linux-port/README.md.
 
-## 0. TL;DR - where the project stands (2026-10-10, session77 gauge / display regression)
+## 0. TL;DR - where the project stands (2026-10-10, session78 first-boot controls)
 
-当前仍用#76 Image/config/logdump；BQ28Z610已接入，两个启动45个连续样本与
-标准寄存器读值/单位对应。仅刷boot一次，第二次仅重启；未写充电/保护参数。
-当前boot_id=aada8705-14a3-4012-bf84-eeb0f7987b96，taint0；末次电池包8.649V、
-SOC100%、温度29.3°C、电流0。充电控制尚未接入，Charging/Good不能作安全验收。
-两次首次启动出现DSI FIFO/MDP FIFO下溢，完整开关屏后停止；新GPU12次读回/fence
-与两次数字彩条/电源循环通过。当前DSI累计194条已停止增加，首次接管回归仍开放。
-session75曾完成39096次GPU渲染、用户纯白及fresh-boot彩条光学验收；它是回退基线，
-不能替代本轮首次启动的验收。详见sessions/77-bq28z610-live-gauge-and-display-regression.md、
-reference/kernel77/README.md。下一步优先定位显示启动回归，再推进MP2650安全控制。
+当前仍用session77的boot与#76 Image/config/logdump；BQ28Z610标准只读监测保持。
+session78没有分区写入，连续三次相同镜像首次启动DSI错误0；第三次600次双缓冲
+页面翻转/完成事件及CRC通过，未请求开关屏。一次旧帧停滞仍可正常刷新，根因未定。
+session77两次失败证据保留，间歇性首次接管故障仍开放，尚未取得新故障的寄存器快照。
+当前boot_id=e1a36cea-f401-41f2-bd1a-1eedf1282e96，taint0；约669秒时DSI0，电池包
+8.645V、SOC100%、29.7°C、电流0。充电控制未接入，Charging/Good不是安全验收。
+实际PHY是7nm-8150/V4.0，10nm关闭；不沿用未核对的源码HEAD/上游SHA。
+详见sessions/78-first-boot-display-controls-and-pageflips.md及reference/kernel78。
+session75的39096次GPU渲染及用户光学验收是历史基线，本轮未重新取得光学观察。
 
 补丁0011在旧命令帧无法排空时停TE/trigger，且必须成功复位覆盖对应INTF的CTL；
 保留0010双复位/清输出顺序，换IOMMU域前完成，并修正初始化失败时private object二次释放。
@@ -28,8 +28,9 @@ session74的数字CRC证据不代表当时已通过光学验收；session75的�
 ## 1. What to do next, in order
 
 1. 通过169.254.42.1密钥SSH保存新日志，保留#76可显示/可GPU渲染基线。
-2. 先定位session77两次首次启动的DSI下溢；保留已验证电量计读取，不用自动
-   开关屏掩盖首次接管问题。确认温度/输入电源/故障行为后再做MP2650充电控制。
+2. 首次启动DSI下溢重现时，恢复前先保存kms/state/clk_summary及完整日志；必要时
+   做受限FIFO原始位诊断。保留电量计读取，不能用自动开关屏替代首次接管验收。
+   确认温度/输入电源/故障行为后再做MP2650充电控制。
    禁止套用其它板参数、解封/NVM更新；原厂MP2650 probe会写配置并关闭安全计时器。
 3. 后续独立完成90Hz、休眠恢复、GPU各频点压力、触摸校准和OTG/USB3。
 

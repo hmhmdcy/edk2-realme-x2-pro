@@ -7,6 +7,7 @@
 
 | 文件 | 内容 |
 |---|---|
+| sessions/78-first-boot-display-controls-and-pageflips.md、reference/kernel78/ | 三次相同镜像首次启动对照、600双缓冲翻转/CRC、7nm绑定核对；间歇性故障仍开放 |
 | sessions/77-bq28z610-live-gauge-and-display-regression.md、reference/kernel77/ | 真实电量计两启动45样本、仅boot部署、首次显示接管下溢回归 |
 | sessions/76-charging-source-and-safety-review.md、reference/kernel76/ | 本机/OPPO/OnePlus充电源码、原厂DT差异、主线电量计与MP2650安全边界；只读研究 |
 | sessions/75-a640-render-and-sofef03f-clock-fix.md、reference/kernel75/ | A640真实渲染、花屏失败证据及非连续DSI时钟的光学验收 |
@@ -15,7 +16,7 @@
 | sessions/72-usb-ncm-and-autonomous-ssh.md、reference/kernel72/ | CDC NCM/密钥SSH自动启动、双向4MiB校验、EUD共存及仅logdump部署 |
 | sessions/71-native-s3706-touch-bringup.md、reference/kernel71/ | 原生S3706触摸代码/供电/总线接入、boot/logdump部署、完整日志与输入事件校验 |
 | linux-port/docs/HARDWARE-STATUS.md | 按用户功能分组的14类硬件接入/验收状态与优先级 |
-| NEXT-SESSION.md、NEXT-SESSION-PROMPT.md | session77电量计/显示回归、session76充电安全研究及session75回退基线、自动USB SSH与提示词 |
+| NEXT-SESSION.md、NEXT-SESSION-PROMPT.md | session78首次启动对照、session77电量计/失败、充电安全及回退基线、自动USB SSH与提示词 |
 | HANDOVER-NEXT.md | 交接入口：第 0–7 节 = 当前状态 / 下一步 / 仓库状态 / 工具 / 坑 / 安全 / 未决；末尾是 history index（旧第 8–30 节 → 文件） |
 | README.md | 项目门面：fork 介绍、构建、刷机、各阶段 status update |
 | DOCS-INDEX.md | 本文：文档地图、同步方式与维护规则 |
