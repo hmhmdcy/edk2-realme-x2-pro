@@ -1,5 +1,7 @@
 # EUD (Embedded USB Debug) on the realme X2 Pro
 
+用途：设备寄存器、CTL/COM与固件日志环的技术历史。文档整理：2026-10-14；以下“下一步”和设备/工具状态按各节日期解释。当前部署见[检查点](NEXT-SESSION.md)，操作规则见[WORKING-BOUNDARIES](WORKING-BOUNDARIES.md)，后续RX与协议验收见[RX-CONSOLE](RX-CONSOLE.md)及[测试飞轮](FLYWHEEL.md)。
+
 EUD is a debug hub built into almost every Qualcomm SoC since ~2018. When it is
 enabled it hijacks the USB port and exposes a small USB hub (VID 0x05C6) with
 debug devices the host can drive: CTL (control), JTAG, SWD, TRACE and COM.
@@ -51,7 +53,7 @@ Host-side result after flashing and rebooting (2026-10-06 17:19):
 
     9500 hub + 9501 control device appear immediately
     eudtool probe -> opcode 0x01 => 00 00 05 00
-                     opcode 0x02 => A1 28 BC 62
+                     opcode 0x02 => XX XX XX XX
                      opcode 0x03 => 04 00 00 00
 
 Do not try to verify this by grepping the boot image: SM8150_UEFI.fd contains a
@@ -378,7 +380,7 @@ Consequences and follow-ups:
     most of each pass, which is worth tuning (TX flow control polling or larger
     frames) before raising the level.
   * The first capture already shows a real firmware error that was invisible
-    before: "ERROR: C40000002:V03051003/V03051002 I0 6D33944A-EC75-4855-A54D-809C75241F6C 9FFCF718"
+    before: "ERROR: C40000002:V03051003/V03051002 I0 PRIVATE_UUID 9FFCF718"
     (BdsDxe GUID, reported 9-11 times per pass).  Worth investigating next.
 
 ## Full DEBUG achieved; real cause of the +0x34B8 crash (2026-10-07)

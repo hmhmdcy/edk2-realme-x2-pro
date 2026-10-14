@@ -1,42 +1,36 @@
-# 下一阶段：Wi-Fi实际固件部署与服务验证（session88）
+# Realme X2 Pro 当前检查点
 
-session88继续Wi-Fi适配；充电阶段保持收尾，显示与充电未解决项保留待办。
-手机仍#86，boot ID=32bf2d8f-8dde-47dc-9b88-e87db9e95198；3984.69秒taint0。
-当前网络接口只有lo/usb0，Wi-Fi未上线；显示超时2/下溢0，display on0/count=0。
-真实显示故障快照摘要与86/87一致；本轮没有清空/重武装、开关屏、重启或分区写入。
-宿主Wi-Fi依赖内核#89编译完成，27项配置变化；QRTR/QMI/GLINK/PAS/SYSMON/PD和ath10k SNOC内建。
-保留全部此前源码修复/模式、14个initramfs文件/308链接及原CPIO；本轮源码仅MPSS DTS增量。
-#89候选MPSS节点okay、同机modem.mdt路径，但PAS auto_boot=false；Wi-Fi节点仍disabled。
-33项本机MPSS分段固件只读归档/哈希通过，ELF可重定位范围160MiB正好适合既有保留区。
-本机msm/modem/wlan_pd、实例180与当前主线PD mapper对应；35项Wi-Fi固件沿用81/87校验。
-静态AArch64 qrtr-lookup/tqftpserv-ro构建完成；真实翻译/WRQ函数本地测试拒绝写、越界和符号链接。
-测试使用本地文件与socket桩，未验证实际QRTR服务；工具/固件尚未安装，MPSS尚未启动。
-关键发现：实际Linux DT来自EDK2内嵌DTB，单改logdump FAT中的DTB不能激活MPSS。
-EDK2内嵌DTB未改，boot固件未构建，#89尚未打包/部署；chip/board ID及扫描/连接/流量均未知。
-Image-wifi sha=02fbe7e5d20cc2a0f5b55e08511ee9a1a39d2c47516079569fe8dc2368360ea0。
-完整构建/固件/测试/现场/边界见sessions/88-wifi-dependency-build-and-read-only-firmware-service.md。
+用途：续作时核对部署、源码、回退依据和待办。设备事实最后核对：2026-10-14，阶段165后的用户实屏反馈及只读核对；本次文档维护未新增实机测试。操作规则以[WORKING-BOUNDARIES](WORKING-BOUNDARIES.md)为准。
 
-1. 先读sessions/88、reference/kernel88与kernel88私人目录；再读87依赖、81固件/供电、79和68实际DT路径。
-   宿主#89已经构建，先核对Image/config/DTB/CPIO哈希和保留审计，不重复运行拒绝覆盖的构建脚本。
-   #89含87显示timer候选和86 MP观测修正，均未实机验收；不把构建通过当硬件通过。
-2. 下一步构建实际boot固件：备份EDK2内嵌DTB/FV/boot，采用#89 DTB，审查语义仅MPSS两个属性变化。
-   实际入口为Platform/Realme/sm8150/FdtBlob/samurai/sm8150-realme-samurai.dtb；兼容DTB保持。
-   参考79/68的FV/模块/BootShim/Android头/版本差异验证；不要复用旧会话的固定守卫。
-   当前EDK2仓库HEAD=a9e7e86；本次文档提交后固件版本字符串可能变化，应以实际构建HEAD重新核对。
-   生成私有boot及logdump候选，#89 Image/DTB放入原FAT，检查容量、来源和全部保留项。
-3. 刷写前重新确认手机boot ID、保存完整dmesg/display snapshot/trace/DRM状态，并备份当前#86 boot/logdump。
-   用新会话新守卫核对PARTNAME/大小/序列/UFS型号/哈希；逐项检查原生命令退出码，F1后finally释放。
-   仅已授权boot/logdump，保留Android/数据/GPT；kernel86/flash-final.ps1停止保护保持，不重放旧OUT。
-   #89启动后先验证/proc/device-tree实际MPSS节点、remoteproc offline、QRTR与USB/EUD/触摸/电量计。
-4. 固件/工具仅临时RAM目录部署并核对哈希，配置SAMURAI_TFTP_FIRMWARE_ROOT；不提供可写存储服务。
-   重新审查显式MPSS启动条件，观察WLFW/PD/TFTP和运行时故障，再取实际chip/board ID选择精确板数据。
-   PAS auto_boot=false，Wi-Fi仍disabled；不任挑35个bdwlan之一，不混用他机mdsp，不启动未审阅rmtfs/NV服务。
-   接着接入Wi-Fi节点、无线接口、扫描/连接及实际流量；这些步骤当前都尚未通过。
-5. 充电和显示保留待办；继续全硬件目标，Wi-Fi之后再蓝牙/音频等，避免重复消耗在充电状态查询上。
+## 最后核对的部署与验收范围
 
-Linux源码/home/cy122/x2pro-linux/linux；initramfs/home/cy122/x2pro-linux/initramfs。
-私有产物E:/edk2-samurai-out/kernel88；公开只发布增量源码/patch/摘要/证据/doc到fork/master。
-完整固件/源码/配置/生成头/镜像/可执行工具/身份留私有目录；历史85/86/87封存不改。
-EUD TOP_CFG0x11、整帧/RX53/F1/两终端保持；既有com-up只恢复COM/VBUS，不写CHGR。
-充电不写配置/解封/NVM/OTP/FET/OTG/GPIO/MCU，不跑OEM charger probe，不读0051/0053/0072或REG14，不用I2C_FORCE。
-最新已采分区摘要见88提取记录与86；部署前必须重新读并核对，不能以旧摘要代替新守卫。
+| 项目 | 最后核对结果 |
+| --- | --- |
+| 部署组合 | kernel163、boot164/logdump163、modules132/software132，加Mesa149本地修复库 |
+| 身份判断 | release仍为`7.3.0-rc6-rmx1931-samurai-k132+`；按`uname -v`核对内核构建号，DRM按by-path解析 |
+| 显示 | 用户确认EDK2之后无白屏/花屏，先黑屏等待，再显示Linux命令行；本次交接故障按已测范围收尾 |
+| 反馈后新boot | boot/logdump读回与内核构建号匹配，桌面进程存在、taint0，显示/GPU/WARN/audio DMA prepare计数均0；该轮未发送重启或刷写命令，启动来源未知 |
+| 165历史软件验收 | Phosh21.45秒、24次DPMS、12次首帧门控及601.15秒同boot/PID稳态通过；这些测量属于此前boot |
+| 仍未闭环 | 黑屏等待时长、冷启动、休眠及更长期可靠性；164首次音频WARN1/DMA prepare917与157非指令重启原因未知 |
+
+依据：[165验收与实屏反馈](reference/kernel165/README.md)、[实屏反馈核对](reference/kernel165/physical-feedback-validation.json)。各功能已证明能力与未验收范围统一见[硬件清单](linux-port/docs/HARDWARE-STATUS.md)。
+
+反馈后的私人身份收据保存在独立输出目录`kernel165/user-feedback-live-private.json`。165 first-boot、160及旧preflash/source身份均已过期；需要切换时重新核对真实设备身份。
+
+## 源码、产物与回退依据
+
+- Linux源码及主Image为163；15个显示相关文件与编译哈希一致。最后交接的WSL源码路径为`/home/cy122/pmos-samurai-kernel136/kernel`，目录名不表示运行构建号，续作先核对路径与源码。161空RMR/SMMU候选已拒收并撤销。
+- EDK2 BDS源码为164候选，C/INF两文件有修改；构建时临时使用实际132/163 DTB，随后恢复源码树原有旧129 DTB。
+- 工作区生成固件是`pristine132`对照，实际164包在独立`kernel164`输出目录。刷写包应依据[164构建证据](reference/kernel164/README.md)核对。
+- 原版boot132及不可变logdump158/163备份保留。162时重建的#158主Image不是原始字节副本，未用于回退。
+- [15文件内核合并补丁](reference/kernel165/kernel-display-fix-from154.patch)基于154，逆向apply检查通过；[固件164补丁](reference/kernel164/before-exit-panel-reset.patch)属于另一个仓库。原始日志、身份和密钥保存在私人目录。
+- Mesa147/149修复保持；150无本地Mesa补丁的降级候选未部署。普通Mesa更新及旧rootfs132镜像可能覆盖本地库，后续软件包与完整rootfs需纳入[0015补丁](linux-port/patches/0015-mesa-turnip-a640-vm-bind-iova-alignment.patch)。
+
+## 续作与已知风险
+
+1. 先核对当前设备、源码及产物身份，读取[操作边界](WORKING-BOUNDARIES.md)。本次显示交接故障已收尾，后续工作按用户任务推进。
+2. 音频首次DMA初始化/停止链与充电控制保护为下一阶段重点；音频任务入口见[AUDIO-NEXT-SESSION-PROMPT](AUDIO-NEXT-SESSION-PROMPT.txt)。164失败未在165及反馈后新boot重现，根因仍未知。
+3. 151软件包数据库差异、实体camera、完整传感器、蜂窝业务/GNSS/指纹/NFC及跨功能冷启动、休眠、长稳见[硬件清单](linux-port/docs/HARDWARE-STATUS.md)。
+4. 165临时启动记录器已停止并退出boot runlevel；历史测试收据与本次身份分开核对。显示电源回归使用`DisplayConfig.PowerSaveMode`；`wlr-randr --off`曾移除唯一输出并导致Phosh崩溃。
+
+显示152—165的候选、失败、回退和验收顺序见[显示修复过程](sessions/display-handoff-152-165.md)。全部历史入口见[会话索引](sessions/INDEX.md)，维护与同步见[文档导航](DOCS-INDEX.md)。

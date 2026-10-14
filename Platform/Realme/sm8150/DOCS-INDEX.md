@@ -1,114 +1,64 @@
-# 文档索引（realme X2 Pro / samurai）—— 仓库与 Windows 工作区
+# Realme X2 Pro 文档导航与维护
 
-> 2026-10-08 整理后。编辑在 Windows 的 E:\RealmeX2Pro edk2\ ，发布在仓库 hmhmdcy/edk2-realme-x2-pro（分支 master），单向同步见第 3 节。
-> 本文件两边内容一致；改完文档跑一次 sync-docs-to-repo.sh 就会推上去。
+用途：阅读入口、专题证据、历史位置和维护方法。最后整理：2026-10-14；本次维护未新增设备操作或验收。
 
-## 1. 入口（先读这几份）
+## 入口与职责
 
-| 文件 | 内容 |
-|---|---|
-| sessions/88-wifi-dependency-build-and-read-only-firmware-service.md、reference/kernel88/ | #89依赖内核、只读固件服务与本地拒写测试、33项MPSS固件校验、实际内嵌DTB部署前交接 |
-| sessions/87-stage-wrap-up-and-wifi-prerequisites.md、reference/kernel87/ | 阶段收尾、未部署的DPU候选与回归、Wi-Fi依赖缺口/候选配置和固件校验 |
-| sessions/86-mp2650-input-status-and-real-display-timeout-snapshot.md、reference/kernel86/ | MPS输入位核实、ADC实测、只读接口失败/候选修正及首次真实显示超时快照 |
-| sessions/85-oem-chemistry-and-short-ic-observations.md、reference/kernel85/ | 58身份ENXIO、LION/0054实测、原厂温补缺省和失联容错、安全与充电状态边界 |
-| sessions/84-display-boot-tracing-and-timeout-snapshots.md、reference/kernel84/ | #85首次启动事件/超时快照、两次600翻页与完整跟踪、失败迭代及MP配置保持 |
-| sessions/83-androidr-and-cyborg-charging-source-comparison.md、reference/kernel83/ | 官方Android R与用户cyborg源码定位、14项本机策略对照、驱动相同/初始化差异及I2C匹配边界 |
-| sessions/82-charging-policy-units-and-android-backup-provenance.md、reference/kernel82/ | 温控负值/单节与包电压单位、原函数错误路径测试、OPLUS保护来源及Android备份来源纠正 |
-| sessions/81-stock-gauge-state-temperature-and-display-timeouts.md、reference/kernel81/ | 原厂封存/计量与标准温度、两次既有DRM超时纠正、600翻转对照及本机无线固件准备 |
-| sessions/80-gauge-identity-and-stock-cell-observations.md、reference/kernel80/ | 旧式FFA5/扩展2719身份差异、原厂双电芯实测、USB输入来源；权限足够 |
-| sessions/79-mp2650-read-only-bus-and-current-settings.md、reference/kernel79/ | QUP1仅总线部署、MP2650三次实测配置和充电保护边界；gh API成功 |
-| sessions/78-first-boot-display-controls-and-pageflips.md、reference/kernel78/ | 三次相同镜像首次启动对照、600双缓冲翻转/CRC、7nm绑定核对；间歇性故障仍开放 |
-| sessions/77-bq28z610-live-gauge-and-display-regression.md、reference/kernel77/ | 真实电量计两启动45样本、仅boot部署、首次显示接管下溢回归 |
-| sessions/76-charging-source-and-safety-review.md、reference/kernel76/ | 本机/OPPO/OnePlus充电源码、原厂DT差异、主线电量计与MP2650安全边界；只读研究 |
-| sessions/75-a640-render-and-sofef03f-clock-fix.md、reference/kernel75/ | A640真实渲染、花屏失败证据及非连续DSI时钟的光学验收 |
-| sessions/74-sm8150-display-boot-handoff.md、reference/kernel74/ | DPU5命令显示接管、失败迭代、两启动/18次电源循环与GPU loader预检 |
-| sessions/73-native-sofef03f-dsi-dsc-display.md、reference/kernel73/ | 原生SOFEF03F/DSI/DSC、60Hz/CRC/电源循环、固件依赖与启动SMMU交接限制 |
-| sessions/72-usb-ncm-and-autonomous-ssh.md、reference/kernel72/ | CDC NCM/密钥SSH自动启动、双向4MiB校验、EUD共存及仅logdump部署 |
-| sessions/71-native-s3706-touch-bringup.md、reference/kernel71/ | 原生S3706触摸代码/供电/总线接入、boot/logdump部署、完整日志与输入事件校验 |
-| linux-port/docs/HARDWARE-STATUS.md | 按用户功能分组的14类硬件接入/验收状态与优先级 |
-| NEXT-SESSION.md、NEXT-SESSION-PROMPT.md | session88当前进展/短提示词；#89未部署、EDK2内嵌DTB、MPSS/WLFW验证与保留边界 |
-| HANDOVER-NEXT.md | 交接入口：第 0–7 节 = 当前状态 / 下一步 / 仓库状态 / 工具 / 坑 / 安全 / 未决；末尾是 history index（旧第 8–30 节 → 文件） |
-| README.md | 项目门面：fork 介绍、构建、刷机、各阶段 status update |
-| DOCS-INDEX.md | 本文：文档地图、同步方式与维护规则 |
-| EUD.md | EUD 设备事实、寄存器、CTL/COM 协议、固件日志环、ArmMmuLib 崩溃真因 |
-| SWD-JTAG.md | EUD SWD 9504 / JTAG 9503：传输层可用，AP DAP 无应答；未读熔丝，权限原因未证实 |
-| RX-CONSOLE.md | EUD RX 寄存器、组帧、tty console；原生 payload 推进修复与剩余终端问题，保留历史探针记录 |
-| BINARIES.md | 设备 blob 来源、ButtonsDxe DEPEX 补丁 |
-| linux-port/README.md、linux-port/docs/00-INDEX.md | 主线 Linux 侧（内核、DTB、patch、脚本、参考） |
-| FLYWHEEL.md | 免按键测试飞轮：命令表、一轮流程、构建打包、硬约束与坑 |
+| 需要了解 | 唯一维护位置 |
+| --- | --- |
+| 最后核对的部署、源码/产物差异、回退依据与续作项 | [NEXT-SESSION](NEXT-SESSION.md) |
+| 当前有效操作规则 | [WORKING-BOUNDARIES](WORKING-BOUNDARIES.md) |
+| 各功能已证明能力、缺陷及待验收范围 | [HARDWARE-STATUS](linux-port/docs/HARDWARE-STATUS.md) |
+| 项目介绍与通用构建说明 | [README](README.md) |
+| Linux源码、补丁、rootfs和工具导航 | [Linux README](linux-port/README.md)、[技术文档索引](linux-port/docs/00-INDEX.md) |
+| 仓库提交记录、工具路径与旧8—30节映射 | [HANDOVER-NEXT](HANDOVER-NEXT.md) |
+| 新会话阅读提示 | [通用提示词](NEXT-SESSION-PROMPT.md)、[音频任务提示词](AUDIO-NEXT-SESSION-PROMPT.txt) |
 
-## 2. 历史记录放在哪
+提示词引用检查点，README和交接导航引用功能清单。实验过程写入sessions/或reference/，入口不再累积阶段摘要。
 
-| 位置 | 内容 |
-|---|---|
-| reference/DECISIONS.md | 旧第 8–11 节：Linux 引导路径与持久变量决策、移植清单、分区改动规则、EDL (9008) 资源 |
-| sessions/NN-<topic>.md | 旧第 12–18、29、30 节：EDK2 与内核侧会话（NN = 旧节号） |
-| sessions/2026-10-06-*.md | 两篇早期记录：诊断镜像抓取、EUD 首次试水（原先拼在 DIAG-CAPTURE.md 里） |
-| linux-port/docs/NN-<topic>.md | 旧第 19–28 节：主线 Linux 侧会话，命名与索引见该目录的 00-INDEX.md |
-| sessions/31-flywheel-f1-verified.md | 旧第 31 节：飞轮 F1 打通（命令通道 `[90][02]`→fastboot、实测证据、主机端口卡死事故） |
-| sessions/32-rx-printk-interference.md | 原探针 90 90；去掉前置 printk 后单字符 RX 修复、多字节仍未解；跨机型源码与真机证据 |
-| sessions/33-rx-access-and-production-policy.md | 整帧锁、MMIO/读序/主机实验、上下游审查、量产权限证据边界；多字节仍未解 |
-| sessions/34-temporary-eud-terminal.md | TX/RX 区分、临时键盘/命令终端、tty/console 真机输出与退出验证 |
-| sessions/35-rx-next-session-handoff.md | 下一会话原生 RX 排查交接、已排除路径、所需新证据与短提示词 |
-| sessions/36-rx-usb-descriptors-and-legacy-qcusbser.md、reference/rx36/ | 实机 USB 描述符、旧 WDM qcusbser / SM8150 审查；libusb/WSL 完整 OUT 受理后仍多字节失败 |
-| sessions/37-rx-source-search-and-phy-lifecycle.md、reference/rx37/ | 同机型源码、QUIC 重载更正、2026-09-29 PHY v9 与本机历史 probe 延迟；未取得原生 RX 修复 |
-| sessions/38-rx-pre-linux-and-usb-boundaries.md、reference/rx38/、linux-port/uefi-rx-probe/ | Linux 之前 UEFI 也重复首字节；合法满包/ZLP、reset 未改善；实际 SNPS PHY 更正、只刷 logdump 后恢复基线 |
-| sessions/39-rx-tight-arrival-poll.md、reference/rx39/ | UEFI 紧轮询仍重复首字节；受理/恢复边界、原基线恢复、新 boot HWIO 来源限制 |
-| sessions/40-rx-register-map-and-stock-firmware-audit.md、reference/rx40/ | 完整旧 DSP EUD_ACORE 表、原厂 SM8150 静态审查，无推进规格；未刷机，单字节回执核对 |
-| sessions/41-rx-ahb2phy-wait-state-fix.md、reference/rx41/ | 原厂 SM8150 映射、TOP_CFG=0x11 有效 RX 方法，UEFI/Linux 完整 payload、tty 执行与输出验证 |
-| sessions/42-native-terminal-next-session-handoff.md | 历史交接与短提示词：仅文档更新；其中缺输出样本已由 session 43 更正 |
-| sessions/43-native-terminal-evidence-audit.md、reference/rx43/ | 原始抓取更正缺输出，BusyBox/tty/TX 审查，已修复配置下双 USB 路径的缺回执边界与最终状态 |
-| sessions/44-rx-receipt-counters.md、reference/rx44/ | 只读计数定位到未观测 pending，原生输出/F1 保留，IRQ/超时来源审查与熔丝证据限定 |
-| sessions/45-rx-mask-before-arrival.md、reference/rx45/ | 接收前只启用 RX 掩码仍失败；完整 LEN=14 输出/F1、恢复 RX44，排除仅掩码方案 |
-| sessions/46-rx-irq-and-host-trace-boundary.md、reference/rx46/ | 真实 IRQ 接收与完整输出/F1；失败 Windows 帧未增 IRQ，libusb 对照与一次 Windows USB ETW |
-| sessions/47-native-terminal-session-boundary.md、reference/rx47/ | 原生终端持续打开/启动同步、重开缺 RX 与端点 reset；真实 TX 缺字、看门狗退回及轮询 F1 |
-| sessions/48-irq-grace-and-tx-journal.md、reference/rx48/ | IRQ 有界宽限、CRC 发送记录 512 帧匹配；wait 分支未触发，兼容/F1/重启保留，稳定性仍开放 |
-| sessions/49-usb-in-and-partial-timeout-audit.md、reference/rx49/ | 7 组旧 IN 离线匹配，持续 libusb 的记录/IN/raw 对应与真实部分取消保留；未改内核/刷机 |
-| sessions/50-windows-receive-and-driver-buffer-audit.md、reference/rx50/ | 当前连接正常；Windows 接收观测与实装 qcusbser 精确 PDB 审查，287 重叠 TX 帧匹配，旧故障未复现 |
-| sessions/51-console-overlap-and-issued-frame-loss.md、reference/rx51/ | 长 console 输出期间 7 字节缺 RX；恢复状态缺一个已发 4 字节帧，511/512 直接匹配，根因仍开放 |
-| sessions/52-same-owner-usb-overlap-and-continuous-in.md、reference/rx52/ | 同 owner 长日志缺 RX，完整 OUT/IN；持续 IN 对照改善请求空窗/TX 匹配，RX 仍未修复 |
-| sessions/53-console-boundary-rx-service.md、reference/rx53/ | console 帧边界整帧 RX 在 USB/Windows 同触发通过；兼容/F1/重启保留，最后仍缺一个已发 TX 前缀 |
-| sessions/54-console-rx-regression-and-host-counter-audit.md、reference/rx54/ | 9 次手动 console RX/F1 回归通过、6 次空 IRQ 正确计数；实装 Windows worker/累计接收计数审查，未刷机、TX 缺口仍开放 |
-| sessions/55-windows-perf-counter-and-reproduced-tx-gap.md、reference/rx55/ | 同 owner GET_STATS/raw/CRC 快照重现缺 TX seq7376，缺口在驱动受理缓冲计数之前；启动首 Ctrl-U 仍未受理，未刷机/重启 |
-| sessions/56-source-boundaries-and-focused-research.md、reference/rx56/ | 修复/测量结论收敛与定向新资料；实装 pre-buffer/reset/padding 审查、旧 ETW 489 字节离线复核，只读未修复 |
-| sessions/57-driver-raw-logging-boundary.md、reference/rx57/ | 前缓冲驱动日志实测：9550 字节与计数/raw 相等、512 帧匹配；首轮脚本误判更正，配置恢复，旧故障未触发 |
-| sessions/58-reopen-first-frame-and-driver-completion-gates.md、reference/rx58/ | 三次真实缺口均为重开后首状态首帧；精确失败读/日志盲区，联合测量方案已准备未执行 |
-| sessions/59-joint-capture-and-forced-odd-reopen-gap.md、reference/rx59/ | 两轮联合抓取恢复；75 奇数 IN / 偶数短 OUT 干预重现首帧缺失，同步 ETW 无失败正长度 IN，翻转候选及 0x1e 更正 |
-| sessions/60-even-reopen-reversal-and-toggle-candidate.md、reference/rx60/ | 74 偶数反向重开首帧完整、512/512 匹配；无管理员有界抓取与未安装的 WDF 保留翻转候选，14 离线用例 |
-| sessions/61-eud-wdf-package-and-build-preparation.md、reference/rx61/ | 固定完整 WDF 源码、9505 专用 INF/project、旧驱动精确回退副本；EWDK 下载进行，完整构建/签名/上机尚待验证 |
-| sessions/62-eud-wdf-build-and-test-signed-package.md、reference/rx62/ | 真实九模块 WDK 构建、Win11 INF/catalog、文件内测试签名与 PE 核对通过；未安装/上机，加载环境待决定 |
-| sessions/63-single-device-driver-compatibility-and-trial-tools.md、reference/rx63/ | 原生只读候选/回退匹配、当前 CI 策略、单设备试装工具 15 保护用例；ZLP 读取阶段明确，安装与上机未运行 |
-| reference/rx64/ | 同一加载环境连续三轮受阻审查、最新只读设备/策略状态、完整原始验收仍未完成 |
-| sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md、reference/rx65/ | WSL长console整包LEN14正确受理/执行，但持续owner缺9个tty TX帧；CRC有效快照503/512直接匹配，完整虚拟IN等于raw，仍需专用帧协议工具 |
-| sessions/66-verified-kernel-logs-and-builtins.md、reference/kernel66/ | 完整日志校验、CPU/PMIC内建依赖和early mapping三项真机修复；实际异常优先级、失败证据与关闭状态 |
-| sessions/67-usb-provider-and-dtb-activation.md、reference/kernel67/ | HS PHY 单项内建后 PHY/dwc3/UDC 真机通过，完整日志校验；CPU7 FAT-DTB 候选未激活、缺回执/损坏导出保留、COM14 回归 Windows |
-| sessions/68-firmware-dtb-and-cpu7-opp-verified.md、reference/kernel68/ | boot固件DTB激活CPU7高OPP，live节点/调频表/max与完整日志真机通过；其余模块仅版本字符串变动，失败证据保留，COM14回Windows |
-| sessions/69-usb-gadget-state-and-eud-coordination-audit.md、reference/kernel69/ | 前次只读日志/USB功能审查：69499字节完整日志校验、gadget为空、实际legacy glue/VBUS override；EUD共存尚未证明，普通USB网络/SSH路径说明 |
-| sessions/70-pm8009-resource-and-touch-prerequisites.md、reference/kernel70/ | 当前资源/触摸前提审查：85404字节日志及cmd-db校验，无PM8009 F资源/DT消费者，降为P3；GENI/RMI4/i2c17未启用，rootfs剩余容量核对 |
-| linux-port/docs/ROOTFS-PRESERVE-ANDROID.md | 保留Android和全部数据的rootfs研究：GPT备份边界、logdump小rootfs/外置/文件方案，未确认安全大分区 |
-| archive/ | 原 109 KB 的 HANDOVER-NEXT.md 全文备份 |
-| HANDOVER.md、EVALUATION-AND-PLAN.md | 2026-10-06 的历史文档，保留原样（含已被推翻的判断） |
+## 专题与证据
 
-规则：一节一文件；同一事实只写一处；镜像只指路、不复制。
+| 专题 | 阅读入口 |
+| --- | --- |
+| 显示152—165候选、失败、回退与实屏验收 | [过程汇总](sessions/display-handoff-152-165.md)、[165证据](reference/kernel165/README.md)、[实屏反馈](reference/kernel165/physical-feedback-validation.json) |
+| GPU已复现CCU故障修复 | [147内核修复](sessions/147-a640-gmem-alignment-fix.md)、[149 Mesa修复](sessions/149-vulkan-ccu-alignment-fix-and-deployment.md)、[151收尾](sessions/151-gpu-closeout-and-hardware-handover.md) |
+| 音频首次初始化与停止链 | [139 TX回收](sessions/139-slimbus-unsubmitted-tx-unwind-and-live-boot.md)、[104 DMIC](sessions/104-native-digital-microphones-and-first-boot-radio-failure.md)、[164失败](reference/kernel164/README.md) |
+| 电池/充电控制与输入预算 | [132观测部署](sessions/132-persistent-mp2650-real-boot-and-complete-rootfs.md)、[133预算研究](sessions/133-usb-power-budget-and-charge-contract.md)、[138恢复阈值](sessions/138-readonly-charger-recharge-threshold.md) |
+| Camera基础与内部TPG | [126 DMA验证](sessions/126-tpg-dma-guards-full-rootfs-and-real-deployment.md) |
+| 蓝牙、Wi-Fi与USB | [130 BlueZ](sessions/130-standard-bluez-discovery-and-startup-integration.md)、[128 Wi-Fi](sessions/128-wcn3990-pairwise-key-delete-and-5ghz.md)、[USB NCM/SSH](linux-port/docs/USB-NCM-SSH.md) |
+| EUD/调试与固件来源 | [EUD](EUD.md)、[RX](RX-CONSOLE.md)、[SWD/JTAG](SWD-JTAG.md)、[BINARIES](BINARIES.md)、[测试飞轮](FLYWHEEL.md) |
+| 同平台显示交接比较 | [参考说明](reference/display-handoff-comparison/README.md) |
+| 2026-10-14分类提交与公开副本范围 | [发布记录](reference/publication-2026-10-14/README.md) |
 
-## 3. 同步与提交（Windows → 仓库，单向）
+## 历史位置
 
-1. bash /mnt/e/RealmeX2Pro\ edk2/linux-port/scripts/mirror-linux-port.sh   —— 镜像 linux-port/
-2. bash /mnt/e/RealmeX2Pro\ edk2/linux-port/scripts/sync-docs-to-repo.sh   —— 顶层文档 + 健康检查 + commit + push
+- [sessions/INDEX](sessions/INDEX.md)：会话和reference目录入口，按现有文件生成；包括只有reference记录的晚期阶段。
+- [reference/DECISIONS](reference/DECISIONS.md)：旧8—11节决策；[Linux技术索引](linux-port/docs/00-INDEX.md)保留19—28节入口。
+- [维护前快照](archive/docs-before-maintenance-2026-10-14/README.md)：旧README、交接、检查点和脚本原文，manifest.json保留SHA256；快照中的相对链接按原路径解释。
+- `archive/`：早期拆分全文和已保存的状态快照。历史的“当前”和临时禁令只描述对应阶段。
+- [HANDOVER](HANDOVER.md)、[旧方案评估](EVALUATION-AND-PLAN.md)、[旧机型说明](DEVICE-README.md)为历史入口，正文已归档。
 
-- docs-health-check.sh（已被上面第二个脚本内置调用）：每个旧节号只能有一个家、archive/ 与 git 一致、Windows 与仓库无漂移，并列出最大文件与重复标题。
-- origin 是上游 edk2-porting/edk2-msm，只推 fork。
-- 本机 GitHub 走 127.0.0.1:7890 代理、时好时坏：ls-remote 成功不代表 push 成功，push 常需重试 2–3 次。
+## 检查与同步
 
-## 4. 维护规则（防止再长成 109 KB）
+Windows工作区是编辑源，WSL EDK2仓库的`Platform/Realme/sm8150`为镜像。在WSL运行：
 
-1. 时间线只写进 sessions/YYYY-MM-DD-<topic>.md（或 Linux 侧 linux-port/docs/NN-<topic>.md），并在 HANDOVER-NEXT.md 末尾索引表加一行；不要再往交接文档追加正文。
-2. 每个文档头部写清：用途 / 来源 / 最后核对日期 / 关联文档。
-3. 一节一文件，引用用「文件 + 节号」；旧的 section 26 一类引用通过索引表仍然有效。
-4. 不纳入版本库：linux-port/artifacts/（30 MB Image、dtb 等可重建产物）、tools/ 里的旧 README 快照、DEVICE-README.md（旧版机型说明）、Windows 侧的旧 HANDOVER.md。
+```bash
+python3 '/mnt/e/RealmeX2Pro edk2/linux-port/scripts/generate-session-index.py'
+bash '/mnt/e/RealmeX2Pro edk2/linux-port/scripts/docs-health-check.sh' --local-only
+bash '/mnt/e/RealmeX2Pro edk2/linux-port/scripts/sync-docs-to-repo.sh' --copy-only
+bash '/mnt/e/RealmeX2Pro edk2/linux-port/scripts/docs-health-check.sh'
+```
 
-## 5. 安全与待办
+同步清单见[docs-sync-manifest.json](linux-port/scripts/docs-sync-manifest.json)，覆盖通用/音频提示词、检查点、边界、技术导航、会话、证据、归档、Mesa0015补丁及文档维护脚本。仓库使用脱敏公开副本，设备标识、启动ID和真实无线地址替换为PRIVATE标记，密码/密钥禁止导出；本地原始资料保持。Python缓存、备份及原始二进制属性不纳入同步或提交。仅同步模式不提交或推送。需要提交推送时显式使用`--publish '提交说明'`；工具只暂存清单范围，仓库存在预先暂存改动时停止发布，避免混入其他工作。
 
-- HANDOVER-NEXT.md 第 22.6 节：内核侧用的 PAT 需要轮换（文档里没有明文 token）。
-- 只刷 boot（和内核存放用的 logdump）分区；U 盘模式别让 PC 格式化；EUD连接保持单一owner，普通USB/EUD共存尚未验收；彻底断电要长按电源约 15 s。
-- 待办：HANDOVER-NEXT.md 第 1 节、sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md。用户最新优先Linux内核具体问题，收束EUD实验，关键日志保存设备侧完整副本并校验导出。保留TOP_CFG0x11/RX53 console IRQ/F1/现有终端/RX48回退；连续WSL TX请求/取消/FIFO审查及Windows受支持环境的开关/完整原生/回退验收保留独立待办；不重复旧passing/reset/零等待。
+`mirror-linux-port.sh`是旧的全Linux侧镜像/提交脚本，只有需要同步Linux源码与全部脚本时才按具体任务使用。日常文档维护使用上面的清单工具。
+
+健康检查验证入口的本地链接、旧8—30节唯一归属、生成索引、归档哈希、文档体积、仓库记录及公开镜像一致性。本地归档是逐字快照；仓库归档是脱敏副本，清单分别记录原文和公开副本SHA256。快照链接按原路径解释；历史技术正文的全目录链接审计可用`--audit-history`查看。历史脚本中的PRIVATE标记需由本地私人输入补齐，不能直接作为设备身份使用。
+
+## 日常维护约定
+
+1. 每份入口写清用途与核对日期。文档整理日期和设备实测日期分别说明。
+2. 新会话保存问题、改动、实际结果、失败/回退、证据和未验收范围；已有reference记录可以直接索引，无需再复制一份正文。
+3. 设备组合和回退身份只维护在检查点；功能验收只维护在硬件清单；当前限制只维护在WORKING-BOUNDARIES。
+4. 入口通过链接指向来源；检查点过程较长时整理进专题历史，并保留原文快照与哈希。
+5. 改动后重生成会话索引、运行检查并同步。原始日志、密钥、私人身份/录音及重要备份保留在私人目录；生成镜像不由文档同步工具复制。

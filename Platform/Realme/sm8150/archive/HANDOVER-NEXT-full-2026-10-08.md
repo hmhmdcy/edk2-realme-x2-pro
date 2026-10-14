@@ -73,7 +73,7 @@ Host CTL node (Windows, already working):
     \\.\Qualcomm EUD Control Device 9501\DEBUG      (no "(0003)" suffix)
     open + WriteFile one opcode byte, ReadFile the response:
         0x01 EUD_VERSION_READ -> 4 bytes (00 00 05 00)
-        0x02 DEVICE_ID_READ   -> 4 bytes (A1 28 BC 62 = 0x62BC28A1)
+        0x02 DEVICE_ID_READ   -> 4 bytes (XX XX XX XX = 0x00000000)
         0x03 EUD_STATUS_READ  -> 4 bytes (04 00 00 00)
         0x07 CTLOUT_SET / 0x08 CTLOUT_CLR: 5 bytes (opcode + LE u32), NO response
     Reading after 0x07/0x08 blocks forever - write only, or use overlapped I/O.
@@ -137,7 +137,7 @@ SerialPortLib scoping in samurai.dsc (important, do not widen casually):
 | quic/eud clone + libeud.dll | E:\eud-host\quic-eud |
 | QUD driver package / unpacked | E:\eud-host\qud_10057.4.zip, qud_cab\ |
 | platform-tools | C:\Users\cy122\Downloads\platform-tools\platform-tools |
-| adb serial | 62bc28a1 |
+| adb serial | PRIVATE_DEVICE_ID |
 
 ## 5. Pitfalls (each one already cost a hardware cycle)
 
@@ -375,7 +375,7 @@ Auth reality - do not rely on "no auth" being permanent:
   side buttons normal.
 * EUD control channel while running the final image:
       0x01 -> 00 00 05 00
-      0x02 -> A1 28 BC 62
+      0x02 -> XX XX XX XX
       0x03 -> 04 00 00 00
 * EUD COM: "Qualcomm EUD Port 9505 (COM14)" Status OK.
 * comlog.exe COM14 60 -> 0 bytes captured.
@@ -513,7 +513,7 @@ sha256 `cf2364723022b2491bf763d5359547fc6226518829c119539b2d5153ec0e71a8`，已�
 2. 若把 `PcdDebugPrintErrorLevel` 开到全量 DEBUG，环会填满，按当前 ~1.2KB/s 每遍约 68 秒 ——
    循环仍保证完整，但回调占用会偏高，建议先做流控优化（TX 状态轮询 / 加大帧长）再开。
 3. **首次抓取已经暴露出一个以前看不见的真固件错误**：
-   `ERROR: C40000002:V03051003/V03051002 I0 6D33944A-EC75-4855-A54D-809C75241F6C 9FFCF718`
+   `ERROR: C40000002:V03051003/V03051002 I0 PRIVATE_UUID 9FFCF718`
    （BdsDxe 的 GUID，每遍出现 9-11 次）—— 值得下一步查。
 ---
 
@@ -974,9 +974,9 @@ PSCI v1.1 ... Zone ... Detected CPU ... init: SLUB ... RCU ... GIC ... IPIs
 
 | 分区 | 索引 | 起始 LBA | 大小 | 类型 GUID | unique GUID |
 |---|---|---|---|---|---|
-| `modem` | 4 | 0xC86 | 0x10000 (256 MiB) | 标准高通 | 934CA8ED-C69D-9755-BA9A-6C9411CDC27F |
-| `logfs` | 30 | 0x31570 | 0x800 (8 MiB) | BC0330EB-... | 09969439-057F-289A-5729-CE302330C1CA |
-| **`logdump`** | 32 | 0x31F70 | 0x4000 (**64 MiB**) | 5AF80809-AABB-4943-9168-CDFC38742598 | 6458791A-5CBF-649C-B221-7A804460E308 |
+| `modem` | 4 | 0xC86 | 0x10000 (256 MiB) | 标准高通 | PRIVATE_UUID |
+| `logfs` | 30 | 0x31570 | 0x800 (8 MiB) | BC0330EB-... | PRIVATE_UUID |
+| **`logdump`** | 32 | 0x31F70 | 0x4000 (**64 MiB**) | PRIVATE_UUID | PRIVATE_UUID |
 
 选它的安全依据（全部逐项验证过）：
 

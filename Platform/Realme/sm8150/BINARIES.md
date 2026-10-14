@@ -60,7 +60,7 @@ The X2 Pro's own `xbl.img` ships the OPPO-customised `ButtonsDxe`, which is
 2. the **OPPO project protocol** - provided by `OppoProject.efi` (`OcdtDxe`).
    When it is missing the driver prints `Locate oppo project protocol failed`
    and returns `EFI_NOT_FOUND`,
-3. the **reset-reason protocol** (`A022155A-4828-4535-A499-11F15240B91B`),
+3. the **reset-reason protocol** (`PRIVATE_UUID`),
    provided by `ResetRuntimeDxe`.
 
 If any of them is missing the driver is unloaded and **no side button works at
@@ -87,11 +87,11 @@ python3 Platform/Realme/sm8150/fix-buttons-depex.py \
 Resulting DEPEX (4 original GUIDs + the OPPO project protocol):
 
 ```
-PUSH 387477C1-69C7-11D2-8E39-00A0C969723B   ; SimpleTextIn
-PUSH 157A5C45-21B2-43C5-BA7C-822FEE5FE599   ; PlatformInfo
-PUSH 60759B13-A8BF-46FE-B7E6-797BFB335DF3   ; PMIC
-PUSH 9BA45B66-EFA4-441C-A3E4-ED2224786BE2   ; PMIC
-PUSH 903C579D-EBDE-19E0-39A7-43B95FA73F91   ; OPPO project protocol (OppoProject)
+PUSH PRIVATE_UUID   ; SimpleTextIn
+PUSH PRIVATE_UUID   ; PlatformInfo
+PUSH PRIVATE_UUID   ; PMIC
+PUSH PRIVATE_UUID   ; PMIC
+PUSH PRIVATE_UUID   ; OPPO project protocol (OppoProject)
 AND AND AND AND END
 ```
 

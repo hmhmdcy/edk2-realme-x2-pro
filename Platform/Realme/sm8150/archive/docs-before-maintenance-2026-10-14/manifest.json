@@ -1,0 +1,129 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "52904c5c30fcaaeaa7b09feda51bc94e8601ce777b2c48d9265baca34968abf4",
+    "bytes": 44153,
+    "snapshot_path": "PROJECT-README.original.md",
+    "private_original_sha256": "52904c5c30fcaaeaa7b09feda51bc94e8601ce777b2c48d9265baca34968abf4",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "linux-port/README.md",
+    "sha256": "775956bde9158447414d1f3ab92db7efe5ebe8f0e731c0f70afd73a3f7e8ef54",
+    "bytes": 25971,
+    "private_original_sha256": "775956bde9158447414d1f3ab92db7efe5ebe8f0e731c0f70afd73a3f7e8ef54",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "HANDOVER-NEXT.md",
+    "sha256": "c0dc62de143d6f0f548935d38bf54719ff9621db891b7835f05aa918e0c9ac33",
+    "bytes": 25886,
+    "private_original_sha256": "be319e7c4eb2b7298c1cf3ac6b3d69f583de6c9ea99b8dcd116320b299a61847",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "DOCS-INDEX.md",
+    "sha256": "f876eedc7cad541b8a06bcafd602e733b24ea6e4cd8e2f5935386d4765dc59b8",
+    "bytes": 24185,
+    "private_original_sha256": "f876eedc7cad541b8a06bcafd602e733b24ea6e4cd8e2f5935386d4765dc59b8",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "NEXT-SESSION.md",
+    "sha256": "d867d112d05f157d14853f6d4335b7e9caaf84d4357e09c87d48389d1f06cee1",
+    "bytes": 7427,
+    "private_original_sha256": "d867d112d05f157d14853f6d4335b7e9caaf84d4357e09c87d48389d1f06cee1",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "NEXT-SESSION-PROMPT.md",
+    "sha256": "4408d9a2aebdc274adb6457cbf62aa2d6024785af6e6f823929beb09c6c8e679",
+    "bytes": 1934,
+    "private_original_sha256": "4408d9a2aebdc274adb6457cbf62aa2d6024785af6e6f823929beb09c6c8e679",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "AUDIO-NEXT-SESSION-PROMPT.txt",
+    "sha256": "705381bcde86fad1dc797a54406fa49a9114bc99de084a07595c5472599f655c",
+    "bytes": 3055,
+    "private_original_sha256": "705381bcde86fad1dc797a54406fa49a9114bc99de084a07595c5472599f655c",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "HANDOVER.md",
+    "sha256": "ceee85c71bb48483c2fd9db82b84fd7ecfca8b81ea64e4fdc7ab902954c6fa33",
+    "bytes": 11560,
+    "private_original_sha256": "89948ba19cb7912141679f3d440f681ec6ea34b7ac7a7ecc4b6d7dd672be79e8",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "EVALUATION-AND-PLAN.md",
+    "sha256": "134166822badb7b426bff47abda9bc1dc48f50f6e837db0ab1f178593d7deabd",
+    "bytes": 11811,
+    "private_original_sha256": "134166822badb7b426bff47abda9bc1dc48f50f6e837db0ab1f178593d7deabd",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "DEVICE-README.md",
+    "sha256": "90aca19ac605d21b787e839d4c7b7871d13dd09efe870d29cabc7f6fafb44555",
+    "bytes": 5833,
+    "private_original_sha256": "90aca19ac605d21b787e839d4c7b7871d13dd09efe870d29cabc7f6fafb44555",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "FLYWHEEL.md",
+    "sha256": "8401da82f142095800ebe3b26215a21490445419d5673bae6dcfb5a4535f2955",
+    "bytes": 31082,
+    "private_original_sha256": "8401da82f142095800ebe3b26215a21490445419d5673bae6dcfb5a4535f2955",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "RX-CONSOLE.md",
+    "sha256": "9c88d1dd69647367dc73f5923d0a82102691c0fb4845808d1edc69f193d4e428",
+    "bytes": 32830,
+    "private_original_sha256": "76e9ca940f57f5a9acb6a8ae3584da2bd865aaa0ea2274c0127364e1aec9278e",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "EUD.md",
+    "sha256": "7d604be5359c3fe3f1b7509249a86906ad49fda69caf06bed886201d9fbe19d1",
+    "bytes": 20698,
+    "private_original_sha256": "a56babd6c1c6def82c531e40a5d30523515540907ac43576eebe8aad72687f08",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "linux-port/docs/00-INDEX.md",
+    "sha256": "4d2dde15276d53e7fd8309dac186c13597f53b188558372f00e3bfb8f5f8b48c",
+    "bytes": 4155,
+    "private_original_sha256": "4d2dde15276d53e7fd8309dac186c13597f53b188558372f00e3bfb8f5f8b48c",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "linux-port/docs/HARDWARE-STATUS.md",
+    "sha256": "d9fb28d1b1a224bcb61963bf7cd533b3cf231ea48cf58171c8bc6702f0fe47ae",
+    "bytes": 6519,
+    "private_original_sha256": "d9fb28d1b1a224bcb61963bf7cd533b3cf231ea48cf58171c8bc6702f0fe47ae",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "linux-port/scripts/docs-health-check.sh",
+    "sha256": "ef1e5795da8a25974c9075f3004ecc303048d04208ca33f79cf516017bdb2c6d",
+    "bytes": 3978,
+    "private_original_sha256": "ef1e5795da8a25974c9075f3004ecc303048d04208ca33f79cf516017bdb2c6d",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "linux-port/scripts/sync-docs-to-repo.sh",
+    "sha256": "cac655b4d5b93230e811e1f363c7adf39eae555583a3eff5162fa24e08de26e3",
+    "bytes": 1531,
+    "private_original_sha256": "cac655b4d5b93230e811e1f363c7adf39eae555583a3eff5162fa24e08de26e3",
+    "public_redacted_copy": true
+  },
+  {
+    "path": "linux-port/scripts/update-repo-state.py",
+    "sha256": "ab76e23ed08dd4f1ec70e57a02917962b1c56d989552f2d93c17da6edab8f20c",
+    "bytes": 2041,
+    "private_original_sha256": "ab76e23ed08dd4f1ec70e57a02917962b1c56d989552f2d93c17da6edab8f20c",
+    "public_redacted_copy": true
+  }
+]

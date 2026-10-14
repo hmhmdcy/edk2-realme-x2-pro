@@ -1,39 +1,41 @@
-# RMX1931 Linux 硬件接入清单（2026-10-10，session88）
+# RMX1931 Linux 硬件状态与未完成项目
 
-按用户可使用功能分14类。触摸基本输入、普通USB NCM/SSH/SCP、原生60Hz显示和GPU真实渲染已获得数据流证据。
-当前状态见sessions/88：下一项硬件优先Wi-Fi，充电阶段已收尾。
-手机仍#86；3984.69秒超时2/下溢0、taint0，display on0/count=0且首次真实快照保持。
-宿主#89内建Wi-Fi诊断依赖并编译通过，含87显示候选及MP观测修正；全部尚未实机验收。
-33项本机MPSS固件归档校验，160MiB重定位范围符合保留区，PD域/实例对应；35项无线固件沿用81/87校验。
-只读固件服务和QRTR工具构建、本地拒写/路径测试通过；未运行服务或启动MPSS。
-实际设备树来自EDK2内嵌DTB，需新boot固件部署；当前无Wi-Fi接口，chip/board ID及网络功能未知。
-充电ADC完整事件接口、控制/保护仍待办；本轮未重启、刷写或改充电配置。
+用途：当前硬件验收清单。最后核对：2026-10-14，阶段165软件复测及后续用户交接白屏/花屏实屏反馈已通过。已部署内核163、software132加Mesa149本地库。文档整理：2026-10-14，未新增实机验收。以[本轮显示证据](../../reference/kernel165/README.md)、[GPU验收](../../reference/kernel149/README.md)和下列各功能证据为准；操作规则见[WORKING-BOUNDARIES](../../WORKING-BOUNDARIES.md)。
 
+**已复现的A640 CCU GPU故障已修复并部署，可以结束本轮GPU故障定位。** 147修复旧式GLES地址对齐，149修复Vulkan自动VM_BIND地址对齐。149完成185次像素读回零差异、36次Settings面板打开及PM、稀疏重绑定、旧地址重放、Vulkan/GLES并发验收。151同启动六次被动观察中无新增fault，taint0，桌面保持。150无Mesa补丁的降级候选未部署；它的验证不能混入149系统驱动的验收。
 
-| 功能组 | 当前可证明的状态 | 接下来必须完成的工作 |
-|---|---|---|
-| 触摸 | 已部署S3706A驱动/供电/DTS，F01/F12/event2注册；此前真实点按/移动/释放/多点通路通过，本轮保留 | 触点数量/方向/边缘校准，休眠/唤醒与长期稳定性 |
-| 原生显示面板 | 75光学验收、84翻页通过；故障开放，87手机仍超时2/下溢0；#88候选构建/宿主回归通过，未部署 | 保存故障现场；候选仍需真实SMP/硬件验证，后续冷断电、90Hz、亮度/休眠 |
-| GPU | A640/GMU主线驱动和本机签名固件；Turnip真实渲染/4096像素读回及fence累计39096次通过 | 各频点压力、休眠恢复及完整桌面应用 |
-| 普通USB与OTG | CDC NCM/high-speed、Windows系统UsbNcm、自动密钥SSH/SCP及EUD共存已实测，双向4MiB校验通过 | OTG/外设、USB3、休眠恢复和长期稳定性 |
-| Wi-Fi | #86无接口；宿主#89依赖内建/编译通过，MPSS候选仅手动启动，Wi-Fi仍关；只读固件服务本地测试通过，固件已私人归档 | 构建实际EDK2内嵌DTB固件并安全部署；实测MPSS/WLFW/PD/TFTP及chip/board ID，再板数据/接口/扫描/连接/流量 |
-| 蓝牙 | 未验收 | 本机UART/固件/供电、HCI和配对/传输 |
-| 音频 | 未验收 | ADSP、音频路由/codec/功放，扬声器、话筒及耳机 |
-| 电池与充电 | 未更换；电量可读；86输入有效/Full实测，ADC事件失败，修正版#87未部署；当前未绑定MP，控制未验收 | 保留待办，转到Wi-Fi；后续ADC事件/持久DT、2719/短路保护、热敏、USB预算/失联；近满电不能判速率 |
-| 蜂窝网络/数据 | 实机MPSS禁用；#89候选节点启用但auto_boot=false，未部署/验收 | 本机调制解调器固件、IPC、SIM及实际连接 |
-| 摄像头 | 未验收 | 本机各模组、传感器/供电、ISP及图像数据流 |
-| 其它传感器 | SLPI禁用，未验收 | 加速度、陀螺仪、光线/接近等的本机配置/固件/数据 |
-| 指纹 | 未验收 | 本机传感器、SPI/供电及TEE/用户态依赖；不能以触摸F12替代 |
-| 振动 | 未验收 | 本机马达、PMIC驱动/供电和真实输出 |
-| GNSS定位 | 未验收 | 本机固件/调制解调器接口、用户态和实际定位 |
+这个结论限定当前已复现故障和已测负载。所有Vulkan扩展、长时间压力及跨启动GPU回归仍需验收；显示交接白屏/花屏及已测开关屏已通过本轮验收，冷启动、休眠和长期显示稳定性仍开放。普通Mesa包更新可能覆盖本地修复，旧rootfs132镜像不含该库更新。
 
-已有基础能力：进入initramfs用户态、六个UFS LUN、CPU三个调频policy及CPU7最高
-2956800kHz表、三路PMIC温度、原生60Hz显示输出、EUD交互和F1。Linux按键输入设备已
-注册，UEFI三侧键已实测；CPU高频压力、UFS持续读写、Linux按键事件等仍有验收边界。
+## 当前功能与待办
 
-剩余warning不等于剩余硬件数：PM8009无已发现DT消费者，P3；RPMh读回-95是固件
-能力限制证据；QMP/aux_bridge与实际USB/显示功能需分别验证。不能用删除warning
-代替接入硬件。详见sessions/70、71和reference/kernel70、71的校验日志。
+“未完成”包括仍有真实缺陷、功能尚未接入，以及仅做过部分验收；不能将这三类都写成完全不能用。
 
-下一项优先Wi-Fi，依赖候选→受限固件服务→本机ID/板数据→接口/扫描/连接及流量，再蓝牙/音频。
-显示候选和充电未解决项留待办。每步保留日志、明确构建/部署/功能验收的边界；保留Android和全部数据。
+| 功能组 | 已证明的能力 | 尚未修复或验收 |
+| --- | --- | --- |
+| GPU | 当前可复现GLES/Vulkan CCU故障已修复并部署，硬件渲染回归通过 | 将Mesa补丁纳入可复现软件包和新rootfs；完整扩展、长期及跨启动回归 |
+| 原生显示 | 用户实屏确认EDK2之后无白屏/花屏，黑屏等待后显示命令行；反馈后新boot显示关键计数0；此前165的DPMS/首帧门控/稳态软件验收通过，身份与测量所属启动见[检查点](../../NEXT-SESSION.md) | 黑屏等待时长未测；冷启动、休眠、更长期稳定性开放。164首启音频WARN及157重启原因仍未知 |
+| 音频 | 原生声卡、双MAX98937和WCD934x；有限PCM播放成功，DMIC0/1/2有非零样本；165及用户反馈后新boot音频DMA prepare/WARN计数0 | 164首次曾WARN1/DMA prepare917，原因未闭环；SLIMbus首次DMA准备失败和停止生命周期；实际扬声器声音、拾音质量、耳机、声学保护与休眠未完整验收 |
+| 电池与充电 | BQ28Z610电量/温度和MP2650输入观测已接入；已有健康Good、接线ONLINE1/Full观测 | 正常充电控制、USB输入预算、温度/保护/失联链及持续充电闭环；输入预算候选未纳入已验收组合 |
+| 摄像头 | 内部TPG真实DMA/IRQ/raw10三帧通过，原厂传感器来源已核对 | 实体传感器到C-PHY/CAMSS的出图、PM8008供电、libcamera或等效用户态及多模式图像验证 |
+| 其它传感器 | 历史接近/磁力计独立样本及SLPI服务证据保留；完整功能尚未在当前组合验收 | 加速度、陀螺仪、完整磁力计/lux、自动旋转与接近日常功能；不能合并不同启动的局部成功 |
+| 蜂窝通话与数据 | MPSS、QRTR/QMI、ModemManager/IPA基础已接入，本轮modem running | SIM注册、真实移动数据、通话/SMS及SSR、冷启动、休眠；历史sim-missing不算业务验收 |
+| GNSS定位 | LOC start/stop、位置/NMEA/SV事件链通过 | 真实有效定位fix、持续定位与桌面定位服务；此前55次位置报告仍为in-progress |
+| 指纹 | 尚无功能验收 | 本机传感器/SPI/供电、安全环境及用户态认证链 |
+| NFC | NCI控制器初始化、上电查询、关闭和重复通过 | RF读卡/标签、时钟请求及eSE业务，尚无真实读卡验收 |
+| 振动 | AW8697驱动与电气检查通过 | 物理振动和桌面反馈未确认；按用户边界不新增脉冲 |
+| 蓝牙 | 原生BlueZ自动服务及LE/BR/EDR/混合扫描通过，本轮服务started | 历史UART重组错误未闭环；配对/数据/音频、冷启动/休眠长稳未验收，当前只扫描不连接 |
+| Wi-Fi | 2.4/5GHz已有实际通信回归，本轮关联5180MHz | 物理冷启动、休眠恢复与长稳；历史连接故障不能仅凭当前关联判定全部解决 |
+| 普通USB与OTG | USB 2.0 Type-C；NCM网络、SSH/SCP及与EUD共存可用 | OTG/角色切换、冷启动/休眠及长期稳定；EUD部分宿主接收/退出路径仍有独立验收待办。USB3不是本机修复或验收目标 |
+| 触摸 | 用户确认可解锁、操作应用，原生驱动工作 | 边缘/方向/多触点与休眠后恢复、长稳 |
+
+已有基础还包括UFS访问、CPU调频表、PMIC温度与按键/EUD。CPU高频压力、UFS持续负载、整机功耗、冷启动及系统休眠唤醒仍需跨功能验收；不能以驱动注册或短窗口健康代替日用完成。
+
+USB规格更正：用户指出此前误列USB3；[X2 Pro规格](https://www.gsmarena.com/realme_x2_pro-9904.php)标注USB Type-C 2.0。[厂商规格](https://www.realme.com/in/realme-x2-pro/specs)只标注Type-C接口，没有声明USB3；SoC具备更高速度控制器不代表整机接口支持该速度。
+
+## 下一阶段顺序
+
+显示交接白屏/花屏与已测开关屏本轮已验收。后续优先推进充电控制保护及音频首次DMA问题，再处理完整传感器、实体摄像头、蜂窝业务与GNSS真实fix；指纹、NFC读卡和外围设备功能保持待办。Wi-Fi、USB和触摸补稳定性，蓝牙继续区分已验收的扫描与尚未验收的连接/音频；整机冷启动、休眠与长期可靠性仍需验证。
+
+参考证据：[显示140至145](../../sessions/145-dsi-deployment-and-session-closeout.md)、[SLIMbus139](../../sessions/139-slimbus-unsubmitted-tx-unwind-and-live-boot.md)、[DMIC104](../../sessions/104-native-digital-microphones-and-first-boot-radio-failure.md)、[充电132](../../sessions/132-persistent-mp2650-real-boot-and-complete-rootfs.md)、[充电138](../../sessions/138-readonly-charger-recharge-threshold.md)、[实体camera前的TPG126](../../sessions/126-tpg-dma-guards-full-rootfs-and-real-deployment.md)、[传感器112](../../sessions/112-startup-sensor-registry-and-reboot.md)、[Wi-Fi128](../../sessions/128-wcn3990-pairwise-key-delete-and-5ghz.md)、[蓝牙130](../../sessions/130-standard-bluez-discovery-and-startup-integration.md)。
+
+阶段151以前的完整状态记录已经移入[历史快照](../../archive/HARDWARE-STATUS-through150-2026-10-13.md)，不再把旧136 GPU故障或145设备状态写作当前待办。

@@ -1,42 +1,33 @@
-# linux-port/docs - index
+# Linux技术文档索引
 
-当前证据：[session88](../../sessions/88-wifi-dependency-build-and-read-only-firmware-service.md)。
-#89 Wi-Fi依赖内核与只读固件服务已构建、本地测试通过；33项MPSS固件校验，PD域/实例对应。
-手机仍#86，无Wi-Fi接口；实际DT来自EDK2内嵌，新boot/#89尚未部署；MPSS/WLFW与chip/board ID待实测。
-显示故障快照保持，超时2/下溢0；显示候选与充电未解决项保留待办，未新增硬件验收。
-前阶段：[session87](../../sessions/87-stage-wrap-up-and-wifi-prerequisites.md)；
-固件/供电：[session81](../../sessions/81-stock-gauge-state-temperature-and-display-timeouts.md)；
-实际DT路径：[session68](../../sessions/68-firmware-dtb-and-cpu7-opp-verified.md)。
+用途：技术说明和早期会话导航。整理日期：2026-10-14；当前功能与部署见[硬件清单](HARDWARE-STATUS.md)及[检查点](../../NEXT-SESSION.md)，操作规则见[WORKING-BOUNDARIES](../../WORKING-BOUNDARIES.md)。
 
-硬件功能清单：[HARDWARE-STATUS](HARDWARE-STATUS.md)。
+## 技术说明
 
+| 文档 | 内容 |
+| --- | --- |
+| [HARDWARE-STATUS.md](HARDWARE-STATUS.md) | 各功能的已证明能力、缺陷和待验收范围 |
+| [USB-NCM-SSH.md](USB-NCM-SSH.md) | USB网络、SSH/SCP与EUD共存路径 |
+| [ROOTFS-F2FS-IMAGE.md](ROOTFS-F2FS-IMAGE.md) | F2FS镜像、构建与验证过程，部署范围按后续会话核对 |
+| [ROOTFS-PRESERVE-ANDROID.md](ROOTFS-PRESERVE-ANDROID.md) | 保留Android与数据的早期研究 |
+| [ANDROID-DT-REFERENCE.md](ANDROID-DT-REFERENCE.md) | 本机Android下游DTS参考来源 |
+| [EDK2-KERNEL-EMBED.md](EDK2-KERNEL-EMBED.md) | 早期内核嵌入固件和引导路径 |
+| [EUD-TERMINAL.md](EUD-TERMINAL.md) | 早期主机交互终端与收发方案 |
+| [OLD-PROJECT-VERIFICATION.md](OLD-PROJECT-VERIFICATION.md) | 旧项目复用与错误核查 |
 
-> Mirror of `E:\RealmeX2Pro edk2\linux-port\docs\`.  Naming: `NN-<topic>.md`, where
-> NN is the HANDOVER-NEXT section the file came from.  The handover itself is an
-> index since 2026-10-08 and holds no section bodies any more.
+## 旧19—28节
 
-| file | what |
-|---|---|
-| `19-loadoptions.md` | kernel command line in the boot option LoadOptions (UTF-16, not ASCII) |
-| `20-linux-boot.md` | mainline Linux boots on hardware; the kernel moves to the logdump FAT |
-| `21-eud-framing.md` | EUD log garbling: kernel-side FIFO overflow, and comlog2 |
-| `22-kernel-upstream.md` | kernel side into GitHub: fork, branches, scripts |
-| `23-upstream-push.md` | fetch and branches done, push blocked, what to check first |
-| `24-push-done.md` | samurai-bringup pushed; two wrong guesses corrected |
-| `25-eud-console.md` | EUD real console + firmware cmdline/DTB update, acceptance criteria |
-| `26-real-machine-review.md` | real-hardware review: console works, two culprits, panic loop |
-| `27-userspace-and-shortcuts.md` | userspace reached; console to /dev/kmsg; shortcuts vs goals |
-| `28-flywheel.md` | button-free fastboot, EUD COM RX, verified fastboot write path |
-| `EUD-TERMINAL.md` | temporary interactive host terminal; one-byte RX frames with ACK/retry, decoded TX and logs |
-| `ANDROID-DT-REFERENCE.md` | where the Android downstream DTS lives and what was cherry-picked |
-| `EDK2-KERNEL-EMBED.md` | how the kernel is embedded in the firmware volume |
-| `OLD-PROJECT-VERIFICATION.md` | the earlier (2026-10-05) project: what is reusable, what is wrong |
-| `ROOTFS-PRESERVE-ANDROID.md` | session66/70 rootfs research and offline capacity with Android/all-data preservation; no large safe rootfs partition verified |
-| `../../sessions/70-pm8009-resource-and-touch-prerequisites.md` | verified cmd-db/full dmesg, PM8009 impact/priority, native touch prerequisites and rootfs capacity; reference/kernel70 |
-| `../../sessions/69-usb-gadget-state-and-eud-coordination-audit.md` | previous read-only log/USB audit: 69499-byte verified dmesg, empty gadget, actual legacy glue and EUD coordination limits; evidence in reference/kernel69 |
-| `../../sessions/68-firmware-dtb-and-cpu7-opp-verified.md` | firmware DTB activates CPU7 OPP/table/max, complete verified log, boot-only update; evidence in reference/kernel68 |
-| `../../sessions/67-usb-provider-and-dtb-activation.md` | USB PHY/dwc3/UDC verified; CPU7 candidate FAT DTB was inactive before session68; evidence in reference/kernel67 |
+这些文件保留原阶段正文，旧节号可通过[交接映射](../../HANDOVER-NEXT.md#旧830节映射)定位。
 
-Rules: one section, one file; never append a section back into the handover.
-`scripts/sync-docs-to-repo.sh` mirrors the top-level documents, and
-`scripts/mirror-linux-port.sh` this directory, into the repository.
+- [19-loadoptions.md](19-loadoptions.md)：19. 内核命令行进了 boot option 的 LoadOptions（2026-10-07 14:4x）
+- [20-linux-boot.md](20-linux-boot.md)：20. 主线 Linux 真机启动成功：内核改放 FAT 分区（2026-10-07 16:0x）
+- [21-eud-framing.md](21-eud-framing.md)：21. EUD 日志乱码的真因：内核侧 FIFO 溢出，不是主机重组（2026-10-07 16:0x）
+- [22-kernel-upstream.md](22-kernel-upstream.md)：22. 内核侧进入 GitHub：从上游 fork（2026-10-07 16:2x）
+- [23-upstream-push.md](23-upstream-push.md)：23. 内核侧上 GitHub：完成 fetch 与分支，卡在 push（2026-10-07 16:3x）
+- [24-push-done.md](24-push-done.md)：24. `samurai-bringup` 已推上 GitHub（2026-10-07 16:46）
+- [25-eud-console.md](25-eud-console.md)：25. EUD 真 console 落地 + 固件 cmdline/DTB 更新，等待真机验证（2026-10-07 18:1x）
+- [26-real-machine-review.md](26-real-machine-review.md)：26. Real-hardware review: console works, two real culprits, panic loop (2026-10-07)
+- [27-userspace-and-shortcuts.md](27-userspace-and-shortcuts.md)：27. Userspace reached; console moved to /dev/kmsg; shortcuts vs proper goals (2026-10-08)
+- [28-flywheel.md](28-flywheel.md)：28. Button-free fastboot and a hands-off flywheel: PON reboot-mode, EUD COM RX, fastboot flash logdump (2026-10-08)
+
+后续阶段与reference证据见[会话索引](../../sessions/INDEX.md)。文档检查和仅同步命令见[DOCS-INDEX](../../DOCS-INDEX.md#检查与同步)。

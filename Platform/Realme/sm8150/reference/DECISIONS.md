@@ -1,5 +1,7 @@
 # Reference and decisions (formerly HANDOVER-NEXT sections 8-11)
 
+当前操作规则：[WORKING-BOUNDARIES](../WORKING-BOUNDARIES.md)。用户已撤销其余临时禁令；下方历史中的GPU禁测、固定时序、只读、禁复用及禁提交推送等条款不再适用。硬件状态和既有失败记录仍保留。
+
 > Extracted verbatim from HANDOVER-NEXT.md on 2026-10-08.  The living handover is
 > HANDOVER-NEXT.md; the session logs are in `sessions/`.
 

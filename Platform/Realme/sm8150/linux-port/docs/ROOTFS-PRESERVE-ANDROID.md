@@ -1,5 +1,9 @@
 # postmarketOS 持久 rootfs：保留 Android 和全部数据
 
+当前状态以[阶段145部署与收尾](../../sessions/145-dsi-deployment-and-session-closeout.md)和[下一轮检查点](../../NEXT-SESSION.md)为准：持久F2FS系统132已在手机运行，当前内核145；本轮只刷logdump，没有重刷userdata。下方“未部署/未安装rootfs”等描述属于此前方案或离线构建阶段，不是当前状态。
+
+> 历史方案。2026-10-11 用户改为不保留 Android，选择 userdata/F2FS，已制作离线镜像；见 [F2FS 镜像说明](ROOTFS-F2FS-IMAGE.md)。本文件保留此前约束和研究证据，手机尚未刷入 rootfs。
+
 Session71只刷boot/logdump接入触摸，Android/全部userdata保留；没有安装rootfs。
 新64MiB logdump镜像内Image30317056/DTB95933字节，FAT空闲36605952字节
 （约34.91MiB），旧session70的36737024字节是其保留旧镜像容量，仍然有效。

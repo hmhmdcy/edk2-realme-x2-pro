@@ -33,9 +33,9 @@ PSCI v1.1 ... Zone ... Detected CPU ... init: SLUB ... RCU ... GIC ... IPIs
 
 | 分区 | 索引 | 起始 LBA | 大小 | 类型 GUID | unique GUID |
 |---|---|---|---|---|---|
-| `modem` | 4 | 0xC86 | 0x10000 (256 MiB) | 标准高通 | 934CA8ED-C69D-9755-BA9A-6C9411CDC27F |
-| `logfs` | 30 | 0x31570 | 0x800 (8 MiB) | BC0330EB-... | 09969439-057F-289A-5729-CE302330C1CA |
-| **`logdump`** | 32 | 0x31F70 | 0x4000 (**64 MiB**) | 5AF80809-AABB-4943-9168-CDFC38742598 | 6458791A-5CBF-649C-B221-7A804460E308 |
+| `modem` | 4 | 0xC86 | 0x10000 (256 MiB) | 标准高通 | PRIVATE_UUID |
+| `logfs` | 30 | 0x31570 | 0x800 (8 MiB) | BC0330EB-... | PRIVATE_UUID |
+| **`logdump`** | 32 | 0x31F70 | 0x4000 (**64 MiB**) | PRIVATE_UUID | PRIVATE_UUID |
 
 选它的安全依据（全部逐项验证过）：
 

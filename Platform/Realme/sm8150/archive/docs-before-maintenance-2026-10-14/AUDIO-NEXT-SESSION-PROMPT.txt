@@ -1,0 +1,11 @@
+你是一名资深Linux嵌入式与ASoC工程师。请在 E:\RealmeX2Pro edk2 项目中继续定位并修复 Realme X2 Pro（RMX1931/samurai）的原生Linux音频问题，阅读现有文档并搜索上游驱动、提交和同平台移植资料，完成必要的代码修正、构建、部署与实机验收，不要只给建议。
+
+先读 NEXT-SESSION.md、WORKING-BOUNDARIES.md、linux-port/docs/HARDWARE-STATUS.md，以及 sessions/139-slimbus-unsubmitted-tx-unwind-and-live-boot.md、sessions/104-native-digital-microphones-and-first-boot-radio-failure.md、reference/kernel164/README.md、reference/kernel165/README.md。历史会话的临时禁令已撤销，以WORKING-BOUNDARIES.md为当前规则。操作前核对真实设备状态；当前最后验收组合是内核#163、boot164/logdump163、modules132/software132加Mesa149修复，内核release仍带k132，应按uname -v判断构建号。Linux源码最后位于WSL /home/cy122/pmos-samurai-kernel136/kernel，目录名不代表运行构建号。
+
+音频基础已接入原生声卡、WCD934x和双MAX98937功放，历史有限PCM播放及DMIC0/1/2采样成功，但实际声音、拾音质量、3.5mm耳机和保护链未完整验收。阶段139已修复SLIMbus未提交TX槽位和事务回收，首次DMA prepare失败的根因仍未知；阶段164首启出现WCD934x WARN1、917条unable to prepare channel，165及后续新boot这些计数为0。这不是已修复的证明，也不能直接归因于显示或SMMU改动；161 SMMU候选已撤销，不要重新混入。
+
+优先捕获首次失败的完整顺序，检查NGD runtime PM、QMI拒绝休眠时DMA释放/状态回退、TX槽位/TID/completion生命周期、WCD934x探测及efuse读取、ADSP/SLIMbus启动依赖。139记录中的runtime_suspend假设尚未由实机参数证明。APR服务登记和版本查询有历史问题，先确认当前源码是否已修正。用实际证据决定最小修改，不靠反复重绑、循环DSP恢复或单纯增加延时掩盖问题。
+
+在保存可核验回退镜像、满足当前边界并核对新设备身份后，进行必要构建部署和重启。保留已验收的显示、GPU、Wi-Fi、USB网络和NV/校准；优先复用当前固件，不误刷其它分区。USB是2.0，不把USB3列为目标。原始日志、密钥及录音留在私人目录；蓝牙只扫描、不连接，振动不新增脉冲，不绕过电池或扬声器保护、不盲目提高功放增益。
+
+验收覆盖多个独立启动中的首次音频初始化、低音量短时播放、有限录音、重复开关PCM及失败回收，确认没有新增WARN、DMA/TX超时、槽位泄漏、关流残留功放或PM异常。然后推进双扬声器、各麦克风、耳机插拔及桌面音频路由；需要我听声音或操作耳机时再提出明确的现场验收问题。以当前实体设备的新日志和实际声音验证为依据，不把驱动绑定、PCM返回0或非零样本等同于全部音频修复。保存补丁、证据和交接记录，明确已修复、未复现及尚未验收的项目。

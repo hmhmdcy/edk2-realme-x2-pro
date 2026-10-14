@@ -1,85 +1,23 @@
 # EDK2 / UEFI firmware for the realme X2 Pro (RMX1931 · "samurai")
 
-当前状态：[session88](sessions/88-wifi-dependency-build-and-read-only-firmware-service.md)。
-手机仍#86，Wi-Fi只有部署前进展：宿主#89依赖内核已编译，MPSS候选手动启动、Wi-Fi节点仍关闭。
-33项本机MPSS固件校验及PD域/实例对应确认；只读固件服务与QRTR工具已构建、本地拒写测试通过。
-实际Linux设备树由EDK2内嵌，单改logdump DTB无效；新boot固件尚未构建，#89尚未打包/部署。
-实际MPSS/WLFW服务、chip/board ID、无线接口/扫描/连接/流量均待验证；当前没有可用Wi-Fi。
-显示超时2/下溢0、故障快照保持；87显示timer候选及MP修正随#89保留，仍未实机验收。
-充电阶段按用户要求收尾，控制/保护问题保留待办；本轮无重启/分区写/充电配置操作。
-保留Android/数据/GPT及密钥，固件与二进制留私人目录。
+用途：项目介绍、构建入口与移植说明。文档整理：2026-10-14；部署与实机状态以[当前检查点](NEXT-SESSION.md)的最后核对记录为准。
 
+This fork brings EDK2/UEFI and mainline Linux to the realme X2 Pro. UEFI Boot Manager, EFI Shell, the framebuffer console, side buttons and UFS enumeration have historical hardware validation. Linux hardware acceptance and remaining work are maintained in the [hardware checklist](linux-port/docs/HARDWARE-STATUS.md).
 
-Unofficial EDK2/UEFI port for the **realme X2 Pro (RMX1931 / RMX1931CN)**, Qualcomm
-**Snapdragon 855+ (SM8150-AC)**, platform **msmnile**, codename **"samurai"**.
+## Start here
 
-This repository is a fork of [edk2-porting/edk2-msm](https://github.com/edk2-porting/edk2-msm)
-with a device package for *samurai* (`Platform/Realme/sm8150/`, `configs/devices/samurai.conf`).
-Everything below is specific to this phone - the generic framework documentation lives in the
-upstream project.
+| Need | Document |
+| --- | --- |
+| Continue development; identify deployed images, sources and rollback | [NEXT-SESSION](NEXT-SESSION.md) |
+| Current operating boundaries | [WORKING-BOUNDARIES](WORKING-BOUNDARIES.md) |
+| Hardware capabilities and acceptance gaps | [HARDWARE-STATUS](linux-port/docs/HARDWARE-STATUS.md) |
+| Find documentation and maintenance commands | [DOCS-INDEX](DOCS-INDEX.md) |
+| Linux source, patches and rootfs references | [Linux workspace](linux-port/README.md) |
+| Experiments, rejected candidates and original evidence | [Session index](sessions/INDEX.md) |
 
-> 中文简介见文末。
+## Scope
 
----
-
-## Status
-
-Boot verified on real hardware (2026-10): **PEI → DXE → BDS → Boot Manager → EFI Shell**.
-
-Previous kernel audit: [session70](sessions/70-pm8009-resource-and-touch-prerequisites.md).
-Fresh 85404-byte dmesg/cmd-db pass device SHA256/gzip CRC. No PM8009 F resources
-or current DT supply consumers: lower its warning to P3 without removing nodes.
-Native touch lacks enabled GENI/RMI4/bus prerequisites; hardware remains untested.
-Preserved logdump image has 36737024 free bytes, not a verified full pmOS layout.
-No kernel changes/flash/EUD experiments; COM14 Windows/Shared, owners released.
-
-Previous kernel audit: [session69](sessions/69-usb-gadget-state-and-eud-coordination-audit.md).
-Device-saved 69499-byte dmesg passes SHA256/gzip CRC; same #60/taint0, no flash
-or kernel change. UDC/configfs exist but no gadget function is configured.
-Actual DWC3 legacy glue/VBUS override and EUD notification paths were audited;
-ordinary USB coexistence remains untested. COM14 Windows/Shared, owners closed.
-
-Previous kernel fix: [session68](sessions/68-firmware-dtb-and-cpu7-opp-verified.md).
-The firmware DTB activates CPU7's 2.9568 GHz OPP; live DT/table/max are verified
-and its boot warnings disappear. Same #60 kernel, fresh boot_id, taint0; complete
-52842-byte log passes device SHA256/gzip CRC. One boot-only flash; logdump and
-Android data preserved. High-frequency stress remains untested. Previous
-[session67](sessions/67-usb-provider-and-dtb-activation.md) restored HS PHY/dwc3/
-UDC; actual USB traffic remains untested. Session66 restored CPU policies/PMIC
-temperatures and removed the early mapping WARN. COM14 returned to Windows;
-EUD stability remains unresolved. [Rootfs research](linux-port/docs/ROOTFS-PRESERVE-ANDROID.md)
-preserves Android and all data; no safe large partition has been established.
-
-Previous EUD stability handoff: [session65](sessions/65-wsl-full-packet-console-overlap-and-tx-gap.md).
-WSL busy-console native14/wire16 input succeeds and executes; all990 console
-digits arrive. The same continuous owner still loses nine tty TX frames/36
-payload bytes: valid512-record journal matches the other503 directly, complete
-positive virtual IN equals raw. This gap needs neither qcusbser nor reopen;
-WSL retains Windows USB/IP/lower USB. Current tty/console is not reliably
-lossless and requires dedicated EUD90/LEN framing tools; generic terminals
-would need a future COM/PTY bridge. Original driver/terminal/firmware and
-TOP_CFG/RX53/F1/rollback remain preserved; all owners finally disposed/detached.
-No flash or new driver/security setting. User now prioritizes Linux kernel
-issues; EUD experiments are deferred. Use EUD as auxiliary observation and
-preserve device-side critical logs with verified exports.
-RX62/63 Windows candidate remains unloaded/unvalidated; the supported loading
-environment and full original acceptance matrix remain separate open work.
-
-| Feature | Status | Notes |
-|---|---|---|
-| UEFI boot (Boot Manager / EFI Shell) | ✅ works | reaches the shell, `map`/`blk` show all UFS partitions |
-| Display | ✅ works | framebuffer text console, 5x12 font (`FrameBufferSerialPortLib`), 1080x2400 |
-| Volume-Up button | ✅ works | `SCAN_UP` |
-| Power button | ✅ works | |
-| **Volume-Down button** | ✅ works | factory realme `ButtonsDxe` + `OppoProject` + `ResetRuntimeDxe` (see `Platform/Realme/sm8150/BINARIES.md`) |
-| UFS / block devices | ✅ works | 6 LUNs, GPT, `BLK*` devices in the shell |
-| USB mass storage mode (phone as a USB disk) | ✅ works | via the built-in `LinuxSimpleMassStorage` kernel (see below) |
-| USB keyboard / host mode | ❓ untested | no OTG device was available during development |
-| Persistent UEFI variables | ❌ not implemented | no variable store partition configured, variables are lost on reboot |
-| Windows (WoA) | ❌ not ready | DSDT is currently borrowed from a Xiaomi Mi 9 (cepheus); a samurai-specific DSDT is required |
-| Mainline Linux | ⚠️ partially | native touch, 60 Hz DSC panel and USB NCM/SSH verified; GPU and other hardware pending |
-
----
+The Linux port has partial hardware acceptance. Passing a specific test does not establish complete daily-use reliability; cold boot, suspend/resume and remaining functional groups have their own acceptance gaps. Persistent UEFI variables and a board-specific Windows-on-ARM DSDT remain open work.
 
 ## The device
 
@@ -108,7 +46,7 @@ Platform/Realme/sm8150/AcpiTables/samurai/DSDT.aml  (currently borrowed from cep
 Platform/Realme/sm8150/README.md                 device-level notes
 ```
 
-Nothing else in the upstream tree is modified - no patches to PEI/DXE core, no BootShim changes.
+The port also changes the shared BDS boot manager and selected libraries. Source and deployed-image differences are recorded in [NEXT-SESSION](NEXT-SESSION.md); device configuration alone does not describe the complete running build.
 
 ### Device blobs
 
@@ -130,7 +68,7 @@ OcdtDxe/OppoProject.{efi,depex}
 ```
 
 `Platform/Realme/sm8150/fetch-binaries.sh` can re-create the same set from public
-mirrors if you prefer to extract them yourself; `Platform/Realme/sm8150/BINARIES.md`
+mirrors if you prefer to extract them yourself; [BINARIES.md](BINARIES.md)
 documents the sources and the required DEPEX patch.
 
 ## Building
@@ -154,23 +92,11 @@ Host notes (Ubuntu, no sudo needed):
 
 ---
 
-## Flashing / testing
+## Testing and deployment
 
-```bash
-# ALWAYS keep a verified backup of your stock boot partition first:
-fastboot flash boot boot_stock_RMX1931.img     # rollback
+Identify the device, selected image and verified rollback before a deployment, using [NEXT-SESSION](NEXT-SESSION.md) and [WORKING-BOUNDARIES](WORKING-BOUNDARIES.md). The original `boot-samurai.img` build recipe does not by itself recreate the accepted Linux/firmware/rootfs combination. The compiled DTB, kernel store, modules and Mesa library must match the selected build evidence.
 
-# flash the port:
-fastboot flash boot boot-samurai.img
-```
-
-The realme/OPPO ABL does **not** implement `fastboot boot` (`FAILED (remote: 'unknown command')`),
-so a temporary boot is not possible - you have to flash, and keep a backup for rollback.
-
-To enter fastboot when the phone is stuck: hold **Power** for ~15 s to force power off, then hold
-**Volume-Down + Power**.
-
----
+The realme/OPPO ABL rejected `fastboot boot` during bring-up. Historical flashing recipes are preserved in the [maintenance snapshot](archive/docs-before-maintenance-2026-10-14/README.md); select a deployment procedure against the current device and image receipts.
 
 ## How the port works (porting notes for other SM8150 devices)
 
@@ -231,64 +157,18 @@ this option. (On Windows you can protect yourself with
 
 ---
 
-## Debugging over USB (EUD)
+## Debugging and the test workflow
 
-This SoC exposes Qualcomm's **Embedded USB Debug hub (EUD)**: once enabled, the
-host PC sees a `VID 0x05C6` USB hub that Qualcomm's OpenOCD fork can drive as a
-JTAG/SWD adapter - no UART wiring, no disassembly. On this device **EUD is not
-fused off** (verified from Android by writing `1` to
-`/sys/module/eud/parameters/enable`).
+The working EUD COM/tty console and F1 bootloader command have hardware evidence. USB NCM/SSH/SCP and EUD coexistence have also been demonstrated; residual EUD reception/exit acceptance gaps remain in the hardware checklist.
 
-EDK2 replicates the kernel's two register writes from `PlatformBootManagerAfterConsole`
-(BDS, when the USB PHY is up):
+- [EUD](EUD.md): device registers, CTL/COM protocol and firmware log ring history.
+- [RX-CONSOLE](RX-CONSOLE.md): RX framing and Linux console investigation.
+- [SWD-JTAG](SWD-JTAG.md): verified transport and unresolved AP DAP response.
+- [FLYWHEEL](FLYWHEEL.md): build, deployment, observation and rollback workflow.
 
-```c
-MmioWrite32 (0x088E0000 + 0x1014, 1);     /* EUD_REG_CSR_EUD_EN              */
-MmioWrite32 (0x088E0000 + 0x0024, 0x1C);  /* INT1_EN_MASK: VBUS|CHGR|SAFE_MODE */
-```
+## Operating boundaries
 
-The block is guarded by `-DSAMURAI_ENABLE_EUD` (set in `samurai.dsc`) so it does
-not affect other devices, and it prints `[SAMURAI-EUD] ...` to the framebuffer.
-While EUD is active the USB port is dedicated to it, so fastboot and the U-disk
-mode are unavailable until the next **full power cycle**.
-
-Registers, caveats and host-side OpenOCD setup: `Platform/Realme/sm8150/EUD.md`.
-
-Current status of the SWD/JTAG half (2026-10-08): the SWD (9504) and JTAG (9503)
-functions can be enabled and driven from the PC (DAP route payload 0x00100445 /
-JTAG 0x00000090), but the AP CoreSight DAP does not answer on this retail unit:
-`ack = 0`, `freezio_latch = 1`, DPIDR reads 0. The `APPS_DBGEN_DISABLE` fuse and
-signed APDP debug policy (`dpAP.mbn` in the F.14 package) are possible
-restrictions; the device fuse state was not read and policy causation was not
-established. These tests did not obtain AP halt. EUD COM therefore
-remains the working debug channel here; the SWD/JTAG host tooling is kept for
-debug-enabled devices. Never switch the internal DAP mux while Android is
-running - it hangs the AP and needs a full power cycle. Details in RX-CONSOLE.md.
-
-## Known issues / TODO
-
-- **Volume-Down is now fixed.** It used to fail because the shared `ButtonsDxe` reads `VOL-`
-  through the PMIC PON real-time IRQ while on samurai the key is wired to a GPIO. The port now
-  uses the factory realme `ButtonsDxe` together with `OppoProject` + `ResetRuntimeDxe` and a
-  patched DEPEX; verified on hardware (`SCAN_UP` / `SCAN_DOWN`). See note 4 above.
-- No letter input: the EFI Shell cannot be typed into with the volume keys alone; a USB keyboard
-  (host mode) is untested.
-- A samurai-specific DSDT is required for Windows-on-ARM.
-- Persistent UEFI variables (a variable store) are not configured.
-- Optional: enable `USE_DISPLAYDXE` + the factory panel XML for a graphical console.
-
----
-
-## Safety
-
-- Only ever flash the `boot` partition; keep a verified backup
-  (the stock image used during development has sha256
-  `dfe18875661164e7cb64eba7942b856e80ffe20abb537aec815da4bf43995cdd`).
-- Do not touch the partition table or any other partition (`xbl`, `abl`, `modem`, `persist`,
-  `super`, `userdata`, ...).
-- The U-disk mode described above exposes raw partitions - see the warning there.
-
----
+Current rules are maintained in [WORKING-BOUNDARIES](WORKING-BOUNDARIES.md). USB mass storage exposes raw UFS partitions; preserve important data and calibration when using it.
 
 ## Credits
 
@@ -298,128 +178,10 @@ running - it hangs the AP and needs a full power cycle. Details in RX-CONSOLE.md
 - [Project-Aloha/mu_aloha_platforms](https://github.com/Project-Aloha/mu_aloha_platforms) - source of the `OppoProject.efi` (OcdtDxe) blob
 - [edk2-porting/edk2-msm device sources](https://github.com/edk2-porting/edk2-msm/tree/master/Platform) - cepheus (Mi 9) was used as the working SM8150 reference
 
-## License
+## License and firmware provenance
 
-Same as upstream edk2-msm (BSD-2-Clause-Patent for EDK2 code). Device firmware blobs
-(vendor DXE, DTBs, ACPI) are **not** distributed here - obtain them from your own device.
+EDK2 code follows the upstream BSD-2-Clause-Patent licensing. Vendor firmware keeps its original licensing and provenance; the fork's binary submodule and extraction sources are documented in [BINARIES](BINARIES.md).
 
----
+## 中文阅读入口
 
-## 中文简介
-
-**realme X2 Pro（RMX1931 / 代号 samurai）的 EDK2/UEFI 移植**，基于 `edk2-porting/edk2-msm`。
-
-已在真机验证：UEFI 可启动到 Boot Manager 与 EFI Shell，framebuffer 文本控制台、**音量上 / 音量下 / 电源键全部可用**、
-UFS 分区枚举、以及"把手机当 U 盘"的 USB 大容量存储模式都可用。Windows 化还需专属 DSDT。
-UFS 分区枚举、以及"把手机当 U 盘"的 USB 大容量存储模式都可用。**音量下键也已修复**；
-Windows 化还需专属 DSDT。
-
-关键坑（详见上文）：
-1. boot 镜像必须保持项目默认布局（v1 + gzip(BootShim+FD) + 尾部追加 `FdtBlob_compat` 的安卓 DTB）；
-2. `PcdMipiFrameBufferAddress` 必须改成 **0x9D000000**，否则 edk2 日志"静默"、看起来就是卡死；
-3. 按键驱动用**原厂 realme ButtonsDxe**，并需同时引入 `OppoProject`（OPPO project 协议）与 `ResetRuntimeDxe`（reset reason 协议），且要给 ButtonsDxe 的 DEPEX 加上 `903C579D`（详见 `Platform/Realme/sm8150/BINARIES.md`）；
-4. `FdtBlob` 放主线 DTB、`FdtBlob_compat` 放安卓 DTB，别放反（放反会导致 U 盘模式失效）。
-
-⚠️ **安全**：只刷 `boot` 分区，先备份；U 盘模式会暴露原始分区，切勿让 PC 端格式化/初始化。
-
-## Status update 2026-10-07 (EUD console works; two real bugs found)
-
-* console=eud (a real nbcon console for the EUD COM FIFO) is verified on hardware:
-  with keep_bootcon removed the log now continues past the 1.2 s mark where it used
-  to die.  Firmware cmdline: earlycon=eud,mmio,0x88e0000 console=tty0 console=eud ...
-  and the DTB in the firmware volume carries the serial@88e0000 node for it.
-* Two independent bugs kept the kernel from reaching userspace:
-  1. 7.3 reads the RPMh regulator voltage back at boot.  On SM8150 the AOSS never
-     answers: the read occupies an ACTIVE TCS and blocks every later write (10 s
-     timeout = RPMH_TIMEOUT_MS, then "failed to read VOLTAGE ret = -110", rpmh_write
-     WARNs, dwc3 -ETIMEDOUT).  Worked around in drivers/soc/qcom/rpmh.c: no read
-     commands on qcom,sm8150 / qcom,sc8180x.
-  2. The built-in initramfs carried 305 absolute symlinks into the host tree
-     (busybox --install -s with an absolute path), so /init could not exec:
-     "Kernel panic - not syncing: No working init found" -> panic=15 reboot loop.
-     Symlinks are relative now and the cpio is rebuilt.
-* Test image: Image-rmx1931-samurai-initfix (RPMh + initramfs fix).
-  Full story and hashes: HANDOVER-NEXT.md section 26.
-
-## Status update 2026-10-08 (userspace reached; what is a shortcut and what is not)
-
-* The kernel now reaches userspace on hardware: "Run /init as init process", all
-  six UFS LUNs enumerated, no panic - and the initramfs banner reaches the EUD
-  COM console after the init script was changed to write to /dev/kmsg.  Writing
-  to /dev/console does not work yet, because the console has no tty binding, so
-  those writes land on the VT (screen only).
-* The phone reboots shortly after the diagnostic dump.  The panic text has to be
-  read from /sys/fs/pstore/console-ramoops (ramoops@0xb7e00000 is in the DTB).
-* HANDOVER-NEXT.md section 27 records, for the first time, which parts of the
-  current setup are temporary information-gathering shortcuts (S1-S13: the
-  /dev/kmsg dump on every boot, the sleep-forever init, the kernel store in the
-  logdump partition, the RPMh SoC quirk, the missing tty layer, ...) and which
-  are the proper goals (a real tty console, a reviewable DTS, ESP + GRUB, a real
-  root filesystem, pstore as the durable log channel, upstreamable patches).
-  Read that section before building anything on top of this setup.
-## Status update 2026-10-08 (button-free fastboot; fastboot can write the kernel store)
-
-* Reboot into fastboot without touching the phone: the vendor DTB's PMIC PON already
-  carries mode-bootloader = <0x02>, mainline's qcom-pon.c plus the generic reboot-mode
-  framework are enabled in the build, and this board only lacks the two mode- lines in
-  its device tree.  With a ~15 line static reboot2 helper, Linux (and later EDK2) can
-  ask for fastboot by itself.
-* fastboot can write the logdump partition, i.e. the kernel store: verified
-  byte-exact, 64 MiB in 1.8 s, so the iteration loop no longer needs Android at all.
-  The Image sits contiguously at offset 90,112 and is always 30,116,352 bytes, so
-  updating it is a single in-place write, and a corrupted FAT is recoverable in 1.8 s
-  straight from fastboot.
-* The EUD COM channel has an RX half too (host to device, registers
-  0x088E000C/0x10/0x14, documented by the official QUIC host library), so a
-  "control it like adb" command channel is a software task - useful later for rescuing
-  a firmware that is stuck before BDS, where neither adb nor fastboot exists.
-* Details, evidence and the unattended flywheel plan: HANDOVER-NEXT.md section 28.
-
-## Status update 2026-10-08 (SWD/JTAG transport verified; AP DAP unresponsive)
-
-* Both EUD debug peripherals can be brought up from Windows: SWD 9504 with
-  `CTLOUT_CLR 0x000E0090` + `CTLOUT_SET 0x00100445` (DAP route, no VBUS pulse)
-  and JTAG 9503 with `0x00000090` + the VBUS pulse. They bind to qdbusb and
-  expose `\\.\Qualcomm EUD SWD Device 9504\DEBUG` / `... JTAG Device 9503\DEBUG`
-  (no "(0004)" suffix). SWD STATUS is `07 01`, JTAG FREQ_RD is `0F 01`.
-* The OpenOCD-equivalent DAP connect sequence (FREQ, line reset, JTAG-to-SWD
-  0xE79E, ABORT, DP CTRL/STAT = 0x50000000, read DPIDR) returns
-  `data = 0x00000000, status = 0x00010020, ack = 0, freezio_latch = 1` in
-  every state tried, including with SRST/TRST held over SWD bitbang. Switching
-  the internal DAP mux while Android runs hangs the AP (black screen).
-* Possible restrictions: Qualcomm debug fuses and an OEM-signed policy in
-  `apdp`; neither was established as the cause of this unit's failed DAP reads.
-  This phone's F.14
-  package carries `dpAP.mbn`, a signed ELF with the OPPO CA chain, so it cannot
-  be replaced. OpenOCD's own quickstart enables EUD at the U-Boot stage and
-  expects DPIDR 0x5ba02477, i.e. it targets debug-enabled devices.
-* Consequence for this port: EUD COM stays the primary log/debug channel
-  (firmware DEBUG(), Linux `earlycon=eud`/`console=eud`, the EudLogDxe ring).
-  Keep the SWD/JTAG tooling in `E:\eud-host` for an engineering device, and try
-  `maxcpus=1` when debugging the Linux SMP bring-up.
-* Final confirmation 2026-10-08, UEFI stage: the officially recommended flow was
-  tested too - flash the firmware, let BDS enable EUD, then attach. The result is
-  identical (`data = 0x00000000, status = 0x00010020, ack = 0`). This repetition
-  does not locate the gate or prove a fuse/policy cause. See SWD-JTAG.md for
-  the current evidence limits; no fuse or APDP modification is proposed.
-
-
-## Status update 2026-10-08 (EUD is a real console: ttyEUD0, /dev/console, RX commands)
-
-The EUD COM FIFO is now driven by a proper uart driver instead of a bare
-console, and the receive side is understood well enough to be used.
-
-* Single writer: the firmware command line no longer carries keep_bootcon, so
-  the early console retires when the real console registers
-  ("printk: legacy bootconsole [eud0] disabled").  Every register write is paced
-  (200 us) and every frame spaced (2 ms); a 210 s capture reassembles with zero
-  lost frames.
-* /dev/ttyEUD0 exists and works end to end, and /dev/console is bound to it.
-* Command channel: [0x81][len][payload], payload[0] is the code (0x01 ping,
-  0x02 register dump, 0x03 status).  Typing: [0x82][len][payload] is inserted
-  into the tty, so a shell on /dev/ttyEUD0 can be driven from the PC.
-* The RX payload register is 0x14 (a FIFO read port); 0x0c/0x10 are latches that
-  hold the last message's header.  Details in RX-CONSOLE.md.
-* Caveat: reading 0x14 too eagerly wedges the EUD block - the console goes
-  silent until a full power cycle.  The payload read must be gated on a
-  completed header.
+这是realme X2 Pro的EDK2/UEFI与主线Linux移植项目。续作先读[检查点](NEXT-SESSION.md)、[操作边界](WORKING-BOUNDARIES.md)及[硬件清单](linux-port/docs/HARDWARE-STATUS.md)。过程与失败记录见[会话索引](sessions/INDEX.md)；本次整理前的README和旧交接保存在[逐字快照](archive/docs-before-maintenance-2026-10-14/README.md)。
