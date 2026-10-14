@@ -1,0 +1,38 @@
+{
+  "auto-network.tar": {
+    "bytes": 88576,
+    "sha256": "945e909f3d3bb49b0ac503228f1f6cb26aad2b1eda4244b1eb9931ee9ec52b89"
+  },
+  "checkpoint.tar": {
+    "bytes": 1150976,
+    "sha256": "ea665af1240e090ad8e6a1707c68c9a3f8e5dd42b27171d31df01de7e21407e6"
+  },
+  "display-after-reboot.tar": {
+    "bytes": 72704,
+    "sha256": "5615d875f10472270176b5d368d3016035ca2251079e6a065351658646bfb364"
+  },
+  "display-live-detail.tar": {
+    "bytes": 16821248,
+    "sha256": "b281d1e245107127c4db25fc34f1829de5514f96a9333444ca74c871146af668"
+  },
+  "display-live-first.tar": {
+    "bytes": 133632,
+    "sha256": "45dc0295b33adab317e0faae12457bc2e62ea1290a6910e5fb3724274409c355"
+  },
+  "display-recovery-once.tar": {
+    "bytes": 1091584,
+    "sha256": "e4b0c39927b926a29da27f5e636c1b816751ec220db16484682c4ab88a6e7795"
+  },
+  "final-network.tar": {
+    "bytes": 94720,
+    "sha256": "a8467ddad6e0d403fb57e954671c6c8b202d75a6f945f73f91aa7e1e1186f094"
+  },
+  "first-radio-trace.tar": {
+    "bytes": 681472,
+    "sha256": "3aa3fbf6839bfadaf095e96d0dd6035a6c16d75d3c38940fd532f00c0552a7dd"
+  },
+  "preflash.tar": {
+    "bytes": 159232,
+    "sha256": "3d7dbeee96a246a6ad58b078aea7fce485769bab47ef2226a490a89f0b32bfb3"
+  }
+}
