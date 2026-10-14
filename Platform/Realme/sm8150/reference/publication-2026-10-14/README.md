@@ -21,3 +21,7 @@ Linux构建树保留99个源码/绑定文件的13个分类提交：共用trace�
 原始日志、密钥、私人身份、备份、Python缓存与原始二进制属性不提交。本地维护前快照保持逐字原文及原SHA256；公开快照脱敏，manifest同时记录private_original_sha256和公开文件SHA256。
 
 同步和健康检查使用[公开副本生成工具](../../linux-port/scripts/public-docs.py)及[统一清单](../../linux-port/scripts/docs-sync-manifest.json)。本轮将早期标识脱敏、连接/音频、传感器/IPA/camera、rootfs/充电/故障调查、GPU、显示交接、文档工具及入口维护分别整理成提交。
+
+## 分类提交清单
+
+[提交与核对结果](commits-validation.json)记录Linux的14个提交与EDK2的10个分类/资产保留提交；携带本记录的后续文档提交不包含在该列表内。推送后按远端分支端点核对最终HEAD。

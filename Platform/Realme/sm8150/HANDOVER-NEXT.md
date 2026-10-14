@@ -19,13 +19,13 @@
 下方块由`linux-port/scripts/update-repo-state.py`从本地git生成，仅描述已提交历史；当前未提交源码以`git status`/`git diff`为准。
 
 <!-- repo-state:start -->
-    master = f23a9f8 samurai: record Wi-Fi dependency build and read-only firmware service handover
-             a9e7e86 samurai: close charging stage and prioritize Wi-Fi prerequisites
-             b3e3f11 samurai: observe MP2650 input and preserve real display timeout
-             60e5b9f samurai: verify OEM chemistry and short-IC observations
-             3e308c0 samurai: deploy boot display traces and timeout snapshots
+    master = 1a0bc14 samurai: retain tracked firmware DTB assets
+             8dc7038 samurai: consolidate current documentation and preserve history
+             7eb284f samurai: add public document sync and validation tools
+             656b998 samurai: record display handoff fixes and physical acceptance
+             0ec984e samurai: save A640 GPU fixes and Mesa VM_BIND patch
 
-    119 commits ahead of upstream origin/master, as of the tip named above;
+    129 commits ahead of upstream origin/master, as of the tip named above;
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
 
