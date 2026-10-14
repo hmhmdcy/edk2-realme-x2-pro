@@ -18,3 +18,21 @@ ramdisk
 # local build artifacts - not for the repo
 Platform/Realme/sm8150/LinuxKernel/Image
 Platform/Realme/sm8150/ramdisk_samurai.img
+
+# Local samurai capture/cache artifacts; public copies are controlled by the docs manifest.
+Platform/Realme/sm8150/**/__pycache__/
+Platform/Realme/sm8150/**/*.pyc
+Platform/Realme/sm8150/reference/**/*.raw
+Platform/Realme/sm8150/reference/**/*.bin
+Platform/Realme/sm8150/reference/**/*.node
+Platform/Realme/sm8150/reference/**/*.gz
+Platform/Realme/sm8150/reference/**/*.tgz
+Platform/Realme/sm8150/reference/**/*.dtb
+Platform/Realme/sm8150/reference/**/*.log
+Platform/Realme/sm8150/reference/**/*.out
+Platform/Realme/sm8150/reference/**/*.err
+Platform/Realme/sm8150/reference/**/*.jsonl
+Platform/Realme/sm8150/reference/**/*.usbmon
+Platform/Realme/sm8150/reference/**/*.txt
+!Platform/Realme/sm8150/reference/**/QUALCOMM-LICENSE.txt
+!Platform/Realme/sm8150/reference/**/LICENSE*.txt

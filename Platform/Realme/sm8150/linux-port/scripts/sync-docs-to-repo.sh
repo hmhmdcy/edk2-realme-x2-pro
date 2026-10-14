@@ -1,44 +1,43 @@
 #!/bin/bash
-# Sync the top-level documents of the Windows working copy into the repo mirror,
-# run the health check, commit and push.
-#   usage: sync-docs-to-repo.sh ["commit message"]
-# linux-port/ is handled by mirror-linux-port.sh; build artifacts are never copied.
-set -u
-W="/mnt/e/RealmeX2Pro edk2"
-RK=/home/cy122/edk2-samurai/repo
-P="$RK/Platform/Realme/sm8150"
-MSG="${1:-docs: sync the working copy into the repo}"
+# Copy-only by default; publishing requires an explicit --publish invocation.
+set -euo pipefail
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+RK=${SAMURAI_REPO:-/home/cy122/edk2-samurai/repo}
+MODE=copy
+MSG=""
+case "${1:---copy-only}" in
+  --copy-only) if [ "$#" -gt 1 ]; then echo 'Unexpected arguments.' >&2; exit 2; fi ;;
+  --publish)
+    if [ "$#" -ne 2 ] || [ -z "$2" ]; then echo 'Usage: sync-docs-to-repo.sh --publish "commit message"' >&2; exit 2; fi
+    MODE=publish
+    MSG=$2
+    ;;
+  *) echo 'Usage: sync-docs-to-repo.sh [--copy-only | --publish "commit message"]' >&2; exit 2 ;;
+esac
 
-echo "=== refresh the Repo state block from git ==="
-python3 "$W/linux-port/scripts/update-repo-state.py"
+if [ "$MODE" = publish ]; then
+  if ! git -C "$RK" diff --cached --quiet; then
+    echo 'Existing staged changes: preserve them and resolve staging before publishing docs.' >&2
+    exit 1
+  fi
+  if [ "$(git -C "$RK" branch --show-current)" != master ]; then
+    echo 'Expected master for the documented fork publish path.' >&2
+    exit 1
+  fi
+fi
 
-echo "=== copy ==="
-for f in README.md HANDOVER-NEXT.md EUD.md BINARIES.md DOCS-INDEX.md SWD-JTAG.md RX-CONSOLE.md FLYWHEEL.md EVALUATION-AND-PLAN.md; do
-  if [ -f "$W/$f" ]; then cp -f "$W/$f" "$P/$f" && echo "  $f"; fi
-done
-for d in archive reference sessions; do
-  if [ -d "$W/$d" ]; then mkdir -p "$P/$d"; cp -r -f "$W/$d/." "$P/$d/"; echo "  $d/"; fi
-done
+python3 "$SCRIPT_DIR/generate-session-index.py"
+python3 "$SCRIPT_DIR/update-repo-state.py" --repo "$RK"
+python3 "$SCRIPT_DIR/docs-health-check.py" --local-only
+python3 "$SCRIPT_DIR/sync-docs.py" --repo "$RK"
+python3 "$SCRIPT_DIR/docs-health-check.py" --repo "$RK"
 
-echo
-echo "=== health check ==="
-bash "$W/linux-port/scripts/docs-health-check.sh" || { echo "health check failed - not committing"; exit 1; }
-
-echo
-echo "=== commit ==="
-cd "$RK"
-git add -A Platform/Realme/sm8150
-if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
-git commit -q -m "$MSG"
-git log --oneline -2
-git show --stat --oneline HEAD | head -12
-
-echo
-echo "=== push (retries: the local proxy is flaky) ==="
-for i in 1 2 3 4 5; do
-  echo "--- attempt $i ---"
-  if out=$(git push fork master 2>&1); then printf '%s\n' "$out" | tail -3; break; fi
-  printf '%s\n' "$out" | tail -3
-  sleep 10
-done
-git status --short
+if [ "$MODE" = publish ]; then
+  python3 "$SCRIPT_DIR/sync-docs.py" --repo "$RK" --stage
+  if git -C "$RK" diff --cached --quiet; then
+    echo 'No documentation changes to commit.'
+    exit 0
+  fi
+  git -C "$RK" commit -m "$MSG"
+  git -C "$RK" push fork master
+fi

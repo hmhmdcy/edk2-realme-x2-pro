@@ -1,53 +1,37 @@
 #!/usr/bin/env python3
-"""Generate the whole Repo state block of HANDOVER-NEXT.md from git.
-
-Invoked by sync-docs-to-repo.sh before it copies the documents, so the block can
-never drift: the commit list, the fork remote and the "commits ahead" count are
-all regenerated.
-
-The count is anchored to the tip commit named in the block, not to the branch
-head, because a commit cannot name itself: the block is written before the
-commit that carries it exists.  Anchoring to the tip makes the number immutable
-and verifiable forever.
-"""
+"""Refresh the marked local commit-history block; do not change repository state."""
+from pathlib import Path
+import argparse
+import re
 import subprocess
-import sys
 
-W = "/mnt/e/RealmeX2Pro edk2"
-RK = "/home/cy122/edk2-samurai/repo"
-P = W + "/HANDOVER-NEXT.md"
 
-def git(*a):
-    r = subprocess.run(["git", "-C", RK] + list(a), capture_output=True, text=True, check=True)
-    return r.stdout.strip()
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--workspace", type=Path, default=Path(__file__).resolve().parents[2])
+    parser.add_argument("--repo", type=Path, default=Path("/home/cy122/edk2-samurai/repo"))
+    args = parser.parse_args()
+    def git(*arguments):
+        return subprocess.run(["git", "-C", str(args.repo), *arguments], capture_output=True,
+                              text=True, check=True).stdout.strip()
+    path = args.workspace / "HANDOVER-NEXT.md"
+    text = path.read_text(encoding="utf-8")
+    pattern = r"(?s)(<!-- repo-state:start -->\n).*?(<!-- repo-state:end -->)"
+    if len(re.findall(pattern, text)) != 1:
+        raise SystemExit("Expected one marked repo-state block in HANDOVER-NEXT.md.")
+    branch = git("branch", "--show-current") or "detached-HEAD"
+    history = git("log", "--oneline", "-5").splitlines()
+    tip = history[0].split()[0]
+    ahead = git("rev-list", "--count", "origin/master.." + tip)
+    lines = [f"    {branch} = {history[0]}", *["             " + line for line in history[1:]], "",
+             f"    {ahead} commits ahead of upstream origin/master, as of the tip named above;", "",
+             "    fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro", "",
+             "此块不证明未提交改动已构建、已部署或已推送；状态由本地git与检查点核对。", ""]
+    updated = re.sub(pattern, lambda m: m[1] + "\n".join(lines) + "\n" + m[2], text)
+    if updated != text:
+        path.write_text(updated, encoding="utf-8", newline="\n")
+    print(f"Repo history refreshed at {tip}; working changes remain untouched.")
 
-t = open(P, encoding="utf-8").read()
-i = t.find("    master = ")
-k = t.find("\nDocumentation layout", i)
-if i < 0 or k < 0:
-    sys.exit("update-repo-state.py: cannot find the Repo state block in HANDOVER-NEXT.md")
 
-lines = git("log", "--oneline", "-9").splitlines()
-tip = lines[0].split()[0]
-ahead = git("rev-list", "--count", "origin/master.." + tip)
-
-out = []
-for n, l in enumerate(lines):
-    sha, _, subj = l.partition(" ")
-    out.append("%s%s  %s" % ("    master = " if n == 0 else "             ", sha, subj))
-out.append("")
-out.append("    %s commits ahead of upstream origin/master, as of the tip named above;" % ahead)
-out.append("    all of them are on the fork.")
-out.append("")
-out.append("    fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro")
-out.append("                 push with:  git push fork master")
-out.append("                 (a plain git push goes to upstream edk2-porting/edk2-msm - never do that)")
-out.append("")
-block = "\n".join(out) + "\n"
-
-new = t[:i] + block + t[k + 1:]
-if new != t:
-    open(P, "w", encoding="utf-8", newline="\n").write(new)
-    print("  Repo state block regenerated: master = %s, %s commits ahead of upstream" % (tip, ahead))
-else:
-    print("  Repo state block already current")
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,21 @@
+{
+  "purpose": "Fixed firmware/module GUIDs retained in public records; other UUIDs are redacted in public copies.",
+  "values": [
+    "0ae233c8-4177-4147-adfb-3c923ce677dc",
+    "1bc93793-694f-48fe-9372-81e2b05556fd",
+    "25462cda-221f-47df-ac1d-259cfaa4e326",
+    "2e6c5b41-9a73-4c0e-8b27-1f5d3a6e9c04",
+    "6fc7bc89-0b6f-ee12-e6f1-aa6890080905",
+    "7a3c1e42-9d55-4c8b-b621-0f8a442e913d",
+    "ee4e5898-3914-4259-9d6e-dc7bd79403cf"
+  ],
+  "definition_sources": {
+    "25462cda-221f-47df-ac1d-259cfaa4e326": "firmware verifier: dt_guid",
+    "ee4e5898-3914-4259-9d6e-dc7bd79403cf": "firmware verifier: lz_guid",
+    "2e6c5b41-9a73-4c0e-8b27-1f5d3a6e9c04": "Platform/Realme/sm8150/EudLogDxe/EudLogDxe.inf",
+    "7a3c1e42-9d55-4c8b-b621-0f8a442e913d": "Platform/Realme/sm8150/LinuxKernel/SamuraiLinuxKernel.inf",
+    "6fc7bc89-0b6f-ee12-e6f1-aa6890080905": "Platform/RenegadePkg/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf",
+    "0ae233c8-4177-4147-adfb-3c923ce677dc": "reference/rx62/qceudexp.vcxproj fixed project definition",
+    "1bc93793-694f-48fe-9372-81e2b05556fd": "reference/rx62/qceudexp.vcxproj fixed project definition"
+  }
+}
