@@ -100,7 +100,7 @@ ButtonsDxe.depex 未含 903C579D    -> 分发顺序不保证，OppoProject 可�
 
 ## 诊断过程中排除的错误假设
 
-- ❌ `6231E399-807B-5A6A-DB81-D15B87041A4F` 不是 OPPO 协议（它是所有 sm8150 ButtonsDxe 都有的通用协议）
+- ❌ `PRIVATE_UUID` 不是 OPPO 协议（它是所有 sm8150 ButtonsDxe 都有的通用协议）
 - ❌ 原厂 ButtonsDxe 的问题不是缺 TLMM（TLMMDxe 已 LOADED）也不是 keymap 本身
 - ✅ 真正缺的是 **OPPO project 协议（903C579D）** 与 **reset reason 协议（A022155A）**
 
