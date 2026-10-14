@@ -34,7 +34,7 @@ assert sha256((base/'eud-usb-console-f1.py').read_bytes()).hexdigest()=='39d2449
 
 identity=json.loads((base/'installed-driver-identity.json').read_text())
 assert identity['identity_matches'] and identity['section_headers_match']
-assert (identity['guid'],identity['age'])==('66581f50-52c9-4a32-9ac6-fe0c57b94a80',1)
+assert (identity['guid'],identity['age'])==('PRIVATE_UUID',1)
 assert identity['binary_sha256']=='ad2ace071d2362d8712820f62570757e1af266a054d2c3d3a6964a41e7cc6151'
 assert identity['pdb_sha256']=='ee203464fc2ab419eaa66c90e345e24eba3fa0e103c0fe11f91e428897ef9155'
 assert {r['name'] for r in identity['functions']}=={'QCSER_Open','QCSER_StartDataThreads','QCRD_StartReadThread','QCSER_ReadThread','SerialGetStats'}

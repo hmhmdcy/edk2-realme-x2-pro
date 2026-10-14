@@ -26,7 +26,7 @@
       ]
     }
   },
-  "final_boot_id": "fc4fe164-1e90-402a-b841-ce870ba9ddfb",
+  "final_boot_id": "PRIVATE_BOOT_ID",
   "taint": 0,
   "partition_hashes_pass": true,
   "native_panel_power_readback": 156,

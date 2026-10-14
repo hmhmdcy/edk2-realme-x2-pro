@@ -6,9 +6,9 @@
 
 ## 32.1 已确认的事实
 
-开始时 USB 枚举及 `fastboot devices` 都显示 `62bc28a1 fastboot`，因此先只执行
+开始时 USB 枚举及 `fastboot devices` 都显示 `PRIVATE_DEVICE_ID fastboot`，因此先只执行
 `fastboot reboot` 启动原有探针，没有先刷机。后续所有成功的 flash 都只有
-`fastboot -s 62bc28a1 flash logdump ...`，没有刷 boot 或任何其他分区。
+`fastboot -s PRIVATE_DEVICE_ID flash logdump ...`，没有刷 boot 或任何其他分区。
 本轮没有修改 DTS / DTB / 固件。
 
 1. 原探针发 `90 03 41 42 43`，得到 **90 90**，既不是 `41 42`，也不是 `90 03`：
@@ -145,7 +145,7 @@ uid=0 gid=0
 [  493.071038] eud: byte[3/3]=90
 ```
 
-该版发 `90 02` 后 COM 自行断开，`fastboot devices` 返回 `62bc28a1 fastboot`。
+该版发 `90 02` 后 COM 自行断开，`fastboot devices` 返回 `PRIVATE_DEVICE_ID fastboot`。
 startup 诊断版也通过相同飞轮返回，再仅刷 `logdump` 恢复最终单字符版。
 本轮各次串口操作均经 finally 关闭，未出现 resource-in-use、换 USB 口或重启主机。
 恢复后再次启动 Linux，`rx32-restored-clear.raw` 收到

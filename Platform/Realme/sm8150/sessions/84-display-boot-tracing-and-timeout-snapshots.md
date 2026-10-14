@@ -1,7 +1,7 @@
 # Session84：显示首次启动跟踪与超时快照
 
 日期2026-10-10。部署了保留现有硬件修复的诊断内核。当前为#85，启动ID
-f02d218a-cc7d-4b92-8858-c8eeaeab5777；404.09秒完整采集和513.90秒复查均taint0、
+PRIVATE_UUID；404.09秒完整采集和513.90秒复查均taint0、
 显示超时0、underrun0。两个独立600翻页探测的完成事件和CRC均通过。
 77首次接管失败、80两次帧完成超时仍开放；本轮没有新光学观察，也没有证明根因已修复。
 
@@ -17,7 +17,7 @@ QUP1总线和USB SSH配置。新旧initramfs CPIO逐字节相同，init/USB hook
 这不表示新增57个硬件驱动。初始tracer为nop，clock为mono；没有启用函数插桩、
 动态kprobe/BPF程序、全局事件printk或其它未经验证的硬件驱动。
 
-两次均只写logdump。分别核对F1回执、WSL owner释放、fastboot序列62bc28a1、product
+两次均只写logdump。分别核对F1回执、WSL owner释放、fastboot序列PRIVATE_DEVICE_ID、product
 msmnile及64MiB容量；写前检查PARTNAME、分区大小、运行boot ID和旧镜像哈希。
 FAT只替换Image，samurai.dtb逐字节保持。boot、Android、userdata及GPT未写。
 boot回读校验为原镜像长度6682624字节的前缀，不是整个96MiB分区的哈希。
@@ -62,7 +62,7 @@ F1已经回执后，EUD设备离开产生libusb EIO；finally释放了接口及W
 
 #85的刷写/重启均成功，但flash-ready.ps1等待EUD控制口的15次500ms窗口过短，
 后续恢复阶段报Expected EUD control identity absent。该错误不代表刷写失败。
-控制口实际出现后重新只读确认A1 28 BC 62，再执行一次com-up；保留失败日志及恢复记录。
+控制口实际出现后重新只读确认XX XX XX XX，再执行一次com-up；保留失败日志及恢复记录。
 不重跑刷写脚本。com-up仅写COM_EN、VBUS_ATTACH、VBUS_INT及零CLR，未写CHGR_EN/INT。
 它包含主机控制写帧，不能表述为“整个过程完全只读”。
 

@@ -1,4 +1,0 @@
-2051
-nop
-local global counter uptime perf [mono] mono_raw boot tai
-X

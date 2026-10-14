@@ -22,11 +22,11 @@ function Invoke-RecheckFastboot([string]$Name,[string[]]$Arguments) {
 $devices=''
 for ($attempt=1; $attempt -le 10; $attempt++) {
     $devices=Invoke-RecheckFastboot "recheck-devices-$attempt" @('devices')
-    if ($devices -match '(?im)^62bc28a1\s+fastboot\s*$') {break}
+    if ($devices -match '(?im)^PRIVATE_DEVICE_ID\s+fastboot\s*$') {break}
     Start-Sleep -Milliseconds 1000
 }
-if ($devices -notmatch '(?im)^62bc28a1\s+fastboot\s*$') {throw 'Expected serial not in fastboot'}
-$product=Invoke-RecheckFastboot 'recheck-product' @('-s','62bc28a1','getvar','product')
+if ($devices -notmatch '(?im)^PRIVATE_DEVICE_ID\s+fastboot\s*$') {throw 'Expected serial not in fastboot'}
+$product=Invoke-RecheckFastboot 'recheck-product' @('-s','PRIVATE_DEVICE_ID','getvar','product')
 if ($product -notmatch 'product:\s*msmnile') {throw 'Unexpected product'}
-Invoke-RecheckFastboot 'recheck-reboot' @('-s','62bc28a1','reboot')
-[ordered]@{serial='62bc28a1';product='msmnile';boot_written=$false;logdump_written=$false;reboot_success=$true;processes_disposed=$true} | ConvertTo-Json | Set-Content "$out77\recheck-reboot.json"
+Invoke-RecheckFastboot 'recheck-reboot' @('-s','PRIVATE_DEVICE_ID','reboot')
+[ordered]@{serial='PRIVATE_DEVICE_ID';product='msmnile';boot_written=$false;logdump_written=$false;reboot_success=$true;processes_disposed=$true} | ConvertTo-Json | Set-Content "$out77\recheck-reboot.json"

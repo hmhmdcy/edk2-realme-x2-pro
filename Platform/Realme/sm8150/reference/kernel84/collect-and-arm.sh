@@ -5,7 +5,7 @@ prefix=/tmp/k84-final
 trace=/sys/kernel/tracing/instances/display
 [ ! -e "$prefix.tar" ]
 [ -r /tmp/k84-probe-large-hashes.txt ]
-[ "$(cat /proc/sys/kernel/random/boot_id)" = f02d218a-cc7d-4b92-8858-c8eeaeab5777 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 uname -a | grep -q '#85 SMP PREEMPT'
 [ "$(sha256sum /tmp/k84-read-mp2650 | cut -d ' ' -f1)" = 6ef5467f5a445d718bd783ed86aabe5e93d08c442f483978355ad42ec79d5673 ]
 [ "$(readlink -f /sys/bus/i2c/devices/i2c-0/of_node)" = /sys/firmware/devicetree/base/soc@0/geniqup@8c0000/i2c@884000 ]

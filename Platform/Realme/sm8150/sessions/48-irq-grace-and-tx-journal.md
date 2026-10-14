@@ -16,7 +16,7 @@ master/fork/master=b660d24 且干净。实际 Linux 源码/Image 与 RX46 B 哈�
 已安装主机终端与 RX47 源码相同。先分别以新 Ctrl-U 和 F1 回执核对当前状态。
 
 只刷了两次 logdump：先 A 的 watchdog 宽限诊断，再 B 的 TX 软件记录器。两次都
-独立核对 fastboot 序列号 62bc28a1/product msmnile；boot 未刷。实际 initramfs、
+独立核对 fastboot 序列号 PRIVATE_DEVICE_ID/product msmnile；boot 未刷。实际 initramfs、
 BusyBox、DTB 保留，构建脚本逐字节核对 FAT 中新 Image 与不变 DTB。
 没有再次管理员 ETW、改驱动、force bind、PHY reset、DAP mux、APDP 或熔丝操作。
 串口单一 owner，手动小步；所有退出/异常通过 finally Close/Dispose。

@@ -120,7 +120,7 @@ for line in members['handover-hashes.txt'].decode().splitlines():
 for name, content in members.items():
     (O / name).write_bytes(content)
 state = members['handover-state.txt'].decode()
-assert state.startswith('32bf2d8f-8dde-47dc-9b88-e87db9e95198\n') and '#86 SMP PREEMPT' in state
+assert state.startswith('PRIVATE_UUID\n') and '#86 SMP PREEMPT' in state
 assert state.splitlines()[3] == '0'
 assert 'underrun:       0' in state and 'frame_done_cnt:2mode:' in state
 assert 'snapshot:count=0\n0\n' in state

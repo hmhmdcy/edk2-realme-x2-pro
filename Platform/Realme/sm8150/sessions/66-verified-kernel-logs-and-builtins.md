@@ -4,7 +4,7 @@
 
 ## 当前结果
 
-三项小改动依次仅刷 logdump：OSM L3 内建使 CPU policy0/4/7 出现；ADC5/VADC_COMMON 内建使三路 PMIC 温度与三个 IIO 设备出现；earlycon CSR 改为 early_ioremap/early_iounmap 后早期 mm/ioremap.c 警告消失、taint=0。最后确认运行 #59、boot_id `87a7b341-6139-4afd-9ca2-3c0b20493e68`。CPU7 高档 OPP 和 USB deferred 仍在，未宣布硬件全部可用或 EUD 无损。
+三项小改动依次仅刷 logdump：OSM L3 内建使 CPU policy0/4/7 出现；ADC5/VADC_COMMON 内建使三路 PMIC 温度与三个 IIO 设备出现；earlycon CSR 改为 early_ioremap/early_iounmap 后早期 mm/ioremap.c 警告消失、taint=0。最后确认运行 #59、boot_id `PRIVATE_BOOT_ID`。CPU7 高档 OPP 和 USB deferred 仍在，未宣布硬件全部可用或 EUD 无损。
 
 实际内核 `/home/cy122/x2pro-linux/linux`，实际 initramfs `/home/cy122/x2pro-linux/initramfs`。没有运行旧 build-image.sh。CPU/ADC 改动只改配置，未改 DTS 或 init。映射修复只改 `drivers/tty/serial/eud_earlycon.c` 的一次性 enable 映射，readl 完成写入后释放临时映射。
 
@@ -32,7 +32,7 @@ ADC 的保存 dmesg 是 54226 字节，SHA `edc816150500d9c789ceb8cade318d3c2762
 
 Windows 两次各单一 F1 均无新回执，一次独立 fastboot 查询超时；一次 WSL 初始 find 找到 0 个设备，未发 OUT。后来发现 WSL 会话已停止；保持普通 WSL shell 会话运行，再 attach 并独立 lsusb 核对 05c6:9505 后读取成功。用户同时确认手机屏幕仍是 Linux。这些无回执不判手机内核故障。
 
-在同一已枚举的 WSL 会话中先关闭日志 owner，再用已有 eud-usb-step 发送一次 F1：新回执收到，随后重启断开报 EIO、finally dispose/监视线程退出。Windows 独立枚举 serial 62bc28a1、product msmnile 后才刷映射候选。没有参数调优、reset/setup/ZLP 或换驱动。
+在同一已枚举的 WSL 会话中先关闭日志 owner，再用已有 eud-usb-step 发送一次 F1：新回执收到，随后重启断开报 EIO、finally dispose/监视线程退出。Windows 独立枚举 serial PRIVATE_DEVICE_ID、product msmnile 后才刷映射候选。没有参数调优、reset/setup/ZLP 或换驱动。
 
 ## 已刷镜像和构建边界
 

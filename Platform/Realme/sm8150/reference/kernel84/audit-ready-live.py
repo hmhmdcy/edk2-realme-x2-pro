@@ -28,7 +28,7 @@ for symbol in ['HIST_TRIGGERS', 'TRACER_SNAPSHOT', 'BOOTTIME_TRACING', 'BOOT_CON
     assert f'CONFIG_{symbol}=y\n' in config
 assert '# CONFIG_FUNCTION_TRACER is not set' in config
 state = raw['ready-state.txt'].decode()
-assert state.startswith('f02d218a-cc7d-4b92-8858-c8eeaeab5777\n')
+assert state.startswith('PRIVATE_UUID\n')
 assert '#85 SMP PREEMPT' in state and state.splitlines()[3] == '0'
 assert 'frame_done_cnt:0mode:' in state
 log = raw['ready-dmesg.txt'].decode()

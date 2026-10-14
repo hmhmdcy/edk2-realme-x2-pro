@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 exec >/tmp/k81-wifi-extraction.txt 2>&1
-[ "$(cat /proc/sys/kernel/random/boot_id)" = 87753933-4992-45d2-aaf5-d9db9c11d1a3 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 grep -qx 'PARTNAME=modem' /sys/class/block/sde4/uevent
 [ "$(cat /sys/class/block/sde4/size)" = 524288 ]
 [ "$(cat /sys/class/block/sde/device/model)" = KLUDG4UHDB-B2D1\  ]

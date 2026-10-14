@@ -16,7 +16,7 @@ MP2650 驱动就认为充电安全可用。下阶段优先验证电量计的标�
 写入充电/电量计寄存器或修改登录配置。当前仍是 #76：
 
 - uname：7.3.0-rc6-rmx1931-samurai+；taint：0。
-- boot_id：af922f36-bacd-481d-a5c5-21c8e3fada65，与 session75 末状态一致。
+- boot_id：PRIVATE_BOOT_ID，与 session75 末状态一致。
 - /sys/class/power_supply 为空；已枚举 I2C 仅 i2c-0 / 0-0020（触摸）。
 - 未测得本轮实时电池电压、温度、电量或充电电流，不能据此宣称充电已经适配。
 

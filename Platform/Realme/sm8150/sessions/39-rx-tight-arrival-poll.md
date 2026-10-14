@@ -61,7 +61,7 @@ UEFI 抓包共 13,927 帧，0 stray/pending，脚本 finally 关闭并 Dispose C
 改用 libusb/WSL 并先发送 PORT_RESET 后，首个 Ctrl-U 获得新回执（uptime 7462.528660）。
 同时改变主机路径和 reset，恢复原因没有被隔离。随后 libusb F1 有新回执
 `[7481.852656] eud: reboot2 bootloader requested`；读端返回 EIO（errno 5），工具退出 1，
-finally 仍释放接口。另行枚举确认 62bc28a1 fastboot 与 18d1:d00d，才恢复基线。
+finally 仍释放接口。另行枚举确认 PRIVATE_DEVICE_ID fastboot 与 18d1:d00d，才恢复基线。
 不能把 EIO 本身或工具退出码当成功依据，也没有泛化忽略所有 I/O 错误。
 
 只刷回 `logdump-rx33-console.img`，reboot 前先起被动抓包：10,179 帧、0 stray/pending、0 OUT，

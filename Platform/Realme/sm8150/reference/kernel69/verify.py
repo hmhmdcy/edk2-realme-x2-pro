@@ -58,7 +58,7 @@ for name, marker, plain_bytes, compressed_bytes in [
                               'plain_sha256': hashlib.sha256(body).hexdigest()})
 
 facts = read('driver-facts.validated.txt')
-assert facts.startswith(b'afbbf870-b998-43d8-ab3d-42b3c68c0122\n0\n')
+assert facts.startswith(b'PRIVATE_UUID\n0\n')
 assert b'Usage: readlink [-fnv] FILE' in facts
 bindings = read('driver-binding.validated.txt')
 assert bindings == b'a6f8800.usb\n../../../../bus/platform/drivers/dwc3-qcom-legacy\na600000.usb\n../../../../../bus/platform/drivers/dwc3\n'
@@ -71,7 +71,7 @@ log = read('latest-dmesg.validated.txt')
 assert log.startswith(b'[    0.000000] Booting Linux')
 assert not any(s in log for s in [b'Kernel panic', b'Oops:', b'Voltage update failed freq=2956800', b'mm/ioremap.c:23'])
 assert log.count(b'Attached SCSI disk') == 6
-report['linux'] = {'boot_id': 'afbbf870-b998-43d8-ab3d-42b3c68c0122', 'taint': 0,
+report['linux'] = {'boot_id': 'PRIVATE_BOOT_ID', 'taint': 0,
                    'full_saved_dmesg_bytes': len(log), 'scsi_disks': 6, 'panic_or_oops': False,
                    'udc_state': 'not attached', 'gadget_configured': False,
                    'coexistence_verified': False, 'binding': 'dwc3-qcom-legacy'}

@@ -145,7 +145,7 @@ old_log_matches = [line for line in old_log.decode(errors='replace').splitlines(
 cmd = (out / 'cmd-db.validated.txt').read_text()
 resources = re.findall(r'^0x([0-9a-f]+): (\S+)', cmd, re.M)
 f_resources = [(a, n) for a, n in resources if re.fullmatch(r'(ldo|smp)f\d+', n)]
-assert cmd.startswith('afbbf870-b998-43d8-ab3d-42b3c68c0122\n0\nCommand DB DUMP\n')
+assert cmd.startswith('PRIVATE_UUID\n0\nCommand DB DUMP\n')
 report = {'sources': sources, 'stock_commit': stock_commit,
     'stock_remote': subprocess.check_output(['git', '--git-dir=' + str(stock), 'remote', 'get-url', 'origin']).decode().strip(),
     'android_archive': {'path': str(tar_path), 'bytes': tar_path.stat().st_size,

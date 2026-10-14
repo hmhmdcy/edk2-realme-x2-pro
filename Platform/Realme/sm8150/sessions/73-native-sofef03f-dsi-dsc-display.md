@@ -63,7 +63,7 @@ pinctrl节点、10个显示/供电属性；GPU/GMU和此前触摸/CPU/USB节点�
 两次make Image无新增编译warning；checkpatch结果和initramfs ownership/perms/
 symlink/独有主机身份校验归档。包内无客户端私钥；两份私钥仍只在本地。
 
-第一次确认F1新回执、独立fastboot序列62bc28a1/msmnile及分区大小后刷boot和#63
+第一次确认F1新回执、独立fastboot序列PRIVATE_DEVICE_ID/msmnile及分区大小后刷boot和#63
 logdump。第二次同样取得新F1，仅刷#64 logdump；脚本生成时误替换reboot参数导致
 unknown command，写入已成功，修正为正常reboot，没有再刷。最后第三次F1用于
 同镜像重启；初查fastboot过早为空，等独立新枚举后只reboot。失败文件保留。
@@ -73,8 +73,8 @@ unknown command，写入已成功，修正为正常reboot，没有再刷。最�
 
 ## 73.3 实际输出数据流和复测
 
-#64首次boot_id=96bbf7e3-6192-4252-a8d6-79b5aec7ca9d，复测boot_id=
-fc4fe164-1e90-402a-b841-ce870ba9ddfb，均taint0。KMS工具要求DRM driver=msm、
+#64首次boot_id=PRIVATE_BOOT_ID，复测boot_id=
+PRIVATE_UUID，均taint0。KMS工具要求DRM driver=msm、
 connected DSI connector36和1080×2400@60，实际native节点card1（simpledrm card0
 移除）。工具使用dumb framebuffer、模式设置、vblank等待、command-mode DIRTYFB
 与DPU硬件CRC，最后关闭/开启CRTC并恢复诊断控制台；不是截图软件哈希。

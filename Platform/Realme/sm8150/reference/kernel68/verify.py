@@ -75,7 +75,7 @@ log=read('opp-dmesg.validated.txt');facts=read('opp-facts.validated.txt')
 assert len(log)==52842 and sha256(log).hexdigest()=='072040c4cabc3299c62e900775089627e92ba43c4f414db34b3d2f4544896e6f'
 assert not any(s in log for s in (b'Voltage update failed freq=2956800',b'Kernel panic',b'Oops:',b'dwc3: failed to initialize core',b'mm/ioremap.c:23'))
 assert log.count(b'Attached SCSI disk')==6
-assert facts.startswith(b'afbbf870-b998-43d8-ab3d-42b3c68c0122\n0\n')
+assert facts.startswith(b'PRIVATE_UUID\n0\n')
 assert b'cpuinfo_max_freq:2956800' in facts and b'scaling_max_freq:2956800' in facts
 assert b'/opp-table-cpu7/opp-2956800000\na600000.usb\n' in facts
 available=re.search(rb'scaling_available_frequencies:([^\n]+)',facts).group(1).split()

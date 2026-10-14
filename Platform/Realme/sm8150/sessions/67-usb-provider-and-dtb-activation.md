@@ -17,8 +17,8 @@ Windows 正在持有。Attached 时 WSL 独占 9505，关闭 helper 后还须 fi
 
 | 启动 | boot_id | 完整 dmesg | 结论 |
 |---|---|---|---|
-| DTB-only #59 | `83952af2-74ee-4dad-9e01-16ee951d4c20` | 52982 字节，SHA256/gzip CRC 通过 | taint0，CPU policies 0/4/7 存在；CPU7 OPP 与 dwc3 core failure 仍在 |
-| USB provider #60 | `28e3bd68-2dd4-46f5-a24b-95f237ec070b` | 53788 字节，SHA256/gzip CRC 通过 | taint0，HS PHY/dwc3/UDC 存在，当前 deferred 为空；CPU7 警告仍在 |
+| DTB-only #59 | `PRIVATE_UUID` | 52982 字节，SHA256/gzip CRC 通过 | taint0，CPU policies 0/4/7 存在；CPU7 OPP 与 dwc3 core failure 仍在 |
+| USB provider #60 | `PRIVATE_UUID` | 53788 字节，SHA256/gzip CRC 通过 | taint0，HS PHY/dwc3/UDC 存在，当前 deferred 为空；CPU7 警告仍在 |
 
 两个快照分别在设备 `/tmp/K67O`、`/tmp/K67U` 保存后压缩，导出核对 gzip 和原始
 长度、SHA256。#59 更换 DTB 时 Image 未变，所以 uname 仍为 #59；新 boot_id 才能
@@ -97,7 +97,7 @@ LUN 仍挂接，原早期映射 WARN 没有重现。未配置 USB 网络/gadget�
 ## 67.5 保留项与关闭
 
 仅两次 logdump 写入，均先关闭旧 owner、取得单次 F1 新回执，再独立确认 serial
-62bc28a1/product=msmnile。F1 后 USB EIO 是回执之后的重启断开，单靠 EIO 不作成功
+PRIVATE_DEVICE_ID/product=msmnile。F1 后 USB EIO 是回执之后的重启断开，单靠 EIO 不作成功
 判据；outer finally detach 遇已消失 busid 的报错保留。冷启动只执行一次正常 com-up。
 USBIP attach 后先等独立 lsusb 看到 9505，root WSL shell 保持在线。
 

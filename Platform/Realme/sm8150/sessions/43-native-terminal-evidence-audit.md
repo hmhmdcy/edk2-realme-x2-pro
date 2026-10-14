@@ -30,7 +30,7 @@ OUT 没捕获回执，之后取得的新 dmesg tail 中也没有该 payload 的�
 ## 43.2 实时起点与改动边界
 
 首先读 HANDOVER-NEXT、RX-CONSOLE、FLYWHEEL 与 sessions 41/42。
-实时设备实际是 Android Bootloader Interface，62bc28a1，usbipd 当时显示 4-4；
+实时设备实际是 Android Bootloader Interface，PRIVATE_DEVICE_ID，usbipd 当时显示 4-4；
 不是上一轮 Linux/COM14 快照。指定序列号的有界 getvar product 返回 msmnile。
 未发现其他相关串口进程；随后独占打开成功，每次结束都 finally Close/Dispose。
 
@@ -62,7 +62,7 @@ USB 对照只 attach 已 Shared 的 6-5，资源释放后单独 detach。
 | native-echo-c | Windows / 1 | 长度 10 全 payload，R43C 与提示符完整 |
 | compatible-stty | 原逐字终端 | 9 字节受理、10 次重试，stty 设置与提示符读回 |
 | native-console-prefix / suffix | Windows / 2、2 | 两帧全 payload，R43D 与提示符完整 |
-| f1 | Windows / 2 | 新 reboot2 回执；另指定 62bc28a1 得到 fastboot msmnile |
+| f1 | Windows / 2 | 新 reboot2 回执；另指定 PRIVATE_DEVICE_ID 得到 fastboot msmnile |
 | final-boot | Windows 被动抓取，无 RX 发送 | 13,677 帧；TOP_CFG=11、original=0，shell 启动 |
 | final-native-echo | Windows / 2 | 重启后完整长度 10 payload、R43F 与提示符 |
 

@@ -18,14 +18,14 @@ function Invoke-K66Fastboot([string]$Name, [string[]]$Arguments, [int]$TimeoutSe
     }
 }
 $devices = Invoke-K66Fastboot 'map-confirm-devices' @('devices') 15
-if ($devices -notmatch '(?im)^62bc28a1\s+fastboot\s*$') { throw 'Expected phone not independently enumerated in fastboot' }
-$product = Invoke-K66Fastboot 'map-confirm-product' @('-s','62bc28a1','getvar','product') 15
+if ($devices -notmatch '(?im)^PRIVATE_DEVICE_ID\s+fastboot\s*$') { throw 'Expected phone not independently enumerated in fastboot' }
+$product = Invoke-K66Fastboot 'map-confirm-product' @('-s','PRIVATE_DEVICE_ID','getvar','product') 15
 if ($product -notmatch 'product:\s*msmnile') { throw 'Unexpected product' }
 if ((Get-Item -LiteralPath $image).Length -ne 67108864) { throw 'Unexpected image length' }
 if ((Get-FileHash -LiteralPath $image -Algorithm SHA256).Hash.ToLowerInvariant() -ne 'c2658235953cbdb8820cfabe6bee9ab0526b8fceb6b69f71f029174690b16e4d') { throw 'Image hash mismatch' }
-$flash = Invoke-K66Fastboot 'map-flash' @('-s','62bc28a1','flash','logdump',$image) 60
+$flash = Invoke-K66Fastboot 'map-flash' @('-s','PRIVATE_DEVICE_ID','flash','logdump',$image) 60
 if ($flash -notmatch "Writing 'logdump'\s+OKAY") { throw 'No successful logdump write evidence' }
-$reboot = Invoke-K66Fastboot 'map-reboot' @('-s','62bc28a1','reboot') 15
-[ordered]@{utc=[DateTime]::UtcNow.ToString('o');serial='62bc28a1';product='msmnile';partition='logdump';image_sha256='c2658235953cbdb8820cfabe6bee9ab0526b8fceb6b69f71f029174690b16e4d';flash_success=$true;reboot_success=$true;processes_disposed=$true} | ConvertTo-Json | Set-Content -LiteralPath "$root\map-flash-validation.json"
+$reboot = Invoke-K66Fastboot 'map-reboot' @('-s','PRIVATE_DEVICE_ID','reboot') 15
+[ordered]@{utc=[DateTime]::UtcNow.ToString('o');serial='PRIVATE_DEVICE_ID';product='msmnile';partition='logdump';image_sha256='c2658235953cbdb8820cfabe6bee9ab0526b8fceb6b69f71f029174690b16e4d';flash_success=$true;reboot_success=$true;processes_disposed=$true} | ConvertTo-Json | Set-Content -LiteralPath "$root\map-flash-validation.json"
 $flash
 $reboot

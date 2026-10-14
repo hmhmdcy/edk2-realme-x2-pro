@@ -43,7 +43,7 @@ expected = {'0x08':'0x16','0x09':'0x4c','0x0a':'0x36','0x07':'0x14','0x00':'0x12
             '0x02':'0x06','0x03':'0xa2','0x04':'0x68','0x0f':'0x12','0x0b':'0x00','0x13':'0x0f'}
 assert regs == expected
 state = (out/'final-state.txt').read_text()
-assert state.splitlines()[0] == '87753933-4992-45d2-aaf5-d9db9c11d1a3'
+assert state.splitlines()[0] == 'PRIVATE_UUID'
 assert state.splitlines()[3] == '0'
 dmesg = (out/'final-dmesg.txt').read_text()
 issues = {pattern: len(re.findall(pattern, dmesg, re.I)) for pattern in

@@ -1,5 +1,5 @@
 {
-  "final_boot_id": "770389cb-a7fe-4b81-bddd-fec402a1c5b8",
+  "final_boot_id": "PRIVATE_BOOT_ID",
   "build": 76,
   "taint": 0,
   "final_gpu_submissions": 9036,
@@ -10,13 +10,13 @@
   "final_dsi_errors": 0,
   "physical_white_confirmed": {
     "build": 75,
-    "boot_id": "c66a6b88-f507-402b-a807-f75184e99bd2",
+    "boot_id": "PRIVATE_BOOT_ID",
     "observation": "已经全白，没有噪点",
     "after_prior_power_cycle": true
   },
   "physical_first_bars_confirmed": {
     "build": 76,
-    "boot_id": "770389cb-a7fe-4b81-bddd-fec402a1c5b8",
+    "boot_id": "PRIVATE_BOOT_ID",
     "observation": "彩条清晰，显示正常",
     "before_recovery_power_cycle": true
   },
@@ -28,7 +28,7 @@
     "all GPU OPP stress"
   ],
   "second_boot_verified": true,
-  "second_boot_id": "af922f36-bacd-481d-a5c5-21c8e3fada65",
+  "second_boot_id": "PRIVATE_BOOT_ID",
   "second_boot_gpu_submissions": 12,
   "second_boot_panel_power_cycles": 3,
   "second_boot_dsi_errors": 0,

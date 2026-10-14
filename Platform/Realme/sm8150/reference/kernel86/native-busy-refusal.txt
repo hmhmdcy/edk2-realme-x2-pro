@@ -1,2 +1,0 @@
-address ownership: Device or resource busy
-reader_exit=1

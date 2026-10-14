@@ -39,7 +39,7 @@ ad2ace071d2362d8712820f62570757e1af266a054d2c3d3a6964a41e7cc6151
 (version 2.1.3.5, 252288 bytes). The local PDB hashes to
 ee203464fc2ab419eaa66c90e345e24eba3fa0e103c0fe11f91e428897ef9155.
 PE RSDS and PDB stream 1 both identify
-66581f50-52c9-4a32-9ac6-fe0c57b94a80, age 1. All retained section headers
+PRIVATE_UUID, age 1. All retained section headers
 match byte for byte; selected public function starts match AMD64 exception
 directory bounds. inspect-qcusbser.py checks these before disassembly.
 Three generated guard symbols outside retained PE sections are reported

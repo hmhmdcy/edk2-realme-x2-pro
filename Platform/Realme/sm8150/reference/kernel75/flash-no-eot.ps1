@@ -28,21 +28,21 @@ if ($usb -match '(?m)^6-5\s+05c6:9505\s+[^\r\n]*Attached') {throw 'EUD still att
 $devices=''
 for ($attempt=1; $attempt -le 10; $attempt++) {
     $devices=Invoke-K72Fastboot "no-eot-confirm-devices-$attempt" @('devices') 15
-    if ($devices -match '(?im)^62bc28a1\s+fastboot\s*$') {break}
+    if ($devices -match '(?im)^PRIVATE_DEVICE_ID\s+fastboot\s*$') {break}
     Start-Sleep -Milliseconds 1000
 }
-if ($devices -notmatch '(?im)^62bc28a1\s+fastboot\s*$') {throw 'Phone not independently enumerated in fastboot'}
-$product=Invoke-K72Fastboot 'no-eot-confirm-product' @('-s','62bc28a1','getvar','product') 15
+if ($devices -notmatch '(?im)^PRIVATE_DEVICE_ID\s+fastboot\s*$') {throw 'Phone not independently enumerated in fastboot'}
+$product=Invoke-K72Fastboot 'no-eot-confirm-product' @('-s','PRIVATE_DEVICE_ID','getvar','product') 15
 if ($product -notmatch 'product:\s*msmnile') {throw 'Unexpected product'}
-$size=Invoke-K72Fastboot 'no-eot-confirm-size-logdump' @('-s','62bc28a1','getvar','partition-size:logdump') 15
+$size=Invoke-K72Fastboot 'no-eot-confirm-size-logdump' @('-s','PRIVATE_DEVICE_ID','getvar','partition-size:logdump') 15
 if ($size -notmatch 'partition-size:logdump:\s*(0x[0-9a-fA-F]+)') {throw 'Partition size missing'}
 $partitionBytes=[Convert]::ToInt64($Matches[1].Substring(2),16)
 $image="$k75out\logdump-k75-no-eot.img"
 $hash=(Get-FileHash $image).Hash.ToLowerInvariant()
 if ($partitionBytes -ne 67108864 -or (Get-Item $image).Length -ne 67108864 -or $hash -ne '1b457172fe3203e3c73833b5f7eb0d497cfebb215310bcf1f36b72e490a0a49a') {throw 'Image/partition/hash mismatch'}
-$flash=Invoke-K72Fastboot 'no-eot-flash-logdump' @('-s','62bc28a1','flash','logdump',$image) 60
+$flash=Invoke-K72Fastboot 'no-eot-flash-logdump' @('-s','PRIVATE_DEVICE_ID','flash','logdump',$image) 60
 if ($flash -notmatch "Writing 'logdump'\s+OKAY") {throw 'Successful write not observed'}
 $flash
-$reboot=Invoke-K72Fastboot 'no-eot-reboot' @('-s','62bc28a1','reboot') 15
-[ordered]@{utc=[DateTime]::UtcNow.ToString('o');serial='62bc28a1';product='msmnile';flashed_partitions=@('logdump');partition_bytes=$partitionBytes;image_sha256=$hash;flash_success=$true;reboot_success=$true;processes_disposed=$true;boot_written=$false;userdata_written=$false;gpt_written=$false} | ConvertTo-Json -Depth 4 | Set-Content "$k75out\no-eot-flash-validation.json"
+$reboot=Invoke-K72Fastboot 'no-eot-reboot' @('-s','PRIVATE_DEVICE_ID','reboot') 15
+[ordered]@{utc=[DateTime]::UtcNow.ToString('o');serial='PRIVATE_DEVICE_ID';product='msmnile';flashed_partitions=@('logdump');partition_bytes=$partitionBytes;image_sha256=$hash;flash_success=$true;reboot_success=$true;processes_disposed=$true;boot_written=$false;userdata_written=$false;gpt_written=$false} | ConvertTo-Json -Depth 4 | Set-Content "$k75out\no-eot-flash-validation.json"
 $reboot

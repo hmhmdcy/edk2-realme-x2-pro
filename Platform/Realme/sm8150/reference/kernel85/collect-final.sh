@@ -4,7 +4,7 @@ set -eu
 prefix=/tmp/k85-final
 trace=/sys/kernel/tracing/instances/display
 [ ! -e "$prefix.tar" ]
-[ "$(cat /proc/sys/kernel/random/boot_id)" = f02d218a-cc7d-4b92-8858-c8eeaeab5777 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 {
     cat /proc/sys/kernel/random/boot_id
     uname -a

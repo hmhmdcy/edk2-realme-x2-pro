@@ -136,7 +136,7 @@ CROSS_COMPILE=aarch64-linux-gnu- Image` 成功，无本轮编译警告；打包�
 最终真机逐个发送 i/d/回车并等待受理，返回 `uid=0 gid=0` 与 shell 提示符。
 抓包 `rx33-final-i.raw`、`rx33-final-d2.raw`、`rx33-final-enter.raw`；d 第一轮未见
 ACK，不计成功。ABC 仍失败如上表。`rx33-final-F1.raw` 包含
-`eud: reboot2 bootloader requested`，主机确认 `62bc28a1 fastboot`。
+`eud: reboot2 bootloader requested`，主机确认 `PRIVATE_DEVICE_ID fastboot`。
 随后再次 reboot 回同版 Linux，端口按 finally 关闭。
 重新枚举 COM 后 `rx33-final-return-ABC.raw` 再次收到内核探针输出，确认已回到 Linux；
 仍为 `41 90 90`。先前仅抓取 25 s 的零捕获不能作为启动失败证据。

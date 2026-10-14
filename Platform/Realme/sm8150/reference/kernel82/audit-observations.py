@@ -19,7 +19,7 @@ for phase in ('before','after'):
         digest,remote=line.split('  ',1)
         assert sha(OUT/Path(remote).name.removeprefix('k82-'))==digest
     state=(OUT/(phase+'-state.txt')).read_text()
-    assert state.startswith('87753933-4992-45d2-aaf5-d9db9c11d1a3\n')
+    assert state.startswith('PRIVATE_UUID\n')
     assert '7.3.0-rc6-rmx1931-samurai+ #76' in state
     assert re.search(r'^0$',state,re.M)
     assert int(re.search(r'underrun:\s*(\d+)',state)[1])==0

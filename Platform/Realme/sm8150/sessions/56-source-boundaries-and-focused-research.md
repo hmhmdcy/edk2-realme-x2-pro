@@ -31,7 +31,7 @@ these intermittent COM faults.
 The PE/PDB identity remains the installed **WDM 2.1.3.5**, not the public newer
 WDF tree: sys SHA ad2ace071d2362d8712820f62570757e1af266a054d2c3d3a6964a41e7cc6151,
 PDB SHA ee203464fc2ab419eaa66c90e345e24eba3fa0e103c0fe11f91e428897ef9155,
-GUID 66581f50-52c9-4a32-9ac6-fe0c57b94a80, age 1. Exact .pdata function bounds
+GUID PRIVATE_UUID, age 1. Exact .pdata function bounds
 and PDB section-header equality are checked. RX50/54 identities are dependencies.
 
 1. **Open/reset request, now traced to its selector.** QCSER_Open at 2a786 calls

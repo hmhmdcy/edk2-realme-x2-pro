@@ -1,7 +1,7 @@
 #!/bin/sh
 # Session81 final fixed observations: no flash/reboot/panel cycle/settings.
 set -eu
-[ "$(cat /proc/sys/kernel/random/boot_id)" = 87753933-4992-45d2-aaf5-d9db9c11d1a3 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 [ ! -e /tmp/k81-final-state.txt ]
 [ "$(readlink -f /sys/bus/i2c/devices/i2c-0/of_node)" = /sys/firmware/devicetree/base/soc@0/geniqup@8c0000/i2c@884000 ]
 [ "$(readlink -f /sys/bus/i2c/devices/i2c-2/of_node)" = /sys/firmware/devicetree/base/soc@0/geniqup@cc0000/i2c@c94000 ]

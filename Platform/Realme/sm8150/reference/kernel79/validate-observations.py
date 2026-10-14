@@ -76,5 +76,5 @@ fw = json.loads((out/'firmware-validation.json').read_text())
 state = (out/'final-state.txt').read_text(encoding='utf-8-sig')
 assert fw['boot_after_sha256'] in state
 assert '607fc6b4b0caba8ca5c7ea6677fd8259c81a216f91b2d6de7603e3f56d9881d0' in state
-assert state.splitlines()[0] == '87753933-4992-45d2-aaf5-d9db9c11d1a3' and state.splitlines()[1] == '0'
+assert state.splitlines()[0] == 'PRIVATE_UUID' and state.splitlines()[1] == '0'
 print(json.dumps({'decoded_current_settings':decoded,'successful_snapshots':3,'logs':logs},indent=2))

@@ -12,7 +12,7 @@ SHA256/gzip CRC；CPU7 高频负载、温升和长期稳定性尚未测试。
 用户询问 COM14 是否归 Windows 时，实时 usbipd 显示 6-5/9505 Attached，WSL 已枚举
 bus1/address9；COM14 只是保留的 Windows 名称，当时 Windows 不能同时使用。
 没有其他已知 EUD owner，既有手动 helper 取得新 Ctrl-U 回执。设备仍是 #60、boot_id
-28e3bd68-2dd4-46f5-a24b-95f237ec070b、taint=0。压缩 facts 240/267 字节校验通过。
+PRIVATE_UUID、taint=0。压缩 facts 240/267 字节校验通过。
 
 通过 PARTNAME=boot 独立确认 /dev/sde11，只读其前 6678528 字节，存于手机 tmpfs。
 完整读取 3261 个 2048 字节块，哈希为
@@ -48,7 +48,7 @@ compact 的 Sec 同样只变版本字符串。严格替换比较证明其余可�
 ## 68.3 仅一次 boot 写入与完整日志
 
 先关闭旧 owner，再用既有 F1 helper 单次发送9002，3030.899ms取得新 F1 回执，
-随后3105.577ms EIO为重启断开，资源finally释放。独立 fastboot 核实62bc28a1、
+随后3105.577ms EIO为重启断开，资源finally释放。独立 fastboot 核实PRIVATE_DEVICE_ID、
 product=msmnile、boot大小0x6000000，核对候选长度/哈希后只 flash boot，再 reboot。
 写入与重启均 OKAY；logdump、userdata、GPT及其他分区没有写入。外层 finally detach
 遇已经消失 busid 的报错保留，没有用它或 EIO 单独证明 fastboot。
@@ -75,7 +75,7 @@ startup同步重试，数据帧只发一次。没有新增 EUD 实验、工具�
 
 ## 68.4 实际结果与优先级
 
-新 boot_id=afbbf870-b998-43d8-ab3d-42b3c68c0122、taint=0。live DT含
+新 boot_id=PRIVATE_BOOT_ID、taint=0。live DT含
 opp-2956800000；policy7 的 scaling_available_frequencies 包含2956800，
 cpuinfo_max_freq/scaling_max_freq均为2956800。瞬时频率1401600，未强制最高频或压测。
 完整日志中原两次 Voltage update failed、invalid初始频率/无效哨兵均消失。

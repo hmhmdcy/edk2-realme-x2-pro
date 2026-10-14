@@ -16,6 +16,6 @@
   "userdata_written": false,
   "gpt_written": false,
   "autonomous_usb_ssh_verified": true,
-  "last_confirmed_boot_id": "5ecfab9e-fa56-4ead-acf8-a5147904980e",
+  "last_confirmed_boot_id": "PRIVATE_BOOT_ID",
   "last_confirmed_kernel": "#62"
 }

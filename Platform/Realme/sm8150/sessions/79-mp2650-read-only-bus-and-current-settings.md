@@ -32,7 +32,7 @@ O_RDONLY本身不能限制 I2C_RDWR，实际每个写消息只有一个指针字
 
 ## 实测当前配置
 
-新启动 boot_id=87753933-4992-45d2-aaf5-d9db9c11d1a3，仍为 #76 内核，taint0。
+新启动 boot_id=PRIVATE_BOOT_ID，仍为 #76 内核，taint0。
 实际适配器重新编号：I2C1/QUP1是/dev/i2c-0；触摸为1-0020，BQ28Z610为2-0055。
 必须按of_node寻找总线，不能再照用session77中硬编码/dev/i2c-1的电量计采样脚本。
 
@@ -60,7 +60,7 @@ REG14未读，因此本轮不证明故障位清零、没有历史故障或整个
 
 候选由实际UEFI DTB构建；FV/FFS校验、嵌入DTB、兼容附加DTB和Android header通过。
 三个可执行模块只有版本字符串136157b→3dd07f4，其他代码字节不变。
-fastboot独立核对62bc28a1/msmnile及boot容量96MiB；写前Linux确认PARTNAME。
+fastboot独立核对PRIVATE_DEVICE_ID/msmnile及boot容量96MiB；写前Linux确认PARTNAME。
 6682624字节boot sha08edf9bcc1c55977169b0a8fd9f963805ba98d0423929e09e17bb9f811ca7405，
 已设备端回读。logdump仍为607fc6b4b0caba8ca5c7ea6677fd8259c81a216f91b2d6de7603e3f56d9881d0。
 回退kernel79/boot-before.img为session77 boot，sha3fbbd0eecf7e793f97920d55bd9ec2a30329d6e53edb307200160a23e1de923e。

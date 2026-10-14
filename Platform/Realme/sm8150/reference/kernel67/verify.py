@@ -68,13 +68,13 @@ assert len(opp)==52982 and sha256(opp).hexdigest()=='7c72b69f83170e0678910699654
 assert opp.count(b'Voltage update failed freq=2956800')==2
 assert read('opp-live-dt.validated.txt').startswith(b'OPP_ABSENT\n')
 opp_facts=read('opp-facts.validated.txt')
-assert b'83952af2-74ee-4dad-9e01-16ee951d4c20\n0\n' in opp_facts
+assert b'PRIVATE_UUID\n0\n' in opp_facts
 assert b'CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2=m' in opp_facts
 usb=read('usb-dmesg.validated.txt')
 assert len(usb)==53788 and sha256(usb).hexdigest()=='1a42e5406e88458205f01e8acdec3593508e9b8e31a039c1659a047f6caa874a'
 facts=read('usb-facts.validated.txt')
 assert b'CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2=y' in facts
-assert b'#60 ' in facts and b'28e3bd68-2dd4-46f5-a24b-95f237ec070b\n0\nlrwx' in facts
+assert b'#60 ' in facts and b'PRIVATE_UUID\n0\nlrwx' in facts
 assert b'qcom-snps-hs-femto-v2-phy' in facts and b'/drivers/dwc3' in facts
 assert b'a600000.usb ->' in facts and b'dwc3: failed to initialize core' not in usb
 assert b'generic_ioremap_prot' not in usb and b'mm/ioremap.c:23' not in usb

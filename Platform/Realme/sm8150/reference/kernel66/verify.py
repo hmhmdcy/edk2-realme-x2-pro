@@ -116,7 +116,7 @@ assert sha256(map_log).hexdigest() == 'e29ff2301abbfef7de16bf78c81ab0216187a99dd
 assert b'generic_ioremap_prot' not in map_log and b'mm/ioremap.c:23' not in map_log
 assert b'Kernel panic' not in map_log
 map_facts = read('map-facts.validated.txt')
-assert b'#59 ' in map_facts and b'87a7b341-6139-4afd-9ca2-3c0b20493e68\n0\n' in map_facts
+assert b'#59 ' in map_facts and b'PRIVATE_UUID\n0\n' in map_facts
 assert all(p in map_facts for p in (b'policy0', b'policy4', b'policy7', b'pm8150-thermal', b'pm8150b-thermal', b'pm8150l-thermal'))
 assert b'Voltage update failed freq=2956800' in map_facts and b'dwc3: failed to initialize core' in map_facts
 result['current_complete_dmesg'] = dict(plain_bytes=len(map_log),

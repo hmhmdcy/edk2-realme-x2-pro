@@ -2,7 +2,7 @@
 
 **本轮实际实现、构建并只刷boot/logdump，把原生触摸带进主线驱动。**
 完整54413字节设备保存dmesg通过SHA256/gzip CRC和长度校验；新内核#61、
-boot_id=a31c1158-fbca-4515-83ac-1a3b40ee808e、taint=0。识别到Synaptics
+boot_id=PRIVATE_BOOT_ID、taint=0。识别到Synaptics
 S3706A、fw id3078696，F01/F12绑定，/dev/input/event2注册；真实事件采样另列。
 证据入口reference/kernel71；功能清单linux-port/docs/HARDWARE-STATUS.md。
 
@@ -46,7 +46,7 @@ logdump-k67-usb.img与RX48/RX53回退未动。
 Windows既有step一次F1无回执，独立fastboot枚举为空，未刷机。随后使用既有
 WSL step一次F1，无setup/reset/ZLP/参数改动；有新F1回执，接着USB EIO，helper
 finally dispose，launcher finally尝试detach（设备已离开），持久WSL shell退出。
-独立fastboot枚举62bc28a1、product=msmnile，boot=96MiB/logdump=64MiB确认后，
+独立fastboot枚举PRIVATE_DEVICE_ID、product=msmnile，boot=96MiB/logdump=64MiB确认后，
 仅写这两项，Writing均OKAY，再reboot。Android、userdata、GPT均未写。
 
 | 产物 | 长度 | SHA256 |

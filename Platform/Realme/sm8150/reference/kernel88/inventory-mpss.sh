@@ -4,7 +4,7 @@ set -eu
 prefix=/tmp/k88-mpss-inventory
 mountpoint=/tmp/k88-modem-ro
 [ ! -e "$prefix.txt" ]
-[ "$(cat /proc/sys/kernel/random/boot_id)" = 32bf2d8f-8dde-47dc-9b88-e87db9e95198 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 grep -qx 'PARTNAME=modem' /sys/class/block/sde4/uevent
 [ "$(cat /sys/class/block/sde4/size)" = 524288 ]
 [ "$(cat /sys/class/block/sde/device/model)" = 'KLUDG4UHDB-B2D1 ' ]

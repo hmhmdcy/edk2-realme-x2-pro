@@ -149,7 +149,7 @@ state = json.loads((BASE / 'final-state.json').read_text())
 assert state['serial_closed'] and state['flashes'] == state['new_elevated_captures'] == 0
 assert len(state['pnp']) == 3 and all(d['Status'] == 'OK' for d in state['pnp'])
 assert all('Attached' not in line for line in state['usbipd_eud_lines'])
-assert state['fastboot_serial'] == '62bc28a1' and state['fastboot_product'] == 'msmnile'
+assert state['fastboot_serial'] == 'PRIVATE_DEVICE_ID' and state['fastboot_product'] == 'msmnile'
 assert sha256((BASE / 'eud-terminal-native.ps1').read_bytes()).hexdigest() == '9c7a16f1f389a0dbbf3436f1383221cdf6c00e348f25b6e3590a479dab103d57'
 assert sha256((BASE / 'eud-terminal-before-rx47.ps1').read_bytes()).hexdigest() == 'f9bdc49e022ce4f9b1537e61ab8c5e7c2ea15a91c6447e15e64372aef8a6dc97'
 print('RX47 verified: native operation/session boundary, actual TX loss and watchdog fallback; stability remains open.')

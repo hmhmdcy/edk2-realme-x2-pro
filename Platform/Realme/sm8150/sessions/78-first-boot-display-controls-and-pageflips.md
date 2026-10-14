@@ -9,21 +9,21 @@
 完成600次双缓冲页面翻转及对应彩条/纯白 CRC；末次约669秒状态检查仍为0错误、taint0。
 session77 的两次失败仍是有效证据，本轮的成功不能证明间歇性首次接管故障已修复。
 
-当前 boot_id=e1a36cea-f401-41f2-bd1a-1eedf1282e96。电量计报告电池包8.645V、
+当前 boot_id=PRIVATE_BOOT_ID。电量计报告电池包8.645V、
 温度29.7°C、电流0、SOC100%、Not charging。充电控制未接入，状态标签不是安全验收。
 本轮未访问充电器、快充MCU、OTG或电量计配置/NVM；未做充电或热压力试验。
 
 ## 1. 相同镜像的启动对照
 
-三次均通过真实 F1 回执进入 fastboot，独立核对 serial=62bc28a1、product=msmnile，
+三次均通过真实 F1 回执进入 fastboot，独立核对 serial=PRIVATE_DEVICE_ID、product=msmnile，
 只执行 reboot。一次早期 COM14 被动读取35秒，发送0帧，最终释放；另外两次未运行
 早期 COM 读取。NCM/SSH/SCP保持可用。传输中的断开错误与成功回执分别保留。
 
 | 启动 | boot_id | 接管前 INTF1 行数 | 旧帧停滞 | 保存日志中的 DSI 错误 |
 |---|---|---|---|---|
-| fresh | 7ccf5e4b-7cd9-424f-b91c-d3bf5f529f57 | 0x960，等于2400 | 无 | 0 |
-| late | 931c82bf-e465-47db-b800-a7a26cef50b0 | 0 | 无 | 0 |
-| repeat / 当前 | e1a36cea-f401-41f2-bd1a-1eedf1282e96 | 0x57b，帧内 | 有；CTL复位确认 | 0，含两轮刷新后的完整日志 |
+| fresh | PRIVATE_UUID | 0x960，等于2400 | 无 | 0 |
+| late | PRIVATE_UUID | 0 | 无 | 0 |
+| repeat / 当前 | PRIVATE_UUID | 0x57b，帧内 | 有；CTL复位确认 | 0，含两轮刷新后的完整日志 |
 
 第三次同时出现旧帧停滞和正常刷新，说明旧帧超时不是本轮已证实的充分故障条件。
 只读 DT 增量、早期串口读取时机和正常/异常首次启动之间的因果关系仍未确定。

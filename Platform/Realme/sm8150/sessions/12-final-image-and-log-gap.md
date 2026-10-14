@@ -12,7 +12,7 @@
   side buttons normal.
 * EUD control channel while running the final image:
       0x01 -> 00 00 05 00
-      0x02 -> A1 28 BC 62
+      0x02 -> XX XX XX XX
       0x03 -> 04 00 00 00
 * EUD COM: "Qualcomm EUD Port 9505 (COM14)" Status OK.
 * comlog.exe COM14 60 -> 0 bytes captured.

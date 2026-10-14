@@ -21,10 +21,10 @@ function Invoke-RebootFastboot([string]$Name,[string[]]$Arguments) {
 $devices=''
 for ($attempt=1; $attempt -le 10; $attempt++) {
     $devices=Invoke-RebootFastboot "devices-$attempt" @('devices')
-    if ($devices -match '(?im)^62bc28a1\s+fastboot\s*$') {break}
+    if ($devices -match '(?im)^PRIVATE_DEVICE_ID\s+fastboot\s*$') {break}
     Start-Sleep -Milliseconds 1000
 }
-if ($devices -notmatch '(?im)^62bc28a1\s+fastboot\s*$') {throw 'No independent fastboot enumeration'}
+if ($devices -notmatch '(?im)^PRIVATE_DEVICE_ID\s+fastboot\s*$') {throw 'No independent fastboot enumeration'}
 $devices
-Invoke-RebootFastboot 'reboot' @('-s','62bc28a1','reboot')
-[ordered]@{utc=[DateTime]::UtcNow.ToString('o');serial='62bc28a1';no_flash=$true;reboot_success=$true;processes_disposed=$true} | ConvertTo-Json | Set-Content "$out\$Prefix-reboot.json"
+Invoke-RebootFastboot 'reboot' @('-s','PRIVATE_DEVICE_ID','reboot')
+[ordered]@{utc=[DateTime]::UtcNow.ToString('o');serial='PRIVATE_DEVICE_ID';no_flash=$true;reboot_success=$true;processes_disposed=$true} | ConvertTo-Json | Set-Content "$out\$Prefix-reboot.json"

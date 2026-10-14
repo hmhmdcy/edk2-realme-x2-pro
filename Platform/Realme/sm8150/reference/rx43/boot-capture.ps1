@@ -1,6 +1,6 @@
 param([Parameter(Mandatory=$true)][string]$Out)
 $ErrorActionPreference='Stop'
-$taskJob=Start-Job -ScriptBlock { & 'C:\Users\cy122\Downloads\platform-tools\platform-tools\fastboot.exe' -s 62bc28a1 reboot 2>&1; if ($LASTEXITCODE) { throw 'fastboot reboot failed' } }
+$taskJob=Start-Job -ScriptBlock { & 'C:\Users\cy122\Downloads\platform-tools\platform-tools\fastboot.exe' -s PRIVATE_DEVICE_ID reboot 2>&1; if ($LASTEXITCODE) { throw 'fastboot reboot failed' } }
 try {
     if (!(Wait-Job $taskJob -Timeout 12)) { throw 'fastboot reboot timeout' }
     Receive-Job $taskJob -ErrorAction Stop

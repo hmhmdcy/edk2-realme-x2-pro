@@ -66,7 +66,7 @@
     "0x0b": "0x00",
     "0x13": "0x0f"
   },
-  "boot_id": "87753933-4992-45d2-aaf5-d9db9c11d1a3",
+  "boot_id": "PRIVATE_BOOT_ID",
   "final_uptime_seconds": 3608.23,
   "final_taint": 0,
   "final_voltage_uV": 8639000,

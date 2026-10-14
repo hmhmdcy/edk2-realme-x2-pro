@@ -4,11 +4,11 @@ set -eu
 prefix=/tmp/k86-prefinal
 [ ! -e "$prefix.tar" ]
 uname -a | grep -q '#86 SMP PREEMPT'
-[ "$(cat /proc/sys/kernel/random/boot_id)" = 32bf2d8f-8dde-47dc-9b88-e87db9e95198 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 grep -q ' /sys/kernel/debug debugfs ' /proc/mounts || mount -t debugfs debugfs /sys/kernel/debug
 grep -q ' /sys/kernel/tracing tracefs ' /proc/mounts || mount -t tracefs tracefs /sys/kernel/tracing
 trace=/sys/kernel/tracing/instances/display
-[ "$(cat /proc/sys/kernel/random/boot_id)" = 32bf2d8f-8dde-47dc-9b88-e87db9e95198 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 [ "$(readlink -f /sys/bus/i2c/devices/0-005c/driver)" = /sys/bus/i2c/drivers/mp2650 ]
 echo 0x5c >/sys/bus/i2c/devices/i2c-0/delete_device
 [ -d "$trace" ]

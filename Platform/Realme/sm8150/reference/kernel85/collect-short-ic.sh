@@ -4,7 +4,7 @@ set -eu
 prefix=/tmp/k85-short
 trace=/sys/kernel/tracing/instances/display
 [ ! -e "$prefix.tar" ]
-[ "$(cat /proc/sys/kernel/random/boot_id)" = f02d218a-cc7d-4b92-8858-c8eeaeab5777 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 uname -a | grep -q '#85 SMP PREEMPT'
 [ "$(readlink -f /sys/bus/i2c/devices/i2c-2/of_node)" = /sys/firmware/devicetree/base/soc@0/geniqup@cc0000/i2c@c94000 ]
 [ "$(sha256sum /tmp/k85-read-short-ic | cut -d ' ' -f1)" = e4d7b535564ab01a8f4ddebf97961adf2faac63b19e29ebcaaf7a7716c792553 ]

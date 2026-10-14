@@ -49,7 +49,7 @@ A new bounded USB owner synchronizes once, submits the same log command, then
 one **header-only** `90 02` at marker+152.678 ms, before the log ends. The raw
 receipt is `eud: RX46 F1 via=console irqs=90 fault=0`, followed by
 `eud: reboot2 bootloader requested`. Independent fastboot reports serial
-62bc28a1, product msmnile. All six OUTs complete once; 2,731 IN bytes / 459 frames
+PRIVATE_DEVICE_ID, product msmnile. All six OUTs complete once; 2,731 IN bytes / 459 frames
 match raw, with 990 log digits complete. No tty payload is sent with F1.
 
 The reader sees USB errno 5 after the accepted F1 (usbmon final IN status -62,

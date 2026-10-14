@@ -8,7 +8,7 @@ $rxOwners=@(Get-CimInstance Win32_Process | Where-Object {$_.ProcessId -ne $PID 
 $rxUsbipd=(& 'C:\Program Files\usbipd-win\usbipd.exe' list | Out-String)
 if($LASTEXITCODE -ne 0){throw 'USBIP read failed.'}
 $rxTarget=@($rxUsbipd -split "`r?`n" | Where-Object {$_ -match '05c6:950[15]'})
-$rxReg=[Microsoft.Win32.Registry]::LocalMachine.OpenSubKey('SYSTEM\CurrentControlSet\Control\Class\{4d36e978-e325-11ce-bfc1-08002be10318}\0008',$false)
+$rxReg=[Microsoft.Win32.Registry]::LocalMachine.OpenSubKey('SYSTEM\CurrentControlSet\Control\Class\{PRIVATE_UUID}\0008',$false)
 try{
  $rxValues=@(foreach($rxName in @('QCDriverConfig','QCDriverLoggingDirectory')){[pscustomobject]@{name=$rxName;present=(@($rxReg.GetValueNames()) -contains $rxName);value=$rxReg.GetValue($rxName,$null)}})
 }finally{$rxReg.Dispose()}

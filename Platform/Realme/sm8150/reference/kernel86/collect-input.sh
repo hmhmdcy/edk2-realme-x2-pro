@@ -4,7 +4,7 @@ prefix=/tmp/k86-input
 trace=/sys/kernel/tracing/instances/display
 [ ! -e "$prefix.tar" ]
 [ ! -e "$prefix-before-state.txt" ]
-[ "$(cat /proc/sys/kernel/random/boot_id)" = f02d218a-cc7d-4b92-8858-c8eeaeab5777 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 [ "$(sha256sum /tmp/k86-read-mp2650-input | cut -d ' ' -f1)" = ed25b9f497ec10294976f61b4fb67994f3884a42a1d7bc3778e0045f7a9ef3a7 ]
 [ "$(sha256sum /tmp/k84-read-mp2650 | cut -d ' ' -f1)" = 6ef5467f5a445d718bd783ed86aabe5e93d08c442f483978355ad42ec79d5673 ]
 state() {

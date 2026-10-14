@@ -3,11 +3,11 @@ $captureRoot='E:\edk2-samurai-out\rx54'
 $fastboot='C:\Users\cy122\Downloads\platform-tools\platform-tools\fastboot.exe'
 $utf8=[Text.UTF8Encoding]::new($false)
 $devices=(& $fastboot devices | Out-String)
-if ($LASTEXITCODE -ne 0 -or $devices.Trim() -notmatch '^62bc28a1\s+fastboot$') { throw 'Unexpected fastboot device' }
+if ($LASTEXITCODE -ne 0 -or $devices.Trim() -notmatch '^PRIVATE_DEVICE_ID\s+fastboot$') { throw 'Unexpected fastboot device' }
 $savedPreference=$ErrorActionPreference
 try {
     $ErrorActionPreference='Continue'
-    $product=(& $fastboot -s 62bc28a1 getvar product 2>&1 | Out-String)
+    $product=(& $fastboot -s PRIVATE_DEVICE_ID getvar product 2>&1 | Out-String)
     $productCode=$LASTEXITCODE
 } finally { $ErrorActionPreference=$savedPreference }
 if ($productCode -ne 0 -or $product -notmatch 'product: msmnile') { throw 'Unexpected fastboot product' }
@@ -15,7 +15,7 @@ if ($productCode -ne 0 -or $product -notmatch 'product: msmnile') { throw 'Unexp
 $savedPreference=$ErrorActionPreference
 try {
     $ErrorActionPreference='Continue'
-    $reply=(& $fastboot -s 62bc28a1 reboot 2>&1 | Out-String)
+    $reply=(& $fastboot -s PRIVATE_DEVICE_ID reboot 2>&1 | Out-String)
     $rebootCode=$LASTEXITCODE
 } finally { $ErrorActionPreference=$savedPreference }
 [IO.File]::WriteAllText("$captureRoot\same-image-reboot.txt",$reply.Replace("`r`n","`n"),$utf8)

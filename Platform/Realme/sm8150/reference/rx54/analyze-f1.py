@@ -64,12 +64,12 @@ assert not pending and ins == incoming == frames and b''.join(ins) == raw
 assert outs == [bytes.fromhex(e['hex']) for e in events if e['event'] in ('out_submit','f1_out_submit')]
 assert len(outs) == 6 and outs[-1] == b'\x90\x02'
 fastboot = (root/'f1-fastboot.txt').read_text()
-assert re.search(r'^62bc28a1\s+fastboot$',fastboot,re.M) and 'product: msmnile' in fastboot
+assert re.search(r'^PRIVATE_DEVICE_ID\s+fastboot$',fastboot,re.M) and 'product: msmnile' in fastboot
 reboot = (root/'same-image-reboot.txt').read_text(); assert 'Rebooting' in reboot and 'OKAY' in reboot
 summary = dict(raw_bytes=len(raw),frames=len(frames),raw_sha256=sha256(raw).hexdigest(),
                in_statuses=dict(statuses),full_in_equals_raw=True,out_count=len(outs),all_out_once_completed=True,
                f1_hex='90 02',f1_source='console',f1_payload_bytes=0,marker_ms=marker['ms'],f1_ms=f1['ms'],end_ms=end['ms'],
-               marker_to_f1_ms=round(f1['ms']-marker['ms'],3),console_digits=990,fastboot_serial='62bc28a1',product='msmnile',closed=closed,
+               marker_to_f1_ms=round(f1['ms']-marker['ms'],3),console_digits=990,fastboot_serial='PRIVATE_DEVICE_ID',product='msmnile',closed=closed,
                limits='USB I/O failure follows the accepted F1, with a separate fastboot check. Detach sees the former bus node removed. No flash; physical USB ACK and remaining TX loss are unmeasured.')
 if __name__ == '__main__':
     (root/'f1-summary.json').write_text(json.dumps(summary,indent=2)+'\n')

@@ -4,7 +4,7 @@ set -eu
 prefix=/tmp/k86-fault
 trace=/sys/kernel/tracing/instances/display
 [ ! -e "$prefix.tar.gz" ]
-[ "$(cat /proc/sys/kernel/random/boot_id)" = 32bf2d8f-8dde-47dc-9b88-e87db9e95198 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 [ "$(cat "$trace/tracing_on")" = 0 ]
 [ ! -e /sys/bus/i2c/devices/0-005c ]
 {

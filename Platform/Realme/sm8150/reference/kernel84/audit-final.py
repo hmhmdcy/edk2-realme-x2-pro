@@ -24,7 +24,7 @@ for line in raw['final-hashes.txt'].decode().splitlines():
     digest, path = line.split('  ', 1)
     assert sha(raw[Path(path).name.removeprefix('k84-')]) == digest
 state = raw['final-state.txt'].decode()
-assert state.startswith('f02d218a-cc7d-4b92-8858-c8eeaeab5777\n')
+assert state.startswith('PRIVATE_UUID\n')
 assert '#85 SMP PREEMPT' in state and state.splitlines()[3] == '0'
 assert 'frame_done_cnt:0mode:' in state and re.search(r'underrun:\s+0\s', state)
 read_registers = lambda b: dict(re.findall(r'^reg=(0x[0-9a-f]+) value=(0x[0-9a-f]+)$', b.decode(), re.M))

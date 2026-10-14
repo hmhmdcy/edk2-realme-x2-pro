@@ -115,7 +115,7 @@ for name in ('watchdog-fastboot-product.txt', 'journal-fastboot-product.txt'):
     assert 'product: msmnile' in text
     # A's archived file contains getvar only; B also retained devices output.
     if name == 'journal-fastboot-product.txt':
-        assert '62bc28a1' in text
+        assert 'PRIVATE_DEVICE_ID' in text
 
 # Independent direct frame-window comparison (no SequenceMatcher).
 blob = (BASE / 'journal-first-1.bin').read_bytes()

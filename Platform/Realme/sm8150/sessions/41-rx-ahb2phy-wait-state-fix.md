@@ -101,14 +101,14 @@ session 43 核对确认它们的原始抓取也已有 uid 和 RX41-C 输出及�
 的第二次完整尝试返回 C（21 字节含清行与换行受理、191 帧、0 stray）。
 第一次尝试在 pathname 中途无 ACK，未提交换行，已经清行，不计 console 失败。
 最终 F1 第一次 OUT 就有新回执；有界 `fastboot devices` 当次返回空，随后明确指定
-序列号 62bc28a1 的 fastboot reboot 返回 OKAY，独立证实 fastboot 命令通路。
+序列号 PRIVATE_DEVICE_ID 的 fastboot reboot 返回 OKAY，独立证实 fastboot 命令通路。
 没有把空枚举记成看到了设备列表。最终重新启动同一候选，末次状态见下节。
 
 ## 41.5 构建与安全边界
 
 本轮只刷 logdump；没有刷 boot 或其他分区，没有修改 PHY/时钟/中断配置，
 没有 force bind、安装过滤器或变更 hrdevmon。每次 F1 取得新设备回执后，
-另行有界核实 fastboot 序列号 62bc28a1，再执行下一步。
+另行有界核实 fastboot 序列号 PRIVATE_DEVICE_ID，再执行下一步。
 一次 F1 发送器过早开串口，因现有抓取占用而 Open 失败，未发送字节且 finally
 关闭；之后等待抓取 Closed/disposed，再重新单步操作。原始空文件保留在外部输出目录。
 

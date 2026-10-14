@@ -18,7 +18,7 @@ Android R/cyborg 来源与单位边界见 [session83](83-androidr-and-cyborg-cha
 [session85](85-oem-chemistry-and-short-ic-observations.md)、[session86](86-mp2650-input-status-and-real-display-timeout-snapshot.md)。
 
 本轮 USB SSH 复核：手机仍为 #86，boot ID
-`32bf2d8f-8dde-47dc-9b88-e87db9e95198`，采集时 uptime 2140.55 秒，taint=0，
+`PRIVATE_UUID`，采集时 uptime 2140.55 秒，taint=0，
 frame_done_cnt=2、underrun=0。display 实例 on=0、snapshot:count=0；快照 SHA256 仍为
 `550d76908bd09bb280f57a5937fce7ec0101e4c167fed850b42834085e53f2f2`，与 session86 一致。
 没有清空或重新武装跟踪，没有新的光学确认。原始 state/dmesg 和设备端摘要保存在

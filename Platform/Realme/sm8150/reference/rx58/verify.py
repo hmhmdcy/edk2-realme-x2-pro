@@ -17,7 +17,7 @@ assert all(r['direct_matches'] == 511 for r in result['gaps'])
 driver = json.loads((root/'driver-boundary-summary.json').read_text())
 assert driver['binary_sha256'] == 'ad2ace071d2362d8712820f62570757e1af266a054d2c3d3a6964a41e7cc6151'
 assert driver['pdb_sha256'] == 'ee203464fc2ab419eaa66c90e345e24eba3fa0e103c0fe11f91e428897ef9155'
-assert driver['guid'] == '66581f50-52c9-4a32-9ac6-fe0c57b94a80' and driver['age'] == 1
+assert driver['guid'] == 'PRIVATE_UUID' and driver['age'] == 1
 expected = {
     'StartTheReadGoing': '39d3fc6c38cc37d3b1adb8bd25b53fd9261172448b56e3957e20f0c53f7fc944',
     'ReadIrpCompletion': '045b377972566306ab84843da2295e3c19acbb94a76d61a000315e97efc12f4a',

@@ -13,7 +13,7 @@
   "new_elevated_captures": 0,
   "f1_irq_out_attempts": 1,
   "f1_poll_out_attempts": 5,
-  "fastboot_serial": "62bc28a1",
+  "fastboot_serial": "PRIVATE_DEVICE_ID",
   "fastboot_product": "msmnile",
   "usbipd_eud_lines": [
     "6-1    05c6:9501  Qualcomm EUD Control Device 9501                              Not shared",

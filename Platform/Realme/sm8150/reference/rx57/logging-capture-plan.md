@@ -15,7 +15,7 @@ ad2ace071d2362d8712820f62570757e1af266a054d2c3d3a6964a41e7cc6151。
 只对 COM14 的这个设备实例操作：
 `USB\VID_05C6&PID_9505\8&5580DC5&0&5`。
 它当前对应的软件键是
-`HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e978-e325-11ce-bfc1-08002be10318}\0008`。
+`HKLM\SYSTEM\CurrentControlSet\Control\Class\{PRIVATE_UUID}\0008`。
 两个配置值当前均不存在；如基线改变，脚本拒绝继续。
 
 | 临时新增的值 | 类型 | 内容 |

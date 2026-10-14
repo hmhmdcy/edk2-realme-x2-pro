@@ -47,7 +47,7 @@ assert 'input: Synaptics S3706A' in log and log.count('Attached SCSI disk')==6
 assert not re.search('Kernel panic - not syncing|Oops:|WARNING:|BUG:',log)
 assert not re.search('(?im)^.*(?:rmi4|c80000.i2c|gpi_dma).*?(?:error|failed|timed out|timeout)',log)
 facts=(r/'finish-facts.validated.txt').read_text()
-assert facts.startswith('a31c1158-fbca-4515-83ac-1a3b40ee808e\n0\n') and '#61 SMP' in facts
+assert facts.startswith('PRIVATE_UUID\n0\n') and '#61 SMP' in facts
 assert '\n1785600\n2419200\n2956800\n' in facts and '\na600000.usb\n' in facts
 assert all(re.search('(?m)^'+disk+'$',facts) for disk in ('sda','sdb','sdc','sdd','sde','sdf'))
 for i,(p,h) in enumerate(json.loads((r/'source-preservation.json').read_text()).items()):

@@ -23,7 +23,7 @@
                   }
               ],
     "binding":  {
-                    "driver_key":  "{4d36e978-e325-11ce-bfc1-08002be10318}\\0008",
+                    "driver_key":  "{PRIVATE_UUID}\\0008",
                     "inf":  "oem102.inf",
                     "inf_sha256":  "dd933233672930b6a138c762f729d92ad984cd1e44abcb16e4ac3878b4305f92",
                     "version":  "2.1.3.5",

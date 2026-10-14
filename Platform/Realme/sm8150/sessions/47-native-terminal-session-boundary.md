@@ -112,7 +112,7 @@ active=0、queued=0，bad/overrun/drops=0；shell 命令继续成功。
 
 关闭每个终端 owner 后单独测试 F1。第一次 via=irq、1 OUT 成功；第二次在实际
 fault=4 退回后 via=poll，第 5 OUT 受理。两次均由独立 fastboot devices/getvar
-确认序列号 62bc28a1、product msmnile。没有任何 fastboot flash。
+确认序列号 PRIVATE_DEVICE_ID、product msmnile。没有任何 fastboot flash。
 两次仅 reboot 同一 RX46 B；被动 boot capture 没有发 RX 测试帧。
 首份 boot 10,919 帧、末份 13,689 帧，stray=0/pending=0，均有 TOP_CFG=11/
 original=0、hwirq524 请求/使能、实际 shell 启动。

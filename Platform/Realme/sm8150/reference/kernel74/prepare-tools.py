@@ -21,7 +21,7 @@ s=s.replace("$hash -ne 'c7778d45c336b35cf75c2842c083b513343f59a0a1864fe52ad2105d
             "$hash -ne '"+hash_image+"'")
 # Replace only evidence names; keep literal fastboot arguments unchanged.
 s=s.replace("'deps-", "'handoff-").replace('\\deps-flash-validation.json','\\handoff-flash-validation.json')
-assert "@('-s','62bc28a1','reboot')" in s
+assert "@('-s','PRIVATE_DEVICE_ID','reboot')" in s
 assert 'logdump-before.img' in s
 s=s.replace("$usb=(&",'''$events=Get-Content "$k74out\\handoff-f1-wsl.events.jsonl" | ForEach-Object {$_ | ConvertFrom-Json}
 if (!@($events | Where-Object {$_.event -eq 'receipt' -and $_.text -eq 'F1'}).Count) {throw 'No current F1 receipt'}

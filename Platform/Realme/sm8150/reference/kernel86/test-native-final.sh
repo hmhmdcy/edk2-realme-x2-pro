@@ -5,7 +5,7 @@ prefix=/tmp/k86-native-final
 trace=/sys/kernel/tracing/instances/display
 [ ! -e "$prefix.tar.gz" ]
 uname -a | grep -q '#87 SMP PREEMPT'
-[ "$(cat /proc/sys/kernel/random/boot_id)" != 32bf2d8f-8dde-47dc-9b88-e87db9e95198 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" != PRIVATE_BOOT_ID ]
 [ "$(cat /proc/sys/kernel/tainted)" = 0 ]
 [ "$(readlink -f /sys/bus/i2c/devices/i2c-0/of_node)" = /sys/firmware/devicetree/base/soc@0/geniqup@8c0000/i2c@884000 ]
 [ ! -e /sys/bus/i2c/devices/0-005c ]

@@ -27,17 +27,17 @@ if (!@($k68events | Where-Object { $_.event -eq 'receipt' -and $_.text -eq 'F1' 
 $k68usb=(& 'C:\Program Files\usbipd-win\usbipd.exe' list | Out-String)
 if ($k68usb -match '(?m)^6-5\s+05c6:9505\s+[^\r\n]*Attached') { throw 'EUD still attached' }
 $k68devices=Invoke-K68Fastboot 'boot-confirm-devices' @('devices') 15
-if ($k68devices -notmatch '(?im)^62bc28a1\s+fastboot\s*$') { throw 'Phone not independently enumerated in fastboot' }
-$k68product=Invoke-K68Fastboot 'boot-confirm-product' @('-s','62bc28a1','getvar','product') 15
+if ($k68devices -notmatch '(?im)^PRIVATE_DEVICE_ID\s+fastboot\s*$') { throw 'Phone not independently enumerated in fastboot' }
+$k68product=Invoke-K68Fastboot 'boot-confirm-product' @('-s','PRIVATE_DEVICE_ID','getvar','product') 15
 if ($k68product -notmatch 'product:\s*msmnile') { throw 'Unexpected product' }
-$k68size=Invoke-K68Fastboot 'boot-confirm-size' @('-s','62bc28a1','getvar','partition-size:boot') 15
+$k68size=Invoke-K68Fastboot 'boot-confirm-size' @('-s','PRIVATE_DEVICE_ID','getvar','partition-size:boot') 15
 if ($k68size -notmatch 'partition-size:boot:\s*(0x[0-9a-fA-F]+)') { throw 'Boot partition size unavailable' }
 $k68partSize=[Convert]::ToInt64($Matches[1].Substring(2),16)
 if ((Get-Item -LiteralPath $k68image).Length -ne 6682624 -or $k68partSize -lt 6682624) { throw 'Image or partition length mismatch' }
 if ((Get-FileHash -LiteralPath $k68image).Hash.ToLowerInvariant() -ne '785071a405d839b13d3d0ef040f42d227b09659e6dd0d3df96bb3689ced0635b') { throw 'Image hash mismatch' }
-$k68flash=Invoke-K68Fastboot 'boot-flash' @('-s','62bc28a1','flash','boot',$k68image) 60
+$k68flash=Invoke-K68Fastboot 'boot-flash' @('-s','PRIVATE_DEVICE_ID','flash','boot',$k68image) 60
 if ($k68flash -notmatch "Writing 'boot'\s+OKAY") { throw 'No successful boot write evidence' }
-$k68reboot=Invoke-K68Fastboot 'boot-reboot' @('-s','62bc28a1','reboot') 15
-[ordered]@{utc=[DateTime]::UtcNow.ToString('o');serial='62bc28a1';product='msmnile';partition='boot';partition_bytes=$k68partSize;image_bytes=6682624;image_sha256='785071a405d839b13d3d0ef040f42d227b09659e6dd0d3df96bb3689ced0635b';flash_success=$true;reboot_success=$true;processes_disposed=$true;logdump_written=$false;userdata_written=$false;gpt_written=$false} | ConvertTo-Json | Set-Content -LiteralPath "$k68root\boot-flash-validation.json"
+$k68reboot=Invoke-K68Fastboot 'boot-reboot' @('-s','PRIVATE_DEVICE_ID','reboot') 15
+[ordered]@{utc=[DateTime]::UtcNow.ToString('o');serial='PRIVATE_DEVICE_ID';product='msmnile';partition='boot';partition_bytes=$k68partSize;image_bytes=6682624;image_sha256='785071a405d839b13d3d0ef040f42d227b09659e6dd0d3df96bb3689ced0635b';flash_success=$true;reboot_success=$true;processes_disposed=$true;logdump_written=$false;userdata_written=$false;gpt_written=$false} | ConvertTo-Json | Set-Content -LiteralPath "$k68root\boot-flash-validation.json"
 $k68flash
 $k68reboot

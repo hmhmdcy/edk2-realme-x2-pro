@@ -4,7 +4,7 @@ set -eu
 prefix=/tmp/k84-ready
 [ ! -e "$prefix.tar" ]
 uname -a | grep -q '#85 SMP PREEMPT'
-[ "$(cat /proc/sys/kernel/random/boot_id)" != 26edf78d-fba8-4dd4-9547-7bc65314bbe7 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" != PRIVATE_BOOT_ID ]
 grep -q ' /sys/kernel/debug debugfs ' /proc/mounts || mount -t debugfs debugfs /sys/kernel/debug
 grep -q ' /sys/kernel/tracing tracefs ' /proc/mounts || mount -t tracefs tracefs /sys/kernel/tracing
 trace=/sys/kernel/tracing/instances/display

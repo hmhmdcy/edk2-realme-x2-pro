@@ -43,7 +43,7 @@ with tarfile.open(O/'before-raw.tar') as tar:
 for line in raw['before-hashes.txt'].decode().splitlines():
     digest,path=line.split('  ',1);assert sha(raw[Path(path).name.removeprefix('k84-')])==digest
 state=raw['before-state.txt'].decode();regs=raw['before-registers.txt'].decode();log=raw['before-dmesg.txt'].decode()
-assert state.startswith('87753933-4992-45d2-aaf5-d9db9c11d1a3\n')
+assert state.startswith('PRIVATE_UUID\n')
 assert 'frame_done_cnt:2mode:' in state and 'POWER_SUPPLY_CAPACITY=99' in state
 assert len(re.findall(r'^.*frame done timeout.*$',log,re.M))==2
 assert not re.search(r'\b(?:BUG:|Oops:)|Unable to handle kernel|dsi_err_worker',log)
@@ -55,7 +55,7 @@ report={'candidate_audit_pass':True,'only_logdump_write_required':True,'boot_unc
         'unchanged_fat_dtb_sha256':sha(members['logdump-before.img']['::/samurai.dtb']),
         'kernel_source_hashes_preserved':manifest['sources'],'initramfs_cpio_byte_identical':True,'initramfs_identity_and_hooks_preserved':True,
         'bootconfig_embedded_exactly':True,'function_tracing_disabled':True,'hardware_driver_configuration_preserved':True,
-        'before_boot_id':'87753933-4992-45d2-aaf5-d9db9c11d1a3','before_timeout_count':2,'before_raw_sha256':sha((O/'before-raw.tar').read_bytes()),
+        'before_boot_id':'PRIVATE_BOOT_ID','before_timeout_count':2,'before_raw_sha256':sha((O/'before-raw.tar').read_bytes()),
         'deployment_done':False,'display_root_cause_fixed':False,'source_head_local_not_upstream':manifest['kernel_head']}
 (O/'candidate-ready-validation.json').write_text(json.dumps(report,indent=2)+'\n')
 print('PASS candidate Image/header/#85/exact bootconfig, only FAT Image changed, byte-identical CPIO, all source/identity hashes, device baseline partition/hash guards.')

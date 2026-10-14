@@ -2,7 +2,7 @@
   "audit": "PASS",
   "scope": "offline build, preservation, firmware integrity and read-only handset handover",
   "handset_kernel_build": 86,
-  "handset_boot_id": "32bf2d8f-8dde-47dc-9b88-e87db9e95198",
+  "handset_boot_id": "PRIVATE_BOOT_ID",
   "handset_uptime_seconds": 3984.69,
   "taint": 0,
   "display_timeouts": 2,

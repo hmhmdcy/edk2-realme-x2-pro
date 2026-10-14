@@ -5,7 +5,7 @@ session = '73-native-sofef03f-dsi-dsc-display.md'
 state = '''SOFEF03F原生DSI/DSC面板已部署到#64，1080×2400@60自动接管msmdrmfb。
 两次启动的彩条—白屏—彩条硬件CRC一致，每次三次关闭/开启与60次vblank等待通过。
 亮度120/256/400写入成功；面板DCS电源状态0x9c。没有人工光学验收或亮度硬件读回。
-最终boot_id=fc4fe164-1e90-402a-b841-ce870ba9ddfb、taint0，59284字节完整dmesg和
+最终boot_id=PRIVATE_BOOT_ID、taint0，59284字节完整dmesg和
 5492字节facts通过设备SHA/gzip CRC/长度；触摸、CPU、六UFS、NCM/SSH与EUD保留。
 启动显示接管阶段记录10条SMMU fault，后续测试未复现，仍须修复；GPU/90Hz/休眠待验。
 本轮一次boot和两次logdump部署，Android/全部数据保留。下一项显示交接与GPU/GMU。
@@ -69,7 +69,7 @@ p.write_text(text)
 
 (w/'NEXT-SESSION.md').write_text('''# 下一阶段交接：显示接管与GPU（2026-10-10，session73）
 
-手机#64，boot_id=fc4fe164-1e90-402a-b841-ce870ba9ddfb、taint0。SOFEF03F原生
+手机#64，boot_id=PRIVATE_BOOT_ID、taint0。SOFEF03F原生
 1080×2400@60 DSC已自动接管；两次启动各完成彩条—白屏—彩条硬件CRC、三次显示
 关闭/开启及60次vblank等待（约0.99秒）。面板DCS状态0x9c，120/256/400亮度写入
 通过；亮度硬件读回/实际光学图像没有验收，90Hz/休眠与GPU渲染也未验收。

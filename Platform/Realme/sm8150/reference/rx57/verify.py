@@ -26,7 +26,7 @@ for name in ['logging-identity.json','creation-identity.json']:
     assert identity['identity_matches'] and identity['section_headers_match']
     assert identity['binary_sha256']=='ad2ace071d2362d8712820f62570757e1af266a054d2c3d3a6964a41e7cc6151'
     assert identity['pdb_sha256']=='ee203464fc2ab419eaa66c90e345e24eba3fa0e103c0fe11f91e428897ef9155'
-    assert (identity['guid'],identity['age'])==('66581f50-52c9-4a32-9ac6-fe0c57b94a80',1)
+    assert (identity['guid'],identity['age'])==('PRIVATE_UUID',1)
     functions.update({f['name']:f for f in identity['functions']})
 previous=json.loads((base.parent/'rx54/installed-driver-identity.json').read_text())
 multi,=[f for f in previous['local_only_functions'] if f['name']=='QCMRD_L2MultiReadThread']

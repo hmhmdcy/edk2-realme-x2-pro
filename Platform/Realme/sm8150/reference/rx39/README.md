@@ -11,7 +11,7 @@
   与紧轮询之间约有两小时墙钟间隔，不能据此归因。
 * `libusb-recover-clear.*`：先 PORT_RESET，再 Ctrl-U 首次受理；同时改变两项，未隔离恢复原因。
 * `libusb-f1-after-fastpoll.*`：两次完整 F1 OUT，新 bootloader 回执，随后 errno 5 EIO。
-  finally 已释放接口；工具退出 1。另证实 62bc28a1/18d1:d00d fastboot 后才恢复基线。
+  finally 已释放接口；工具退出 1。另证实 PRIVATE_DEVICE_ID/18d1:d00d fastboot 后才恢复基线。
 * `baseline-return-excerpt.txt/.events.txt`：恢复基线后被动抓包的原行号摘录，10,179 帧、
   0 stray/pending、0 OUT。完整原件保存在外部，manifest 留哈希。
 * `baseline-native-clear.*`：恢复后 Windows 第一次 Ctrl-U 新回执，停止重发并 Close/Dispose。

@@ -2,7 +2,7 @@
   "archive_sha256": "a3375c604691d0d9c7957029b2cb5839d5a875514d4e37c56ab9c2aa7e0d7873",
   "compressed_archive_sha256": "4007d22d2a82e41317e44d300cd43e67e993813c327f192d79b309c5012b8e2e",
   "members_and_sha256_verified": true,
-  "boot_id": "f02d218a-cc7d-4b92-8858-c8eeaeab5777",
+  "boot_id": "PRIVATE_BOOT_ID",
   "kernel_build": 85,
   "uptime_seconds": 404.09,
   "taint": 0,

@@ -1,4 +1,4 @@
-param([string]$Name='opp-finish-state', [string]$Image='E:\edk2-samurai-out\logdump-k67-opp.img', [string]$Kernel='#59', [string]$BootId='83952af2-74ee-4dad-9e01-16ee951d4c20', [int]$Flashes=1)
+param([string]$Name='opp-finish-state', [string]$Image='E:\edk2-samurai-out\logdump-k67-opp.img', [string]$Kernel='#59', [string]$BootId='PRIVATE_BOOT_ID', [int]$Flashes=1)
 $ErrorActionPreference='Stop'
 $k67root='E:\edk2-samurai-out\kernel67'
 $k67before=Get-Content -LiteralPath 'E:\edk2-samurai-out\kernel66\baseline-state.json' -Raw | ConvertFrom-Json

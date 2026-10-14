@@ -59,7 +59,7 @@ RX38-UEFI CHAINLOAD original Kernel
 首次 ready 标记在打开 COM 之前丢失，结果行完整捕获；主机先发 ABC，见 DEFG ready 后再发 DEFG。
 源码工具后来把“打开即发 ABC”改为显式 `-StartAbc`，重跑此对照需传该开关。
 全程重组 13,917 帧、0 stray、0 pending；这不证明每一完整 TX 帧都未丢失。
-后续捕获 Linux #44、ttyEUD0、shell 启动；F1 新回执后确认 `62bc28a1 fastboot`。
+后续捕获 Linux #44、ttyEUD0、shell 启动；F1 新回执后确认 `PRIVATE_DEVICE_ID fastboot`。
 
 结论：重复首字节在 Linux 接管前已存在，不能只归因于 Linux 调度、串口层或接管时关钟。
 它没有证明 PHY 初始化、共同 MMIO/COM 硬件路径、host 路径或权限配置中的哪一个是根因。

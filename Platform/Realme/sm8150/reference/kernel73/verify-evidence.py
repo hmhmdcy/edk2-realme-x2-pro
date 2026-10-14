@@ -39,7 +39,7 @@ for name, expected_sha in (
         cycles_passed=3,vblank_waits=60,vblank_elapsed_seconds=elapsed)
 
 facts = (root/'final-facts.txt').read_text()
-assert facts.splitlines()[1:3] == ['fc4fe164-1e90-402a-b841-ce870ba9ddfb','0']
+assert facts.splitlines()[1:3] == ['PRIVATE_UUID','0']
 assert 'PARTNAME=logdump' in facts and 'logdump_partition=/dev/sde32' in facts
 assert 'c7778d45c336b35cf75c2842c083b513343f59a0a1864fe52ad2105d3d55e6c7  /dev/sde32' in facts
 assert '57508887131ae55cf9465fa1a44280fa45b507a3439345ffe635dc7544eaa999  -' in facts
@@ -58,7 +58,7 @@ assert '\nK73_EUD_NATIVE_OK\n' in (root/'native-eud.txt').read_text()
 assert '\nK73_REBOOT_EUD_OK\n' in (root/'reboot-eud.txt').read_text()
 for prefix in ('display','deps','native'):
     assert 'F1' in (root/(prefix+'-f1-wsl.txt')).read_text()
-assert '62bc28a1' in (root/'same-image-ready-devices.out').read_text()
+assert 'PRIVATE_DEVICE_ID' in (root/'same-image-ready-devices.out').read_text()
 assert json.loads((root/'same-image-ready-reboot.json').read_text())['no_flash']
 
 result = dict(captures_verified=len(captures),tests=tests,final_boot_id=facts.splitlines()[1],

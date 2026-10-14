@@ -2,7 +2,7 @@
 set -eu
 target=/tmp/k86-guard-before-final.txt
 [ ! -e "$target" ]
-[ "$(cat /proc/sys/kernel/random/boot_id)" = 32bf2d8f-8dde-47dc-9b88-e87db9e95198 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 grep -qx 'PARTNAME=boot' /sys/class/block/sde11/uevent
 grep -qx 'PARTNAME=logdump' /sys/class/block/sde32/uevent
 [ "$(cat /sys/class/block/sde11/size)" = 196608 ]

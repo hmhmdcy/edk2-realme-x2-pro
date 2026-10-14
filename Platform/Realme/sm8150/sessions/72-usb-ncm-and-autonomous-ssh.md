@@ -8,7 +8,7 @@ Windows自动加载系统UsbNcm驱动，EUD/COM14同时保留；双向4MiB随机
 
 ## 72.1 新基线和原生USB实现
 
-新回执确认旧#61、boot_id=a31c1158-fbca-4515-83ac-1a3b40ee808e、taint=0。
+新回执确认旧#61、boot_id=PRIVATE_BOOT_ID、taint=0。
 手机保存73173字节完整dmesg，gzip15594字节，SHA256为
 5809a52e1603f6e8d66506c50ef708fc2e59edff49825265b7939121b8020071。
 EUD严格base64解码、gzip CRC、SHA和长度全部通过。随后同一压缩文件经普通USB
@@ -57,12 +57,12 @@ make Image无新增warning/error。FAT中Image逐字匹配、DTB不变，空闲3
 ## 72.3 部署和验收边界
 
 Windows单次F1无回执，独立fastboot为空，因此没有写分区。WSL既有工具随后收到
-F1回执、设备离开导致EIO，finally dispose/detach；独立fastboot确认62bc28a1/
+F1回执、设备离开导致EIO，finally dispose/detach；独立fastboot确认PRIVATE_DEVICE_ID/
 msmnile/logdump64MiB后，仅写logdump且Writing OKAY，boot固件保留session71版本。
 一次WSL attach初始lsusb未枚举，finally释放；后续加入有界枚举等待，未改变EUD参数。
 后续同镜像重启有初始fastboot枚举为空的记录，等新枚举后再reboot，无额外刷机。
 
-新#62首次boot_id=c93bf272-84a1-4b83-a55a-9376085c729b、taint=0，自动NCM/SSH启动，
+新#62首次boot_id=PRIVATE_BOOT_ID、taint=0，自动NCM/SSH启动，
 同一主机密钥通过认证；/usr/sbin/samurai-usb再次start只报告already started。
 PTY实际/dev/pts/0，tty/stty与K72PTYOK通过；SCP显式-O使用已构建的legacy scp协议。
 部署前后各一对4194304字节随机文件，上行原件/手机哈希、下行手机/主机哈希均一致。
@@ -79,7 +79,7 @@ EUD原生命令在NCM工作时取得#62的新boot_id/taint回执；F1再次返�
 随后再做独立SSH复测，其确切boot_id/结果见independent-ssh-validation与最终facts。
 com-up只用于恢复EUD的COM枚举，不能把其后的SSH测试冒充之前的结果。
 
-最终独立复测boot_id=5ecfab9e-fa56-4ead-acf8-a5147904980e、#62/taint0，
+最终独立复测boot_id=PRIVATE_BOOT_ID、#62/taint0，
 没有发送com-up即取得新SSH认证/状态回执，旧known_hosts身份保持。一次NCM刚枚举时
 SSH尚未就绪，失败保留；之后的新回执才算通过。最终完整53594字节dmesg
 （gzip12566，SHA256=be43829e3a55bfdda53835a12ba45d7bf84f83c8ef2c03d272aee8f985f02ebd）

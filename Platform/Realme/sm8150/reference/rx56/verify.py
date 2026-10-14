@@ -26,7 +26,7 @@ for name in ['front-identity.json','reset-identity.json','padding-identity.json'
     assert ident['identity_matches'] and ident['section_headers_match']
     assert ident['binary_sha256']=='ad2ace071d2362d8712820f62570757e1af266a054d2c3d3a6964a41e7cc6151'
     assert ident['pdb_sha256']=='ee203464fc2ab419eaa66c90e345e24eba3fa0e103c0fe11f91e428897ef9155'
-    assert (ident['guid'],ident['age'])==('66581f50-52c9-4a32-9ac6-fe0c57b94a80',1)
+    assert (ident['guid'],ident['age'])==('PRIVATE_UUID',1)
     for f in ident['functions']:
         data=bytearray(); address=int(f['start_rva'],16)
         for line in (base/f['disassembly']).read_text().splitlines():

@@ -8,7 +8,7 @@
   ],
   "tests": {
     "drain-display-tests": {
-      "boot_id": "904ec7b8-c9ef-4a00-8eda-be5535002262",
+      "boot_id": "PRIVATE_BOOT_ID",
       "crc_aba_repetitions": 3,
       "crc_samples": 72,
       "display_off_on_cycles": 9,
@@ -25,7 +25,7 @@
       ]
     },
     "drain-reboot-display-tests": {
-      "boot_id": "2412cbe2-9f1d-4ea4-9c0b-8a19d4ff6568",
+      "boot_id": "PRIVATE_BOOT_ID",
       "crc_aba_repetitions": 3,
       "crc_samples": 72,
       "display_off_on_cycles": 9,
@@ -68,7 +68,7 @@
       "panel_power_reads": 10
     }
   },
-  "final_boot_id": "2412cbe2-9f1d-4ea4-9c0b-8a19d4ff6568",
+  "final_boot_id": "PRIVATE_BOOT_ID",
   "taint": 0,
   "final_partition_hashes_pass": true,
   "only_logdump_written": true,

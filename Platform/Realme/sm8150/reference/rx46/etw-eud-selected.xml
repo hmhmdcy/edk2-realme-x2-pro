@@ -2,7 +2,7 @@
 <Events xmlns="http://schemas.microsoft.com/win/2004/08/events/event" xmlns:ns1="http://schemas.microsoft.com/win/2004/08/events/trace">
   <Event>
     <System>
-      <Provider Guid="{9e814aad-3204-11d2-9a82-006008a86939}" />
+      <Provider Guid="{PRIVATE_UUID}" />
       <EventID>0</EventID>
       <Version>2</Version>
       <Level>0</Level>
@@ -10,7 +10,7 @@
       <Opcode>0</Opcode>
       <Keywords>0x0</Keywords>
       <TimeCreated SystemTime="2026-10-09T19:41:56.860084700+07:59" />
-      <Correlation ActivityID="{00000000-0000-0000-0000-000000000000}" />
+      <Correlation ActivityID="{PRIVATE_UUID}" />
       <Execution ProcessID="129576" ThreadID="125208" ProcessorID="0" KernelTime="105" UserTime="15" />
       <Channel />
       <Computer />
@@ -45,12 +45,12 @@
       <ns1:EventName>EventTrace</ns1:EventName>
     </RenderingInfo>
     <ns1:ExtendedTracingInfo>
-      <ns1:EventGuid>{68fdd900-4a3e-11d1-84f4-0000f80464e3}</ns1:EventGuid>
+      <ns1:EventGuid>{PRIVATE_UUID}</ns1:EventGuid>
     </ns1:ExtendedTracingInfo>
   </Event>
   <Event>
     <System>
-      <Provider Name="Microsoft-Windows-USB-USBXHCI" Guid="{30e1d284-5d88-459c-83fd-6345b39b19ec}" />
+      <Provider Name="Microsoft-Windows-USB-USBXHCI" Guid="{PRIVATE_UUID}" />
       <EventID>4</EventID>
       <Version>3</Version>
       <Level>4</Level>
@@ -58,7 +58,7 @@
       <Opcode>10</Opcode>
       <Keywords>0x4000000000008001</Keywords>
       <TimeCreated SystemTime="2026-10-09T19:41:56.863652100+07:59" />
-      <Correlation ActivityID="{e5427735-572e-0000-06e3-bee52e57dd01}" />
+      <Correlation ActivityID="{PRIVATE_UUID}" />
       <Execution ProcessID="129576" ThreadID="125208" ProcessorID="0" KernelTime="105" UserTime="15" />
       <Channel>Microsoft-Windows-USB-USBXHCI-Analytic</Channel>
       <Computer />
@@ -185,7 +185,7 @@
   </Event>
   <Event>
     <System>
-      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{36da592d-e43a-4e28-af6f-4bc57c5a11e8}" />
+      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{PRIVATE_UUID}" />
       <EventID>6</EventID>
       <Version>0</Version>
       <Level>4</Level>
@@ -193,7 +193,7 @@
       <Opcode>12</Opcode>
       <Keywords>0x8000000000008001</Keywords>
       <TimeCreated SystemTime="2026-10-09T19:41:57.083347100+07:59" />
-      <Correlation ActivityID="{e5427735-572e-0004-db77-7ce52e57dd01}" />
+      <Correlation ActivityID="{PRIVATE_UUID}" />
       <Execution ProcessID="130332" ThreadID="130408" ProcessorID="4" KernelTime="90" UserTime="15" />
       <Channel>Microsoft-Windows-USB-UCX-Analytic</Channel>
       <Computer />
@@ -225,7 +225,7 @@
   </Event>
   <Event>
     <System>
-      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{36da592d-e43a-4e28-af6f-4bc57c5a11e8}" />
+      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{PRIVATE_UUID}" />
       <EventID>6</EventID>
       <Version>0</Version>
       <Level>4</Level>
@@ -233,7 +233,7 @@
       <Opcode>12</Opcode>
       <Keywords>0x8000000000008001</Keywords>
       <TimeCreated SystemTime="2026-10-09T19:41:57.083347400+07:59" />
-      <Correlation ActivityID="{e5427735-572e-0004-db77-7ce52e57dd01}" />
+      <Correlation ActivityID="{PRIVATE_UUID}" />
       <Execution ProcessID="130332" ThreadID="130408" ProcessorID="4" KernelTime="90" UserTime="15" />
       <Channel>Microsoft-Windows-USB-UCX-Analytic</Channel>
       <Computer />
@@ -265,7 +265,7 @@
   </Event>
   <Event>
     <System>
-      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{36da592d-e43a-4e28-af6f-4bc57c5a11e8}" />
+      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{PRIVATE_UUID}" />
       <EventID>26</EventID>
       <Version>0</Version>
       <Level>4</Level>
@@ -273,7 +273,7 @@
       <Opcode>1</Opcode>
       <Keywords>0x80000000000001C0</Keywords>
       <TimeCreated SystemTime="2026-10-09T19:42:00.453560200+07:59" />
-      <Correlation ActivityID="{00000000-0000-0000-0000-000000000000}" />
+      <Correlation ActivityID="{PRIVATE_UUID}" />
       <Execution ProcessID="4" ThreadID="123356" ProcessorID="8" KernelTime="0" UserTime="0" />
       <Channel>Microsoft-Windows-USB-UCX-Analytic</Channel>
       <Computer />
@@ -321,7 +321,7 @@
   </Event>
   <Event>
     <System>
-      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{36da592d-e43a-4e28-af6f-4bc57c5a11e8}" />
+      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{PRIVATE_UUID}" />
       <EventID>27</EventID>
       <Version>1</Version>
       <Level>4</Level>
@@ -329,7 +329,7 @@
       <Opcode>2</Opcode>
       <Keywords>0x80000000000001C0</Keywords>
       <TimeCreated SystemTime="2026-10-09T19:42:00.453590900+07:59" />
-      <Correlation ActivityID="{00000000-0000-0000-0000-000000000000}" />
+      <Correlation ActivityID="{PRIVATE_UUID}" />
       <Execution ProcessID="0" ThreadID="0" ProcessorID="1" KernelTime="47106075" UserTime="0" />
       <Channel>Microsoft-Windows-USB-UCX-Analytic</Channel>
       <Computer />
@@ -378,7 +378,7 @@
   </Event>
   <Event>
     <System>
-      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{36da592d-e43a-4e28-af6f-4bc57c5a11e8}" />
+      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{PRIVATE_UUID}" />
       <EventID>26</EventID>
       <Version>0</Version>
       <Level>4</Level>
@@ -386,7 +386,7 @@
       <Opcode>1</Opcode>
       <Keywords>0x80000000000001C0</Keywords>
       <TimeCreated SystemTime="2026-10-09T19:42:05.561300800+07:59" />
-      <Correlation ActivityID="{00000000-0000-0000-0000-000000000000}" />
+      <Correlation ActivityID="{PRIVATE_UUID}" />
       <Execution ProcessID="4" ThreadID="130056" ProcessorID="1" KernelTime="0" UserTime="0" />
       <Channel>Microsoft-Windows-USB-UCX-Analytic</Channel>
       <Computer />
@@ -434,7 +434,7 @@
   </Event>
   <Event>
     <System>
-      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{36da592d-e43a-4e28-af6f-4bc57c5a11e8}" />
+      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{PRIVATE_UUID}" />
       <EventID>27</EventID>
       <Version>1</Version>
       <Level>4</Level>
@@ -442,7 +442,7 @@
       <Opcode>2</Opcode>
       <Keywords>0x80000000000001C0</Keywords>
       <TimeCreated SystemTime="2026-10-09T19:42:05.561333100+07:59" />
-      <Correlation ActivityID="{00000000-0000-0000-0000-000000000000}" />
+      <Correlation ActivityID="{PRIVATE_UUID}" />
       <Execution ProcessID="0" ThreadID="0" ProcessorID="1" KernelTime="47110305" UserTime="0" />
       <Channel>Microsoft-Windows-USB-UCX-Analytic</Channel>
       <Computer />
@@ -491,7 +491,7 @@
   </Event>
   <Event>
     <System>
-      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{36da592d-e43a-4e28-af6f-4bc57c5a11e8}" />
+      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{PRIVATE_UUID}" />
       <EventID>26</EventID>
       <Version>0</Version>
       <Level>4</Level>
@@ -499,7 +499,7 @@
       <Opcode>1</Opcode>
       <Keywords>0x80000000000001C0</Keywords>
       <TimeCreated SystemTime="2026-10-09T19:42:09.013611300+07:59" />
-      <Correlation ActivityID="{00000000-0000-0000-0000-000000000000}" />
+      <Correlation ActivityID="{PRIVATE_UUID}" />
       <Execution ProcessID="4" ThreadID="130056" ProcessorID="3" KernelTime="0" UserTime="0" />
       <Channel>Microsoft-Windows-USB-UCX-Analytic</Channel>
       <Computer />
@@ -547,7 +547,7 @@
   </Event>
   <Event>
     <System>
-      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{36da592d-e43a-4e28-af6f-4bc57c5a11e8}" />
+      <Provider Name="Microsoft-Windows-USB-UCX" Guid="{PRIVATE_UUID}" />
       <EventID>27</EventID>
       <Version>1</Version>
       <Level>4</Level>
@@ -555,7 +555,7 @@
       <Opcode>2</Opcode>
       <Keywords>0x80000000000001C0</Keywords>
       <TimeCreated SystemTime="2026-10-09T19:42:09.013644500+07:59" />
-      <Correlation ActivityID="{00000000-0000-0000-0000-000000000000}" />
+      <Correlation ActivityID="{PRIVATE_UUID}" />
       <Execution ProcessID="0" ThreadID="0" ProcessorID="1" KernelTime="47113320" UserTime="0" />
       <Channel>Microsoft-Windows-USB-UCX-Analytic</Channel>
       <Computer />

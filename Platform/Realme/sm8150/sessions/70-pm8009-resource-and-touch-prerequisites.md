@@ -12,7 +12,7 @@ SHA256、gzip CRC 和长度核对。没有 panic/Oops，仍为 #60、同 boot_id
 usbipd 为 Shared、未 Attached；已知 owner 扫描为空。实际 Git HEAD 为
 218812bca7dacd7aaec7cd1aae74bec449433df4，工作区干净。
 既有 Windows 原生终端取得新 K70F 回执，确认 Linux 7.3.0-rc6、boot_id
-afbbf870-b998-43d8-ab3d-42b3c68c0122、taint=0；不是用 USB PID 推断系统模式。
+PRIVATE_UUID、taint=0；不是用 USB PID 推断系统模式。
 
 每份副本先保存在手机 /tmp，再压缩和导出；完整起止标记、设备 SHA、gzip CRC
 及手机 wc 字节数逐项通过。没有填补实时输出的残缺前缀。

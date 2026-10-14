@@ -33,11 +33,11 @@ foreach ($pair in @(
 $usb=(& 'C:\Program Files\usbipd-win\usbipd.exe' list | Out-String)
 if ($usb -match '(?m)^6-5\s+05c6:9505\s+[^\r\n]*Attached') {throw 'EUD still attached'}
 $devices=Invoke-DisplayFastboot 'confirm-devices' @('devices') 15
-if ($devices -notmatch '(?im)^62bc28a1\s+fastboot\s*$') {throw 'Phone not independently enumerated in fastboot'}
-$product=Invoke-DisplayFastboot 'confirm-product' @('-s','62bc28a1','getvar','product') 15
+if ($devices -notmatch '(?im)^PRIVATE_DEVICE_ID\s+fastboot\s*$') {throw 'Phone not independently enumerated in fastboot'}
+$product=Invoke-DisplayFastboot 'confirm-product' @('-s','PRIVATE_DEVICE_ID','getvar','product') 15
 if ($product -notmatch 'product:\s*msmnile') {throw 'Unexpected product'}
 foreach ($part in @('boot','logdump')) {
-    $size=Invoke-DisplayFastboot "confirm-size-$part" @('-s','62bc28a1','getvar',"partition-size:$part") 15
+    $size=Invoke-DisplayFastboot "confirm-size-$part" @('-s','PRIVATE_DEVICE_ID','getvar',"partition-size:$part") 15
     if ($size -notmatch "partition-size:${part}:\s*(0x[0-9a-fA-F]+)") {throw "Partition size missing: $part"}
     $partitionBytes=[Convert]::ToInt64($Matches[1].Substring(2),16)
     $image="$out\$part-k73-display.img"
@@ -45,10 +45,10 @@ foreach ($part in @('boot','logdump')) {
     if ($part -eq 'logdump' -and $partitionBytes -ne 67108864) {throw 'Unexpected logdump size'}
 }
 foreach ($part in @('logdump','boot')) {
-    $flash=Invoke-DisplayFastboot "flash-$part" @('-s','62bc28a1','flash',$part,"$out\$part-k73-display.img") 60
+    $flash=Invoke-DisplayFastboot "flash-$part" @('-s','PRIVATE_DEVICE_ID','flash',$part,"$out\$part-k73-display.img") 60
     if ($flash -notmatch "Writing '$part'\s+OKAY") {throw 'Successful write not observed'}
     $flash
 }
-$reboot=Invoke-DisplayFastboot 'reboot' @('-s','62bc28a1','reboot') 15
-[ordered]@{utc=[DateTime]::UtcNow.ToString('o');serial='62bc28a1';product='msmnile';flashed_partitions=@('logdump','boot');flash_success=$true;reboot_success=$true;processes_disposed=$true;userdata_written=$false;gpt_written=$false} | ConvertTo-Json -Depth 4 | Set-Content "$out\flash-validation.json"
+$reboot=Invoke-DisplayFastboot 'reboot' @('-s','PRIVATE_DEVICE_ID','reboot') 15
+[ordered]@{utc=[DateTime]::UtcNow.ToString('o');serial='PRIVATE_DEVICE_ID';product='msmnile';flashed_partitions=@('logdump','boot');flash_success=$true;reboot_success=$true;processes_disposed=$true;userdata_written=$false;gpt_written=$false} | ConvertTo-Json -Depth 4 | Set-Content "$out\flash-validation.json"
 $reboot

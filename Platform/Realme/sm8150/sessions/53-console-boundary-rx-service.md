@@ -12,7 +12,7 @@ RX 改善写成所有 TX/reopen 问题已经解决。证据见 [reference/rx53](
 主机 continuous IN 对照只改善 TX。开始再次核实三节点 OK、COM14、Shared/not
 Attached、无 owner，Git 干净；实际源码/Image 保留 RX48 B。新 Ctrl-U 第一次受理，
 frames=110/bytes=1078/tty_before=1077、IRQ active=1/fault=0。旧 F1 第 2 OUT 受理，
-独立 fastboot 序列号 62bc28a1/product msmnile 核对后才刷候选。
+独立 fastboot 序列号 PRIVATE_DEVICE_ID/product msmnile 核对后才刷候选。
 
 再次查阅 [console API](https://docs.kernel.org/driver-api/tty/console.html)、
 [workqueue](https://docs.kernel.org/core-api/workqueue.html) 和

@@ -40,16 +40,16 @@ for group in ['preinstall','initial','native','prefinal','fault','initial-final'
         'taint':0,'frame_done_timeouts':count,'underruns':0,
         'configuration_file_matches':expected if config is not None else None}
     if group=='preinstall':
-        assert state.startswith('f02d218a-cc7d-4b92-8858-c8eeaeab5777\n') and '#85 SMP PREEMPT' in state
+        assert state.startswith('PRIVATE_UUID\n') and '#85 SMP PREEMPT' in state
         assert 'snapshot:count=1' in raw[group+'-trace-settings.txt'].decode()
         assert '60e183a6780945885a738ac1bd0c7e23ed41515bca662cb50a831ede3b57302b ' in raw[group+'-partition-hashes.txt'].decode()
         assert raw[group+'-registers.txt']==(O/'input-after-registers.txt').read_bytes()
     elif group in ['initial','native','prefinal','fault']:
-        assert state.splitlines()[0]!='f02d218a-cc7d-4b92-8858-c8eeaeab5777' and '#86 SMP PREEMPT' in state
+        assert state.splitlines()[0]!='PRIVATE_UUID' and '#86 SMP PREEMPT' in state
         candidate=json.loads((O/'candidate-validation.json').read_text())
         assert candidate['candidate_logdump_sha256'] in raw[group+'-partition-hashes.txt'].decode()
     else:
-        assert state.splitlines()[0]!='32bf2d8f-8dde-47dc-9b88-e87db9e95198' and '#87 SMP PREEMPT' in state
+        assert state.splitlines()[0]!='PRIVATE_UUID' and '#87 SMP PREEMPT' in state
         candidate=json.loads((O/'candidate-final-validation.json').read_text())
         assert candidate['candidate_logdump_sha256'] in raw[group+'-partition-hashes.txt'].decode()
 (O/'capture-audit.json').write_text(json.dumps({'audit':'PASS','groups':report},indent=2)+'\n')

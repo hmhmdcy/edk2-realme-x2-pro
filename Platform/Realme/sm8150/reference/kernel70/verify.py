@@ -47,7 +47,7 @@ for name, marker, plain_len, gzip_len in [
         'device_sha256': digest, 'plain_sha256': hashlib.sha256(body).hexdigest(),
         'sha256_pass': True, 'gzip_crc_pass': True})
 
-boot = b'afbbf870-b998-43d8-ab3d-42b3c68c0122\n0\n'
+boot = b'PRIVATE_UUID\n0\n'
 state, facts, cmd = read('provider-state.validated.txt'), read('runtime-facts.validated.txt'), read('cmd-db.validated.txt')
 assert all(data.startswith(boot) for data in (state, facts, cmd))
 assert b'debugfs' not in state

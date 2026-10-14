@@ -13,7 +13,7 @@ namespace Rx63 {
   public sealed class BindingResult { public string PublishedInf; public bool NeedReboot; }
   public static class DeviceDriver {
     public static int StageCalls, InstallCalls;
-    static readonly Guid Ports = new Guid("4d36e978-e325-11ce-bfc1-08002be10318");
+    static readonly Guid Ports = new Guid("PRIVATE_UUID");
     const uint CompatibleDriver = 2;
     [StructLayout(LayoutKind.Sequential)] struct DevInfo {
       public uint cbSize; public Guid ClassGuid; public uint DevInst; public UIntPtr Reserved;

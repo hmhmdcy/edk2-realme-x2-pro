@@ -82,7 +82,7 @@ len=2 始终保留给头部 F1 `[90][02]`，tty 使用 len=1、3..14；两字节
 
 只在新证据支持必要改动时构建，保留用户已有内核修改与备份。增量构建后用原 FAT 副本
 替换 Image、核对 DTB；禁用旧 build-image.sh。新内核优先只刷 logdump；总授权范围仅
-boot/logdump。发 F1 前确认旧 owner 已关闭，独立核实 fastboot 序列号 62bc28a1 后再刷。
+boot/logdump。发 F1 前确认旧 owner 已关闭，独立核实 fastboot 序列号 PRIVATE_DEVICE_ID 后再刷。
 串口始终一个 owner、try/finally Close/Dispose；不做无人值守大循环。
 
 ## 42.5 可直接粘贴的短提示词

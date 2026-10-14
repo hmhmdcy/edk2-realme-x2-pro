@@ -2,7 +2,7 @@
 set -eu
 target=/tmp/k86-guard-before-flash.txt
 [ ! -e "$target" ]
-[ "$(cat /proc/sys/kernel/random/boot_id)" = f02d218a-cc7d-4b92-8858-c8eeaeab5777 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 grep -qx 'PARTNAME=boot' /sys/class/block/sde11/uevent
 grep -qx 'PARTNAME=logdump' /sys/class/block/sde32/uevent
 [ "$(cat /sys/class/block/sde11/size)" = 196608 ]

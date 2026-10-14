@@ -83,7 +83,7 @@ def state(name):
             'power_supply': values}
 
 states = {name: state(name) for name in captures if name.endswith('-state.txt')}
-assert 'f02d218a-cc7d-4b92-8858-c8eeaeab5777' in text('short-before-state.txt')
+assert 'PRIVATE_UUID' in text('short-before-state.txt')
 assert '#85 SMP PREEMPT' in text('short-before-state.txt')
 assert states['short-before-state.txt']['uptime_seconds'] < states['short-after-state.txt']['uptime_seconds']
 assert states['chemistry-before-state.txt']['uptime_seconds'] < states['chemistry-after-state.txt']['uptime_seconds']

@@ -1,6 +1,6 @@
 $ErrorActionPreference='Stop'
 $rxTarget='USB\VID_05C6&PID_9505\8&5580DC5&0&5'
-$rxKey='Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e978-e325-11ce-bfc1-08002be10318}\0008'
+$rxKey='Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{PRIVATE_UUID}\0008'
 $rxInstalled=Get-ItemProperty -LiteralPath $rxKey
 $rxSig=Get-AuthenticodeSignature -LiteralPath 'C:\Windows\System32\drivers\qcusbser.sys'
 $rxBoot=Get-ItemProperty -LiteralPath 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\State'

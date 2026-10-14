@@ -41,7 +41,7 @@
   "bootconfig_embedded_exactly": true,
   "function_tracing_disabled": true,
   "hardware_driver_configuration_preserved": true,
-  "before_boot_id": "87753933-4992-45d2-aaf5-d9db9c11d1a3",
+  "before_boot_id": "PRIVATE_BOOT_ID",
   "before_timeout_count": 2,
   "before_raw_sha256": "8ba42d3495229b689358ec7d2d9db2d46203a0d8f52ac0a768fb122bcbcca6af",
   "deployment_done": false,

@@ -10,7 +10,7 @@
 
 ## 65.1 设备核实与限定启动
 
-用户选择 WSL 路径并告知手机已连接。先看到 18d1:d00d fastboot，设备 62bc28a1，
+用户选择 WSL 路径并告知手机已连接。先看到 18d1:d00d fastboot，设备 PRIVATE_DEVICE_ID，
 product=msmnile；只执行一次 fastboot reboot 启动现有镜像，没有刷分区。冷启动后
 9500/9501 正常而 9505 未出现，按已审查的正常 COM 启用路径执行一次 eudtool com-up：
 CTL CLR0、SET20、SET1000、SET2000、等待200ms、CLR2000，五次写均完成5字节。

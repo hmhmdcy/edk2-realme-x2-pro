@@ -3,7 +3,7 @@
 Read-only analysis of the same installed qcusbser 2.1.3.5 identified in RX50.
 PE SHA ad2ace071d2362d8712820f62570757e1af266a054d2c3d3a6964a41e7cc6151;
 PDB SHA ee203464fc2ab419eaa66c90e345e24eba3fa0e103c0fe11f91e428897ef9155;
-GUID 66581f50-52c9-4a32-9ac6-fe0c57b94a80, age 1. Matching section headers and
+GUID PRIVATE_UUID, age 1. Matching section headers and
 AMD64 exception-directory bounds establish the selected function identities.
 This does not use the newer public WDF implementation as the installed driver.
 

@@ -13,7 +13,7 @@ inf='''; Experimental EUD COM package, offline candidate only.
 [Version]
 Signature="$WINDOWS NT$"
 Class=Ports
-ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+ClassGuid={PRIVATE_UUID}
 Provider=%Provider%
 DriverVer=10/10/2026,1.0.0.1
 CatalogFile=qceudexp.cat

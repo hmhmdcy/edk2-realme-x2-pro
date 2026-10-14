@@ -23,7 +23,7 @@ assert all(p in stock for p in ('guard_mp_rc=2','guard_touch_rc=2','read_rc=0','
 regs=dict(re.findall(r'reg=(0x[0-9a-f]{2}) value=(0x[0-9a-f]{2})',(out/'final-registers.txt').read_text()))
 expected={'0x08':'0x16','0x09':'0x4c','0x0a':'0x36','0x07':'0x14','0x00':'0x12','0x01':'0x2d','0x02':'0x06','0x03':'0xa2','0x04':'0x68','0x0f':'0x12','0x0b':'0x00','0x13':'0x0f'}
 assert regs==expected
-state=(out/'final-state.txt').read_text();assert state.splitlines()[0]=='87753933-4992-45d2-aaf5-d9db9c11d1a3' and state.splitlines()[3]=='0'
+state=(out/'final-state.txt').read_text();assert state.splitlines()[0]=='PRIVATE_UUID' and state.splitlines()[3]=='0'
 dmesg=(out/'final-dmesg.txt').read_text();patterns=('dsi.*(?:error|underflow|overflow)',r'\bOops:',r'\bBUG:','smmu.*(?:fault|error)','geni.*(?:error|failed)','i2c.*(?:error|failed)')
 issues={p:len(re.findall(p,dmesg,re.I)) for p in patterns};assert not any(issues.values()),issues
 assert [int(x) for x in re.findall(r'underrun:\s*(\d+)',state)]==[0]

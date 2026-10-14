@@ -5,7 +5,7 @@ attached handset photograph confirms colored noise. Its SHA256 is
 `eb174bce95e4f59ef1214838ef6488beb289ca734812c349cc8a84a3a3f9f4da`;
 the photograph remains local.
 
-On kernel build #72, boot ID `5093ea6a-ef56-4dc1-bd84-6296190bbc80`, the CPU
+On kernel build #72, boot ID `PRIVATE_BOOT_ID`, the CPU
 framebuffer has intact black-background/white-text fbcon output. It is 1080x2400,
 XR24, 32 bpp with a 4352-byte stride. The decoded framebuffer image is local
 `console.png`. No inference of a correct physical display is permitted from
@@ -33,7 +33,7 @@ transport settings or supply voltages.
 
 ## EOT-only candidate
 
-Build #74, boot ID `a4543a18-48bb-488c-b3da-139a6957a004`, disabled EOT append. The initial capture had no DSI worker errors and the host EOT register was zero, yet the user still saw colored noise during a static-white hold. The whole logdump readback matched 1b457172fe3203e3c73833b5f7eb0d497cfebb215310bcf1f36b72e490a0a49a and the boot-image prefix matched 43ddcba2444e1672cd95205f6984c761eaeb59c83162cffdffb371c50a29c37b. This is a failed physical display candidate, not a fix.
+Build #74, boot ID `PRIVATE_BOOT_ID`, disabled EOT append. The initial capture had no DSI worker errors and the host EOT register was zero, yet the user still saw colored noise during a static-white hold. The whole logdump readback matched 1b457172fe3203e3c73833b5f7eb0d497cfebb215310bcf1f36b72e490a0a49a and the boot-image prefix matched 43ddcba2444e1672cd95205f6984c761eaeb59c83162cffdffb371c50a29c37b. This is a failed physical display candidate, not a fix.
 
 The next candidate additionally restores stock noncontinuous clock mode. The controller code explicitly clears an inherited forced-HS request and the PHY forced-clock bits.
 
@@ -53,7 +53,7 @@ support the deployed configuration; EOT-only was insufficient. We did not
 change the measured link rate, supply voltages, DSC PPS or EUD transport.
 
 The same final #76 image was rebooted again without a flash. Boot ID
-`af922f36-bacd-481d-a5c5-21c8e3fada65` passes twelve additional GPU draws and
+`PRIVATE_UUID` passes twelve additional GPU draws and
 three panel power cycles, with zero DSI worker errors in the complete log.
 Total verified GPU draws are 39,096; final-build regression panel cycles are
 twelve. The second boot adds automated evidence, not a second optical report.

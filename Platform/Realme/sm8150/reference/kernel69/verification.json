@@ -137,7 +137,7 @@
     "Source snapshots and successful exports are not USB traffic or hardware-coexistence validation."
   ],
   "linux": {
-    "boot_id": "afbbf870-b998-43d8-ab3d-42b3c68c0122",
+    "boot_id": "PRIVATE_BOOT_ID",
     "taint": 0,
     "full_saved_dmesg_bytes": 69499,
     "scsi_disks": 6,

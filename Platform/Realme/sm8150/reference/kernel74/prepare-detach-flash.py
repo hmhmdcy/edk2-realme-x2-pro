@@ -9,7 +9,7 @@ assert text.count(needle)==1
 text = text.replace(needle,'''$devices=''
 for ($attempt=1; $attempt -le 10; $attempt++) {
     $devices=Invoke-K72Fastboot "detach-confirm-devices-$attempt" @('devices') 15
-    if ($devices -match '(?im)^62bc28a1\\s+fastboot\\s*$') {break}
+    if ($devices -match '(?im)^PRIVATE_DEVICE_ID\\s+fastboot\\s*$') {break}
     Start-Sleep -Milliseconds 1000
 }
 ''')
@@ -20,7 +20,7 @@ assert text.count(needle)==1
 text = text.replace(needle,'''$devices=''
 for ($attempt=1; $attempt -le 10; $attempt++) {
     $devices=Invoke-RebootFastboot "devices-$attempt" @('devices')
-    if ($devices -match '(?im)^62bc28a1\\s+fastboot\\s*$') {break}
+    if ($devices -match '(?im)^PRIVATE_DEVICE_ID\\s+fastboot\\s*$') {break}
     Start-Sleep -Milliseconds 1000
 }
 ''')

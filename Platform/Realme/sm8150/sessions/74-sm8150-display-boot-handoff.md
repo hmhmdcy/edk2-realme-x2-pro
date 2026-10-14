@@ -42,7 +42,7 @@ checkpatch（忽略本地raw diff的提交消息元数据）0错误0警告，最
 
 ## 最终验收
 
-第一boot_id=904ec7b8-c9ef-4a00-8eda-be5535002262，第二/最终=2412cbe2-9f1d-4ea4-9c0b-8a19d4ff6568。
+第一boot_id=PRIVATE_BOOT_ID，第二/最终=PRIVATE_BOOT_ID。
 每次三组A/B/A、72个DPU CRC样本，合计144个；A=69961448/60af15f5、
 B=25e11871/25e11871，A复现一致。每次九组60次vblank等待为约0.99秒，九次
 完整panel disable/unprepare/prepare/enable与控制台恢复，共18次。两次日志各有

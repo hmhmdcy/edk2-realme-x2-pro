@@ -19,7 +19,7 @@
   "other_executable_bytes_unchanged": true,
   "changed_modules": [
     {
-      "guid": "bad0554e-22e9-4d83-9afd-cc87727a1a45",
+      "guid": "PRIVATE_UUID",
       "name": "PlatformSmbiosDxe",
       "before_size": 36992,
       "after_size": 36992,
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "guid": "6d33944a-ec75-4855-a54d-809c75241f6c",
+      "guid": "PRIVATE_UUID",
       "name": "BdsDxe",
       "before_size": 110714,
       "after_size": 110714,
@@ -43,7 +43,7 @@
       ]
     },
     {
-      "guid": "462caa21-7614-4503-836e-8ab6f4662331",
+      "guid": "PRIVATE_UUID",
       "name": "UiApp",
       "before_size": 200800,
       "after_size": 200800,
@@ -69,12 +69,12 @@
   ],
   "changed_compact_modules": [
     {
-      "guid": "8af09f13-44c5-96ec-1437-dd899cb5ee5d",
+      "guid": "PRIVATE_UUID",
       "name": "",
       "type": "0x3"
     },
     {
-      "guid": "9e21fd93-9c72-4c15-8c4b-e77f1db2d792",
+      "guid": "PRIVATE_UUID",
       "name": "",
       "type": "0xb"
     }

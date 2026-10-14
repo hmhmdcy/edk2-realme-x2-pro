@@ -42,7 +42,7 @@ def text(suffix):
 states = {}
 for suffix in ['before-state', 'after-state']:
     raw = text(suffix)
-    assert 'f02d218a-cc7d-4b92-8858-c8eeaeab5777' in raw and '#85 SMP PREEMPT' in raw
+    assert 'PRIVATE_UUID' in raw and '#85 SMP PREEMPT' in raw
     assert re.search(r'^0$', raw, re.M)
     assert 'frame_done_cnt:0mode:' in raw and 'underrun:       0' in raw
     assert '\n1\nsnapshot:count=1\n' in raw

@@ -2,7 +2,7 @@
 # Session80 bounded observations, on the already-verified session79 boot.
 # No flash, reboot, panel cycle, charging settings, NVM or USB role changes.
 set -eu
-test "$(cat /proc/sys/kernel/random/boot_id)" = 87753933-4992-45d2-aaf5-d9db9c11d1a3
+test "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID
 test ! -e /tmp/k80-final-state.txt
 test "$(readlink -f /sys/bus/i2c/devices/i2c-0/of_node)" = /sys/firmware/devicetree/base/soc@0/geniqup@8c0000/i2c@884000
 test "$(readlink -f /sys/bus/i2c/devices/i2c-2/of_node)" = /sys/firmware/devicetree/base/soc@0/geniqup@cc0000/i2c@c94000

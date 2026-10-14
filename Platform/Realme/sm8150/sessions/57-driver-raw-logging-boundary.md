@@ -23,7 +23,7 @@ RX43 撤回原始文件里已有、显示却隐藏的旧缺输出样本。RX55 �
 使用的公开配置指南；方法来自本机 **实际系统服务文件** 的精确机器码，不把旧驱动
 源码当实装版本。系统文件与审查文件 SHA256 均为
 `ad2ace071d2362d8712820f62570757e1af266a054d2c3d3a6964a41e7cc6151`，
-匹配 PDB GUID `66581f50-52c9-4a32-9ac6-fe0c57b94a80`、age=1。
+匹配 PDB GUID `PRIVATE_UUID`、age=1。
 
 | 新核对的来源 | 用途与限制 |
 |---|---|
@@ -64,7 +64,7 @@ finally 启用相同实例，再等待完整身份恢复。补测 mock 返回设
 ## 57.4 实际抓取及字节对照
 
 帮助进程 pid=179076 在 `2026-10-09T19:02:21Z` ready。只改 COM14 软件键
-`HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e978-e325-11ce-bfc1-08002be10318}\0008`：
+`HKLM\SYSTEM\CurrentControlSet\Control\Class\{PRIVATE_UUID}\0008`：
 QCDriverConfig=REG_DWORD `0x80000000`；QCDriverLoggingDirectory=REG_SZ
 `\??\E:\edk2-samurai-out\rx57\driver-logs-02`。两值原来都不存在。
 

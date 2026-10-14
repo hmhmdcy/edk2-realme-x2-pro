@@ -8,7 +8,7 @@
 * `uefi-1.raw/.txt/.events.txt`：最小 UEFI 应用在 Linux 运行之前受理 ABC/DEFG，连读为 AAA/DDDD。
   原始回读字为 41414141 / 44444444；日志在整帧缓存之后输出。
   随后原内核、tty 和 shell 启动；13,917 重组帧、0 stray/pending。
-* `f1-before-uefi.*`、`f1-after-uefi.*`：两次新 bootloader 回执，均另确认 62bc28a1 fastboot。
+* `f1-before-uefi.*`、`f1-after-uefi.*`：两次新 bootloader 回执，均另确认 PRIVATE_DEVICE_ID fastboot。
 * `uefi-package.log`：原内核、DTB 逐字节比较通过，诊断镜像和 EFI 应用哈希。
 * `before-setup-ABC.*`、`port-reset-ABC.*`：完整 OUT 及新回执，reset 后仍 41 90 90。
 * `rx-timeout-DEFG.*`：完整 OUT、无设备回执；不能当受理后的 payload 反例。

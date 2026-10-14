@@ -1,7 +1,7 @@
 # RX65 — reconnect through WSL and measure full-packet console overlap
 
 User selected WSL as a route around qcusbser and connected the phone. Fresh
-state was fastboot, serial62bc28a1/productmsmnile, no EUD or existing owner.
+state was fastboot, serialPRIVATE_DEVICE_ID/productmsmnile, no EUD or existing owner.
 One scoped fastboot reboot returned the existing image; no flashing planned.
 
 Before USB data, require three healthy EUD nodes, exact existing original

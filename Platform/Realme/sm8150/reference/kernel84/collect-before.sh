@@ -2,7 +2,7 @@
 # Preserve the old live boot before any diagnostic deployment.
 set -eu
 prefix=/tmp/k84-before
-[ "$(cat /proc/sys/kernel/random/boot_id)" = 87753933-4992-45d2-aaf5-d9db9c11d1a3 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 [ ! -e "$prefix.tar" ]
 grep -qx 'PARTNAME=boot' /sys/class/block/sde11/uevent
 grep -qx 'PARTNAME=logdump' /sys/class/block/sde32/uevent

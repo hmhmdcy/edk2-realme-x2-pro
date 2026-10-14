@@ -112,7 +112,7 @@
     }
   ],
   "linux": {
-    "boot_id": "afbbf870-b998-43d8-ab3d-42b3c68c0122",
+    "boot_id": "PRIVATE_BOOT_ID",
     "taint": 0,
     "kernel": "#60",
     "dmesg_bytes": 85404,

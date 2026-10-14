@@ -10,7 +10,7 @@ for line in (O / 'handover-hashes.txt').read_text().splitlines():
     local = O / Path(remote).name.removeprefix('k87-')
     assert sha(local) == digest, local
 state = (O / 'handover-state.txt').read_text()
-assert state.startswith('32bf2d8f-8dde-47dc-9b88-e87db9e95198\n')
+assert state.startswith('PRIVATE_UUID\n')
 assert '#86 SMP PREEMPT' in state and '2140.55 ' in state
 assert 'underrun:       0' in state and 'frame_done_cnt:2mode:' in state
 assert 'snapshot:count=0\n0\n' in state and '0-005c' not in state
@@ -56,7 +56,7 @@ for n, expected in [('kernel85', 'b68efb3b534fc882972d1a7bbaced45e7dde78ae949584
     assert sha(W / 'reference' / n / 'SHA256SUMS') == expected
 result = {'audit': 'PASS', 'scope': 'capture hashes, offline build/tests/profile and documented limits',
           'handset_kernel_version': 86,
-          'handset_boot_ID': '32bf2d8f-8dde-47dc-9b88-e87db9e95198',
+          'handset_boot_ID': 'PRIVATE_BOOT_ID',
           'handset_uptime_seconds': 2140.55, 'display_timeouts': 2, 'display_underruns': 0,
           'trace_on': 0, 'snapshot_trigger_count': 0,
           'snapshot_sha256': (O / 'snapshot-hash.txt').read_text().split()[0],

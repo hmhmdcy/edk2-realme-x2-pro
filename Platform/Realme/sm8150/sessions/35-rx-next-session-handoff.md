@@ -32,7 +32,7 @@ fastboot；下一会话先检查实际枚举和是否已有终端占口，不把
 | PC → 手机 RX | 长度 1 的真实 payload 字符进入 tty；长度 3 的 ABC 仍为重复首字节或 41 90 90 |
 | 原始 offset-2 假设 | 原探针 90 90；去掉前置 printk 后首字节为 A，不支持跳过两字节 |
 | 门控 | RX_PENDING 并非每次首次读后立即清零；短间隔读完也可仍为 07 |
-| 飞轮 | `[90][02]` 头部命令 → 先关 EUD → 无按键进 fastboot，设备 62bc28a1 |
+| 飞轮 | `[90][02]` 头部命令 → 先关 EUD → 无按键进 fastboot，设备 PRIVATE_DEVICE_ID |
 | 临时终端 | `E:\eud-host\eud-terminal.cmd -Reconnect`，逐字符受理重试，Ctrl-] 关闭 |
 
 原生 RX 的成功标准是按发送顺序读出全部 payload，例如 ABC → 41 42 43、

@@ -2,7 +2,7 @@ from pathlib import Path
 import re
 
 w=Path('/mnt/e/RealmeX2Pro edk2')
-boot='5ecfab9e-fa56-4ead-acf8-a5147904980e'
+boot='PRIVATE_UUID'
 current='''当前硬件接入：[session72]({prefix}sessions/72-usb-ncm-and-autonomous-ssh.md)。
 普通USB NCM/密钥SSH/SCP已实现并部署到#62，Windows系统UsbNcm与EUD共存。
 部署前后双向4MiB SHA校验通过、错误计数0；另一次重启无需host com-up就能SSH认证。

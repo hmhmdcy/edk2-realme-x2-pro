@@ -3,7 +3,7 @@ $rxRoot='E:\edk2-samurai-out\rx61'
 $rxDownload=Join-Path $rxRoot 'ewdk-download'
 if(Test-Path -LiteralPath $rxDownload){throw 'Download already prepared; inspect and reuse its live handles, do not restart.'}
 $rxHead=Get-Content -Raw -LiteralPath (Join-Path $rxRoot 'ewdk-head.json')|ConvertFrom-Json
-$rxUrl='https://download.microsoft.com/download/be985897-caaa-4497-9ea4-17fa7065cd8a/EWDK_ge_release_svc_prod1_26100_250904-1728.iso'
+$rxUrl='https://download.microsoft.com/download/PRIVATE_UUID/EWDK_ge_release_svc_prod1_26100_250904-1728.iso'
 $rxLength=20002537472L
 if($rxHead.uri -ne $rxUrl -or [long]$rxHead.headers.'Content-Length'[0] -ne $rxLength){throw 'Official ISO identity/size changed.'}
 $rxDisk=Get-PSDrive -Name E

@@ -36,19 +36,19 @@ for n in ('final-validation.json','patch-validation.json','final-source-manifest
           'noncontinuous-build-hashes.txt','final-build-hashes.txt'):
     source=out/n
     if source.exists(): shutil.copyfile(source,ref/n)
-report = dict(final_boot_id='770389cb-a7fe-4b81-bddd-fec402a1c5b8',build=76,taint=0,
+report = dict(final_boot_id='PRIVATE_BOOT_ID',build=76,taint=0,
               final_gpu_submissions=sum(draws),earlier_gpu_submissions=30048,
               total_gpu_submissions=sum(draws)+30048,final_panel_power_cycles=9,
               final_crc_pairs=72,final_dsi_errors=0,
-              physical_white_confirmed=dict(build=75,boot_id='c66a6b88-f507-402b-a807-f75184e99bd2',
+              physical_white_confirmed=dict(build=75,boot_id='PRIVATE_BOOT_ID',
                                              observation='已经全白，没有噪点',after_prior_power_cycle=True),
-              physical_first_bars_confirmed=dict(build=76,boot_id='770389cb-a7fe-4b81-bddd-fec402a1c5b8',
+              physical_first_bars_confirmed=dict(build=76,boot_id='PRIVATE_BOOT_ID',
                                                  observation='彩条清晰，显示正常',before_recovery_power_cycle=True),
               acceptance_limits=['cold power removal','90Hz','suspend/resume',
                                  'brightness optical calibration','all GPU OPP stress'])
 (ref/'capture-validation.json').write_text(json.dumps(captures,indent=2)+'\n')
 (ref/'evidence-validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
-text=(ref/'display-failure.md').read_text().replace('\x074543a18','`a4543a18-48bb-488c-b3da-139a6957a004`')
+text=(ref/'display-failure.md').read_text().replace('\x074543a18','`PRIVATE_UUID`')
 text=text.replace('-48bb-488c-b3da-139a6957a004-48bb-488c-b3da-139a6957a004','-48bb-488c-b3da-139a6957a004')
 text += '''
 ## Accepted noncontinuous-clock configuration

@@ -44,7 +44,7 @@ assert 'S3706A, fw id: 3078696' in log and log.count('Attached SCSI disk')==6
 assert '[usb] CDC NCM usb0/169.254.42.1 with public-key SSH started' in log
 assert not re.search(r'Kernel panic - not syncing|Oops:|WARNING:|BUG:',log)
 facts=(root/'finish-facts.validated.txt').read_text()
-assert '5ecfab9e-fa56-4ead-acf8-a5147904980e\n0\n' in facts
+assert 'PRIVATE_UUID\n0\n' in facts
 assert 'configured\nhigh-speed\na600000.usb\n' in facts
 assert '\n1785600\n2419200\n2956800\n' in facts
 assert facts.endswith('0\n0\nK72END\n')

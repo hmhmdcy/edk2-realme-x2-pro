@@ -44,7 +44,7 @@
   "gpt_written": false,
   "last_confirmed_mode": "Linux",
   "last_confirmed_kernel": "#60",
-  "last_confirmed_boot_id": "afbbf870-b998-43d8-ab3d-42b3c68c0122",
+  "last_confirmed_boot_id": "PRIVATE_BOOT_ID",
   "boot_image_sha256": "785071a405d839b13d3d0ef040f42d227b09659e6dd0d3df96bb3689ced0635b",
   "retained_logdump_image_sha256": "cfbe4509da3e4455351c11cad6400af7cc4044f21cc3ba04e3927bd01c35e6d7"
 }

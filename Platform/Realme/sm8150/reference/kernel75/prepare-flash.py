@@ -9,11 +9,11 @@ if (!$fw.other_executable_bytes_unchanged -or !$fw.firmware_dtb_raw_section_matc
 if ((Get-FileHash "$k75out\\boot-before.img").Hash.ToLowerInvariant() -ne '57508887131ae55cf9465fa1a44280fa45b507a3439345ffe635dc7544eaa999') {throw 'Boot rollback hash mismatch'}
 $bootimage="$k75out\\boot-k75-gpu.img"
 if ((Get-FileHash $bootimage).Hash.ToLowerInvariant() -ne '43ddcba2444e1672cd95205f6984c761eaeb59c83162cffdffb371c50a29c37b') {throw 'Boot candidate hash mismatch'}
-$bootsize=Invoke-K72Fastboot 'gpu-confirm-size-boot' @('-s','62bc28a1','getvar','partition-size:boot') 15
+$bootsize=Invoke-K72Fastboot 'gpu-confirm-size-boot' @('-s','PRIVATE_DEVICE_ID','getvar','partition-size:boot') 15
 if ($bootsize -notmatch 'partition-size:boot:\\s*(0x[0-9a-fA-F]+)' -or [Convert]::ToInt64($Matches[1].Substring(2),16) -lt (Get-Item $bootimage).Length) {throw 'Boot partition size mismatch'}
 '''
 s=s.replace("$flash=Invoke-K72Fastboot",extra+"$flash=Invoke-K72Fastboot",1)
-s=s.replace("$reboot=Invoke-K72Fastboot",'''$bootflash=Invoke-K72Fastboot 'gpu-flash-boot' @('-s','62bc28a1','flash','boot',$bootimage) 60
+s=s.replace("$reboot=Invoke-K72Fastboot",'''$bootflash=Invoke-K72Fastboot 'gpu-flash-boot' @('-s','PRIVATE_DEVICE_ID','flash','boot',$bootimage) 60
 if ($bootflash -notmatch "Writing 'boot'\\s+OKAY") {throw 'Boot write not observed'}
 $bootflash
 $reboot=Invoke-K72Fastboot''',1)

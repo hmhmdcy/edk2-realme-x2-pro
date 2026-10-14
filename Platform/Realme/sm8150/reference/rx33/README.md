@@ -16,4 +16,4 @@ python3 linux-port/scripts/decode-eud-capture.py reference/rx33/rx33-final-ABC.r
 ```
 
 最终版本的单字符回车后返回 `uid=0 gid=0`；ABC 仍为 `41 90 90`；
-F1 的受理日志随后由主机 fastboot devices 确认，设备为 62bc28a1。
+F1 的受理日志随后由主机 fastboot devices 确认，设备为 PRIVATE_DEVICE_ID。

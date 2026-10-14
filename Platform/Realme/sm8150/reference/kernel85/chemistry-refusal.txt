@@ -1,2 +1,0 @@
-Refusing adapter/client/driver mismatch
-reader_exit=2

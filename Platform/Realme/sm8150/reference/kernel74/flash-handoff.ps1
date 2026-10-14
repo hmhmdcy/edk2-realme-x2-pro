@@ -26,18 +26,18 @@ if (!@($events | Where-Object {$_.event -eq 'receipt' -and $_.text -eq 'F1'}).Co
 $usb=(& 'C:\Program Files\usbipd-win\usbipd.exe' list | Out-String)
 if ($usb -match '(?m)^6-5\s+05c6:9505\s+[^\r\n]*Attached') {throw 'EUD still attached'}
 $devices=Invoke-K72Fastboot 'handoff-confirm-devices' @('devices') 15
-if ($devices -notmatch '(?im)^62bc28a1\s+fastboot\s*$') {throw 'Phone not independently enumerated in fastboot'}
-$product=Invoke-K72Fastboot 'handoff-confirm-product' @('-s','62bc28a1','getvar','product') 15
+if ($devices -notmatch '(?im)^PRIVATE_DEVICE_ID\s+fastboot\s*$') {throw 'Phone not independently enumerated in fastboot'}
+$product=Invoke-K72Fastboot 'handoff-confirm-product' @('-s','PRIVATE_DEVICE_ID','getvar','product') 15
 if ($product -notmatch 'product:\s*msmnile') {throw 'Unexpected product'}
-$size=Invoke-K72Fastboot 'handoff-confirm-size-logdump' @('-s','62bc28a1','getvar','partition-size:logdump') 15
+$size=Invoke-K72Fastboot 'handoff-confirm-size-logdump' @('-s','PRIVATE_DEVICE_ID','getvar','partition-size:logdump') 15
 if ($size -notmatch 'partition-size:logdump:\s*(0x[0-9a-fA-F]+)') {throw 'Partition size missing'}
 $partitionBytes=[Convert]::ToInt64($Matches[1].Substring(2),16)
 $image="$k74out\logdump-k74-handoff.img"
 $hash=(Get-FileHash $image).Hash.ToLowerInvariant()
 if ($partitionBytes -ne 67108864 -or (Get-Item $image).Length -ne 67108864 -or $hash -ne '25db108b8a19f2d3e1cb695438ee134a1c8e9a04d1db6b57601130aa9cde9e5a') {throw 'Image/partition/hash mismatch'}
-$flash=Invoke-K72Fastboot 'handoff-flash-logdump' @('-s','62bc28a1','flash','logdump',$image) 60
+$flash=Invoke-K72Fastboot 'handoff-flash-logdump' @('-s','PRIVATE_DEVICE_ID','flash','logdump',$image) 60
 if ($flash -notmatch "Writing 'logdump'\s+OKAY") {throw 'Successful write not observed'}
 $flash
-$reboot=Invoke-K72Fastboot 'handoff-reboot' @('-s','62bc28a1','reboot') 15
-[ordered]@{utc=[DateTime]::UtcNow.ToString('o');serial='62bc28a1';product='msmnile';flashed_partitions=@('logdump');partition_bytes=$partitionBytes;image_sha256=$hash;flash_success=$true;reboot_success=$true;processes_disposed=$true;boot_written=$false;userdata_written=$false;gpt_written=$false} | ConvertTo-Json -Depth 4 | Set-Content "$k74out\handoff-flash-validation.json"
+$reboot=Invoke-K72Fastboot 'handoff-reboot' @('-s','PRIVATE_DEVICE_ID','reboot') 15
+[ordered]@{utc=[DateTime]::UtcNow.ToString('o');serial='PRIVATE_DEVICE_ID';product='msmnile';flashed_partitions=@('logdump');partition_bytes=$partitionBytes;image_sha256=$hash;flash_success=$true;reboot_success=$true;processes_disposed=$true;boot_written=$false;userdata_written=$false;gpt_written=$false} | ConvertTo-Json -Depth 4 | Set-Content "$k74out\handoff-flash-validation.json"
 $reboot

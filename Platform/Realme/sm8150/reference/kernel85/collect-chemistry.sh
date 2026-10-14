@@ -3,7 +3,7 @@ set -eu
 prefix=/tmp/k85-chemistry
 trace=/sys/kernel/tracing/instances/display
 [ ! -e "$prefix.tar" ]
-[ "$(cat /proc/sys/kernel/random/boot_id)" = f02d218a-cc7d-4b92-8858-c8eeaeab5777 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 uname -a | grep -q '#85 SMP PREEMPT'
 [ "$(sha256sum /tmp/k85-read-stock-chemistry | cut -d ' ' -f1)" = f78d968f93752142ea839a61de3323139b89139f1ac3c463cb67499d78744bc9 ]
 [ "$(sha256sum /tmp/k85-read-stock-temperatures | cut -d ' ' -f1)" = 8792cae1f6d217bd99b5f7940b7eabb14cda35f2cdd49d59b107e5734d6764b1 ]

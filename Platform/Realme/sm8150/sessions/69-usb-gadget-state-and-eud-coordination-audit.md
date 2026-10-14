@@ -29,7 +29,7 @@ K69L gzip SHA256：`28ad635dfebf39904397cff93a588aaa70eac1de3f18ed68dacb428f8d7d
 解压 SHA256：`6e93b2d0c10668edc31eb18eb4e80ffba0f5759dddd681778d74cd49a6521f64`。
 保存文件仍在手机 tmpfs，后续可直接导出同一原件，没有给残缺的实时前缀补字。
 
-boot_id 仍为 afbbf870-b998-43d8-ab3d-42b3c68c0122，taint=0，#60 未重启。
+boot_id 仍为 PRIVATE_BOOT_ID，taint=0，#60 未重启。
 UDC a600000.usb 已注册，state=not attached、current_speed=UNKNOWN；maximum_speed
 为 super-speed-plus，这只是配置上限，不是实测协商速度。configfs 已挂载，但
 /sys/kernel/config/usb_gadget 为空。USB role/Type-C 类目录为空。

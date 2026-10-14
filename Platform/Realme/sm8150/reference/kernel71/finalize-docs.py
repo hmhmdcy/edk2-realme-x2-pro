@@ -35,7 +35,7 @@ GENI/GPI DMA/RMI4内建、本机DTS/供电及reset GPIO补丁已经部署到boot
 初始完整dmesg54413字节、后续日志见该会话，设备保存后压缩导出并逐项校验。
 event2原文306744字节/12781记录通过SHA/gzip CRC/长度，970个SYN_REPORT，
 241个contact全部释放，坐标在1080×2400内；记录最多5触点，但不是严格五指/精度
-验收。当前boot_id=a31c1158-fbca-4515-83ac-1a3b40ee808e、taint=0。
+验收。当前boot_id=PRIVATE_BOOT_ID、taint=0。
 
 已有基础能力是UEFI、六个UFS LUN、CPU三个调频policy和CPU7最高2956800kHz表、
 三路PMIC温度、simpledrm帧缓冲、EUD交互及F1。除触摸基础通路外，按用户功能

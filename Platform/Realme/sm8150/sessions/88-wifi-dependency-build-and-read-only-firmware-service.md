@@ -6,7 +6,7 @@ Wi-Fi 尚未可用。手机仍运行 #86，宿主 #89 依赖内核与只读固�
 
 ## 当前实机状态
 
-USB SSH 本次采集：boot ID `32bf2d8f-8dde-47dc-9b88-e87db9e95198`，内核 `7.3.0-rc6-rmx1931-samurai+ #86`，uptime 3984.69 秒，taint 0。网络接口只有 `lo`、`usb0`；remoteproc 类没有实例，I2C 客户端只有触摸 `1-0020` 和电量计 `2-0055`，没有 MP2650 客户端。
+USB SSH 本次采集：boot ID `PRIVATE_BOOT_ID`，内核 `7.3.0-rc6-rmx1931-samurai+ #86`，uptime 3984.69 秒，taint 0。网络接口只有 `lo`、`usb0`；remoteproc 类没有实例，I2C 客户端只有触摸 `1-0020` 和电量计 `2-0055`，没有 MP2650 客户端。
 
 显示超时累计 2、下溢 0，display trace 已停止、snapshot 触发计数 0。现场 snapshot SHA256 仍为 `550d76908bd09bb280f57a5937fce7ec0101e4c167fed850b42834085e53f2f2`，与86/87一致。此次保存完整 dmesg、snapshot、主 trace、DRM state、kms，设备端摘要逐一核对。本轮没有清空/重武装 trace、开关屏、重启或分区写入。
 

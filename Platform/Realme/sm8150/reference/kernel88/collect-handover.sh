@@ -4,7 +4,7 @@ set -eu
 prefix=/tmp/k88-handover
 trace=/sys/kernel/tracing/instances/display
 [ ! -e "$prefix.tar" ]
-[ "$(cat /proc/sys/kernel/random/boot_id)" = 32bf2d8f-8dde-47dc-9b88-e87db9e95198 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 uname -a | grep -q '#86 SMP PREEMPT'
 [ "$(cat "$trace/tracing_on")" = 0 ]
 grep -qx 'snapshot:count=0' "$trace/events/dpu/dpu_enc_frame_done_timeout/trigger"

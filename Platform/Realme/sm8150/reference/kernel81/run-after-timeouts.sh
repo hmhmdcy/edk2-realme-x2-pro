@@ -2,7 +2,7 @@
 # Current live boot, after two logged frame-done timeouts; save state first.
 # Reuse audited session78 event/CRC tool, no explicit CRTC disable/panel cycle.
 set -eu
-[ "$(cat /proc/sys/kernel/random/boot_id)" = 87753933-4992-45d2-aaf5-d9db9c11d1a3 ]
+[ "$(cat /proc/sys/kernel/random/boot_id)" = PRIVATE_BOOT_ID ]
 [ "$(sha256sum /tmp/kms-pageflip | cut -d ' ' -f1)" = 7abbfa366bc688b50379f2fee65f54510b7805d0c498f7930e0f4531b96cd42b ]
 [ ! -e /tmp/k81-pageflip-after-timeouts.txt ]
 ! pidof kms-pageflip

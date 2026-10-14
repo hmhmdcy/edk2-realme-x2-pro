@@ -36,7 +36,7 @@
     [  70.662708] eud: rx id=90 len=02 s1=07070707         （F1 轮）
     [  70.702349] eud: reboot2 bootloader requested
     主机：COM 口立刻断开 "The port is closed"
-    PC：  fastboot devices -> 62bc28a1 fastboot
+    PC：  fastboot devices -> PRIVATE_DEVICE_ID fastboot
 
 第一版 F1（`logdump-f1.img`）失败，因为驱动等 payload 收齐才分发：`len=02` 的帧
 读完第 1 个字节后门控清零 → 整条消息被放弃 → 命令永远到不了。改成**读到头部即执行**
