@@ -330,6 +330,7 @@
 | [kernel246](<../reference/kernel246/README.md>) | 246：真实RF/时钟日志与modem原始零C/No |
 | [kernel247](<../reference/kernel247/README.md>) | 247：启动期MEMSHARE真实请求与OEM配置差异 |
 | [kernel248](<../reference/kernel248/README.md>) | 248：保存当前Linux并验证PC恢复 |
+| [kernel249](<../reference/kernel249/README.md>) | 249：用户态仓库整合、独立复现与上游维护 |
 | [rx33](<../reference/rx33/README.md>) | Session 33：有效 EUD RX 抓包 |
 | [rx34](<../reference/rx34/README.md>) | Session 34 的临时终端记录 |
 | [rx36](<../reference/rx36/README.md>) | Session 36：USB 描述符、旧 qcusbser 审查与已完成对照 |

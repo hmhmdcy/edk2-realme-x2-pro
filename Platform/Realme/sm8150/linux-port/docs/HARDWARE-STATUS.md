@@ -1,6 +1,6 @@
 # RMX1931 Linux 硬件状态与未完成项目
 
-用途：当前硬件验收清单。248在RAM恢复环境准备完整返回文件，Android未刷，无新GNSS测试；源码[发布记录](../../reference/publication-2026-10-17/README.md)。247于2026-10-17继续GNSS专项，其余功能核对仍按240；[247启动MEMSHARE与OEM配置差异](../../reference/kernel247/README.md)。全机适配未完成。libcamera r15/config-r10保持；Snapshot CPU前摄预览和用户启动配置已验，拍照/切换/缓冲回收仍开放。默认Vulkan发生480条GPU fault，停止后及CPU两轮无新增、taint0，不能写240全程fault0。GNSS无fix。[240](../../reference/kernel240/README.md)、[交接](../../reference/kernel240/HANDOFF.md)、[239近机型](../../reference/kernel239/RELATED-LINUX-SOLUTIONS.md)、[检查点](../../NEXT-SESSION.md)、[边界](../../WORKING-BOUNDARIES.md)。
+用途：当前硬件验收清单。249仅完成PC侧用户态仓库/离线复现，物理手机当前OS未知，没有新实机验收，见[249](../../reference/kernel249/README.md)。248最后在RAM恢复环境准备完整返回文件，当时Android未刷，无新GNSS测试；源码[发布记录](../../reference/publication-2026-10-17/README.md)。247于2026-10-17继续GNSS专项，其余功能核对仍按240；[247启动MEMSHARE与OEM配置差异](../../reference/kernel247/README.md)。全机适配未完成。libcamera r15/config-r10保持；Snapshot CPU前摄预览和用户启动配置已验，拍照/切换/缓冲回收仍开放。默认Vulkan发生480条GPU fault，停止后及CPU两轮无新增、taint0，不能写240全程fault0。GNSS无fix。[240](../../reference/kernel240/README.md)、[交接](../../reference/kernel240/HANDOFF.md)、[239近机型](../../reference/kernel239/RELATED-LINUX-SOLUTIONS.md)、[检查点](../../NEXT-SESSION.md)、[边界](../../WORKING-BOUNDARIES.md)。
 
 **149已复现的A640 CCU故障修复保持；240新增Snapshot默认Vulkan负载的GPU fault，需独立继续定位。** 147修复旧式GLES地址对齐，149修复Vulkan自动VM_BIND地址对齐。149完成185次像素读回零差异、36次Settings面板打开及PM、稀疏重绑定、旧地址重放、Vulkan/GLES并发验收。151同启动六次被动观察中无新增fault，taint0，桌面保持。150无Mesa补丁的降级候选未部署；它的验证不能混入149系统驱动的验收。
 

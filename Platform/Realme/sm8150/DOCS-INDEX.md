@@ -23,6 +23,7 @@
 
 | 专题 | 阅读入口 |
 | --- | --- |
+| 用户态复现、上游维护与补丁纯度 | [249整合与独立核验](reference/kernel249/README.md) |
 | 显示152—165候选、失败、回退与实屏验收 | [过程汇总](sessions/display-handoff-152-165.md)、[165证据](reference/kernel165/README.md)、[实屏反馈](reference/kernel165/physical-feedback-validation.json) |
 | GPU旧CCU修复与Snapshot新负载故障 | [240故障及CPU回退](reference/kernel240/README.md)、[147内核修复](sessions/147-a640-gmem-alignment-fix.md)、[149 Mesa修复](sessions/149-vulkan-ccu-alignment-fix-and-deployment.md)、[151收尾](sessions/151-gpu-closeout-and-hardware-handover.md) |
 | 音频首次初始化与停止链 | [139 TX回收](sessions/139-slimbus-unsubmitted-tx-unwind-and-live-boot.md)、[104 DMIC](sessions/104-native-digital-microphones-and-first-boot-radio-failure.md)、[164失败](reference/kernel164/README.md) |

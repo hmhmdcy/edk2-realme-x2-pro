@@ -19,13 +19,13 @@
 下方块由`linux-port/scripts/update-repo-state.py`从本地git生成，仅描述已提交历史；当前未提交源码以`git status`/`git diff`为准。
 
 <!-- repo-state:start -->
-    master = 6a0e4ba samurai: save GNSS HAL RF clock and modem investigations
+    master = 3f8a65e samurai: publish complete source index and Linux return validation
+             6a0e4ba samurai: save GNSS HAL RF clock and modem investigations
              54e18d6 samurai: preserve camera modules packages and desktop fixes
              4111dac samurai: save sensor and radio fixes with runtime evidence
              2cbe036 samurai: preserve audio recovery and suspend evidence
-             5c80582 samurai: record categorized publication and verification
 
-    134 commits ahead of upstream origin/master, as of the tip named above;
+    135 commits ahead of upstream origin/master, as of the tip named above;
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
 
