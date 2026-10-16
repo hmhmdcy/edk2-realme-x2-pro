@@ -1,0 +1,296 @@
+{
+  "stage": 240,
+  "kernel_changed_in239": false,
+  "kernel_boot_stage": 235,
+  "current_boot_guard_stage": 236,
+  "kernel_image_stage": 183,
+  "upstream_version": "0.7.2",
+  "framework_version": "99990.7.2-r15",
+  "configuration_version": "0.1.0-r10",
+  "package_recipe": "../packages/libcamera/APKBUILD",
+  "package_source_lock": "../packages/libcamera/source-lock.json",
+  "configuration_recipe": "../packages/samurai-camera-config/APKBUILD",
+  "installed_packages": [
+    "libcamera",
+    "libcamera-gstreamer",
+    "libcamera-ipa",
+    "libcamera-tools",
+    "libcamera-v4l2",
+    "samurai-camera-config",
+    "samurai-camera-stack"
+  ],
+  "built_packages": [
+    {
+      "name": "libcamera",
+      "version": "99990.7.2-r15",
+      "file": "libcamera-99990.7.2-r15.apk",
+      "sha256": "3e2f48fd28da265eff60ab560279e16fa177f7df993b5b379e5f2dfaf0bc6195",
+      "bytes": 916903
+    },
+    {
+      "name": "libcamera-dbg",
+      "version": "99990.7.2-r15",
+      "file": "libcamera-dbg-99990.7.2-r15.apk",
+      "sha256": "0fc1a2c1592b8777a1a5449a3797d38ac65bdd9dab448a4cc19d36311cdad6dc",
+      "bytes": 8628
+    },
+    {
+      "name": "libcamera-dev",
+      "version": "99990.7.2-r15",
+      "file": "libcamera-dev-99990.7.2-r15.apk",
+      "sha256": "91033bfc3d0d518623bdd3fed2eb3d31b0008066a0d2f2d101ae636804de0d15",
+      "bytes": 25755
+    },
+    {
+      "name": "libcamera-gstreamer",
+      "version": "99990.7.2-r15",
+      "file": "libcamera-gstreamer-99990.7.2-r15.apk",
+      "sha256": "dc456abf5a4b7bf6418fe03bec6c8c1a3688cd1c5c0b19845082f6320b6142aa",
+      "bytes": 57330
+    },
+    {
+      "name": "libcamera-ipa",
+      "version": "99990.7.2-r15",
+      "file": "libcamera-ipa-99990.7.2-r15.apk",
+      "sha256": "bfc9dbdc3b8ec1d943c45cb973f25cd69bdae4e2aeea30890dbdda36cd6b8033",
+      "bytes": 767700
+    },
+    {
+      "name": "libcamera-raspberrypi",
+      "version": "99990.7.2-r15",
+      "file": "libcamera-raspberrypi-99990.7.2-r15.apk",
+      "sha256": "76f938a86de6d8b66cfbc29aedc1397892fe264eecf7140661d33a881294b2d3",
+      "bytes": 375343
+    },
+    {
+      "name": "libcamera-tools",
+      "version": "99990.7.2-r15",
+      "file": "libcamera-tools-99990.7.2-r15.apk",
+      "sha256": "a2e47e8b231b7e9694734d595a1c66844393bf56a6d60a57a2df37e53f9aa9e0",
+      "bytes": 130540
+    },
+    {
+      "name": "libcamera-v4l2",
+      "version": "99990.7.2-r15",
+      "file": "libcamera-v4l2-99990.7.2-r15.apk",
+      "sha256": "bfbedeccd2a9abdb57d7e92312b66856c43bac5aaf0a21bb673606bbe7139a6a",
+      "bytes": 33865
+    },
+    {
+      "name": "py3-libcamera",
+      "version": "99990.7.2-r15",
+      "file": "py3-libcamera-99990.7.2-r15.apk",
+      "sha256": "8a77137b6e15faa68f28f77b4432441a75ea7691e69d496d6ff77144fd23e94e",
+      "bytes": 317097
+    },
+    {
+      "name": "py3-libcamera-pyc",
+      "version": "99990.7.2-r15",
+      "file": "py3-libcamera-pyc-99990.7.2-r15.apk",
+      "sha256": "8a488783b57240144e1703e9ac4c628c42cbea6621e1d111bcc02684c8ff56e0",
+      "bytes": 1551
+    },
+    {
+      "name": "qcam",
+      "version": "99990.7.2-r15",
+      "file": "qcam-99990.7.2-r15.apk",
+      "sha256": "bb1ec7d8b0f7bd1a4e2dea3bbb593469234651399d2bdfcc24c967e321ee237b",
+      "bytes": 78252
+    },
+    {
+      "name": "samurai-camera-config",
+      "version": "0.1.0-r10",
+      "file": "samurai-camera-config-0.1.0-r10.apk",
+      "sha256": "34340a49ff61f57f148275c1be7f03e4a3f6808f5f1dd51d179e2c6c7d959b75",
+      "bytes": 1879
+    },
+    {
+      "name": "samurai-camera-stack",
+      "version": "0.1.0-r10",
+      "file": "samurai-camera-stack-0.1.0-r10.apk",
+      "sha256": "b685389b433d6785d7e541d464751d5dcf8503fc55a70e8e095867c61c7b8d6e",
+      "bytes": 989
+    }
+  ],
+  "installed_payload_records": 49,
+  "all_original_feature_subpackages_built": true,
+  "five_ipa_signatures_verified_against_new_core": true,
+  "actual_default_runtime_without_overrides": true,
+  "same_camera_twice_initial_parameters_verified": true,
+  "front_candidate_raw_rgb_six_frames_each": true,
+  "rear_strict_all_nonzero_passed": false,
+  "scene_optical_response_and_colour_open": true,
+  "default_and_loaded_modules": {
+    "qcom_pm8008": "6021a359b1eb8c8c3d7c7c42346c830aaab06ccda9b3c36a346c3564749c643f",
+    "qcom_pm8008_imx319_lab": "5198e2bd8f008d81ded614aead7df17a6ef265a7a038b6faaf8b295c19fc9b26",
+    "reset_realme_rmx1931_pm8008": "2223f33725a03fc0ddb7f6a33e4b507d5b6952e3edf49ec401e1627d53b59e80",
+    "imx319": "176f68d768b51302af1fe0af56e0b55f08af333394456f02b15950126415c6de",
+    "imx471": "e49dab26b05a325df8da64bb5c4b57c29cd51d1dcf15f5d4ed4dcb53033e66f1",
+    "qcom_camss": "ff9fdfa346249d836c0f830c9ea2480b6b06b280089007a054a6d2a0514f5822",
+    "fastrpc": "2abde0ead81c2feb78f639da2ab29d7c3e29654a9d013a098418b232a5cfd794",
+    "hci_uart": "f6c5ed3538270480a72cf4bf8b1339103417941930b0d8ecb941fd11d16d7020"
+  },
+  "current_module_manifest_stage": 237,
+  "experimental_16mp_default_off": true,
+  "gpu_isp_open": true,
+  "full_kernel_rootfs_integration_open": true,
+  "package_install_evidence": "../../reference/kernel239/r15-package-install-validation.json",
+  "actual_default_parameter_evidence": "../../reference/kernel239/r15-installed-startup-analysis.json",
+  "policy_reload_evidence": "../../reference/kernel239/wireplumber-reload-validation.json",
+  "final_health_evidence": "../../reference/kernel240/final-health-validation.json",
+  "rollback_framework": "99990.7.2-r13",
+  "rollback_configuration": "0.1.0-r8",
+  "native_seven_package_downgrade_simulation_passed": true,
+  "full_downgrade_round_trip_not_tested": true,
+  "kernel_changed_in240": false,
+  "package_count": 958,
+  "snapshot_version": "51.0-r0",
+  "snapshot_official_added_packages": 14,
+  "original944_package_records_unchanged": true,
+  "snapshot_cpu_renderer": "cairo",
+  "snapshot_gdk_disable": "gl,vulkan,offload",
+  "snapshot_user_desktop_and_dbus_overrides": true,
+  "snapshot_real_dbus_activation_verified": true,
+  "snapshot_front_cpu_mmap_preview_verified": true,
+  "snapshot_30second_mmap_downloads": 600,
+  "snapshot_paintable_bus_errors": 0,
+  "snapshot_30second_buffer_recycle_errors": 301,
+  "snapshot_photography_and_switching_not_verified": true,
+  "historical_snapshot_vulkan_gpu_faults": 480,
+  "gpu_faults_after_stopping_default_snapshot": 0,
+  "snapshot_preview_evidence": "../../reference/kernel240/snapshot-mmap-r2-frame-flow-validation.json",
+  "snapshot_launcher_evidence": "../../reference/kernel240/snapshot-dbus-activation-validation.json",
+  "snapshot_distribution_packages": [
+    {
+      "name": "a52dec",
+      "version": "0.8.0-r11",
+      "file": "a52dec-0.8.0-r11.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/community/aarch64/a52dec-0.8.0-r11.apk",
+      "bytes": 37202,
+      "sha256": "a30a6ab69c9cecf2f48789e8f38937528955e7c46111d2c2732d069602568bc9"
+    },
+    {
+      "name": "gst-plugins-good",
+      "version": "1.28.7-r0",
+      "file": "gst-plugins-good-1.28.7-r0.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/community/aarch64/gst-plugins-good-1.28.7-r0.apk",
+      "bytes": 2790984,
+      "sha256": "47a27bee866827fb72458c05b522cd54c9cb1f449da850e291fc652e983a704d"
+    },
+    {
+      "name": "gst-plugins-rs-gtk4",
+      "version": "0.15.3-r1",
+      "file": "gst-plugins-rs-gtk4-0.15.3-r1.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/community/aarch64/gst-plugins-rs-gtk4-0.15.3-r1.apk",
+      "bytes": 273641,
+      "sha256": "8d0b0cc4b522e5d0ea8f3ab7a7304cc0a011269af4c8a14998de04889cd69cc3"
+    },
+    {
+      "name": "gst-plugins-ugly",
+      "version": "1.28.7-r0",
+      "file": "gst-plugins-ugly-1.28.7-r0.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/community/aarch64/gst-plugins-ugly-1.28.7-r0.apk",
+      "bytes": 154434,
+      "sha256": "0efe590c0fd04a2ab255454ccb9a016b083e91442832e8488063966fe6caf441"
+    },
+    {
+      "name": "libavc1394",
+      "version": "0.5.4-r3",
+      "file": "libavc1394-0.5.4-r3.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/community/aarch64/libavc1394-0.5.4-r3.apk",
+      "bytes": 42180,
+      "sha256": "a42dc6f836d931212ce96be5fd18819abb75b9fce102e2a049ec37a9fe701231"
+    },
+    {
+      "name": "libdv",
+      "version": "1.0.0-r8",
+      "file": "libdv-1.0.0-r8.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/community/aarch64/libdv-1.0.0-r8.apk",
+      "bytes": 44906,
+      "sha256": "44873b88c669f7621b0a5c7538dd0d2a6997bf1cf43b9c107373cad5ee45064c"
+    },
+    {
+      "name": "libglycin-gtk4",
+      "version": "2.2.1-r0",
+      "file": "libglycin-gtk4-2.2.1-r0.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/community/aarch64/libglycin-gtk4-2.2.1-r0.apk",
+      "bytes": 129822,
+      "sha256": "51f9fb8c4b659ee6981e64a0cede9a2020d256af4653aba2f0144a7838e4a822"
+    },
+    {
+      "name": "libiec61883",
+      "version": "1.2.0-r4",
+      "file": "libiec61883-1.2.0-r4.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/community/aarch64/libiec61883-1.2.0-r4.apk",
+      "bytes": 20460,
+      "sha256": "eeba0be76337e5263c8111b87a98ef275fd97f3e480a966e555d3fd9c60fa2e8"
+    },
+    {
+      "name": "libshout",
+      "version": "2.4.6-r4",
+      "file": "libshout-2.4.6-r4.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/main/aarch64/libshout-2.4.6-r4.apk",
+      "bytes": 53779,
+      "sha256": "e0e6adb7cc9b1a1351ed1cd642fcc6ce907921080709d4411fdaa04192c85821"
+    },
+    {
+      "name": "libtag",
+      "version": "2.2.1-r0",
+      "file": "libtag-2.2.1-r0.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/community/aarch64/libtag-2.2.1-r0.apk",
+      "bytes": 378519,
+      "sha256": "5cf2d38f905d1f357c92ed3bab05fc8ae64c068e8f9f8364af31807300b25472"
+    },
+    {
+      "name": "opencore-amr",
+      "version": "0.1.6-r1",
+      "file": "opencore-amr-0.1.6-r1.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/community/aarch64/opencore-amr-0.1.6-r1.apk",
+      "bytes": 132510,
+      "sha256": "a7bf5e0cf989e2f95185d53113e8b2a74acf91ac685ab630dd6a5f5ba375ecce"
+    },
+    {
+      "name": "snapshot",
+      "version": "51.0-r0",
+      "file": "snapshot-51.0-r0.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/community/aarch64/snapshot-51.0-r0.apk",
+      "bytes": 1050660,
+      "sha256": "d2fd0ad01aa27639aa1918d6055f32cce643f187b26ec6ed3c2602b205088ddd"
+    },
+    {
+      "name": "speex",
+      "version": "1.2.1-r2",
+      "file": "speex-1.2.1-r2.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/main/aarch64/speex-1.2.1-r2.apk",
+      "bytes": 47555,
+      "sha256": "acea3899cd8187c887f49f43f0e87d9dde78ddc1e9edae2c5352193d98ba8f14"
+    },
+    {
+      "name": "wavpack-libs",
+      "version": "5.9.0-r0",
+      "file": "wavpack-libs-5.9.0-r0.apk",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/edge/community/aarch64/wavpack-libs-5.9.0-r0.apk",
+      "bytes": 91200,
+      "sha256": "f2d4dbcadc69cfb065bf2701042c98df26e1c0d40c1d5af5f4d91f9601adba6b"
+    }
+  ],
+  "snapshot_launcher_files": {
+    "org.gnome.Snapshot.desktop": {
+      "sha256": "b857de670636c17d2dc0faaa902e94652fecc31d30f7d5df925e0bd3164b432e",
+      "bytes": 9751,
+      "mode": 420
+    },
+    "org.gnome.Snapshot.service": {
+      "sha256": "f18df4682092a03962f916f84f89c92fcf6664ec0be5027f6c08e5011d202308",
+      "bytes": 148,
+      "mode": 420
+    }
+  },
+  "snapshot_launcher_profile": "snapshot-launcher/",
+  "snapshot_launcher_scope": "per-user current device; full rootfs package integration still open",
+  "goal_status_at_documentation_handoff": "paused",
+  "last_device_validation_stage": 240,
+  "documentation_handoff_only": true,
+  "handoff_instructions": "../../reference/kernel240/HANDOFF.md",
+  "device_not_retested_for_handoff": true
+}
