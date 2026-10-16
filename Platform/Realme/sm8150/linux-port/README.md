@@ -16,6 +16,8 @@
 | [scripts/](scripts/) | 构建、验证、日志与文档工具；早期部署脚本的参数需按当前任务核对 |
 | [refs/19781/](refs/19781/) | 本机项目号19781的Android下游DTS摘录，见[参考说明](docs/ANDROID-DT-REFERENCE.md) |
 | [initramfs/](initramfs/) | 早期诊断用户空间与启动脚本 |
+| [packages/](packages/README.md) | GNSS辅助服务、MM源码锁与APK构建工具 |
+| [radio/](radio/README.md) | modem RAM工作文件服务、固定来源与可复现构建 |
 | `eud.c`、`eud_earlycon.c` | 保存的EUD实现；与晚期源码的差异按具体会话补丁核对 |
 | `artifacts/` | 本地生成产物，不通过文档同步工具复制到仓库 |
 

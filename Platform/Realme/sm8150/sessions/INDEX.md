@@ -140,6 +140,42 @@
 | [154-dsi-host-init-rejected-and-runtime-display-recovery.md](<154-dsi-host-init-rejected-and-runtime-display-recovery.md>) | 154：停止继承DSI CTRL不足以修复首次白屏 |
 | [156-first-frame-backlight-and-early-desktop.md](<156-first-frame-backlight-and-early-desktop.md>) | 156：首帧后亮屏与桌面提前启动 |
 | [159-same158-second-boot-display-verification.md](<159-same158-second-boot-display-verification.md>) | 159：第二次158启动与显示回归 |
+| [169-native-audio-service-lifecycle-and-two-boots.md](<169-native-audio-service-lifecycle-and-two-boots.md>) | 166—169：原生音频服务生命周期修复与两个独立启动 |
+| [170-microphone-speaker-acoustic-self-test.md](<170-microphone-speaker-acoustic-self-test.md>) | 170：麦克风声学自测未检出扬声器编码音 |
+| [171-speaker-sd1-and-acoustic-loop.md](<171-speaker-sd1-and-acoustic-loop.md>) | 171：扬声器从SD0改为板上SD1，三麦克风及桌面检出编码音 |
+| [172-wcd-headset-detection-and-speaker-regression.md](<172-wcd-headset-detection-and-speaker-regression.md>) | 172：WCD耳机检测初始化与扬声器回归 |
+| [173-ucm-headset-routing-and-desktop-duplex.md](<173-ucm-headset-routing-and-desktop-duplex.md>) | 173：耳机UCM路由与桌面双向音频 |
+| [174-port-interrupt-stop-and-card-reprobe.md](<174-port-interrupt-stop-and-card-reprobe.md>) | 174：端口中断停止回归与声卡重探测 |
+| [175-card-regmap-clock-lifetimes-and-reset-nack.md](<175-card-regmap-clock-lifetimes-and-reset-nack.md>) | 175：声卡、regmap与clock生命周期及父设备复位NACK |
+| [176-reset-addresses-and-reprobe-regression.md](<176-reset-addresses-and-reprobe-regression.md>) | 176：复位地址刷新与10次声卡恢复回归 |
+| [177-system-s2idle-and-post-resume-audio.md](<177-system-s2idle-and-post-resume-audio.md>) | 177：系统s2idle与恢复后左右声道验证 |
+| [178-related-models-and-adsp-restart-failure.md](<178-related-models-and-adsp-restart-failure.md>) | 178：相关机型复查与ADSP重启断链失败 |
+| [179-related-models-and-pdr-rx-lock-reproduction.md](<179-related-models-and-pdr-rx-lock-reproduction.md>) | 179：相关机型参考与 PDR/QMI 接收锁阻塞 |
+| [180-pdr-peer-lifetime-and-irq-quiesce.md](<180-pdr-peer-lifetime-and-irq-quiesce.md>) | 180：PDR 世代/寿命修复及父中断退出 |
+| [181-offline-irq-cleanup-and-adsp-recovery.md](<181-offline-irq-cleanup-and-adsp-recovery.md>) | 181：离线 IRQ 清理及受控 ADSP 恢复通过 |
+| [182-active-capture-crash-recovery.md](<182-active-capture-crash-recovery.md>) | 182：活跃录音期间的一次合成 ADSP 崩溃报告恢复 |
+| [183-offline-stream-and-active-crash-pm.md](<183-offline-stream-and-active-crash-pm.md>) | 183：修复离线 WCD 流清理并验证活跃播放恢复和两次 s2idle |
+| [185-bluetooth-power-pulse-h4-repair-and-pm.md](<185-bluetooth-power-pulse-h4-repair-and-pm.md>) | 185：蓝牙功率脉冲解析修复、默认模块部署与PM |
+| [186-slpi-lifecycle-native-failure-and-a11-reference.md](<186-slpi-lifecycle-native-failure-and-a11-reference.md>) | 186：SLPI停启故障、失败FastRPC原型与本机A.11参考 |
+| [200-static-mmcx-boot-and-front-camera-regression.md](<200-static-mmcx-boot-and-front-camera-regression.md>) | 200：静态MMCX成对启动与前摄跨启动回归 |
+| [201-gnss-utc-validity-and-geoclue-assistance.md](<201-gnss-utc-validity-and-geoclue-assistance.md>) | 201：GPS绝对有效期、自动UTC补时与标准GeoClue接入 |
+| [223-camera-capture-sof-control-snapshots.md](<223-camera-capture-sof-control-snapshots.md>) | 223：SOF捕获号与控制快照配套部署 |
+| [224-camera-raw-statistics-and-stop-cancellation.md](<224-camera-raw-statistics-and-stop-cancellation.md>) | 224：相机RAW统计与停止取消修复 |
+| [225-camera-standard-exposure-controls.md](<225-camera-standard-exposure-controls.md>) | 225：前摄标准曝光与增益控制 |
+| [226-gnss-raw-reception-and-aiding.md](<226-gnss-raw-reception-and-aiding.md>) | 226：GNSS原始测量与辅助对照 |
+| [227-fastrpc-publication-and-module-owner.md](<227-fastrpc-publication-and-module-owner.md>) | 227：FastRPC完整发布与模块保活候选 |
+| [228-fastrpc-native-module-pinning.md](<228-fastrpc-native-module-pinning.md>) | 228：FastRPC新启动、保活与五路传感器实测 |
+| [229-daylight-front-camera-colour.md](<229-daylight-front-camera-colour.md>) | 229：白天前摄真实颜色统计 |
+| [230-clean-intree-fastrpc-and-native-sensors.md](<230-clean-intree-fastrpc-and-native-sensors.md>) | 230 树内FastRPC真实加载与传感器验收 |
+| [231-gnss-rfs-stock-layout-audit.md](<231-gnss-rfs-stock-layout-audit.md>) | 231：GNSS RFS 原厂布局和文件服务审计 |
+| [232-rear-pmic-reset-and-address-candidate.md](<232-rear-pmic-reset-and-address-candidate.md>) | 232：后摄 PM8008 复位/地址依赖候选 |
+| [233-pmic-native-deployment-and-managed-cycles.md](<233-pmic-native-deployment-and-managed-cycles.md>) | 233：后摄 PM8008 依赖部署与原生循环 |
+| [234-bt-rx-state-and-uart-artifact-evidence.md](<234-bt-rx-state-and-uart-artifact-evidence.md>) | 234 蓝牙帧状态诊断与串口产物核对 |
+| [235-imx319-of-runtime-and-isolated-p-power.md](<235-imx319-of-runtime-and-isolated-p-power.md>) | 235 IMX319真实驱动与独立P两路供电候选 |
+| [236-imx319-real-id-and-live-of-fix.md](<236-imx319-real-id-and-live-of-fix.md>) | 236 后摄真实ID与live OF属性修正 |
+| [237-imx319-first-raw-and-camss-unwind.md](<237-imx319-first-raw-and-camss-unwind.md>) | 237 IMX319首批RAW与CAMSS失败回收 |
+| [238-imx319-control-and-related-linux-solutions.md](<238-imx319-control-and-related-linux-solutions.md>) | 238：IMX319控制链与近机型Linux方案 |
+| [239-softisp-startup-and-linux-camera-gnss-research.md](<239-softisp-startup-and-linux-camera-gnss-research.md>) | 239：软件 ISP 首参修复与 Linux 摄像头/GNSS 搜索 |
 | [2026-10-06-diagvendor-capture.md](<2026-10-06-diagvendor-capture.md>) | 诊断镜像 boot-samurai-diagvendor —— 抓原厂按键驱动失败原因 |
 | [2026-10-06-eud-first-test.md](<2026-10-06-eud-first-test.md>) | EUD 试水结果 + 会话交接（2026-10-06 16:5x） |
 | [2026-10-14-categorized-publication.md](<2026-10-14-categorized-publication.md>) | 2026-10-14 代码与资料分类提交 |
@@ -212,6 +248,88 @@
 | [kernel163](<../reference/kernel163/README.md>) | 163：在早期显示初始化期间保持面板复位 |
 | [kernel164](<../reference/kernel164/README.md>) | 164：UEFI BeforeExitBootServices 面板复位候选 |
 | [kernel165](<../reference/kernel165/README.md>) | 165：同一 boot164/kernel163 第二次启动软件验收 |
+| [kernel166](<../reference/kernel166/README.md>) | 166：音频 PM/DMA 错误回收候选，实机拒收 |
+| [kernel167](<../reference/kernel167/README.md>) | 167：拒收166后回退kernel163 |
+| [kernel168](<../reference/kernel168/README.md>) | 168：SLIMbus服务生命周期与原生音频恢复 |
+| [kernel169](<../reference/kernel169/README.md>) | 169：同一kernel168第二次启动与停止回归 |
+| [kernel170](<../reference/kernel170/README.md>) | 170：麦克风检测扬声器编码测试音，未检出可信信号 |
+| [kernel171](<../reference/kernel171/README.md>) | 171：参考 OnePlus/Realme 原厂链路，修正扬声器 SD1 并检出编码音 |
+| [kernel172](<../reference/kernel172/README.md>) | 172：绑定 WCD934x 耳机检测，修正偏置电压和状态错误 |
+| [kernel173](<../reference/kernel173/README.md>) | 173：部署耳机 UCM 路由，验证桌面播放与录音 |
+| [kernel174](<../reference/kernel174/README.md>) | 174：SLIM 端口中断停流、暂停回归与声卡重探测缺陷 |
+| [kernel175](<../reference/kernel175/README.md>) | 175：jack、regmap、MCLK 生命周期修复与父设备复位超时 |
+| [kernel176](<../reference/kernel176/README.md>) | 176：WCD934x 复位后地址刷新与重复绑定回归 |
+| [kernel177](<../reference/kernel177/README.md>) | 177：kernel176 的系统 s2idle 与恢复后音频验证 |
+| [kernel178](<../reference/kernel178/README.md>) | 178：相关机型复查与 ADSP 重启断链错误 |
+| [kernel179](<../reference/kernel179/README.md>) | 179：相关机型复核与 PDR 接收锁阻塞重现 |
+| [kernel180](<../reference/kernel180/README.md>) | 180：PDR 世代与释放修复、父中断退出及剩余离线写错误 |
+| [kernel181](<../reference/kernel181/README.md>) | 181：离线 IRQ 清理修复与 ADSP 停启、左右声学验证 |
+| [kernel182](<../reference/kernel182/README.md>) | 182：活跃桌面录音中的单次 ADSP 自动恢复 |
+| [kernel183](<../reference/kernel183/README.md>) | 183：离线流清理修复、活跃播放恢复及当前内核两次 s2idle |
+| [kernel184](<../reference/kernel184/README.md>) | 184：外设适配继续推进 |
+| [kernel185](<../reference/kernel185/README.md>) | 185：蓝牙功率脉冲与H4边界修复及实机部署 |
+| [kernel186](<../reference/kernel186/README.md>) | 186：SLPI停启、FastRPC共享池故障与本机A.11固件 |
+| [kernel187](<../reference/kernel187/README.md>) | 187：本机A.11 SLPI惯性流与标准客户端实测 |
+| [kernel188](<../reference/kernel188/README.md>) | 188：自动SSC服务、桌面访问通过与休眠崩溃回退 |
+| [kernel189](<../reference/kernel189/README.md>) | 189：FastRPC冻结等待修复与连续三轮传感器休眠恢复 |
+| [kernel190](<../reference/kernel190/README.md>) | 阶段190：修复GNSS辅助能力发现的提前indication竞态 |
+| [kernel191](<../reference/kernel191/README.md>) | 阶段191：完整XTRA辅助注入与LOC异步生命周期修复 |
+| [kernel192](<../reference/kernel192/README.md>) | 阶段192：两颗PM8008真机识别与原厂相机供电序列解码 |
+| [kernel193](<../reference/kernel193/README.md>) | 阶段193：前摄IMX471实体识别与CCI/MCLK电源域验证 |
+| [kernel194](<../reference/kernel194/README.md>) | 阶段194：IMX471 OF接入候选与PM8008复位地址初始化 |
+| [kernel195](<../reference/kernel195/README.md>) | 阶段195：PM8008失败复位回退与前摄VIO精确OF引用 |
+| [kernel196](<../reference/kernel196/README.md>) | 阶段196：普通IMX471实体probe、OF媒体端点与运行时供电 |
+| [kernel197](<../reference/kernel197/README.md>) | 阶段197：修复CAMSS端点校验，建立实体前摄媒体链路 |
+| [kernel198](<../reference/kernel198/README.md>) | 阶段198：前摄首次实体RAW取帧，定位高频运行问题 |
+| [kernel199](<../reference/kernel199/README.md>) | 阶段199：CAMSS运行时MMCX性能请求，恢复正常频率实体取帧 |
+| [kernel200](<../reference/kernel200/README.md>) | 阶段200：静态MMCX设备树与CAMSS成对启动，前摄跨启动取流 |
+| [kernel201](<../reference/kernel201/README.md>) | 阶段201：GPS辅助数据有效期、自动UTC补时与GeoClue接入 |
+| [kernel202](<../reference/kernel202/README.md>) | 阶段202：GPS首会话UTC准备与真实自动辅助数据恢复 |
+| [kernel203](<../reference/kernel203/README.md>) | 203：GNSS/MM 签名软件包落地与相关机型对照 |
+| [kernel204](<../reference/kernel204/README.md>) | 204：补齐蓝牙 UART RX 唤醒与休眠引脚 |
+| [kernel206](<../reference/kernel206/README.md>) | 206：修复 modem 工作文件服务，继续 GNSS 实测 |
+| [kernel207](<../reference/kernel207/README.md>) | 207：补齐本机原厂 MCFG 文件服务与 TFTP 块号回绕 |
+| [kernel208](<../reference/kernel208/README.md>) | 208：取得原厂 GNSS 接收器诊断，核对时间、ADC 与 XTRA |
+| [kernel209](<../reference/kernel209/README.md>) | 209：UTC 精度单变量对照未改善接收器报告，核对常态相机缺口 |
+| [kernel210](<../reference/kernel210/README.md>) | 210：前摄接入正常设备树并自动绑定，真实 RAW 取流通过 |
+| [kernel211](<../reference/kernel211/README.md>) | 211：前摄裁剪、独立供电域与用户态取流 |
+| [kernel212](<../reference/kernel212/README.md>) | 212：同一boot镜像第二次启动与默认CPU ISP |
+| [kernel213](<../reference/kernel213/README.md>) | 213：暗场与首帧全黑的区分，IMX471用户态候选 |
+| [kernel214](<../reference/kernel214/README.md>) | 214：完整相机包已部署，默认客户端通过 |
+| [kernel215](<../reference/kernel215/README.md>) | 215：IMX471 内部测试图寄存器位宽修复并实测 |
+| [kernel216](<../reference/kernel216/README.md>) | 216：补齐 IMX471 原厂模拟增益范围并验证 RAW 响应 |
+| [kernel217](<../reference/kernel217/README.md>) | 217：原厂三模式验证、完整分辨率候选与时序差异 |
+| [kernel218](<../reference/kernel218/README.md>) | 阶段218：原生尺寸Quad Bayer CPU候选 |
+| [kernel219](<../reference/kernel219/README.md>) | 阶段219：原厂模式实机取流与时序修复 |
+| [kernel220](<../reference/kernel220/README.md>) | 220：切换模式后的曝光元数据 |
+| [kernel221](<../reference/kernel221/README.md>) | 221：GNSS星座配置与卫星黑名单只读核对 |
+| [kernel222](<../reference/kernel222/README.md>) | 222：请求间断错配复现与SM8150帧同步候选 |
+| [kernel223](<../reference/kernel223/README.md>) | 223：捕获帧与控制快照配对已部署 |
+| [kernel224](<../reference/kernel224/README.md>) | 224：RAW自动统计、曝光元数据与停止清理已部署 |
+| [kernel225](<../reference/kernel225/README.md>) | 225：标准曝光与增益控制已部署 |
+| [kernel226](<../reference/kernel226/README.md>) | 226：GNSS原始测量与辅助数据四轮对照已完成 |
+| [kernel227](<../reference/kernel227/README.md>) | 227：FastRPC 发布、回调对象及模块引用候选 |
+| [kernel228](<../reference/kernel228/README.md>) | 228：FastRPC手机实测通过，树内产物待新启动验收 |
+| [kernel229](<../reference/kernel229/README.md>) | 229：白天前摄真实颜色信息已确认 |
+| [kernel230](<../reference/kernel230/README.md>) | 230：树内FastRPC新启动与真实传感器验收通过 |
+| [kernel231](<../reference/kernel231/README.md>) | 231：GNSS 文件服务与原厂 RFS 布局核查 |
+| [kernel232](<../reference/kernel232/README.md>) | 232：后摄 PM8008 复位和依赖候选已构建 |
+| [kernel233](<../reference/kernel233/README.md>) | 233：后摄 PM8008 依赖已部署并完成原生暖/冷循环 |
+| [kernel234](<../reference/kernel234/README.md>) | 234：蓝牙帧状态诊断与真实串口产物核对 |
+| [kernel235](<../reference/kernel235/README.md>) | 235：IMX319 真实驱动、独立 P 两路供电候选与磁盘暂存 |
+| [kernel236](<../reference/kernel236/README.md>) | 236：后摄候选实际部署、live OF 修正与 IMX319 实际 ID |
+| [kernel237](<../reference/kernel237/README.md>) | 237：IMX319 首批真实 RAW 与 CAMSS 失败回收修正 |
+| [kernel238](<../reference/kernel238/README.md>) | 238：IMX319 增益换算、48帧控制与同平台方案核对 |
+| [kernel239](<../reference/kernel239/README.md>) | 239：实际 ISP 首参修复、r15 默认部署与近机型核对 |
+| [kernel240](<../reference/kernel240/README.md>) | 240：相机应用故障、Snapshot CPU 预览与后摄统计 |
+| [kernel241](<../reference/kernel241/README.md>) | 241：本机 GNSS HAL 初始化与 Linux QMI 差异 |
+| [kernel242](<../reference/kernel242/README.md>) | 242：ROM 对照、modem 文件一致性与 GNSS 时钟关联采集 |
+| [kernel243](<../reference/kernel243/README.md>) | 243：开窗接收复测、active MCFG 与 DIAG 传输诊断 |
+| [kernel244](<../reference/kernel244/README.md>) | 244：Linux 首次启动 DIAG 握手与真实 GNSS 测量 |
+| [kernel245](<../reference/kernel245/README.md>) | 245：GPS锁对照、DIAG重连边界与MEMSHARE实测 |
+| [kernel246](<../reference/kernel246/README.md>) | 246：真实RF/时钟日志与modem原始零C/No |
+| [kernel247](<../reference/kernel247/README.md>) | 247：启动期MEMSHARE真实请求与OEM配置差异 |
+| [kernel248](<../reference/kernel248/README.md>) | 248：保存当前Linux并验证PC恢复 |
 | [rx33](<../reference/rx33/README.md>) | Session 33：有效 EUD RX 抓包 |
 | [rx34](<../reference/rx34/README.md>) | Session 34 的临时终端记录 |
 | [rx36](<../reference/rx36/README.md>) | Session 36：USB 描述符、旧 qcusbser 审查与已完成对照 |
@@ -245,6 +363,7 @@
 | [rx65](<../reference/rx65/README.md>) | RX65 — WSL full native input succeeds; tty TX loss remains |
 | [display-handoff-comparison](<../reference/display-handoff-comparison/README.md>) | 一加、真我 Linux 显示交接方案对比 |
 | [publication-2026-10-14](<../reference/publication-2026-10-14/README.md>) | 2026-10-14 分类提交与公开资料 |
+| [publication-2026-10-17](<../reference/publication-2026-10-17/README.md>) | 2026-10-17：保存全部后续硬件适配源码 |
 
 ## 早期拆分与快照
 

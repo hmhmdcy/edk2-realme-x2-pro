@@ -20,9 +20,10 @@ dropbear/dropbearkey/scp；许可证在refs/dropbear-2026.94-LICENSE。
 实际initramfs是/home/cy122/x2pro-linux/initramfs，原EUD/init逻辑保留。
 kernel72-initramfs.config把本地UID/GID1000映射成包内root；更换构建用户时按
 实际源文件所有权配置并验证CPIO，不能把固定1000当通用发行配置。
-历史一次性安装/构建/部署和验证代码在reference/kernel72，不要重复运行安装器
-覆盖现有init，也不要用旧build-image.sh覆盖实际initramfs。
+历史安装/构建/部署和验证代码在reference/kernel72，可按当前布局复用；
+处理一次性安装步骤，将所需修改合入现有init/initramfs并保留回退。
 
 本轮只刷一次logdump，boot固件与DTB未改；直接回退kernel71/logdump-k71-touch.img。
-日志必须先保留在手机，再SCP下载，按手机SHA256、gzip CRC和长度校验。
+日志可保留在手机后SCP下载，也可流式采集；按用途核验完整性。
+72阶段文件传输采用手机SHA256、gzip CRC和长度校验。
 双向4MiB SHA、PTY、自动SSH、EUD保留及原始失败记录详见sessions/72。

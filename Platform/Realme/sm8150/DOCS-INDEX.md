@@ -1,12 +1,13 @@
 # Realme X2 Pro 文档导航与维护
 
-用途：阅读入口、专题证据、历史位置和维护方法。最后整理：2026-10-14；本次维护未新增设备操作或验收。
+用途：阅读入口、专题证据、历史位置和维护方法。最后整理：2026-10-17；实际硬件结果和未验收范围见功能清单与当前检查点。
 
 ## 入口与职责
 
 | 需要了解 | 唯一维护位置 |
 | --- | --- |
 | 最后核对的部署、源码/产物差异、回退依据与续作项 | [NEXT-SESSION](NEXT-SESSION.md) |
+| 当前续作建议、证据路径及脚本复用注意 | [240交接说明](reference/kernel240/HANDOFF.md) |
 | 当前有效操作规则 | [WORKING-BOUNDARIES](WORKING-BOUNDARIES.md) |
 | 各功能已证明能力、缺陷及待验收范围 | [HARDWARE-STATUS](linux-port/docs/HARDWARE-STATUS.md) |
 | 项目介绍与通用构建说明 | [README](README.md) |
@@ -16,18 +17,22 @@
 
 提示词引用检查点，README和交接导航引用功能清单。实验过程写入sessions/或reference/，入口不再累积阶段摘要。
 
+2026-10-16已复核约束：当前规则仅由WORKING-BOUNDARIES维护，历史实验的RAM统计、无存图/补光、CPU回退及一次性执行条件不新增长期禁令；复核范围见[记录](reference/kernel240/constraints-review-validation.json)。
+
 ## 专题与证据
 
 | 专题 | 阅读入口 |
 | --- | --- |
 | 显示152—165候选、失败、回退与实屏验收 | [过程汇总](sessions/display-handoff-152-165.md)、[165证据](reference/kernel165/README.md)、[实屏反馈](reference/kernel165/physical-feedback-validation.json) |
-| GPU已复现CCU故障修复 | [147内核修复](sessions/147-a640-gmem-alignment-fix.md)、[149 Mesa修复](sessions/149-vulkan-ccu-alignment-fix-and-deployment.md)、[151收尾](sessions/151-gpu-closeout-and-hardware-handover.md) |
+| GPU旧CCU修复与Snapshot新负载故障 | [240故障及CPU回退](reference/kernel240/README.md)、[147内核修复](sessions/147-a640-gmem-alignment-fix.md)、[149 Mesa修复](sessions/149-vulkan-ccu-alignment-fix-and-deployment.md)、[151收尾](sessions/151-gpu-closeout-and-hardware-handover.md) |
 | 音频首次初始化与停止链 | [139 TX回收](sessions/139-slimbus-unsubmitted-tx-unwind-and-live-boot.md)、[104 DMIC](sessions/104-native-digital-microphones-and-first-boot-radio-failure.md)、[164失败](reference/kernel164/README.md) |
 | 电池/充电控制与输入预算 | [132观测部署](sessions/132-persistent-mp2650-real-boot-and-complete-rootfs.md)、[133预算研究](sessions/133-usb-power-budget-and-charge-contract.md)、[138恢复阈值](sessions/138-readonly-charger-recharge-threshold.md) |
-| Camera基础与内部TPG | [126 DMA验证](sessions/126-tpg-dma-guards-full-rootfs-and-real-deployment.md) |
+| GNSS标准链路、相关机型与modem文件服务 | [247启动MEMSHARE与OEM配置差异](reference/kernel247/README.md)、[246真实RF/Clock与modem原始C/No](reference/kernel246/README.md)、[245锁/DIAG/MEMSHARE与active MCFG](reference/kernel245/README.md)、[244首次启动DIAG与真实测量](reference/kernel244/README.md)、[243开窗/PDC/DIAG与其它手机修复](reference/kernel243/README.md)、[242 ROM/modem一致性与时钟关联采集](reference/kernel242/README.md)、[241本机HAL调用对照与630秒实测](reference/kernel241/README.md)、[239当前ODM来源及运行采用疑点](reference/kernel239/README.md)、[239近机型Linux路线](reference/kernel239/RELATED-LINUX-SOLUTIONS.md)、[206 RAM工作文件与实测](reference/kernel206/README.md)、[205机型对照](reference/kernel205/GNSS-RELATED-DEVICES.md)、[201 UTC/有效期/GeoClue](reference/kernel201/README.md)、[191协议修复](reference/kernel191/README.md) |
+| Camera应用、实体前后摄与内部TPG | [240桌面相机故障与CPU预览](reference/kernel240/README.md)、[239首参及近机型Linux方案](reference/kernel239/RELATED-LINUX-SOLUTIONS.md)、[218原生尺寸CPU候选与实测边界](reference/kernel218/README.md)、[217原厂模式与未部署候选](reference/kernel217/README.md)、[216原厂增益范围](reference/kernel216/README.md)、[215传感器图案位宽](reference/kernel215/README.md)、[214完整包部署与默认客户端](reference/kernel214/README.md)、[213暗场与首帧对照](reference/kernel213/README.md)、[200静态MMCX启动/前摄12帧](reference/kernel200/README.md)、[126 DMA验证](sessions/126-tpg-dma-guards-full-rootfs-and-real-deployment.md) |
 | 蓝牙、Wi-Fi与USB | [130 BlueZ](sessions/130-standard-bluez-discovery-and-startup-integration.md)、[128 Wi-Fi](sessions/128-wcn3990-pairwise-key-delete-and-5ghz.md)、[USB NCM/SSH](linux-port/docs/USB-NCM-SSH.md) |
 | EUD/调试与固件来源 | [EUD](EUD.md)、[RX](RX-CONSOLE.md)、[SWD/JTAG](SWD-JTAG.md)、[BINARIES](BINARIES.md)、[测试飞轮](FLYWHEEL.md) |
 | 同平台显示交接比较 | [参考说明](reference/display-handoff-comparison/README.md) |
+| 2026-10-17后续修复发布与返回文件 | [发布记录](reference/publication-2026-10-17/README.md)、[248备份状态](reference/kernel248/STATUS.md) |
 | 2026-10-14分类提交与公开副本范围 | [发布记录](reference/publication-2026-10-14/README.md) |
 
 ## 历史位置
