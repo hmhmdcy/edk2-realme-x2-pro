@@ -1,5 +1,7 @@
 # 396：恢复 IPE CCM 的实际命令编码和固件路由，形成内核候选
 
+**398更正：本轮数值oracle使用type 1，实际IPE调用者使用type 2。下文13位偏移作为IPE契约的结论撤回；[398](../kernel398/README.md)已修正候选为11位并重新验证。原始过程保留。**
+
 完整IQ适配继续推进。本轮把后级CCM从“已提取调校树”推进到可用的受限内核编码器，并以本机原HAL／固件验证计算、打包和帧路由。[1121组对照](colour-validation.json)、[AArch64执行](colour-arm64-validation.json)、[12组固件准备](routing-validation.json)及[内核构建](intree-build-validation.json)通过。**候选尚未接入逐帧运行接口或安装，CCM硬件像素效果尚未验证；完整Gamma／LTM／CCM与多摄校准仍未完成。**
 
 ## 现有方案、原厂文件与分层

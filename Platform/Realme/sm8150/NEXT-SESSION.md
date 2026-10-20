@@ -1,37 +1,31 @@
-# 当前检查点：397（逐帧CC硬件固定矩阵通过，正式仍395，目标active）
+# 当前检查点：398（IPE分支／偏移位宽纠正，离线；设备最后核对397）
 
-先读WORKING-BOUNDARIES.md、reference/kernel397/README.md。396交接归档archive/NEXT-SESSION-through396-2026-10-21.md。完整多摄/ISP继续，关灯黑场/噪点不单独判故障，照明相关校准后做。
+先读WORKING-BOUNDARIES.md、reference/kernel398/README.md。397完整交接归档archive/NEXT-SESSION-through397-2026-10-21.md。完整多摄／骁龙ISP目标active；关灯黑场／噪点按低照度，正常照明光学校准后做。
 
-## 本轮实际进展和颜色域边界
+## 本轮纠正与验证
 
-397新增camss_a5_ipe_run_colour_status类型化同步接口；锁内复制/验证量化矩阵、整数偏移、Q因子，MAP前非法值局部拒绝。旧job/frame/session布局和接口保持，旧调用NULL仍旁路。IQ2584后2592空数组、2624单项post数组、2656固定44B命令，总2700，均在原4096B IQ页中，沿用请求映射/未知完成保留/复位回收。帧头40base、48postoffset32。不接受任意外来CDM或寄存器包。
+实际IPE CC调用者输出type2（常量及真实初始化指令执行确认）。396误用type1，13位offset作为IPE契约的结论撤回；398候选改signed11、范围-1024…1023、掩码0x7ff。矩阵signed12/Q(7+shift)、GBR排列、固定9word包0x5e68保持。397实机单位／零／半幅全部zerooffset，既有观察仍有效，但不证明负offset。
 
-39个实际transfer/DMA用例ASan/UBSan通过，含旧/CC接口及MAP/FRAME/UNMAP错误保留；实际C完整2700区域1121组/3026700B与原HAL命令+固件布局零差，2730非法/短缓冲无写入，host+QEMU AArch64通过。12组合由完整原FW CONFIG_IO/帧准备消费，软件模型停enqueue前。
+重跑实际type2完整CC13CalculateSetting+原CDM编码：737原厂叶+384合成=1121，49324B零差，72非法无写。实际完整2700B IQ页1121组/3026700B与正确oracle零差，2730非法无写，主机ASan/UBSan和AArch64 QEMU通过。只改colour.c/.h；job/frame、分配、DMA/未知完成/复位函数未改，复用397生命周期模型。
 
-一次实机root=/var/lib/samurai/k397-colour-r1，worker10439，collector10536。候选core+临时固定模式adapter只私有加载，磁盘正式文件未动。四模式相同640x480 NV12输入各1帧：旁路Y与输入一致；单位矩阵全460800B等于旁路；零矩阵全460800B归零；半幅矩阵307200个Y精确除2，UV相对旁路向下除2有5280B高1，其余相同，原因未隔离。CRC主机重算一致、尾canary/时间戳/序号/输入未改通过，4direct/错误0。实际CC程序已影响像素，不只是ACK。
+source354 branch samurai-ipe-offset398，HEAD8b1e8903a550ffc20a2d8f1de574c37f2260fff3，父3976a6451dd1fa14534e5c805d8ca8e9a588b42016d，干净未部署。正常in-tree核心W1/Werror成功、诊断0，370152B/SHAf479b291bb64e24af0c3b8b7285eb7c60c1ee474917f717827abe7f037182744；共享输出和配置恢复。398无phone操作，不把离线结果称为新实机通过。
 
-不能直接应用原厂RGB矩阵：当前NV12输入输出只启CC、两侧颜色转换仍关闭，正确RGB处理域未建立。零矩阵连UV归零是观察，不证明RGB链路正确。优先原HAL核实pre-LTM color transform、post-LTM chroma enhancement等转换/范围/顺序；再非对角元素/有符号偏移、标准媒体请求/libcamera及351触发树。当前无稳定V4L2参数接口，不把临时test_cc_mode当产品API。
+## 转换链新事实与下一步
 
-## 源码、构建和正式部署
+现有CamxChi固定提交及本机HAL／FW原件复用。完整CST计算141组通过：actualtype2，matrixsigned13/Q10，subtractsigned11，addoffset0…1023，clamp10。HAL模块片段实际调用原CDM，FW片段消费enable，开／关及低位测试通过：CST pre-LTM/index3，IQ2092→0x5a60，data0x5a68/12words；CV post-LTM/index4，IQ2200→0x6460，data0x6468/8words。此前猜CV2196撤回，勿按邻项名称套用。
 
-source354 branch samurai-ipe-frame-colour397，HEAD6a6451dd1fa14534e5c805d8ca8e9a588b42016d，干净；父39646fdb7c96b04825dc1802f8280685a4c4e709615。仅4源文件，free/unknown completion/quiesce/stop函数体不变。访问source/build先reference/kernel284/storage.py::mounted_build()；现有32GiB ext4不可格式化/重建。
+CV实际Execute内联OEM数值片段282组/9024B零差，无算术stub。coefQ8/signed12；yoffset及KCB/KCR数值钳位signed11，KCB/KCR寄存器field13。本机OEM14floats顺序rToY,gToY,bToY,yoffset,am,ap,bm,bp,cm,cp,dm,dp,kcr,kcb，包末顺序cb/cr相反。新参考源范围不能覆盖本机实际契约。完整CV Execute、工厂插值和RGB物理处理域尚未验证。
 
-正常397 core ARM64 in-tree W1/Werror诊断0，370160B/SHA2a2aa6b57050cd4fda82fa849bff6924061b6b3600287a0541c3664846f254e6。临时adapter122160B/SHAa56989f098212ccca4ba084b5c6aee80d8ec04970aee431660bb3cbc030d0e01，宏只提供0旁路/1单位/2零/3半幅；核心与正常构建逐字节同。前两次adapter构建缺帮助模块目标导致modpost未解符号，第二次因准备未终态过早启动仍旧列表；第三次完整目标成功。标准帮助模块只为符号构建，未安装。临时源和共享构建输出/配置恢复，所有构建终态，失败记录保留。
+接续先从保留原厂调校恢复所选模式CST/CV参数及范围，类型化内核转换配置与程序同request存储，保持既有DMA生命周期；合成输入实测转换组合，再非对角/负offset、标准媒体请求与libcamera、351触发树及完整Gamma/LTM/CCM。产品仍旁路，禁止直接把原厂RGB矩阵乘当前conversion-disabled NV12路径。
 
-实机后已卸候选、恢复正常395/393。默认r30四摄imx471/imx319/s5k3m5/s5kgw1各12，恰好48direct/starts-stops4/错误-取消0，无LD/调校覆盖，fixture恢复。临时4、恢复48及实验前48三个epoch分开。worker/client/collector全部终态，无新dump/timeout/fault，未重启/刷写/永久安装。不要重启已有state的runtime脚本。
+首CST路由夹具漏enable load，修正入口后通过，失败脚本/说明私存398。WSL默认用户锁属主及root依赖路径问题已核实修复；storage284挂原backing，无格式化/重建。以后访问source/build先mounted_build()，root配现有PYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。
 
-正式core395354864B/SHA68ab5b3d6626a51ae91dd13003aed8e199a58f3ba34c1fd24ebad7e16c688a88；adapter393 ff2bfa7a9439b2ef67087ff6f5db8c9d26e9a92596cd1f63b14c3a047111d4c1；CAMSS38924fcfa685d07eb8d0e1a0b8356d9ee005e5413faf29c1b384e8c79c364630288。磁盘/加载note、四个私有配置保持，test_cc_mode及test_drop_frame_ack均无。源码397未永久部署。
+## 最后实机证据：397，非398复验
 
-host397委托396/395/394，guard仍/var/lib/samurai/k394-recovered/boot-id-private.txt，原USB密钥/known_hosts。Image363/release7.3.0-rc6-rmx1931-samurai-k363+、boot389/logdump365、DT389静态7SID/5IOVA、SG owner API/helper、原FW、r30/r25保持。用户源libcamera391-ipe-r30-built。不重复无关全量核验。
+正式仍core395354864B/SHA68ab5b3d6626a51ae91dd13003aed8e199a58f3ba34c1fd24ebad7e16c688a88、adapter393SHAff2bfa7a9439b2ef67087ff6f5db8c9d26e9a92596cd1f63b14c3a047111d4c1、CAMSS389SHA24fcfa685d07eb8d0e1a0b8356d9ee005e5413faf29c1b384e8c79c364630288。Image363/release7.3.0-rc6-rmx1931-samurai-k363+、boot/静态DT389、logdump365、SG ownerAPI、FW、r30/r25保持。
 
-最终CPU/IRQ/PM/backing/map/import释放，ICP/CAMSS/双CCI suspended，17clks0、9rails disabled/users0、taint0。PW10681/WP10684各一uid10000；owner_refs53是桌面普通CAMSS句柄，m2m users0/fatalfalse。SSC/旋转未全面复验，不称旧间歇故障修复。
+397临时core/fixedadapter四模式4direct，随后恢复395/393默认四摄各12共48direct/starts-stops4/error0。两epoch分开，实验前48另存。最终CPU/IRQ/PM/backing/map/import释放，ICP/CAMSS/双CCI suspended、17clks0、9railsdisabled/users0、taint0；PW10681/WP10684各一uid10000，owner_refs53是桌面CAMSS句柄。worker10439/client/collector10536终态，无test_cc_mode或dropACK参数；不重启旧runtime脚本。
 
-## 保留证据与接续
+host398委托397…394，guard=/var/lib/samurai/k394-recovered/boot-id-private.txt，原USB密钥/known_hosts；转换状态前按规则核实设备，不沿用已失效390guard。395失ACK恢复及394失败/reboot/206061B ramoops仍私存，回退副本均保留。SSC/旋转未全面复验。
 
-396完整原HAL CC量化/固定CDM1121组、矩阵signed12/offsetsigned13、Q(7+shift)、GBR行列顺序及FW路由可复用；原厂737叶只私存351，所选前摄非单位矩阵不能挪IFE代替。397已解决同页程序所有权和固定矩阵实像素，接下来先解决上面的颜色域组合，再全Gamma/LTM/CCM，不跳到默认启用。
-
-395reset pulse2us/deassert/CPU读回、IPE新ACK后再DMA/PM释放，双会话真实丢ACK恢复无重启；394旧块reset后重启的精确物理机制未证明，失败和206061B ramoops保持。395首事务因GW1底层13/应用12严格计数断言失败并回退，第二次正常48通过，均保留。两个395root的normal393-core.ko备份e22253916088e58a221c1948f025c44c939c819310c7d3f67106053dd39502f6，393旧pair/391旧r29-r24七包/390平台-boot366回退保持。
-
-完整reference/kernel363/REMAINING-CAMERA-SCOPE.md继续：第五2MP身份/mux、多模式、动态帧长/防频闪、几何/多摄同步、连续AF/光学。产品默认仍1:1 NV12/NV21 IQ旁路，异步implicit-fence发布未证明。保留388 DMA-only SG禁sg_page/sg_phys、自有IOMMU别名、381未知DMA/reset、383 Unicorn MEM_READ破坏ThumbIT/SP审计。
-
-private=/mnt/e/edk2-samurai-out/kernel397及前序；FW/HAL/OEM源/ASM/CDM/全日志/图像/个体数据不公开。公共mirror=/home/cy122/edk2-samurai/repo/Platform/Realme/sm8150，仅本地提交、不push/PR、保留其它改动。
+363/REMAINING-CAMERA-SCOPE.md完整继续：第五2MP身份/mux、多模式、帧长/防频闪、几何/多摄同步、连续AF与正常光照画质，异步implicitfence未证明。私人FW/HAL/原厂源/ASM/CDM/图像/个体数据仅/mnt/e/edk2-samurai-out/kernel398及前序。公共mirror只本地提交、不push/PR、保留其它改动。
