@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [369真实A5故障快照与恢复基线](../reference/kernel369/README.md)
+
 - [368原厂SFR响应3与错误诊断／DMA回收候选](../reference/kernel368/README.md)
 
 - [367基线恢复及363～366 ICP/DT实测](../reference/kernel367/README.md)
@@ -466,4 +468,3 @@
 - [Linux技术与19—28节](../linux-port/docs/00-INDEX.md)
 - [旧决策8—11节](../reference/DECISIONS.md)
 - [2026-10-14维护前逐字快照](../archive/docs-before-maintenance-2026-10-14/README.md)
-

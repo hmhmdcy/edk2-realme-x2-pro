@@ -19,5 +19,8 @@
   "commit": "9c60745372258f2f37374862a06c9fd09eeaf240",
   "branch": "samurai-a5-terminal-sfr368",
   "sha256": "c24d1adc0bb180884b7b4dbeafc32c02ede7a25f9e06810047b71637ea90b575",
-  "hardware_boot_verified": false
+  "hardware_boot_verified": false,
+  "temporary_runtime_exercised_stage": 369,
+  "hardware_cleanup_verified": false,
+  "runtime_evidence": "reference/kernel369/boot-runtime-r1-validation.json"
 }
