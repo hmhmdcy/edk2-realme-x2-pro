@@ -1,0 +1,24 @@
+{
+  "stage": 277,
+  "build_stage": 277,
+  "package_version": "0.1.0-r18",
+  "source_files_sha256": {
+    "70-samurai-camera-heaps.rules": "edaa592dd125f84da3c59b4d90465a2d1202a8cceda3f0aec5febf31f817f02d",
+    "APKBUILD": "f08bd17d147ee5f74c12de1982faba506cb20ebbfdf2f2604d8f3a47ac0e2ecf",
+    "configuration.yaml": "078d4021f6c2cc6412b6668c8bb76e45f4bc7dde00a8abd2ae2de8b380a81a04",
+    "samurai-camera-heaps.conf": "3dcdfeb7f6c25f12603fa19510a5cbc412b9e4af1c5b5655f89367bbacd27440"
+  },
+  "actual_signed_build_validation": "reference/kernel277/r23-package-build-validation.json",
+  "native_install_validation": "reference/kernel277/package-install-validation.json",
+  "actual_current_payload_validation": "reference/kernel277/final-health-validation.json",
+  "package_payload_features_preserved": true,
+  "private_keys_not_in_sources": true,
+  "s5k3m5_native_gain_pair_still_required": true,
+  "gw1_helper_native_gain_codes": [
+    32,
+    1024
+  ],
+  "standard_focus_fom_metadata_validation": "reference/kernel277/focus-metadata-r1-validation.json",
+  "high_resolution_manual_transition_validation_pending": true,
+  "autofocus_algorithm_implemented": false
+}

@@ -1,0 +1,37 @@
+{
+  "stage": 304,
+  "files": [
+    {
+      "path": "NEXT-SESSION.md",
+      "sha256": "370bc590c8894e57550076021edf995d3cefb2c8ef314cb26a237bed582371d1"
+    },
+    {
+      "path": "NEXT-SESSION-PROMPT.md",
+      "sha256": "7f69e45a0666037509e9b984b8f27d97e5c432b4473684511d259bc3b63b93b6"
+    },
+    {
+      "path": "DOCS-INDEX.md",
+      "sha256": "ca5765ee18e7471dda2e2cd3188433afb0ae41eb029b2799d8cb48c17afc822c"
+    },
+    {
+      "path": "linux-port/camera/README.md",
+      "sha256": "dab90d5d4bdf5b9da77c329886c65c510ca283b277db0ba37e716efc5a6709d7"
+    },
+    {
+      "path": "linux-port/camera/kernel/README.md",
+      "sha256": "07856f25fda822768b26dc08038a971a49b81400e2dd0dc04b6af65e1910ecea"
+    },
+    {
+      "path": "linux-port/docs/HARDWARE-STATUS.md",
+      "sha256": "10d8edc7c53817223ac619412bacec20b9aff2ea81afc4c352957f795b7d81b3"
+    },
+    {
+      "path": "linux-port/camera/deployment-lock.json",
+      "sha256": "e1ac305816db1a83162debb62d971d68c7d1fc8b47ea849f767e4fa1a14017d0"
+    },
+    {
+      "path": "linux-port/camera/kernel/source-lock.json",
+      "sha256": "2e9946739864bb421e7b22a5c9ed7d4d9603f85baa98aad2811c7c695d600c1c"
+    }
+  ]
+}

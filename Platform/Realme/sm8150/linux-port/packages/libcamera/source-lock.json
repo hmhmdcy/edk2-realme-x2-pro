@@ -1,18 +1,7 @@
 {
-  "stage": 239,
-  "original_recipe_version": "99990.7.2-r13",
-  "new_recipe_version": "99990.7.2-r15",
-  "original_six_patches_and_all_tuning_desktop_inputs_preserved": true,
-  "original_auto_virtual_pipelines_and_subpackages_preserved": true,
-  "three_verified_image_processing_patches_added": [
-    "0007-imx471-helper.patch",
-    "0008-imx471-properties-1um.patch",
-    "0009-softisp-cpu-initialize-luts.patch"
-  ],
-  "build_only_external_ipa_key_option_added": true,
-  "default_upstream_key_generation_retained_when_option_empty": true,
-  "ipa_resigned_after_strip_with_matching_retained_key": true,
-  "no_private_key_copied_into_public_sources": true,
+  "stage": 342,
+  "build_stage": 342,
+  "package_version": "99990.7.2-r27",
   "source_files_sha256": {
     "0001-software_isp-debayer_egl-Re-add-log-for-failing-DMAB.patch": "b6d52d7caafe5e303271f7abad515cb7fa4d3dd49e828dab2b19c4b51aab1cda",
     "0002-libcamera-camera_sensor-Add-Sony-IMX355-sensor-prope.patch": "253094f0750e7287b601bec8fe90edf2d7b8955b76d72e53d657e8bb811c48b9",
@@ -36,7 +25,13 @@
     "0020-soft-invalid-statistics-hold.patch": "53d2947041c4826476e6594ba08517287908edd76b570ee807d63a640ed56e4a",
     "0021-imx319-gain-helper.patch": "b1fc6777a3474ca73ba11315485a43b2e77271040efe76920f61133fb77571b9",
     "0022-soft-initial-parameters.patch": "0150a0912b43cba7eeb4b4613f2b9a519a565cfdfee469f0939dbb0eee80d604",
-    "APKBUILD": "2d16c02cfb27a26dd5601c35b7b882cbaacecda1d1f5806d7aae80b1fd3f7495",
+    "0023-simple-link-state-after-external-client.patch": "e739802d7ab4922977fa7006cdf8f636a913ba3a8823059bd75b809ab9c468f3",
+    "0024-s5k3m5-native-gain-helper.patch": "4cc4a40e68e54cd2cd965028eb0c0df42ef821ab378105b926f03c8d7c182b2b",
+    "0025-s5kgw1-native-gain-helper.patch": "7f4cef16f5831db3f417b67d326e3dff7ae38c8ce091f87048b56f1e615cf0ee",
+    "0026-simple-lens-stream-lifetime.patch": "4ed8fc79606508df1ebc06b1aa76c71d5fcf1f9d80bd5973dfb83b753655f37a",
+    "0027-softisp-raw-focus-statistics.patch": "afdfdcb5f29c7135d6aa45cda1930524ae3e663fa1455fc9853a37aa4ae693c6",
+    "0028-simple-contrast-autofocus.patch": "d5a980944ff2cdcc0f20cec65c2b441803daafcdfc431a3355f520b50f9c0875",
+    "APKBUILD": "33bf04f6c87b839e610cabb01cd6027622c90b64fa7869186a2871c3dcaee44e",
     "hi846.yaml": "05760b1ea5116e353beb62e599768536facb5ba05cfe7d39fd66d921269f7a00",
     "imx355.yaml": "096feb578f1ba3a25a3c7feca20bf8e810e9d2a62da8cd3e898499ad11540739",
     "imx363.yaml": "0d0cf3d08412b177724c4b1a100313c38fccd6ee8f8ce171d3522ed68fd46ed6",
@@ -47,64 +42,47 @@
     "imx858.yaml": "a266aa80548a77bd7b80d224bf194853ca1756fe9439db1f530ad052ae7c16f6",
     "qcam.desktop": "edcae8ebaa41deeb32e837ceba78f2a4f7b87dac4d78a980bfda843cdd3d8cae",
     "s5k3l6xx.yaml": "05760b1ea5116e353beb62e599768536facb5ba05cfe7d39fd66d921269f7a00",
-    "s5kjn1.yaml": "85e2a8e694c825f741acb25d336c058011e56434b56715e57305206f38ca8cbd"
+    "s5kjn1.yaml": "85e2a8e694c825f741acb25d336c058011e56434b56715e57305206f38ca8cbd",
+    "0029-camss-hardware-pipeline.patch": "f61e2d2a83f8866d07913e3b1ba8386cdbe50a13a7a9e827b8fa7fa0ad89ffd1",
+    "0030-camss-lens-shading.patch": "77998694b30a71e9c38461f147b41106c9760e1f620d46b3487be1ead3e3f70b",
+    "0031-camss-calibrated-white-balance.patch": "78fa6cca59893552b131c4ee65f9b8cda95ac1c8b01f2e791c8aa78cab0c59a6",
+    "0032-camss-calibrated-cct-estimation.patch": "f6448fd1bd8cf7e416218f1460a9602ee7d3950842e2ef54ac5db06f73d1d34d",
+    "0033-camss-colour-correction-coupling.patch": "bc7e8326cac7a06af9cc5bdb7e51431efbd44aa1ae4fdbb9703329d3bdadb1ed",
+    "0034-camss-runtime-reference-lux.patch": "d71b78ae518d06c1f251137707a06cfdc40dba98c5a87d04b8e4ec949f4a1b33",
+    "0035-camss-runtime-aec-colour-correction.patch": "dbf38880ff874711b370c9c7478e8d4e6d774f5e2ba79d6bbdc7876e6ecbdc59",
+    "0036-camss-dynamic-lens-shading.patch": "84c7a0df9107f894cb00f6bee3984e090fe6b89138d020e8526ea4fe014c073f"
   },
-  "explicit_build_jobs_parameter": true,
-  "checksums_follow_source_order": true,
-  "unversioned_libyuv_runtime_explicit_build_dependency": true,
-  "original_ten_patches_and_all_existing_source_inputs_preserved": true,
-  "full_auto_virtual_features_and_all_eleven_subpackages_retained": true,
-  "experimental_native_quad_default_false": true,
-  "configurable_software_isp_dma_heap": true,
-  "additional_stage219_patches": [
-    "0011-imx471-native-quad-cpu.patch",
-    "0012-software-isp-dma-heap-selection.patch"
+  "actual_signed_build_validation": "reference/kernel342/package-build-validation.json",
+  "native_install_validation": "reference/kernel342/install-r1-validation.json",
+  "actual_current_payload_validation": "reference/kernel342/installed-iq-validation.json",
+  "package_payload_features_preserved": true,
+  "private_keys_not_in_sources": true,
+  "s5k3m5_native_gain_pair_still_required": true,
+  "gw1_helper_native_gain_codes": [
+    32,
+    1024
   ],
-  "original_twelve_patches_and_all_existing_inputs_preserved": true,
-  "sensor_information_refreshed_on_each_configuration": true,
-  "additional_stage220_patches": [
-    "0013-simple-refresh-sensor-timing.patch"
+  "autofocus_supported_modes": [
+    "Auto"
   ],
-  "original_thirteen_patches_and_all_existing_inputs_preserved": true,
-  "additional_stage223_patches": [
-    "0014-simple-capture-control-snapshot.patch"
-  ],
-  "capture_time_controls_snapshotted_by_capture_sequence": true,
-  "request_keyed_ipa_context_preserved": true,
-  "original_fourteen_patches_and_all_existing_inputs_preserved": true,
-  "additional_stage224_patches": [
-    "0015-simple-raw-only-statistics.patch",
-    "0016-simple-stop-live-requests.patch",
-    "0017-simple-capture-cancel-status.patch"
-  ],
-  "cpu_raw_only_statistics_auto_controls_and_metadata": true,
-  "raw_only_no_rgb_dma_outputs": true,
-  "stop_cleanup_uses_live_request_ownership": true,
-  "capture_cancel_status_propagated_to_user_outputs": true,
-  "manual_api_not_implemented": false,
-  "original_seventeen_patches_and_all_existing_inputs_preserved": true,
-  "additional_stage225_patches": [
-    "0018-simple-manual-exposure-controls.patch",
-    "0019-ipc-threaded-start-outputs.patch",
-    "0020-soft-invalid-statistics-hold.patch"
-  ],
-  "manual_api_scope": "CPU software ISP: independent exposure/gain Auto/Manual, AeEnable preprocessing, start controls and captured-source metadata",
-  "threaded_start_output_arguments_forwarded": true,
-  "invalid_statistics_hold_latest_prepared_targets": true,
-  "additional_stage238_patches": [
-    "0021-imx319-gain-helper.patch"
-  ],
-  "additional_stage239_patches": [
-    "0022-soft-initial-parameters.patch"
-  ],
-  "imx319_gain_formula": "1024/(1024-code)",
-  "initial_ipa_parameters_snapshotted_after_start": true,
-  "initial_combined_matrix_published": true,
-  "black_level_and_tuning_not_changed": true,
-  "actual_processing_frame_sequence_timestamp_logged": true,
-  "original_twenty_patch_and_all_tuning_inputs_preserved": true,
-  "complete_thirteen_packages_built_seven_runtime_packages_installed": true,
-  "all_five_ipa_signatures_verified": true,
-  "default_stop_start_twice_initial_parameters_verified": true,
-  "rear_scene_optical_response_and_colour_still_open": true
+  "autofocus_algorithm_implemented": true,
+  "continuous_af_implemented": false,
+  "manual_distance_map_calibrated": false,
+  "standard_af_validation": "reference/kernel315/raw-r3-validation.json",
+  "auto_exposure_af_validation": "reference/kernel315/raw-r3-validation.json",
+  "high_resolution_manual_transition_validation_pending": true,
+  "profile_only_in_device_data_package": true,
+  "default_hardware_pipeline": true,
+  "matched_camss_driver_stage": 338,
+  "camss_lsc_optional_driver_validation": "reference/kernel318/install-r1-validation.json",
+  "lsc_ipa_implemented": true,
+  "lsc_static_mode_upload": true,
+  "lsc_default_enabled": false,
+  "lsc_dynamic_mode_upload": true,
+  "calibrated_white_balance_and_cct": true,
+  "colour_correction_runtime_aec": true,
+  "aec_lux_runtime_integrated": true,
+  "optional_calibration_profiles_enabled_by_default": false,
+  "factory_mode_exposure_table_binding_verified": false,
+  "maintained_source": "/mnt/samurai-full282/libcamera342-r27-built/src/libcamera-v0.7.2"
 }

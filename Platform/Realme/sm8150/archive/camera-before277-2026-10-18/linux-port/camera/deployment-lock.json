@@ -1,0 +1,733 @@
+{
+  "stage": 276,
+  "kernel_boot_stage": 276,
+  "current_boot_guard_stage": 276,
+  "kernel_image_stage": 183,
+  "framework_version": "99990.7.2-r22",
+  "configuration_version": "0.1.0-r17",
+  "pipewire_core_spa_gstreamer_version": "1.6.9-r3",
+  "package_recipe": "../packages/libcamera/APKBUILD",
+  "configuration_recipe": "../packages/samurai-camera-config/APKBUILD",
+  "package_source_lock": "../packages/libcamera/source-lock.json",
+  "built_packages": [
+    {
+      "name": "libcamera",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "libcamera-99990.7.2-r22.apk",
+      "bytes": 916944,
+      "sha256": "23be11da6d0a09cad3c550977865e7caaf105011d836694d5e0b80ca0669b652"
+    },
+    {
+      "name": "libcamera-dbg",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "libcamera-dbg-99990.7.2-r22.apk",
+      "bytes": 8622,
+      "sha256": "5d6758e9f591df6d0168dabfd7b425651068645c761f3209b47c74c3d2d750fa"
+    },
+    {
+      "name": "libcamera-dev",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "libcamera-dev-99990.7.2-r22.apk",
+      "bytes": 25756,
+      "sha256": "221cf34fc7fdb69e811a001083a21ce7b259e5065eac7ae29050577196127f8f"
+    },
+    {
+      "name": "libcamera-gstreamer",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "libcamera-gstreamer-99990.7.2-r22.apk",
+      "bytes": 57328,
+      "sha256": "d65b8396b0f97e26e4c99c30c36d71c73d55de05be4b14802883cb6bd41bd330"
+    },
+    {
+      "name": "libcamera-ipa",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "libcamera-ipa-99990.7.2-r22.apk",
+      "bytes": 771335,
+      "sha256": "ac4223068bb8aa338cba4a19e72b168963e8164e0a00c47036bf8e7dcbc2db4d"
+    },
+    {
+      "name": "libcamera-raspberrypi",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "libcamera-raspberrypi-99990.7.2-r22.apk",
+      "bytes": 375343,
+      "sha256": "6d62461886f289f0da41f3e84029aa82e47eb68137afc501c3ebc01287761318"
+    },
+    {
+      "name": "libcamera-tools",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "libcamera-tools-99990.7.2-r22.apk",
+      "bytes": 130538,
+      "sha256": "733dd772c9db0d5d355e23e2c922e3103baa096c6b92a739c5fe84cd1c50b4cf"
+    },
+    {
+      "name": "libcamera-v4l2",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "libcamera-v4l2-99990.7.2-r22.apk",
+      "bytes": 33863,
+      "sha256": "03edc0786215067f6870ba451a7fb37978d7b868bdea9b1d456a77a53136ea8a"
+    },
+    {
+      "name": "py3-libcamera",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "py3-libcamera-99990.7.2-r22.apk",
+      "bytes": 317097,
+      "sha256": "5ef3c9c46404d236c067549097b44816fa2d7e7db9e8abc126cef98e166d89bf"
+    },
+    {
+      "name": "py3-libcamera-pyc",
+      "version": "99990.7.2-r22",
+      "arch": "noarch",
+      "file": "py3-libcamera-pyc-99990.7.2-r22.apk",
+      "bytes": 1553,
+      "sha256": "f553ff97e0f104a455c83d652bc2b7c7ea4d8d89e0c9b0ca77866da5122e59fc"
+    },
+    {
+      "name": "qcam",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "qcam-99990.7.2-r22.apk",
+      "bytes": 78252,
+      "sha256": "e3770c9227b20e083f0d008a26ae8e799cb8fa1c18257ab9f96b78302e4c5b52"
+    },
+    {
+      "name": "samurai-camera-config",
+      "version": "0.1.0-r17",
+      "arch": "noarch",
+      "file": "samurai-camera-config-0.1.0-r17.apk",
+      "bytes": 1882,
+      "sha256": "55fef327f51112bda731b826beb0b3e52452d398fc3e613717b90e20e3cc6a90"
+    },
+    {
+      "name": "samurai-camera-stack",
+      "version": "0.1.0-r17",
+      "arch": "noarch",
+      "file": "samurai-camera-stack-0.1.0-r17.apk",
+      "bytes": 988,
+      "sha256": "a4cab28bd4767c7b76c1925f56db55aef9f5a9c12969d054bbc544edd385886f"
+    }
+  ],
+  "installed_package_payloads": [
+    {
+      "name": "libcamera",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "libcamera-99990.7.2-r22.apk",
+      "bytes": 916944,
+      "sha256": "23be11da6d0a09cad3c550977865e7caaf105011d836694d5e0b80ca0669b652",
+      "dependencies": [
+        "libcamera-ipa=99990.7.2-r22",
+        "so:libEGL.so.1",
+        "so:libGLESv2.so.2",
+        "so:libc.musl-aarch64.so.1",
+        "so:libgcc_s.so.1",
+        "so:libgnutls.so.30",
+        "so:libpisp.so.1",
+        "so:libstdc++.so.6",
+        "so:libudev.so.1",
+        "so:libunwind.so.8",
+        "so:libyaml-0.so.2",
+        "so:libyuv.so"
+      ],
+      "provides": [
+        "cmd:libcamera-bug-report=99990.7.2-r22",
+        "cmd:libcamerify=99990.7.2-r22",
+        "so:libcamera-base.so.0.7=0.7.2",
+        "so:libcamera.so.0.7=0.7.2"
+      ],
+      "files": {
+        "usr/bin/libcamera-bug-report": {
+          "kind": "file",
+          "sha256": "11aa06fb18270647f41d6f9a73b99842ab1787dc9b7eee1d9f5c1082a2a4b1ae",
+          "mode": 493
+        },
+        "usr/bin/libcamerify": {
+          "kind": "file",
+          "sha256": "37951370ea1c42e9b168b7745544d4e09809554547f4ecfefbf7113ea2137f18",
+          "mode": 493
+        },
+        "usr/lib/libcamera-base.so.0.7": {
+          "kind": "symlink",
+          "target": "libcamera-base.so.0.7.2"
+        },
+        "usr/lib/libcamera-base.so.0.7.2": {
+          "kind": "file",
+          "sha256": "5da1f3a539e5bdbc9f633b56453d6f6ba7acd093ff76cd68b905006ce0109af8",
+          "mode": 493
+        },
+        "usr/lib/libcamera.so.0.7": {
+          "kind": "symlink",
+          "target": "libcamera.so.0.7.2"
+        },
+        "usr/lib/libcamera.so.0.7.2": {
+          "kind": "file",
+          "sha256": "b4d8e68354520f73850915c351eb40f8bfefbb596787bf34b2a843fe7f56f2f0",
+          "mode": 493
+        },
+        "usr/libexec/libcamera/mali-c55_ipa_proxy": {
+          "kind": "file",
+          "sha256": "cd85c3dd922d0c54ee6f71dc86a882919a6e269ff34f42b90d371b948f05d7f2",
+          "mode": 493
+        },
+        "usr/libexec/libcamera/rkisp1_ipa_proxy": {
+          "kind": "file",
+          "sha256": "4148d570b294491405ab00b3f49262f3bff1cbd557a5431f020b786c6435aae1",
+          "mode": 493
+        },
+        "usr/libexec/libcamera/soft_ipa_proxy": {
+          "kind": "file",
+          "sha256": "4c5cb5b05e4ae4587beae0d7f680da7d8bfbf678e435446326b1cbd7ca92c31f",
+          "mode": 493
+        },
+        "usr/share/libcamera/pipeline/rpi/pisp/example.yaml": {
+          "kind": "file",
+          "sha256": "f554068b1c0ff366cc20e8660ac74b2411cfa0ead5d0bca271e4f5f3e5fefb7e",
+          "mode": 420
+        },
+        "usr/share/libcamera/pipeline/virtual/virtual.yaml.example": {
+          "kind": "file",
+          "sha256": "81259104e1c1fc11920a6028a5f0eab425b3a57d2a6020968e4fc2ba0ed1145a",
+          "mode": 420
+        }
+      },
+      "directories": {
+        "usr": 493,
+        "usr/bin": 493,
+        "usr/lib": 493,
+        "usr/libexec": 493,
+        "usr/libexec/libcamera": 493,
+        "usr/share": 493,
+        "usr/share/libcamera": 493,
+        "usr/share/libcamera/pipeline": 493,
+        "usr/share/libcamera/pipeline/rpi": 493,
+        "usr/share/libcamera/pipeline/rpi/pisp": 493,
+        "usr/share/libcamera/pipeline/virtual": 493
+      }
+    },
+    {
+      "name": "libcamera-gstreamer",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "libcamera-gstreamer-99990.7.2-r22.apk",
+      "bytes": 57328,
+      "sha256": "d65b8396b0f97e26e4c99c30c36d71c73d55de05be4b14802883cb6bd41bd330",
+      "dependencies": [
+        "so:libc.musl-aarch64.so.1",
+        "so:libcamera-base.so.0.7",
+        "so:libcamera.so.0.7",
+        "so:libgcc_s.so.1",
+        "so:libglib-2.0.so.0",
+        "so:libgobject-2.0.so.0",
+        "so:libgstallocators-1.0.so.0",
+        "so:libgstbase-1.0.so.0",
+        "so:libgstreamer-1.0.so.0",
+        "so:libgstvideo-1.0.so.0",
+        "so:libstdc++.so.6"
+      ],
+      "provides": [],
+      "files": {
+        "usr/lib/gstreamer-1.0/libgstlibcamera.so": {
+          "kind": "file",
+          "sha256": "ada72c44fe240e4f0d27324d708b3bebf97650756c28e323b35c4e8b19d4ac70",
+          "mode": 493
+        }
+      },
+      "directories": {
+        "usr": 493,
+        "usr/lib": 493,
+        "usr/lib/gstreamer-1.0": 493
+      }
+    },
+    {
+      "name": "libcamera-ipa",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "libcamera-ipa-99990.7.2-r22.apk",
+      "bytes": 771335,
+      "sha256": "ac4223068bb8aa338cba4a19e72b168963e8164e0a00c47036bf8e7dcbc2db4d",
+      "dependencies": [
+        "so:libc.musl-aarch64.so.1",
+        "so:libcamera-base.so.0.7",
+        "so:libcamera.so.0.7",
+        "so:libgcc_s.so.1",
+        "so:libpisp.so.1",
+        "so:libstdc++.so.6"
+      ],
+      "provides": [],
+      "files": {
+        "usr/lib/libcamera/ipa/ipa_mali_c55.so": {
+          "kind": "file",
+          "sha256": "1d73e858e26649f87b93d7293f3379b52f8f58a1b50f0bc858876a5cb9db9a71",
+          "mode": 493
+        },
+        "usr/lib/libcamera/ipa/ipa_mali_c55.so.sign": {
+          "kind": "file",
+          "sha256": "d8f559d6a450734617e37d97a60164754dd030ec9def4065d2b421c87b181090",
+          "mode": 420
+        },
+        "usr/lib/libcamera/ipa/ipa_rkisp1.so": {
+          "kind": "file",
+          "sha256": "f6e3c1769c71bdc786c74ee49a08d7bea7b77083a9a07bc288f70160b34fe30e",
+          "mode": 493
+        },
+        "usr/lib/libcamera/ipa/ipa_rkisp1.so.sign": {
+          "kind": "file",
+          "sha256": "f64e41f102219148ae6dce0ce6bee2242ee697ed5fe3e3303d329c7cc61c9507",
+          "mode": 420
+        },
+        "usr/lib/libcamera/ipa/ipa_rpi_pisp.so": {
+          "kind": "file",
+          "sha256": "086ffba6c50a788bd0592a386af6f7f1716941f24b5cdcc2322ee90f5ca02f36",
+          "mode": 493
+        },
+        "usr/lib/libcamera/ipa/ipa_rpi_pisp.so.sign": {
+          "kind": "file",
+          "sha256": "8e2d3ba341b0cd793336b1f16822cd8c9d389ccb63b51bd77de438508d890aa7",
+          "mode": 420
+        },
+        "usr/lib/libcamera/ipa/ipa_rpi_vc4.so": {
+          "kind": "file",
+          "sha256": "7609fc6adc3e0dda6c578ba8f822467ccf5666d28bd73a57cc2b89df019ebbce",
+          "mode": 493
+        },
+        "usr/lib/libcamera/ipa/ipa_rpi_vc4.so.sign": {
+          "kind": "file",
+          "sha256": "095ea1e776fe0fccf9928dbf2e2c46d59c55a9fbb4e6d60a145ff5cacf5fcdbb",
+          "mode": 420
+        },
+        "usr/lib/libcamera/ipa/ipa_soft_simple.so": {
+          "kind": "file",
+          "sha256": "a8ae3637f288e09fbd363b915868c9502ce89b00cf481785433c7854fe19b39c",
+          "mode": 493
+        },
+        "usr/lib/libcamera/ipa/ipa_soft_simple.so.sign": {
+          "kind": "file",
+          "sha256": "21eb2e6358a57a85d7e803f0e0fa0bbcb8c232fa2ad4a9bddd8307b597367f04",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/mali-c55/imx415.yaml": {
+          "kind": "file",
+          "sha256": "c3ec53960bf59c37921f954ccd49018d15c03e1b889df3c6b00f2b1c5acfb454",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/mali-c55/uncalibrated.yaml": {
+          "kind": "file",
+          "sha256": "01d2df0edc90146888fcba0ba57023794af2a26165940b3d5cc1902563392e0f",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/rkisp1/imx219.yaml": {
+          "kind": "file",
+          "sha256": "e930ada3ff3e4ba424a1bfbfdb651358c8f50584cc9a75cecdc2e14707721f6a",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/rkisp1/imx258.yaml": {
+          "kind": "file",
+          "sha256": "d25874cce55cc5b689e3b6e9ebad46aeae002c5808843068f26f738df452fe48",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/rkisp1/ov2685.yaml": {
+          "kind": "file",
+          "sha256": "b9bc9148bdbfe9196103e2aa69da300c2eb7e99f3d48ccaf0ba2b3c2a7072676",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/rkisp1/ov4689.yaml": {
+          "kind": "file",
+          "sha256": "e8e820e96acb11bb71595dea677184c28207e743dd2a7acec3a1d4232cb8d220",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/rkisp1/ov5640.yaml": {
+          "kind": "file",
+          "sha256": "49e63d4cca91ae2b82abf5bb7b75cee91d3476e81b10044a5b6b3e33222a27b3",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/rkisp1/ov5695.yaml": {
+          "kind": "file",
+          "sha256": "c8b82dcb21d34ec043c2d23c7c90f2f01e6aafb4d7efb05ab35879bde4dd6430",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/rkisp1/ov8858.yaml": {
+          "kind": "file",
+          "sha256": "e1274c831bfd6487b2d4f2c3fcce147cc224ca2ab78d83a21f44552241f52285",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/rkisp1/uncalibrated.yaml": {
+          "kind": "file",
+          "sha256": "e8e820e96acb11bb71595dea677184c28207e743dd2a7acec3a1d4232cb8d220",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/simple/hi846.yaml": {
+          "kind": "file",
+          "sha256": "05760b1ea5116e353beb62e599768536facb5ba05cfe7d39fd66d921269f7a00",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/simple/imx355.yaml": {
+          "kind": "file",
+          "sha256": "096feb578f1ba3a25a3c7feca20bf8e810e9d2a62da8cd3e898499ad11540739",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/simple/imx363.yaml": {
+          "kind": "file",
+          "sha256": "0d0cf3d08412b177724c4b1a100313c38fccd6ee8f8ce171d3522ed68fd46ed6",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/simple/imx371.yaml": {
+          "kind": "file",
+          "sha256": "268a927e45949c7092ab2679e9678b0732dd41c028ae968e27dfba52f248856d",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/simple/imx376.yaml": {
+          "kind": "file",
+          "sha256": "268a927e45949c7092ab2679e9678b0732dd41c028ae968e27dfba52f248856d",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/simple/imx519.yaml": {
+          "kind": "file",
+          "sha256": "268a927e45949c7092ab2679e9678b0732dd41c028ae968e27dfba52f248856d",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/simple/imx800.yaml": {
+          "kind": "file",
+          "sha256": "a266aa80548a77bd7b80d224bf194853ca1756fe9439db1f530ad052ae7c16f6",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/simple/imx858.yaml": {
+          "kind": "file",
+          "sha256": "a266aa80548a77bd7b80d224bf194853ca1756fe9439db1f530ad052ae7c16f6",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/simple/s5k3l6xx.yaml": {
+          "kind": "file",
+          "sha256": "05760b1ea5116e353beb62e599768536facb5ba05cfe7d39fd66d921269f7a00",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/simple/s5kjn1.yaml": {
+          "kind": "file",
+          "sha256": "85e2a8e694c825f741acb25d336c058011e56434b56715e57305206f38ca8cbd",
+          "mode": 420
+        },
+        "usr/share/libcamera/ipa/simple/uncalibrated.yaml": {
+          "kind": "file",
+          "sha256": "0689579ca79036bbd31d104deafca70fb8b267c4c8f8492e07bd6f6e875ee1ac",
+          "mode": 420
+        }
+      },
+      "directories": {
+        "usr": 493,
+        "usr/lib": 493,
+        "usr/lib/libcamera": 493,
+        "usr/lib/libcamera/ipa": 493,
+        "usr/share": 493,
+        "usr/share/libcamera": 493,
+        "usr/share/libcamera/ipa": 493,
+        "usr/share/libcamera/ipa/mali-c55": 493,
+        "usr/share/libcamera/ipa/rkisp1": 493,
+        "usr/share/libcamera/ipa/simple": 493
+      }
+    },
+    {
+      "name": "libcamera-tools",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "libcamera-tools-99990.7.2-r22.apk",
+      "bytes": 130538,
+      "sha256": "733dd772c9db0d5d355e23e2c922e3103baa096c6b92a739c5fe84cd1c50b4cf",
+      "dependencies": [
+        "so:libc.musl-aarch64.so.1",
+        "so:libcamera-base.so.0.7",
+        "so:libcamera.so.0.7",
+        "so:libdrm.so.2",
+        "so:libevent-2.1.so.7",
+        "so:libevent_pthreads-2.1.so.7",
+        "so:libgcc_s.so.1",
+        "so:libgtest.so.1.18.0",
+        "so:libstdc++.so.6",
+        "so:libyaml-0.so.2"
+      ],
+      "provides": [
+        "cmd:cam=99990.7.2-r22",
+        "cmd:lc-compliance=99990.7.2-r22"
+      ],
+      "files": {
+        "usr/bin/cam": {
+          "kind": "file",
+          "sha256": "413b0dca12d14a002651b5851565dc3ab401d79cfec821eb92fc5d680ef3f832",
+          "mode": 493
+        },
+        "usr/bin/lc-compliance": {
+          "kind": "file",
+          "sha256": "1c194e6904cfcc3b0d62af8378460a173a507d8fa1e308298e1f420baeb4cb11",
+          "mode": 493
+        }
+      },
+      "directories": {
+        "usr": 493,
+        "usr/bin": 493
+      }
+    },
+    {
+      "name": "libcamera-v4l2",
+      "version": "99990.7.2-r22",
+      "arch": "aarch64",
+      "file": "libcamera-v4l2-99990.7.2-r22.apk",
+      "bytes": 33863,
+      "sha256": "03edc0786215067f6870ba451a7fb37978d7b868bdea9b1d456a77a53136ea8a",
+      "dependencies": [
+        "so:libc.musl-aarch64.so.1",
+        "so:libcamera-base.so.0.7",
+        "so:libcamera.so.0.7",
+        "so:libgcc_s.so.1",
+        "so:libstdc++.so.6"
+      ],
+      "provides": [],
+      "files": {
+        "usr/libexec/libcamera/v4l2-compat.so": {
+          "kind": "file",
+          "sha256": "da3dcb8dd02d877a296f32a1c9e8cfe412524587ada24175b5a9ca6307de8f0e",
+          "mode": 493
+        }
+      },
+      "directories": {
+        "usr": 493,
+        "usr/libexec": 493,
+        "usr/libexec/libcamera": 493
+      }
+    },
+    {
+      "name": "samurai-camera-config",
+      "version": "0.1.0-r17",
+      "arch": "noarch",
+      "file": "samurai-camera-config-0.1.0-r17.apk",
+      "bytes": 1882,
+      "sha256": "55fef327f51112bda731b826beb0b3e52452d398fc3e613717b90e20e3cc6a90",
+      "dependencies": [
+        "libcamera=99990.7.2-r22",
+        "libcamera-ipa=99990.7.2-r22",
+        "openrc",
+        "eudev"
+      ],
+      "provides": [],
+      "files": {
+        "etc/libcamera/configuration.yaml": {
+          "kind": "file",
+          "sha256": "078d4021f6c2cc6412b6668c8bb76e45f4bc7dde00a8abd2ae2de8b380a81a04",
+          "mode": 420
+        },
+        "etc/modules-load.d/samurai-camera-heaps.conf": {
+          "kind": "file",
+          "sha256": "3dcdfeb7f6c25f12603fa19510a5cbc412b9e4af1c5b5655f89367bbacd27440",
+          "mode": 420
+        },
+        "etc/udev/rules.d/70-samurai-camera-heaps.rules": {
+          "kind": "file",
+          "sha256": "edaa592dd125f84da3c59b4d90465a2d1202a8cceda3f0aec5febf31f817f02d",
+          "mode": 420
+        }
+      },
+      "directories": {
+        "etc": 493,
+        "etc/libcamera": 493,
+        "etc/modules-load.d": 493,
+        "etc/udev": 493,
+        "etc/udev/rules.d": 493
+      }
+    },
+    {
+      "name": "samurai-camera-stack",
+      "version": "0.1.0-r17",
+      "arch": "noarch",
+      "file": "samurai-camera-stack-0.1.0-r17.apk",
+      "bytes": 988,
+      "sha256": "a4cab28bd4767c7b76c1925f56db55aef9f5a9c12969d054bbc544edd385886f",
+      "dependencies": [
+        "samurai-camera-config=0.1.0-r17",
+        "libcamera=99990.7.2-r22",
+        "libcamera-ipa=99990.7.2-r22",
+        "libcamera-tools=99990.7.2-r22",
+        "libcamera-gstreamer=99990.7.2-r22",
+        "libcamera-v4l2=99990.7.2-r22"
+      ],
+      "provides": [],
+      "files": {},
+      "directories": {}
+    }
+  ],
+  "installed_package_count": 961,
+  "ko_count": 776,
+  "kernel_modules": {
+    "qcom_pm8008": {
+      "loaded": true,
+      "sha256": "bcdbf711b1194a7eac46eaba626373bf9e82fdebd321e9a536e26d1c55076905",
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {}
+    },
+    "qcom_pm8008_regulator": {
+      "loaded": true,
+      "sha256": "d4dbb9cd7679381c97003c3bce901979d16c945e937d752dedc1fb75da3186d3",
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {}
+    },
+    "imx319": {
+      "loaded": true,
+      "sha256": "53917b9988e0796b4bc4724cd84932cf05882f4e9c81d4d3cbda9c11908a5cb5",
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {}
+    },
+    "imx471": {
+      "loaded": true,
+      "sha256": "e49dab26b05a325df8da64bb5c4b57c29cd51d1dcf15f5d4ed4dcb53033e66f1",
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {
+        "unprocessed_fullres": "N"
+      }
+    },
+    "qcom_camss": {
+      "loaded": true,
+      "sha256": "ff9fdfa346249d836c0f830c9ea2480b6b06b280089007a054a6d2a0514f5822",
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {
+        "dma_trace": "N"
+      }
+    },
+    "v4l2_cci": {
+      "loaded": true,
+      "sha256": "f9c9272ac6f19712fee621b4c583f517112b6ed90324e21600d5c0c23b74a03d",
+      "loaded_note_matches_disk": true,
+      "intree": "Y"
+    },
+    "s5k3m5": {
+      "loaded": true,
+      "sha256": "11791431fb7d50ccd64163fdc5d753b61be5844830e90d14ce4f738a42f8b8f5",
+      "loaded_note_matches_disk": true,
+      "intree": "Y"
+    },
+    "s5kgw1": {
+      "loaded": true,
+      "sha256": "0c907b122065b8657dc9f9e68ff17784c5419ed1994fe9f1ced5ccfa60c90ade",
+      "loaded_note_matches_disk": true,
+      "intree": "Y"
+    },
+    "lc898219xi": {
+      "sha256": "03517eeac1b88820cfa24a0932ce5832e9f47260793cc703b64228c487cd5f1d",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y"
+    },
+    "i2c_qcom_cci": {
+      "sha256": "b2808f63c0e290a7aa5808de687d2001b8f936595a8632d2a1055b05aa8ca42b",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y"
+    }
+  },
+  "boot_sha256": "0d6bbc0255fc7a44340b2c2c6a20f2bfa807f683f69dd20a3fb130d961dc4c64",
+  "dtb_sha256": "dcdd74ec903520c7023fa28badcb293b2e4e26ee5bac639497c63d53536b2c8d",
+  "standard_regulator_consumers_and_dt_wiring": true,
+  "lab_supply_and_board_reset_provider_removed": true,
+  "cpu_isp_and_system_dma_heap": true,
+  "private_library_overrides_absent": true,
+  "per_application_copy_switch_absent": true,
+  "snapshot_launcher_profile": "snapshot-launcher/",
+  "snapshot_launcher_sha256": {
+    "org.gnome.Snapshot.desktop": "b857de670636c17d2dc0faaa902e94652fecc31d30f7d5df925e0bd3164b432e",
+    "org.gnome.Snapshot.service": "f18df4682092a03962f916f84f89c92fcf6664ec0be5027f6c08e5011d202308"
+  },
+  "snapshot_cairo_workaround_still_required": true,
+  "current_camera_evidence": "../../reference/kernel276/README.md",
+  "final_health_evidence": "../../reference/kernel276/final-health-validation.json",
+  "system_services": {
+    "stage": 276,
+    "new_processes": [
+      {
+        "name": "pipewire",
+        "pid": 5117,
+        "start_ticks": "11070"
+      },
+      {
+        "name": "wireplumber",
+        "pid": 5141,
+        "start_ticks": "11072"
+      }
+    ],
+    "spa_path": "/usr/lib/spa-0.2/libcamera/libspa-libcamera.so",
+    "spa_candidate_active": false,
+    "normal_system_library_paths": true,
+    "phosh_pid": 3803,
+    "current_manifest": "/var/lib/samurai/k276-services-current-private.json",
+    "ssc_running": true,
+    "temporary_nodeps_desktop_start": false,
+    "physical_rotation_retest_pending": true
+  },
+  "guard_path": "/var/lib/samurai/k276-work/boot-id-private.txt",
+  "goal_status": "active_incomplete",
+  "previous_lock_archive": "../../archive/camera-before276-2026-10-18/linux-port/camera/deployment-lock.json",
+  "snapshot_gui_evidence_stage": 270,
+  "current_boot_actual_capture_validation_pending": false,
+  "current_boot_unexpected_reboot_followup": false,
+  "snapshot_reboot_cause_unresolved": true,
+  "full_image_and_all_modules_candidate_built": true,
+  "candidate_kernel_receipt": "../../reference/kernel269/full-build-validation.json",
+  "candidate_kernel_deployed": false,
+  "full_rootfs_rebuild_pending": true,
+  "board_rotation_matrix": "-1,0,0;0,-1,0;0,0,1",
+  "board_rotation_rule_sha256": "b33a6148454d48d18df96cda8540e1ea446a7ef6677b9fc7901eb67f83fecc55",
+  "sensor_startup_order_receipt": "../../reference/kernel269/sensor-startup-order-validation.json",
+  "sensor_startup_fresh_boot_validation_pending": false,
+  "other_rear_cameras_quality_camera_orientation_gpu_video_still_open": true,
+  "current_stack_gui_validation_pending": true,
+  "snapshot_gui_evidence_deployment": "r19/r14 pre-boot270 session, two sensors only",
+  "snapshot_gui_evidence": "../../reference/kernel270/snapshot-gui-r1-validation.json",
+  "s5k3m5_native_gain_code_range": [
+    32,
+    512
+  ],
+  "s5k3m5_real_gain_range": [
+    1,
+    16
+  ],
+  "s5k3m5_real_gain_step": 0.03125,
+  "s5k3m5_driver_and_userspace_must_be_updated_together": true,
+  "s5k3m5_control_evidence": "../../reference/kernel271/gain-response-validation.json",
+  "current_stack_automatic_exposure_startup_slow": true,
+  "kernel_source_commit": "0d69276125ec8e7d0cc083ac421e2ad7fe79a3c8",
+  "kernel_source_branch": "samurai-cci-io276",
+  "planned_boot_transition_evidence": "../../reference/kernel276/postboot-identity-validation.json",
+  "sensor_startup_fresh_boot_passed": true,
+  "ssc_boot_start_failed": false,
+  "desktop_temporary_nodeps_restore": false,
+  "automatic_rotation_currently_available": null,
+  "main_camera_chip_id_verified": true,
+  "main_camera_cphy_raw_capture_verified": true,
+  "main_camera_optical_scene_observed": true,
+  "main_camera_autofocus_verified": false,
+  "main_camera_full_manual_transition_validation_passed": null,
+  "main_camera_failed_manual_evidence": "../../reference/kernel273/main-manual-r1-validation.json",
+  "current_stack_four_camera_regression": "../../reference/kernel276/four-camera-regression-validation.json",
+  "current_stack_main_camera_scene": "../../reference/kernel276/standard-focus-optical-analysis.json",
+  "spectra_hardware_image_processing_supported": false,
+  "historical_three_camera_regression": "../../reference/kernel271/three-camera-regression-validation.json",
+  "historical_telephoto_real_scene": "../../reference/kernel271/ae-optical-review.json",
+  "historical_snapshot_front_rear_gui_verified": true,
+  "historical_snapshot_gui_jpeg_decode_verified": true,
+  "snapshot_front_rear_gui_preview_switch_shutter_verified": false,
+  "snapshot_jpeg_decode_verified": false,
+  "physical_rotation_retest_pending": true,
+  "historical_ssc_boot273_eperm_cause_unresolved": true,
+  "current_r22_manual_transition_validation_pending": true,
+  "later_same_matrix_two_passes_evidence": "../../reference/kernel274/README.md",
+  "standard_v4l2_manual_focus_verified": true,
+  "standard_lens_lifetime_verified": true,
+  "shared_cci_io_supply_pm_verified": true
+}

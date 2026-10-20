@@ -1,0 +1,123 @@
+{
+  "stage": 289,
+  "upstream_base": "a90ee4305c4a5df72c11b31dacfdc76e00fcf78a",
+  "maintained_branch": "samurai-vfe175-pix288",
+  "maintained_commit": "8c79b7e1912790d3e18a84c9c6621a6d92baa768",
+  "actual_kernel_image_stage": 288,
+  "actual_kernel_release": "7.3.0-rc6-rmx1931-samurai-k279candidate+",
+  "boot_stage": 276,
+  "module_count": 778,
+  "deployed_camera_modules": {
+    "qcom_camss": {
+      "sha256": "e606730e1191f0ffdef552d015cc6e63739eefb17764862d998e45250b09f6be",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {}
+    },
+    "i2c_qcom_cci": {
+      "sha256": "06a41ed7a14af3cf337b159093f38c2fb301c46bf6d73c8a8babab815c428ec7",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {}
+    },
+    "s5k3m5": {
+      "sha256": "9327bcf0e6721bfd38feb8e4c02e71b9783460dba915f30e16f196c55b3590b5",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {}
+    },
+    "s5kgw1": {
+      "sha256": "c5162618b41d9be4fbd2f58cd62eb5130d8ba6c9a16ce0b75d465ba1c7edf026",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {}
+    },
+    "imx319": {
+      "sha256": "2596dfbe19d620831f084120205b7f853dc640c9acf8f298da1da38b46967303",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {}
+    },
+    "imx471": {
+      "sha256": "84e9a7a95dee6dfa146008757b3df97a5e1a563875bc950eb53fe7e47f1872ff",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {
+        "unprocessed_fullres": "N"
+      }
+    },
+    "lc898219xi": {
+      "sha256": "2dbc874ad259674e2546e1705adb1d09e9d52c38a50e8a3eb9010ffcce7f66b1",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {}
+    },
+    "qcom_pm8008": {
+      "sha256": "755b79a562e2581ef20acb29e666f317f71907fdc1563b5d434e9bb08f68892d",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {}
+    },
+    "qcom_pm8008_regulator": {
+      "sha256": "bc60c0f6d8e1e67eaf143e70e23146b4f009f1193b168d9bdd678d1600bc0134",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {}
+    },
+    "v4l2_cci": {
+      "sha256": "8874aaece88f05c91c2fd2ffbaa7dd5b80fc17f21af0ee446675784a268de743",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {}
+    }
+  },
+  "s5k3m5_source_sha256": "17f2c014be35b8abdd82c4c5f7ec74d1b3bf5f110b5c2aec2ad33e54c2ca83cd",
+  "native_gain_patch": "../../../reference/kernel271/s5k3m5-native-gain-code.patch",
+  "physical_gain_evidence": "../../../reference/kernel271/gain-response-validation.json",
+  "module_build_evidence": "../../../reference/kernel271/current-module-build-validation.json",
+  "current_boot_evidence": "../../../reference/kernel288/postboot-identity-validation.json",
+  "full_kernel_candidate_evidence": "../../../reference/kernel289/fixes-full-build-validation.json",
+  "previous_lock_archive": "../../../archive/camera-before289-2026-10-19/linux-port/camera/kernel/source-lock.json",
+  "source_tree_intree_is_not_upstream_acceptance": true,
+  "s5kgw1_source_sha256": "c6ddb9d4cec98987b4ca6ca07e80b66acae62283042328b102648391ce8b6c41",
+  "gw1_candidate_patch": "../../../reference/kernel272/s5kgw1-candidate.patch",
+  "gw1_module_build_evidence": "../../../reference/kernel272/current-module-build-validation.json",
+  "gw1_raw_capture_evidence": "../../../reference/kernel276/main-capture-validation.json",
+  "gw1_manual_transition_test_failed": true,
+  "autofocus_and_spectra_not_complete": true,
+  "lc898219xi_source_sha256": "df86c2ebe3beb99d2495e0070c93e114a2cdbec9842fb616ea8d8281016406b1",
+  "cci_source_sha256": "aefdd5d2cfe0ffd3de042c9098cf84c0fc6969fb6cd6632b10f0a26354a0e02f",
+  "lc898219xi_patch": "../../../reference/kernel274/lc898219xi-candidate.patch",
+  "cci_io_patch": "../../../reference/kernel276/cci-io-candidate.patch",
+  "cci_module_build_evidence": "../../../reference/kernel276/current-module-build-validation.json",
+  "standard_focus_evidence": "../../../reference/kernel276/standard-focus-validation.json",
+  "camera_lifetime_evidence": "../../../reference/kernel276/manager-lifetime-validation.json",
+  "gw1_manual_failure_stage": 273,
+  "current_camera_userspace_stage": 278,
+  "userspace_focus_statistics_evidence": "../../../reference/kernel278/native-af-r1-validation.json",
+  "historical_r22_manual_transition_not_retested": true,
+  "current_r24_manual_transition_retest_pending": true,
+  "single_auto_af_implemented_in_userspace": true,
+  "autofocus_full_feature_set_not_complete": true,
+  "spectra_not_complete": true,
+  "historical_r23_manual_transition_not_retested": true,
+  "complete_new_kernel_image_and_modules_deployed": true,
+  "complete_rootfs_rebuild_pending": true,
+  "source_worktree_branch": "samurai-tpg-gamma289",
+  "source_worktree_commit": "ff8d2e9fc04ef92407ff83c40c4e059eb620f0f7",
+  "source_worktree_is_undeployed_candidate": true,
+  "candidate_source_clean": true,
+  "candidate_source_evidence": "../../../reference/kernel289/fixes-commit-validation.json",
+  "current_boot_auto_af_retest_pending": true,
+  "final_health_evidence": "../../../reference/kernel289/final-health-validation.json"
+}

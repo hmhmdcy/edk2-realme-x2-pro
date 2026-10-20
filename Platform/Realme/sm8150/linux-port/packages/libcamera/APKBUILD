@@ -1,10 +1,10 @@
-# Realme X2 Pro: retain the distro feature set; add IMX471 and first-frame fixes.
+# Realme X2 Pro: full framework with CAMSS hardware processing and RAW support.
 # Forked from Alpine for temporary downstream patches
 maintainer="Robert Mader <robert.mader@collabora.com>"
 pkgname=libcamera
 _pkgver=0.7.2
 pkgver=9999$_pkgver
-pkgrel=15
+pkgrel=27
 pkgdesc="Linux camera framework"
 url="https://libcamera.org/"
 arch="all"
@@ -82,6 +82,20 @@ source="https://gitlab.freedesktop.org/camera/libcamera/-/archive/v$_pkgver/libc
 	0020-soft-invalid-statistics-hold.patch
 	0021-imx319-gain-helper.patch
 	0022-soft-initial-parameters.patch
+	0023-simple-link-state-after-external-client.patch
+	0024-s5k3m5-native-gain-helper.patch
+	0025-s5kgw1-native-gain-helper.patch
+	0026-simple-lens-stream-lifetime.patch
+	0027-softisp-raw-focus-statistics.patch
+	0028-simple-contrast-autofocus.patch
+	0029-camss-hardware-pipeline.patch
+	0030-camss-lens-shading.patch
+	0031-camss-calibrated-white-balance.patch
+	0032-camss-calibrated-cct-estimation.patch
+	0033-camss-colour-correction-coupling.patch
+	0034-camss-runtime-reference-lux.patch
+	0035-camss-runtime-aec-colour-correction.patch
+	0036-camss-dynamic-lens-shading.patch
 	qcam.desktop
 	$_tuning_files
 	"
@@ -111,6 +125,7 @@ build() {
 	case "$LIBCAMERA_IPA_PRIVATE_KEY" in /*) ;; *) die "IPA key path must be absolute" ;; esac
 	abuild-meson \
 		-Dpipelines=auto,virtual \
+		-Dipas=camss-vfe,ipu3,mali-c55,rkisp1,rpi/pisp,rpi/vc4,simple,vimc \
 		-Dv4l2=true \
 		-Dwerror=false \
 		-Ddocumentation=disabled \
@@ -232,4 +247,18 @@ b2a3019c66fbb0bbfabab5d5dca7af6fbc3a29b0e8ccc06c179d5e9eb740588243524b60a4fc0a45
 d59020e62520ee622282c85ce7bcdfe453c99becf48cc1005c5f8a4bb8b2511b19c89f38fb3c994e7c6a79d1f84e2ed5f5a09b4c5bdc1dc4a44b071dbccf0d44  s5kjn1.yaml
 e1c8fa27b388532bcff887ec6ea4bce629f04470dcd1f74ede2a027e6f3f0cb6bde0bf096d63d1117da23d33b0ff79e61d2a8d61f050ca523117701dd5f74d69  0021-imx319-gain-helper.patch
 40b5a591a26fcbfba6e913ade1f29db3e341cc320e9fcb88a9f8d5b91bb09450d7bd9c6413a1f0a0902d723db4073afb97d20946e5c9ef9ec34019712e4a380e  0022-soft-initial-parameters.patch
+60d773973b751e64d44fda04c4eb6b59394f77af0166fbea2efc52811a05aa2cb88de8338a84b7e3da8b1ab5570205c764e518db2c177cf7c7f018b871a4cabe  0023-simple-link-state-after-external-client.patch
+3d023b4c2cb7048c88490c68c529f71c128885e7779a7e2614f02926544c90f77dd996c9b809e9029a46003e3366c0b93df6b34d8fe96ca8e39e52125eecd8d8  0024-s5k3m5-native-gain-helper.patch
+6e7021e3626fa4b336038d1171f6d503b25ff097f9b363c9e237df95aeff7e35ba40d717828ca0b4e7d10497db36b982a853fa5ed6fc8804cb6f4472a1361bf5  0025-s5kgw1-native-gain-helper.patch
+94f488b0fddfe8f5ead3a16fff237102fc8dd6cb524853b3daa5218d0a8c70b8934a79088b8466f23a4713c401b516d43dbe7b72f637d32f509b6479ebb94117  0026-simple-lens-stream-lifetime.patch
+90a3c186e6f0be8cd1dce0c605c8b75c49e523b9b9a25f02e907893b4c147cd922d95103c24c4afcd5c4220e426a4178c6982a01c95335f2491a32fded78190f  0027-softisp-raw-focus-statistics.patch
+015c232438b30bbc8dbd74acc4b2aac9896f8b9c301f09bcf99e1749a65224b9a7c19c5fc546b6bd46d4b4e100bb6e80d6e3d608f5b73c69c4da2a70c73a3f57  0028-simple-contrast-autofocus.patch
+5a4f5d811baf6120debcd9699ce4fb1bb59c36219472aff4b3cff6a86e201867d63325d1a2d2a5569eb4668e4cef0edd0209f9476f381976439171a63bc8652a  0029-camss-hardware-pipeline.patch
+6ca69f72f28d282f6056017d5e661bf61aa2fec4514c16d305af4a67696ef765252cf9a209a7f10a9b85575954121038dadd594c560fbd7d323e423797c90844  0030-camss-lens-shading.patch
+20bdd1167cecd92375de1f5d21b19d2ef4073066d405f01d4e9a60e0c340065a136beab2ebbd3ead25a54cfbc4eb1c3710f29d14fe87fe3b87d74b2e6e5c3129  0031-camss-calibrated-white-balance.patch
+028e92d1458cae0fc5da0eb4af788e3b2f2b40a8c5f493e441d30a4ffd61760ea2de5eedc9a9e2272f81b7ba8d743d52804e016095e6787410572d6e227bbc85  0032-camss-calibrated-cct-estimation.patch
+896ed66279c81e05c908780a0566a65b0dbc04e7d1c80e7a833b739faa2fea78fbda0c532f37877050958389d3c6355906d8308e664f163502e66e9ed5eedeab  0033-camss-colour-correction-coupling.patch
+56140973abbdc4c536d08db02eed624143ceaf2fbe852b4e1e593d57862fe8054b121d7532ad267d2116ae6127e6bec6d99069343f4743414cdf2bb2bd48add2  0034-camss-runtime-reference-lux.patch
+9eba783588792c940d9e28902fa377c061fa23b1c62e99b2c892a150ff20817d168cc7395048b8aadc5329d954ef62660d8a269bbcad07761e2593ed043c4a8b  0035-camss-runtime-aec-colour-correction.patch
+7efa753e88e7a40d7c4e9f731b158bec84fd94977fe02d4ae5fd27842914d0143239472f757a03ced30fdf06e62f8fab65b3a796066436cf1eac708e1f6f2402  0036-camss-dynamic-lens-shading.patch
 "

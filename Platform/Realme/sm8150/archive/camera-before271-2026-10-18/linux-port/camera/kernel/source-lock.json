@@ -1,0 +1,80 @@
+{
+  "stage": 223,
+  "upstream_repository": "https://github.com/cschalle/mipi-fixes-x1-aura",
+  "upstream_repository_commit": "533d995b7acbd6965e5b0b85c97f8bafab9fed4e",
+  "patches": [
+    {
+      "file": "0001-imx471-test-pattern-width.patch",
+      "commit": "e8c7bce089b518b5d9076d585ebc469e9c390ff8",
+      "sha256": "149fdebb4a80f0259aaf101b4ab68c193475d2b77460836da92a60166fcf32cd"
+    },
+    {
+      "file": "0002-imx471-analogue-gain-limit.patch",
+      "commit": "5cf84f3eda244f0a30684c2b323a5489edd9cb1b",
+      "sha256": "a4012f717a5201254e63dcc136a75f8a1e3185942267c5130cd5251b21cb5030"
+    },
+    {
+      "file": "0003-imx471-factory-modes.patch",
+      "sha256": "a3bee1e004699c49023ea63e71ad3dcfbfc9530f539dba9a1f995e3376c9ac46",
+      "origin": "verified real-device stage219, factory mode data stage217"
+    },
+    {
+      "file": "0004-imx471-pixel-array-timing.patch",
+      "sha256": "ef3f00743d017a698924fc362cb3668924a3f4b696bb4f554ea087ef3da1bfc1",
+      "origin": "verified real-device stage219, factory mode data stage217"
+    }
+  ],
+  "current_source_sha256": "619314972b4bb7ad33d12dacc49e174e6dbd21db141b69f8cd374335b7858f8c",
+  "current_module_sha256": "e49dab26b05a325df8da64bb5c4b57c29cd51d1dcf15f5d4ed4dcb53033e66f1",
+  "module_bytes": 29536,
+  "vermagic": "7.3.0-rc6-rmx1931-samurai-k132+ SMP preempt mod_unload aarch64",
+  "test_pattern_register_width": 16,
+  "analogue_gain_code_max": 960,
+  "own_factory_gain_max": 16.0,
+  "previous215_module_sha256": "6b2bb0b47b93c6bf12eb8e137592c203f12fa96fcf9551553c48cc35ccad9d9c",
+  "kernel_image_and_boot_unchanged": false,
+  "runtime_evidence": "../../../reference/kernel219/timing-module-reload-validation.json",
+  "actual_sensitivity_calibration_and_standard_manual_gain_api_not_accepted": true,
+  "current_board_source_sha256": "0e83044dfaf461a449bfe264f3567c811a682762875ccf4349a5309204d7506b",
+  "kernel_image_unchanged": true,
+  "boot_stage": 219,
+  "deployed_dtb_sha256": "a214fd6b2ccb93e5bbb5adc774e7c510398541e8fab286832682cc6bbd76ca42",
+  "additional_patch_base_source_hashes": {
+    "drivers/media/i2c/imx471.c": "cc7562794d1a9b69a0bf7e98f7ed8fcb9e9917b7a6a5c46b833f649a8c60b175",
+    "arch/arm64/boot/dts/qcom/sm8150-samurai.dts": "c25ab5b7dc4723798e590110cb84a5d02cb36313ba0feda98981e75ac1f2913a"
+  },
+  "patch_replay_exact": true,
+  "host_canonical_kernel_source_still_stage216": true,
+  "timing_evidence": "../../../reference/kernel219/4608x3456-timing-vblank-1-after-timing-fix-validation.json",
+  "experimental_full_resolution_default": false,
+  "geometry_colour_quality_and_standard_cfa_still_open": true,
+  "sensor_deployment_stage": 219,
+  "camss": {
+    "deployment_stage": 223,
+    "patch": "0005-camss-sm8150-paired-sof.patch",
+    "patch_sha256": "68aec636e4bbdf8af0dc45b4155748d03c39851cc4d6f8540d6d1ebaa0bf99a6",
+    "base_source_sha256": {
+      "drivers/media/platform/qcom/camss/camss-vfe.h": "6879bfd289381821ab1a0cfe21b94eb014b7a4d96e6c7930531a839a298019f7",
+      "drivers/media/platform/qcom/camss/camss-vfe.c": "4bd17e2c15ddd279febaa406ce6d05e81acfbd8a5a6c87eedf54eb80abc0332d",
+      "drivers/media/platform/qcom/camss/camss-vfe-17x.c": "e9a8f613f6dffc849af29c262adb6a7ee59e289f3896d4c11d89b453acc44dbd",
+      "drivers/media/platform/qcom/camss/camss-video.h": "41486e598a4cf33fb7340810767b065cf4d31ba2d2f105462adbe83b54b5675f"
+    },
+    "current_source_sha256": {
+      "drivers/media/platform/qcom/camss/camss-vfe.h": "d3a37511155d1b039615ab47e0454eea4405c2d136f1df2c8f7be9f208be0a4b",
+      "drivers/media/platform/qcom/camss/camss-vfe.c": "d301a4b46d44304ddc0b31cc348cb2c8344412d10d63b3bca8a810eca3f9d156",
+      "drivers/media/platform/qcom/camss/camss-vfe-17x.c": "01ace81cff5e867d88ec87833a62e14883bd8075e3814e88679161ac0f34c40d",
+      "drivers/media/platform/qcom/camss/camss-video.h": "26bd4b81d6be763eec76a11e15258164bcf0e26a994922bc9d562d9ef4643d3e"
+    },
+    "module_sha256": "fae1ed40da4e2751c081aca3a990a5a3c44de47599883a045340b9f62f54803e",
+    "module_bytes": 777360,
+    "base_kernel_commit": "58d7652b4e2674b67fd283a061a0cc94907b6466",
+    "sm8150_vfe170_only": true,
+    "completion_timestamp_remains_eof": true,
+    "missing_sof_tag_is_buffer_error": true,
+    "runtime_evidence": "../../../reference/kernel223/control-snapshot-native-validation.json",
+    "deployment_evidence": "../../../reference/kernel223/coherent-install-validation.json",
+    "original_module_sha256": "82cbc0528a76858ac57e149bdb540d14630112d74213384303960eead684fe58",
+    "canonical_camss_sources_still_original": true
+  },
+  "driver_patch_sets_require_full_kernel_rootfs_integration": true
+}

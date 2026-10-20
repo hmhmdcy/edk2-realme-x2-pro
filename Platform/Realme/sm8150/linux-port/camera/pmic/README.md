@@ -1,5 +1,7 @@
 # RMX1931 双 PM8008 实验部署源码
 
+**本目录233实验源现为历史/回退资料，不用于新构建。** 267已在手机撤掉独立lab供电模块、板级reset provider及实验loader配置。当前使用[公共MFD](../../../reference/kernel267/qcom-pm8008.c)、[公共regulator](../../../reference/kernel267/qcom-pm8008-regulator.c)和[RMX1931 DTS](../../../reference/kernel267/sm8150-samurai.dts)，已同步维护内核分支。GPIO、电压和地址依赖从DT提供；原生cam及Snapshot前后摄预览/切换/拍照通过。[267供电验证](../../../reference/kernel267/README.md)、[268应用验证](../../../reference/kernel268/README.md)。以下模块参数和加载配置仅描述旧实验，不再部署。
+
 阶段233实际运行的复位/地址组件完整源码及锁定信息。P目前只验证身份，不创建regulator/MFD子设备；后摄尚未出图，产品供电schema、VIN父网和完整kernel/rootfs整合仍未完成。
 
 `qcom-pm8008.c`替代195版MFD，`reset-realme-rmx1931-pm8008.c`为独立板级provider；`Kconfig.fragment`/`Makefile.fragment`用于drivers/reset接入。`experimental-p-identity-only.dts`从实际部署219板源生成，启用P实验身份；保守的`product-p-disabled.dts`禁用P。不能与旧MFD混搭后声称依赖已验收。[原生部署证据](../../../reference/kernel233/README.md)、[复位契约](../../../reference/kernel232/RESET-CONTRACT.md)

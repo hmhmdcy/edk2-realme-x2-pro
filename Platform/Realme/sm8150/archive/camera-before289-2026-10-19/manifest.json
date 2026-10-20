@@ -1,0 +1,38 @@
+{
+  "NEXT-SESSION.md": {
+    "bytes": 6323,
+    "sha256": "c2a60deb0789712953ff15f1a6b3c47451389f44f215e73d5f182f6a18185b8d"
+  },
+  "DOCS-INDEX.md": {
+    "bytes": 9867,
+    "sha256": "3111d6c1ab4158ec1114ecbc3e6eee988ed0a45dfc17d034df6cd4bd5a1ad420"
+  },
+  "linux-port/camera/kernel/source-lock.json": {
+    "bytes": 4839,
+    "sha256": "b56ac01dae850ee3c384e27a687045fcaca25711cb83b7f7bd925f428171c363"
+  },
+  "linux-port/camera/deployment-lock.json": {
+    "bytes": 27877,
+    "sha256": "c7060c66886636c8e3a55bb298d85d87a87ec4033fdaee49412268f148937755"
+  },
+  "linux-port/camera/README.md": {
+    "bytes": 10695,
+    "sha256": "fdb7eaf271093d9f0f7d03ab694fdc3c623721d260d12a4ed6443a2435668d4f"
+  },
+  "linux-port/camera/kernel/README.md": {
+    "bytes": 4691,
+    "sha256": "ca1a81bdc34b8369d3396d4546d4e914e63386c928508476c0dd4f29e670ad85"
+  },
+  "linux-port/docs/HARDWARE-STATUS.md": {
+    "bytes": 22343,
+    "sha256": "d17460a36590eb69b0f2b31483f61698ad25686b0d499595c7f974cb2886f690"
+  },
+  "reference/kernel276/OEM-TUNING.md": {
+    "bytes": 4908,
+    "sha256": "3ffd93a2bd4d8f00dc395910aec440d31d5e96d0492df0f1ecedbaafea86e8e8"
+  },
+  "reference/kernel287/README.md": {
+    "bytes": 9011,
+    "sha256": "6d81b3768b34633522df7130ef96e70daebbc93a0e21c3f0b40815843b95fe33"
+  }
+}
