@@ -1,4 +1,4 @@
-387当前：四摄实际libcamera→IPE、RAW配对及隔离IPA候选验证通过，最终82个IPE作业/处理错误0；RAW-only保持原路径。临时模块/固件已清理、服务恢复，未永久安装。零拷贝、正式平台owner与完整IQ/多摄校准仍待，目标active。[387证据](../../reference/kernel387/README.md)。以下为历史。
+388当前：IPE核心直接DMA，原生18＋libcamera81共99帧通过，导出FD/mmap平台所有权实测；原SG/CAMSS恢复后四摄回归通过。未永久安装，正式平台/板级部署、硬件错误并发与完整IQ/多摄校准仍待，目标active。[388证据](../../reference/kernel388/README.md)。以下为历史。
 
 361收尾：四摄五模式十原厂线程上下文完成r28曝光／频闪／Gamma请求274帧；隔离模式仍有CAMSS队列重入错误。公共分发器修复ARM64回归通过，未打新包／未安装；设备已恢复r27/r22、338/k298及服务，taint0、资源休眠。 [361交接](../../reference/kernel361/README.md)。以下为历史。
 

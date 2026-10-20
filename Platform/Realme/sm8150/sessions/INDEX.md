@@ -412,6 +412,88 @@
 | [kernel304](<../reference/kernel304/README.md>) | 304：原厂 EEPROM 的 WB／LSC 类型表与旧 XML 错位核查 |
 | [kernel305](<../reference/kernel305/README.md>) | 305：S5K3M5 几何接口修复与四摄回归 |
 | [kernel306](<../reference/kernel306/README.md>) | 306：长焦原厂黑电平、控制时序与硬件 AE |
+| [kernel307](<../reference/kernel307/README.md>) | 307：VFE175硬件RGB网格统计 |
+| [kernel308](<../reference/kernel308/README.md>) | 308：硬件RGB IPA与两摄AWB回写 |
+| [kernel309](<../reference/kernel309/README.md>) | 309：四摄硬件AWB与CSI接收时钟修复 |
+| [kernel310](<../reference/kernel310/README.md>) | 310：主前摄控制时序与四摄联合AE/AWB |
+| [kernel311](<../reference/kernel311/README.md>) | 311：运行中AWB开关和手动白平衡请求 |
+| [kernel312](<../reference/kernel312/README.md>) | 312：六模式选择、默认3A和图像缓冲恢复 |
+| [kernel313](<../reference/kernel313/README.md>) | 313：硬件处理流复用单次自动对焦 |
+| [kernel314](<../reference/kernel314/README.md>) | 314：公共 CAMSS 共享流与 RAW／PIX 并行 |
+| [kernel315](<../reference/kernel315/README.md>) | 315：libcamera RAW 与硬件处理流接入 |
+| [kernel316](<../reference/kernel316/README.md>) | 316：默认硬件ISP与产品消费者接入 |
+| [kernel317](<../reference/kernel317/README.md>) | 317：原厂镜头阴影表、校准合成与硬件编码 |
+| [kernel318](<../reference/kernel318/README.md>) | 318：VFE175 镜头阴影网格已验证并部署 |
+| [kernel319](<../reference/kernel319/README.md>) | 319：用户空间LSC网格重采样 |
+| [kernel320](<../reference/kernel320/README.md>) | 320：修正本机原厂LSC数据分组，四个零节点已消失 |
+| [kernel321](<../reference/kernel321/README.md>) | 321：LSC用户空间闭环与r26正式包 |
+| [kernel322](<../reference/kernel322/README.md>) | 322：原厂触发选择与广角真实个体LSC试验 |
+| [kernel323](<../reference/kernel323/README.md>) | 323：长焦原厂LSC、模式映射与实际取流 |
+| [kernel324](<../reference/kernel324/README.md>) | 324：主摄/前摄原厂LSC与前摄两模式实机 |
+| [kernel325](<../reference/kernel325/README.md>) | 325：GW1标准测试图案与主摄两模式LSC |
+| [kernel326](<../reference/kernel326/README.md>) | 326：其余三摄个体数据读取与独立解码 |
+| [kernel327](<../reference/kernel327/README.md>) | 327：四摄个体 LSC 链路补齐 |
+| [kernel328](<../reference/kernel328/README.md>) | 328：四摄 WB 标定来源与原厂算法路径 |
+| [kernel329](<../reference/kernel329/README.md>) | 329：通用 WB 校准与 CCT 查表数学 |
+| [kernel330](<../reference/kernel330/README.md>) | 330：可选个体白平衡与运行中色温控制 |
+| [kernel331](<../reference/kernel331/README.md>) | 331：个体校准参考点与反向色温数学 |
+| [kernel332](<../reference/kernel332/README.md>) | 332：个体参考点驱动的逐帧色温估计 |
+| [kernel333](<../reference/kernel333/README.md>) | 333：原厂CCM完整数据与通用插值/编码 |
+| [kernel334](<../reference/kernel334/README.md>) | 334：VFE175硬件颜色矩阵后端实测 |
+| [kernel335](<../reference/kernel335/README.md>) | 335：色温、白平衡与硬件色彩矩阵联动 |
+| [kernel336](<../reference/kernel336/README.md>) | 336：原厂曝光索引与lux触发语义 |
+| [kernel337](<../reference/kernel337/README.md>) | 337：Bayer统计到原厂lux亮度的普通RGB路径 |
+| [kernel338](<../reference/kernel338/README.md>) | 338：部署兼容原厂亮度链的 CAMSS 统计网格 |
+| [kernel339](<../reference/kernel339/README.md>) | 339：每帧 Bayer 亮度与 lux index 接入候选 IPA |
+| [kernel340](<../reference/kernel340/README.md>) | 340：实时 AEC/CCT 联动 CCM |
+| [kernel341](<../reference/kernel341/README.md>) | 341：动态 LSC、个体校准与统一 ISP revision |
+| [kernel342](<../reference/kernel342/README.md>) | 342：r27/r22 正式包与本机主摄方案对应 |
+| [kernel343](<../reference/kernel343/README.md>) | 343：原厂模式树与普通取流曝光表选择 |
+| [kernel344](<../reference/kernel344/README.md>) | 344：本机私有校准成为默认配置 |
+| [kernel345](<../reference/kernel345/README.md>) | 345：原厂曝光分配与帧时长 knee 数学 |
+| [kernel346](<../reference/kernel346/README.md>) | 346：原厂 EV／FPS 动态曝光表 |
+| [kernel347](<../reference/kernel347/README.md>) | 347：从原厂调校包提取完整 IFE Gamma |
+| [kernel348](<../reference/kernel348/README.md>) | 348：原厂 Gamma 已经由 VFE175 硬件生效 |
+| [kernel349](<../reference/kernel349/README.md>) | 349：原厂 IFE Gamma 接入 IPA 并完成组合实测 |
+| [kernel350](<../reference/kernel350/README.md>) | 350：完整提取原厂 IPE Gamma，复现原 HAL 插值与编码 |
+| [kernel351](<../reference/kernel351/README.md>) | 351：恢复原厂 LTM、后级矩阵及逆 Gamma 默认开关 |
+| [kernel352](<../reference/kernel352/README.md>) | 352：移植 LTM 逆 Gamma，取得原厂 ICP 固件并核实队列 ABI |
+| [kernel353](<../reference/kernel353/README.md>) | 353：实现并构建 A5 ICP 队列和 ELF 内核核心 |
+| [kernel354](<../reference/kernel354/README.md>) | 354：ICP DMA 别名映射后端及真实 SMMU 探测通过 |
+| [kernel355](<../reference/kernel355/README.md>) | 355：原厂 A5／BPS／IPE 资源顺序与真实上电验证 |
+| [kernel356](<../reference/kernel356/README.md>) | 356：A5 固件启动后端与板级内存修正（尚未打通） |
+| [kernel357](<../reference/kernel357/README.md>) | 357：公共 IOMMU 引用修正与停滞现场恢复记录 |
+| [kernel358](<../reference/kernel358/README.md>) | 358：原厂防频闪曝光调整与模式参数绑定 |
+| [kernel359](<../reference/kernel359/README.md>) | 359：原厂曝光程序接入实际 CAMSS IPA（主机候选） |
+| [kernel360](<../reference/kernel360/README.md>) | 360：Gamma／曝光合并与 r28 软件包候选 |
+| [kernel361](<../reference/kernel361/README.md>) | 361：请求链实测、公共分发器修复与交接 |
+| [kernel362](<../reference/kernel362/README.md>) | 362：隔离 IPA 的提交所有权与公共请求顺序 |
+| [kernel363](<../reference/kernel363/README.md>) | 363：统一内核已部署、四颗传感器回归和原厂 HFI 入口核对 |
+| [kernel364](<../reference/kernel364/README.md>) | 364：精确 HFI ready 已应用，IOMMU 回收通过，固件引用故障定位 |
+| [kernel365](<../reference/kernel365/README.md>) | 365：静态 ICP／板级固件内存引用，以及未生效的 FAT DT 更新 |
+| [kernel366](<../reference/kernel366/README.md>) | 366：将静态 ICP 板级引用装入实际 EDK2 固件 DT |
+| [kernel367](<../reference/kernel367/README.md>) | 367：A5 异常重启后的正常基线恢复 |
+| [kernel368](<../reference/kernel368/README.md>) | 368：确认原厂响应 3 为 SFR 故障路径，修复错误诊断与 DMA 回收顺序 |
+| [kernel369](<../reference/kernel369/README.md>) | 369：取得真实 A5 故障快照，错误仍未收敛；恢复相机基线 |
+| [kernel370](<../reference/kernel370/README.md>) | 370：拆分 A5 停止与 DMA/PM 释放，准备受约束的故障窗口 |
+| [kernel371](<../reference/kernel371/README.md>) | 371：持有模式仍在probe返回前重启，设备基线已恢复 |
+| [kernel372](<../reference/kernel372/README.md>) | 372：取得复位前原厂异常现场，定位初始化失败的错误清理路径 |
+| [kernel373](<../reference/kernel373/README.md>) | 373：A5就绪与SYS_INIT实机通过，probe退出阶段仍重启 |
+| [kernel374](<../reference/kernel374/README.md>) | 374：绑定完成后原厂固件三项握手通过，停机阶段仍重启 |
+| [kernel375](<../reference/kernel375/README.md>) | 375：原厂A5固件完整HFI生命周期实机通过 |
+| [kernel376](<../reference/kernel376/README.md>) | 376：两个IPE固件会话并存、创建与销毁实机通过 |
+| [kernel377](<../reference/kernel377/README.md>) | 377：还原目标 IPE CONFIG_IO ABI；首次映射失败 |
+| [kernel378](<../reference/kernel378/README.md>) | 378：配置别名移出 debug 映射；实机 CONFIG_IO 首次确认 |
+| [kernel379](<../reference/kernel379/README.md>) | 379：两路 IPE CONFIG_IO 控制链路实机通过 |
+| [kernel380](<../reference/kernel380/README.md>) | 380：原厂 striping 完整执行与内核 IPE 帧编码器 |
+| [kernel381](<../reference/kernel381/README.md>) | 381：实机首帧 IPE 像素通路通过，零 IQ 的输出幅度仍待修正 |
+| [kernel382](<../reference/kernel382/README.md>) | 382：内核生成 ICA 默认配置，实机 NV12 幅度恢复 |
+| [kernel383](<../reference/kernel383/README.md>) | 383：内核原生分区计算与原厂完整帧准备差分 |
+| [kernel384](<../reference/kernel384/README.md>) | 384：原生 bypass 条带与实机像素对照 |
+| [kernel385](<../reference/kernel385/README.md>) | 385：多尺寸、NV21与交替会话连续提交 |
+| [kernel386](<../reference/kernel386/README.md>) | 386：V4L2 m2m入口及实际18帧队列验证 |
+| [kernel387](<../reference/kernel387/README.md>) | 387：四摄实际 libcamera → IPE 管线，82 帧通过 |
+| [kernel388](<../reference/kernel388/README.md>) | 388：IPE 直接 DMA 与导出缓冲区所有权，最终 99 帧通过 |
 | [rx33](<../reference/rx33/README.md>) | Session 33：有效 EUD RX 抓包 |
 | [rx34](<../reference/rx34/README.md>) | Session 34 的临时终端记录 |
 | [rx36](<../reference/rx36/README.md>) | Session 36：USB 描述符、旧 qcusbser 审查与已完成对照 |
@@ -449,48 +531,6 @@
 | [publication-2026-10-14](<../reference/publication-2026-10-14/README.md>) | 2026-10-14 分类提交与公开资料 |
 | [publication-2026-10-17](<../reference/publication-2026-10-17/README.md>) | 2026-10-17：保存全部后续硬件适配源码 |
 | [repository-audit-20261018](<../reference/repository-audit-20261018/README.md>) | 2026-10-18：APK索引刷新与版本约束核对 |
-
-## 最新交接
-
-- [387 四摄libcamera接入IPE与82帧实机](../reference/kernel387/README.md)
-
-- [386 V4L2 m2m入口与18帧实机](../reference/kernel386/README.md)
-
-- [385多尺寸/格式及交替会话16帧](../reference/kernel385/README.md)
-
-- [384原生完整bypass条带与实机像素](../reference/kernel384/README.md)
-
-- [383原生分区与原厂CDM差分](../reference/kernel383/README.md)
-
-- [382内核ICA默认配置与幅度修复](../reference/kernel382/README.md)
-
-- [381实机首帧IPE像素通路](../reference/kernel381/README.md)
-
-- [380原厂striping与内核帧编码](../reference/kernel380/README.md)
-
-- [379两路IPE IO配置实机通过](../reference/kernel379/README.md)
-
-- [376两IPE会话创建/并存/销毁](../reference/kernel376/README.md)
-
-- [375原厂A5/HFI完整启停与四摄回归](../reference/kernel375/README.md)
-- [374绑定后三握手与停机重启](../reference/kernel374/README.md)
-
-- [373就绪与SYS_INIT、退出重启恢复](../reference/kernel373/README.md)
-- [372真实复位前异常现场](../reference/kernel372/README.md)
-
-- [371持有模式实验与新启动恢复](../reference/kernel371/README.md)
-
-- [370离线A5故障窗口与MMU证据](../reference/kernel370/README.md)
-
-- [369真实A5故障快照与恢复基线](../reference/kernel369/README.md)
-
-- [368原厂SFR响应3与错误诊断／DMA回收候选](../reference/kernel368/README.md)
-
-- [367基线恢复及363～366 ICP/DT实测](../reference/kernel367/README.md)
-
-- [362 隔离请求修复及原厂曝光/Gamma默认部署](../reference/kernel362/README.md)
-
-- [361 请求链实测、公共分发器修复与收尾交接](../reference/kernel361/README.md)
 
 ## 早期拆分与快照
 
