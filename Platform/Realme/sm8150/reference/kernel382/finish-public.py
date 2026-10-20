@@ -26,6 +26,6 @@ subprocess.run(['git','-C',str(repo),'commit','-m','camera: initialize target IC
 report=dict(stage=382,commit=git('rev-parse','HEAD'),public_files=len(names),source_tree_clean=True,
  last_hardware_experiment_stage=382,ipe_frame_control_completion_verified=True,ipe_synthetic_pixel_transfer_verified=True,
  ipe_nv12_output_levels_correct=True,ipe_kernel_generated_bypass_iq=True,full_iq_or_optical_calibration_verified=False,current_boot_guard_stage=378,
- normal_camera_capture_reference_stage=382,camera_capture_repeated=False,ssc_healthy=False,desktop_recovered=True,
+ normal_camera_capture_reference_stage=381,camera_capture_repeated=False,ssc_healthy=False,desktop_recovered=True,
  raw_firmware_logs_calibration_images_not_published=True,goal_status='active')
 (P/'public-checkpoint-commit-private.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))

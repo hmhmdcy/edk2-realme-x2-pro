@@ -5,5 +5,6 @@ s=s.replace('camera: complete first target IPE pixel transfer with owned DMA','c
 s=s.replace('last_hardware_experiment_stage=381','last_hardware_experiment_stage=382')
 s=s.replace('ipe_nv12_output_levels_correct=False','ipe_nv12_output_levels_correct=True,ipe_kernel_generated_bypass_iq=True')
 s=s.replace('camera_capture_repeated=True','camera_capture_repeated=False')
+s=s.replace('normal_camera_capture_reference_stage=382','normal_camera_capture_reference_stage=381')
 (HERE/'finish-public.py').write_text(s)
 print('Prepared scoped public checkpoint; vendor inputs, images and full logs stay private.')
