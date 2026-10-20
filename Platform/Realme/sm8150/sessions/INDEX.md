@@ -502,6 +502,7 @@
 | [kernel394](<../reference/kernel394/README.md>) | 394：真实帧 ACK 丢失触发重启；保留证据并恢复正式四摄 |
 | [kernel395](<../reference/kernel395/README.md>) | 395：修复 A5 强制复位到 DMA 退映射的顺序，并部署正式核心 |
 | [kernel396](<../reference/kernel396/README.md>) | 396：恢复 IPE CCM 的实际命令编码和固件路由，形成内核候选 |
+| [kernel397](<../reference/kernel397/README.md>) | 397：逐帧 CCM 参数归入驱动请求，固定矩阵已作用于硬件像素 |
 | [rx33](<../reference/rx33/README.md>) | Session 33：有效 EUD RX 抓包 |
 | [rx34](<../reference/rx34/README.md>) | Session 34 的临时终端记录 |
 | [rx36](<../reference/rx36/README.md>) | Session 36：USB 描述符、旧 qcusbser 审查与已完成对照 |
