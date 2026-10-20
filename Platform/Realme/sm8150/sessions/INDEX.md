@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [385多尺寸/格式及交替会话16帧](../reference/kernel385/README.md)
+
 - [384原生完整bypass条带与实机像素](../reference/kernel384/README.md)
 
 - [383原生分区与原厂CDM差分](../reference/kernel383/README.md)

@@ -1,4 +1,4 @@
-384当前：原生bypass完整条带接入内核并移除外部文件依赖；52组原厂命令准备对照，实机640合成帧全部像素与382原厂条带结果一致，正常资源回收。更多路径及完整IQ/多摄校准目标active，未永久安装。[384证据](../../../reference/kernel384/README.md)。以下为历史。
+385当前：原生bypass四尺寸/两端口/NV12-NV21/max_cores1-2配置共16变化帧实机通过，RT/非RT交替、Y等于当前输入、正常回收；待接V4L2m2m/libcamera与完整IQ，多摄校准目标active。未永久安装。[385证据](../../../reference/kernel385/README.md)。以下为历史。
 
 361收尾：348 Gamma模块仅临时用于请求链验证，已恢复338；k298/taint0/双CCI与CAMSS休眠。公共用户空间分发器已修，隔离CAMSS请求队列仍待修；357 IOMMU补丁及356正确板级内存候选未安装。 [361交接](../../../reference/kernel361/README.md)。以下为历史。
 
