@@ -1,5 +1,7 @@
 # Realme X2 Pro 交接导航
 
+361收尾交接：优先读[当前检查点](NEXT-SESSION.md)与[361具体结果和续作](reference/kernel361/README.md)。新候选隔离队列未通过，设备已恢复原版；后文部署身份与提交统计均为历史快照。
+
 用途：兼容旧交接入口、记录仓库工具与旧节号映射。文档整理：2026-10-16；部署身份、目标状态、当前待办与回退依据统一见[当前检查点](NEXT-SESSION.md)。
 
 ## 0. 从哪里继续
@@ -8,7 +10,7 @@
 
 ## 1. 下一步
 
-按用户任务和[检查点的续作项](NEXT-SESSION.md#续作与已知风险)推进；当前交接顺序、证据路径、一次性脚本和回退入口见[240交接说明](reference/kernel240/HANDOFF.md)。本次交接没有新增手机操作或硬件验收，归档中的active和健康值按对应实测阶段解释。音频任务读[音频提示词](AUDIO-NEXT-SESSION-PROMPT.txt)，完整导航见[DOCS-INDEX](DOCS-INDEX.md)。
+按用户任务和[检查点的续作项](NEXT-SESSION.md#源码回退与下一步)推进；标准单次AF与最新四摄回归见[278](reference/kernel278/README.md)，此前RAW统计见[277](reference/kernel277/README.md)，标准镜头/CCI见[276](reference/kernel276/README.md)。历史阶段的active和健康值不代表当前部署。音频任务读[音频提示词](AUDIO-NEXT-SESSION-PROMPT.txt)，完整导航见[DOCS-INDEX](DOCS-INDEX.md)。
 
 ## 2. 硬件与协议资料
 
@@ -19,13 +21,13 @@
 下方块由`linux-port/scripts/update-repo-state.py`从本地git生成，仅描述已提交历史；当前未提交源码以`git status`/`git diff`为准。
 
 <!-- repo-state:start -->
-    master = 3f8a65e samurai: publish complete source index and Linux return validation
-             6a0e4ba samurai: save GNSS HAL RF clock and modem investigations
-             54e18d6 samurai: preserve camera modules packages and desktop fixes
-             4111dac samurai: save sensor and radio fixes with runtime evidence
-             2cbe036 samurai: preserve audio recovery and suspend evidence
+    master = d3ed79b8 camera: preserve hardware pipeline and factory tuning integration
+             e36f5fca docs: publish Samurai userspace reproduction and upstream maintenance status
+             3f8a65ec samurai: publish complete source index and Linux return validation
+             6a0e4ba4 samurai: save GNSS HAL RF clock and modem investigations
+             54e18d62 samurai: preserve camera modules packages and desktop fixes
 
-    135 commits ahead of upstream origin/master, as of the tip named above;
+    137 commits ahead of upstream origin/master, as of the tip named above;
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
 
@@ -42,7 +44,7 @@
 | 仓库文档镜像 | `Platform/Realme/sm8150` |
 | 镜像与备份输出 | `E:\edk2-samurai-out`；具体包按检查点证据选择 |
 | EUD主机工具 | `E:\eud-host` |
-| Linux源码/产物身份 | [检查点](NEXT-SESSION.md#源码产物与回退依据) |
+| Linux源码/产物身份 | [检查点](NEXT-SESSION.md#当前部署与启动身份) |
 
 ## 5. 工具使用依据
 

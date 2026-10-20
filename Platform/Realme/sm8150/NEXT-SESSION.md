@@ -1,39 +1,35 @@
-# Realme X2 Pro 当前检查点
+# 当前检查点：361（收尾交接）
 
-2026-10-17：249完成PC侧pmaports整合、用户态构建与离线rootfs核验；没有连接/刷写手机，物理手机当前系统未知。最后实机全机验收沿用240，GNSS到247，248为返回备份。[249结果与边界](reference/kernel249/README.md)。
+2026-10-20。用户要求收尾、提交、更新文档并交接；本阶段已结束实机实验。完整多摄／骁龙 ISP 目标尚未完成，不能标记完成。按 WORKING-BOUNDARIES.md 选择相关验证，复用未改部分的结果。
 
-先读[操作边界](WORKING-BOUNDARIES.md)、[硬件清单](linux-port/docs/HARDWARE-STATUS.md)、[240交接](reference/kernel240/HANDOFF.md)。适配未完成；GNSS旧goal仍暂停，本轮未续作搜星或Android基线采集。此前用户选择自行手动刷Android，不得把旧RAM环境/boot-id guard当作仍有效。
+## 已交付与未通过
 
-## 公开仓库与维护方式
+360 将原厂曝光／手动防频闪和 IFE Gamma 合并为 r28／配置 r23 候选，完整构建、签名和 ARM64 组合检查通过，未安装。361 临时使用 348 Gamma 模块实机验证：四摄、五物理模式、十个原厂 Preview／Video 线程上下文均完成五段 EV／频闪／WB 请求，共 274 帧。
 
-- [pmaports](https://github.com/hmhmdcy/pmaports)：默认samurai-userspace，4aeae3b3035412794b2204e2f8bc104cef082a54；上游基线862c5af2ca9a48f43e934d9ea55fee0dd47a67f2，完整历史保留。6个主题提交保存最终用户态差异，samurai-bringup保留整理过程；没有强推旧分支。
-- [内核](https://github.com/hmhmdcy/linux/tree/samurai-bringup)：04d4d4f93171574201db1837a1b195e3aeccde4e已推。相对a90ee4305（7.3-rc6）仍有120文件差异、OF fixture/overlay与诊断；不是纯净维护队列。
-- [EDK2与历史证据](https://github.com/hmhmdcy/edk2-realme-x2-pro)：保留启动链与240/247/248等记录；本地生成DTB仍有既有未提交修改，不能随文档提交。
+隔离 IPA 仍未通过。r4 在公共 EventDispatcherPoll 递归分发中断言；361 公共层补丁保留外层状态、最外层才回收条目，ARM64 旧版失败／新版通过的八组回归符合预期，接口／类布局未改。r5 用新 base 实机越过原断言，随后 CAMSS IspControls 队列重入导致空队列 pop_front。r4／r5 整轮均保留失败，未执行的广角实景不计通过。完整记录及补丁见 [361](reference/kernel361/README.md)。
 
-用户要求跟随上游且补丁纯净。按上游＋最小功能队列＋原生APK维护；新候选重放补丁、构建/升级模拟后，再实机验收并固定标签。详见[pmaports维护策略](https://github.com/hmhmdcy/pmaports/blob/samurai-userspace/samurai/MAINTENANCE.md)。当前IMX319仍依赖235/237 lab PMIC/provider，必须正式化电源/reset/静态DTS并验证，不能直接删配置冒充清理完成。
+下一步先修 CamssVfeData 待处理 ISP 队列在同步 applyIspControls() 前后的重入／所有权；r5 同一 source=12 重复处理。不要删断言、空队列跳过或禁用隔离。用新事务验证隔离主摄、一个线程上下文及广角实景，再制作下一版完整包。360 r28 APK 仍含旧 base；361 尚未生成 r29，不能直接把 r28 当隔离合格包安装。
 
-## 249独立核验
+## 当前设备
 
-GitHub新clone，公开pmbootstrap3.12.0提交200f512…，另有公开且校验锁定的kernel=none功能补丁；没有复制旧私有SDK。13个目标配方及crossdirect构建通过；源检查14配方/88本地SHA512/102生产文件/1工具补丁通过，GitHub CI通过。
+最后只读观察：原严格密钥 USB 169.254.42.1 SSH 可用；7.3.0-rc6-rmx1931-samurai-k298+，CAMSS338 note SHA256 0227d29bb5129e2fc69866529147b21b902d441c855f848fd5eaa3093c590297，taint0。libcamera 五运行包 r27、config／stack r22；PipeWire／WirePlumber 各一个、uid10000；CAMSS／双 CCI suspended；无活动361 worker、无 ICP实验模块或孤儿固件。r5清理九电源 disabled/users0，相关新内核故障0。[最终状态](reference/kernel361/closeout-device-validation.json)。
 
-libcamera原6发行版补丁＋6最终下游功能补丁，零fuzz重放；1490源码文件净比较一致、21改动文件锁通过。r18/config-r13构建；Turnip26.2.4-r2；MM1.25.95_git20261005-r4完整重建、38测试通过。RAM COW/sharedmem/TFTP/RPC四项ASan/UBSan回归通过，已知builder进程寿命分配不做leak验收。
+临时348及候选用户空间已撤回，安装文件未改，无重启／刷写。原版本四摄各4帧的基础检查见360，不重复未改组件全量测试。手机已恢复Linux，无需沿用357的强制重启请求。9008进入过程见357；退出触发未知，pstore为空。旧356 R5状态仍 load-boot-test／terminal=false、worker不存在，不改成成功。
 
-882包离线根目录；189包文件哈希、78ARM64 ELF、QMI GI、服务路径与用户配置通过，finalize重复执行通过；3项CLI帮助/版本通过。签名APK仓库仅34个当前候选包，拒绝同名多版本索引；samurai标签绑定设备库来源，apk更新索引及upgrade模拟通过。候选测试账号已锁定，不含旧登录身份。
+## 源码、构建和私有资料
 
-明确自备同机私有输入，301 SSC文件/160固件manifest通过；248备份保持RO。源码配方不含厂商固件/NV/私钥。完整启动链尚未一键复建；滚动依赖、APK/IPA新签名不保证历史逐字节一致。维护纯度检查按预期拒绝实验供电配置。所有这些结果均不是新实机硬件验收。
+公共实现／脚本主工作区：E:\RealmeX2Pro edk2；Git提交位置：WSL /home/cy122/edk2-samurai/repo，子目录 Platform/Realme/sm8150。公共镜像不含个体校准、原厂固件、密钥及认证原始日志。
 
-## 源码、产物与回退依据
+libcamera候选：/mnt/samurai-full282/libcamera361-event-dispatch-built/src/libcamera-v0.7.2；相对360只改公共 event_dispatcher_poll.cpp。已重建 base，核心／IPA／proxy取360实际打包载荷。临时bundle必须包含 .so.0.7 → .so.0.7.2 相对SONAME链接，r1/r2因遗漏链接误载系统r27。
 
-最后部署boot235＋Image183，775ko/789模块项按237清单核对；libcamera历史r15/config-r10、Snapshot51.0-r0，248备份958包。新候选版本不得当成已上机版本。canonical旧内核/旧SDK继续保留，勿重置/覆盖。
+360完整包／回退仓库、8份完整私有原厂用途配置：E:/edk2-samurai-out/kernel360；361实机原始观察：同级kernel361。手机事务 /var/lib/samurai/k361-request-r1..r5 保留，不重放。host361.ssh沿用host360新guard；private360/recovered-boot-adoption-private.json定位当前启动，旧305/356guard不变。
 
-显示修复跨UEFI164和内核153–165；GLES147与Turnip149分属内核/用户态。Snapshot仅应用CPU覆盖（GSK_RENDERER=cairo、GDK_DISABLE=gl,vulkan,offload）两轮预览/清理通过；默认Vulkan出现480条历史fault，CPU两轮无新增不代表根因修复。实屏画面/颜色、回收告警、其它后摄仍开放。传感器精度/旋转与SLPI同boot重启生命周期、蜂窝无SIM业务未验。
+SDK /home/cy122/x2pro-linux/libcamera214-root；进入E盘ext4前调用storage284.mounted_build()，其mount含flock；SDK /work/libcamera临时bind不能并发，退出释放。已有执行handle只轮询，不因观察超时重复启动。C盘空间紧，不复制大型源码／产物到C。
 
-GNSS仍1240份日志/2586原始C/No全0，无fix；MEMSHARE试验未定位根因，Android定位基线未知。装机完整；窗边开窗不能排除接收环境影响。不得把辅助注入服务打包解释为已修复RF/LNA或时钟问题。
+内核 /mnt/samurai-full282/source354，branch samurai-iommu-node-lifetime357，commit ba61a62293e0f6bc5838c06f2e85e033e3d702a8。357 IOMMU节点引用修正已W1/Werror构建、未装。356第7构建已改Realme板级firmware 0x9ab00000／5MiB命名memory-region，从未发机；旧generic 0x8b700000实验失败，不能复用。尚无完整SYS_INIT／PING／PC_ACK成功。
 
-[248返回记录](reference/kernel248/STATUS.md)保存21分区、6LUN GPT与完整userdata私人备份依据。clean-r6的PC partclone/F2FS检查通过。回到手机前重新核当前OS、设备身份和备份；旧guard已不保证适用，不自动刷写。
+## 后续范围
 
-## 续作与已知风险
+先完成隔离队列／新包，再推进正确内存下ICP／HFI及IPE完整会话，接350/351/352后级Gamma／LTM／CCM；动态FrameDurationLimits、自动频率检测、更多模式、光学／几何、多摄同步及连续AF仍待完成。十上下文TPG请求链不等于物理曝光响应或绝对校准，IFE Gamma不等于最终原厂显示色调。未知前摄裁剪保留generic，缺完整IQ的高分辨率不造表。
 
-249开发及GitHub新clone位于PC私有32GiB ext4构建卷D:/samurai249-build/build-ext4-private.img，挂载点/home/cy122/x2pro-linux/pmos249-build；不得重新mkfs。GitHub新SDK为github-only/sdk-r2，rootfs位于其work/chroot_rootfs_realme-samurai。私有测试日志/manifest在E:/edk2-samurai-out/kernel249。构建卷和248原始备份/恢复镜像均保留。
-
-下一步是独立维护内核候选：整理最后相机电源/provider，拆出正常驱动与DTS，移除临时OF/trace；按显示/GPU/音频/无线/传感器/相机主题逐hunk审查。完成构建、模块一致性和必要实机回归之前，不发布纯净维护版。上游更新不是无人值守刷机；当前未配置自动化升级任务。
+历史检查点保留在 [360及以前归档](archive/NEXT-SESSION-through360-2026-10-20.md)，各reference按当时记录解释。357认证／360原始日志可能含私密输入，不打印或镜像。

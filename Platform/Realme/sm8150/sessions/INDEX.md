@@ -176,11 +176,35 @@
 | [237-imx319-first-raw-and-camss-unwind.md](<237-imx319-first-raw-and-camss-unwind.md>) | 237 IMX319首批RAW与CAMSS失败回收 |
 | [238-imx319-control-and-related-linux-solutions.md](<238-imx319-control-and-related-linux-solutions.md>) | 238：IMX319控制链与近机型Linux方案 |
 | [239-softisp-startup-and-linux-camera-gnss-research.md](<239-softisp-startup-and-linux-camera-gnss-research.md>) | 239：软件 ISP 首参修复与 Linux 摄像头/GNSS 搜索 |
+| [283-vfe175-wb-parameters-and-startup-queue.md](<283-vfe175-wb-parameters-and-startup-queue.md>) | 283：VFE175白平衡参数与首帧队列 |
+| [284-vfe175-demosaic-and-coherent-kernel.md](<284-vfe175-demosaic-and-coherent-kernel.md>) | 284：VFE175 Demosaic36与完整内核模块 |
+| [285-vfe175-cst-colorimetry.md](<285-vfe175-cst-colorimetry.md>) | 285：VFE175 CST12与色彩范围 |
+| [286-vfe175-gamma-and-output-depth.md](<286-vfe175-gamma-and-output-depth.md>) | 286：VFE175 Gamma16与FULL输出位深 |
+| [287-vfe175-demux-mnds-and-layering.md](<287-vfe175-demux-mnds-and-layering.md>) | 287：原厂依据与VFE175 Demux/MNDS16 |
+| [288-coherent-kernel-full-nv12-transport.md](<288-coherent-kernel-full-nv12-transport.md>) | 288：统一内核部署与硬件FULL NV12传输 |
+| [289-tpg-phy-history-gamma-sram-clock.md](<289-tpg-phy-history-gamma-sram-clock.md>) | 289：TPG PHY历史隔离与Gamma SRAM时钟 |
+| [290-vfe175-full-route-and-standard-tpg.md](<290-vfe175-full-route-and-standard-tpg.md>) | 290：原厂FULL路径修复、完整部署与标准硬件TPG验收 |
+| [291-two-sensor-physical-full-color-validation.md](<291-two-sensor-physical-full-color-validation.md>) | 291：两颗传感器真实CSI硬件FULL与独立RAW色彩对照 |
+| [293-vfe175-standard-white-balance-and-full-regression.md](<293-vfe175-standard-white-balance-and-full-regression.md>) | 293：VFE175标准白平衡参数及FULL回归修复 |
+| [294-vfe175-metadata-lifetime-and-zero-histogram.md](<294-vfe175-metadata-lifetime-and-zero-histogram.md>) | 294：VFE175 metadata 生命周期与零直方图失败 |
+| [295-vfe175-bhist-counts-and-startup-validity.md](<295-vfe175-bhist-counts-and-startup-validity.md>) | 295：VFE175有效BHIST计数与首包有效性缺陷 |
+| [296-vfe175-bhist-sram-initialization.md](<296-vfe175-bhist-sram-initialization.md>) | 296：VFE175统计SRAM初始化与首包修复 |
+| [297-shared-sof-statistics-frame-identity.md](<297-shared-sof-statistics-frame-identity.md>) | 297：共享SOF帧号与统计断粮恢复 |
+| [298-black-level-mapping-and-hardware-scene.md](<298-black-level-mapping-and-hardware-scene.md>) | 298：黑电平映射与暗绿硬件对照 |
+| [299-factory-bls-eeprom-and-inline-libcamera.md](<299-factory-bls-eeprom-and-inline-libcamera.md>) | 299：原厂BLS、本机EEPROM与在线libcamera候选 |
+| [300-hardware-ipa-and-lifecycle.md](<300-hardware-ipa-and-lifecycle.md>) | 300：标准硬件IPA与生命周期收敛 |
+| [301-imx319-control-response-timing.md](<301-imx319-control-response-timing.md>) | 301：IMX319控制响应时序 |
+| [302-sensor-controls-and-effective-sof-context.md](<302-sensor-controls-and-effective-sof-context.md>) | 302：硬件IPA传感器控制与有效SOF上下文 |
+| [303-hardware-ae-candidate-and-joint-latch-preparation.md](<303-hardware-ae-candidate-and-joint-latch-preparation.md>) | 303：硬件AE与联合控制的实机验证 |
+| [304-original-eeprom-wb-lsc-and-xml-misalignment.md](<304-original-eeprom-wb-lsc-and-xml-misalignment.md>) | 304：原厂EEPROM WB／LSC与旧XML错位核查 |
+| [305-s5k3m5-selection-geometry-and-four-camera-regression.md](<305-s5k3m5-selection-geometry-and-four-camera-regression.md>) | 305：长焦标准几何与四摄回归 |
+| [306-s5k3m5-factory-bls-timing-and-hardware-ae.md](<306-s5k3m5-factory-bls-timing-and-hardware-ae.md>) | 306：长焦原厂BLS、时序与硬件AE |
 | [2026-10-06-diagvendor-capture.md](<2026-10-06-diagvendor-capture.md>) | 诊断镜像 boot-samurai-diagvendor —— 抓原厂按键驱动失败原因 |
 | [2026-10-06-eud-first-test.md](<2026-10-06-eud-first-test.md>) | EUD 试水结果 + 会话交接（2026-10-06 16:5x） |
 | [2026-10-14-categorized-publication.md](<2026-10-14-categorized-publication.md>) | 2026-10-14 代码与资料分类提交 |
 | [2026-10-14-documentation-maintenance.md](<2026-10-14-documentation-maintenance.md>) | 2026-10-14 文档维护 |
 | [display-handoff-152-165.md](<display-handoff-152-165.md>) | 显示交接修复过程：152—165 |
+| [maintenance-2026-10-19.md](<maintenance-2026-10-19.md>) | 2026-10-19：暂停交接与主机编译产物清理 |
 
 ## Reference目录
 
@@ -331,6 +355,63 @@
 | [kernel247](<../reference/kernel247/README.md>) | 247：启动期MEMSHARE真实请求与OEM配置差异 |
 | [kernel248](<../reference/kernel248/README.md>) | 248：保存当前Linux并验证PC恢复 |
 | [kernel249](<../reference/kernel249/README.md>) | 249：用户态仓库整合、独立复现与上游维护 |
+| [kernel250](<../reference/kernel250/README.md>) | 250：Android 实际 GNSS HAL 初始化与室外正信号 |
+| [kernel251](<../reference/kernel251/README.md>) | 251：原厂 realme UI 2.0 室内 GNSS 与 Linux 对照 |
+| [kernel252](<../reference/kernel252/README.md>) | 252：原厂室内 SBAS 跟踪、基带零测量与 Linux 对照 |
+| [kernel253](<../reference/kernel253/README.md>) | 253：原厂GPS弱信号、UTC实注与射频/初始化对照 |
+| [kernel254](<../reference/kernel254/README.md>) | 254：GPS SEARCH 的新鲜度与原厂初始化实测 |
+| [kernel255](<../reference/kernel255/README.md>) | 255：PGA来源、外部频率估计与XO初始化核对 |
+| [kernel256](<../reference/kernel256/README.md>) | 256：原厂室外无线调试取得持续GNSS定位 |
+| [kernel257](<../reference/kernel257/README.md>) | 257：从原厂F.16返回Linux，恢复完整系统并验证无线SSH |
+| [kernel258](<../reference/kernel258/README.md>) | 258：Linux室外无线GNSS持续定位，完成原厂对照 |
+| [kernel259](<../reference/kernel259/README.md>) | 259：GeoClue 定位生命周期修复与室外复测 |
+| [kernel260](<../reference/kernel260/README.md>) | 260：桌面 GNSS 定位通过与无 SIM 电源管理 |
+| [kernel261](<../reference/kernel261/README.md>) | 261：中文、应用商店与屏幕键盘检查 |
+| [kernel262](<../reference/kernel262/README.md>) | 262：前摄保存 JPEG、缓冲持有复现与 CPU 复制路径 |
+| [kernel263](<../reference/kernel263/README.md>) | 263：公共相机缓冲生命周期，正常取流进展与断连竞态 |
+| [kernel264](<../reference/kernel264/README.md>) | 264：公共相机缓冲生命周期修复、原生包部署及实际快门 |
+| [kernel265](<../reference/kernel265/README.md>) | 265 公共相机缓冲退役修复与系统部署 |
+| [kernel266](<../reference/kernel266/README.md>) | 266：相机架构复核与标准元数据候选 |
+| [kernel267](<../reference/kernel267/README.md>) | 267：公共 PM8008 供电、标准 IMX319 与新设备树实机启动 |
+| [kernel268](<../reference/kernel268/README.md>) | 268：公共相机切换修复与前后摄应用实测 |
+| [kernel269](<../reference/kernel269/README.md>) | 269：内核维护收敛、板级旋转修复与收尾 |
+| [kernel270](<../reference/kernel270/README.md>) | 270：恢复相机实测与第二颗后摄适配（进行中） |
+| [kernel271](<../reference/kernel271/README.md>) | 271：长焦原生细分增益、配套部署与自动曝光实测 |
+| [kernel272](<../reference/kernel272/README.md>) | 272：GW1 主摄标准驱动候选、板级描述与离线验证 |
+| [kernel273](<../reference/kernel273/README.md>) | 273：GW1 主摄实机接入、四摄取流与未完成项 |
+| [kernel274](<../reference/kernel274/README.md>) | 274：主摄镜头光学响应、标准镜头驱动候选与 ISP 分层 |
+| [kernel275](<../reference/kernel275/README.md>) | 275：标准镜头与 libcamera 生命周期部署，定位共享 I/O 依赖 |
+| [kernel276](<../reference/kernel276/README.md>) | 276：公共 CCI 供电收敛、标准手动对焦和多摄回归 |
+| [kernel277](<../reference/kernel277/README.md>) | 277：RAW 空间清晰度统计与标准 FocusFoM 实机部署 |
+| [kernel278](<../reference/kernel278/README.md>) | 278：标准单次自动对焦、不可变帧统计与镜头回执 |
+| [kernel279](<../reference/kernel279/README.md>) | 279：优先复用现有方案的 CAMSS ISP 源码候选 |
+| [kernel280](<../reference/kernel280/README.md>) | 280：纠正 ISP 型号依据，补 CSID175 像素输入路径 |
+| [kernel281](<../reference/kernel281/README.md>) | 281：原厂 HAL 静态依据与 VFE175 CAMIF 候选 |
+| [kernel282](<../reference/kernel282/README.md>) | 282：复用多流修复，补 VFE175 FULL 双平面输出 |
+| [kernel283](<../reference/kernel283/README.md>) | 283：VFE175 白平衡参数后端与首帧参数队列 |
+| [kernel284](<../reference/kernel284/README.md>) | 284：匹配 Demosaic36，完成候选内核与模块链接 |
+| [kernel285](<../reference/kernel285/README.md>) | 285：VFE175 CST12色彩转换后端 |
+| [kernel286](<../reference/kernel286/README.md>) | 286：VFE175 FULL位深转换与Gamma16后端 |
+| [kernel287](<../reference/kernel287/README.md>) | 287：原厂依据、VFE175 Demux与MNDS16后端 |
+| [kernel288](<../reference/kernel288/README.md>) | 288：统一内核部署与首个硬件FULL NV12链路 |
+| [kernel289](<../reference/kernel289/README.md>) | 289：内部TPG历史隔离与Gamma SRAM时钟修复 |
+| [kernel290](<../reference/kernel290/README.md>) | 290：原厂FULL后处理协议、公共驱动修复及完整部署 |
+| [kernel291](<../reference/kernel291/README.md>) | 291：两颗实体传感器接入硬件FULL及独立RAW色彩对照 |
+| [kernel292](<../reference/kernel292/README.md>) | 292：VFE175 参数节点、稀疏 pad 与真实部署后的 FULL 回归 |
+| [kernel293](<../reference/kernel293/README.md>) | 293：VFE175 标准白平衡参数实机闭环与 FULL 回归修复 |
+| [kernel294](<../reference/kernel294/README.md>) | 294：VFE175 统计通路和 metadata 生命周期 |
+| [kernel295](<../reference/kernel295/README.md>) | 295：VFE175 BHIST 有效计数、实景曝光响应与首包缺陷 |
+| [kernel296](<../reference/kernel296/README.md>) | 296：VFE175 统计 SRAM 初始化与首包修复 |
+| [kernel297](<../reference/kernel297/README.md>) | 297：图像／统计共享 SOF 帧号与断粮恢复 |
+| [kernel298](<../reference/kernel298/README.md>) | 298：公共黑电平映射与暗绿硬件对照 |
+| [kernel299](<../reference/kernel299/README.md>) | 299：原厂 BLS、本机 EEPROM 与 libcamera 在线候选 |
+| [kernel300](<../reference/kernel300/README.md>) | 300：CAMSS 硬件 IPA 模块与生命周期收敛 |
+| [kernel301](<../reference/kernel301/README.md>) | 301：IMX319 曝光／增益与硬件统计时序 |
+| [kernel302](<../reference/kernel302/README.md>) | 302：硬件 IPA 的曝光／增益控制与有效帧上下文 |
+| [kernel303](<../reference/kernel303/README.md>) | 303：硬件 AE 候选与联合锁存验收准备 |
+| [kernel304](<../reference/kernel304/README.md>) | 304：原厂 EEPROM 的 WB／LSC 类型表与旧 XML 错位核查 |
+| [kernel305](<../reference/kernel305/README.md>) | 305：S5K3M5 几何接口修复与四摄回归 |
+| [kernel306](<../reference/kernel306/README.md>) | 306：长焦原厂黑电平、控制时序与硬件 AE |
 | [rx33](<../reference/rx33/README.md>) | Session 33：有效 EUD RX 抓包 |
 | [rx34](<../reference/rx34/README.md>) | Session 34 的临时终端记录 |
 | [rx36](<../reference/rx36/README.md>) | Session 36：USB 描述符、旧 qcusbser 审查与已完成对照 |
@@ -363,8 +444,15 @@
 | [rx64](<../reference/rx64/README.md>) | RX64 — supported driver-loading environment remains blocked |
 | [rx65](<../reference/rx65/README.md>) | RX65 — WSL full native input succeeds; tty TX loss remains |
 | [display-handoff-comparison](<../reference/display-handoff-comparison/README.md>) | 一加、真我 Linux 显示交接方案对比 |
+| [full-upgrade-20261018](<../reference/full-upgrade-20261018/README.md>) | 2026-10-18：现有软件源全量升级完成 |
+| [maintenance-2026-10-19](<../reference/maintenance-2026-10-19/README.md>) | 2026-10-19：暂停交接与编译产物清理 |
 | [publication-2026-10-14](<../reference/publication-2026-10-14/README.md>) | 2026-10-14 分类提交与公开资料 |
 | [publication-2026-10-17](<../reference/publication-2026-10-17/README.md>) | 2026-10-17：保存全部后续硬件适配源码 |
+| [repository-audit-20261018](<../reference/repository-audit-20261018/README.md>) | 2026-10-18：APK索引刷新与版本约束核对 |
+
+## 最新交接
+
+- [361 请求链实测、公共分发器修复与收尾交接](../reference/kernel361/README.md)
 
 ## 早期拆分与快照
 
@@ -372,3 +460,4 @@
 - [Linux技术与19—28节](../linux-port/docs/00-INDEX.md)
 - [旧决策8—11节](../reference/DECISIONS.md)
 - [2026-10-14维护前逐字快照](../archive/docs-before-maintenance-2026-10-14/README.md)
+
