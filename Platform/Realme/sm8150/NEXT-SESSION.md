@@ -1,29 +1,27 @@
-# 当前检查点：362（已部署，完整目标继续）
+# 当前检查点：367（基线恢复，完整多摄／ISP目标 active）
 
-2026-10-20。四摄／骁龙ISP目标active，尚未完成；下一步转ICP/A5固件和IPE会话。规则见WORKING-BOUNDARIES.md。
+2026-10-20。先读WORKING-BOUNDARIES.md。原密钥USB SSH，当前boot guard `/var/lib/samurai/k367-work/boot-id-private.txt`，reference/kernel367/host.py为入口。Image/778模块363、boot固件366、静态DT来源365；libcamera五运行包99990.7.2-r29，config/stack0.1.0-r24，四份私有完整Preview默认保持362。全部相机/ISP目标尚未完成。
 
-363进行中：正在从source354固定357提交构建独立k363的完整Image/778模块，尚未切换设备；现场仍为下述362组合。构建worker759，私有kernel363/boot-build-state-private.json为状态入口，已有执行只轮询，不重复启动。相关新脚本与原厂入口12场景证据见reference/kernel363/README.md。
+## 实际新结果
 
-## 当前设备与新增结果
+363统一Image固定ba61a62293e0f6bc5838c06f2e85e033e3d702a8，包含348 Gamma和357公共OF/IOMMU节点引用修正。42 CAMSS组件W1/Werror无诊断，778模块匹配，实际内嵌BT模块核对。四颗已确认传感器和隔离IPA回归通过。364实机映射/核对/回收1280页；实验模块/节点可完整卸载，无OF引用故障。
 
-严格原密钥USB SSH 169.254.42.1；沿用360恢复后的boot guard。当前Image仍7.3.0-rc6-rmx1931-samurai-k298+，固件boot276未改。已安装libcamera五运行包99990.7.2-r29、config/stack0.1.0-r24；CAMSS现为348 Gamma模块，note SHA256 d8c0f30d189aa8e69e377ba58c891955f3bc795abfb6b8ed6a9562a1d118333a。其余传感器及板级DT未改。
+364首次正确板级启动在resources返回-22；精确诊断确认overlay给已有无phandle预留节点加标签不能实时解析。365增加默认disabled的SoC ICP资源和板级camera_mem引用，既有固件9ab00000/5MiB/no-map不变。207个引用数字重排但目标路径均保持。只改logdump FAT中的DT没有生效；实际EDK2用固件卷DT。366重建固件，逐FFS证明只有DTB变化，实际boot读回和静态引用通过。不能再把FAT DT文件正确当Linux已采用它。
 
-本机四份360完整Preview配置已更新/etc/libcamera/ipa/camss-vfe/{model}.yaml；原厂曝光/手动频闪和IFE Gamma成为已对应模式的默认，个体WB/CCT、动态LSC/CCM保持。五模式安装后137帧隔离请求通过；四个硬件/四个PipeWire节点，GStreamer/PipeWire各12帧通过。最终taint0、双CCI/CAMSS休眠、九路电源disabled/users0、服务各一个uid10000，无活动362 worker或ICP模块。[结果与边界](reference/kernel362/README.md)、[安装](reference/kernel362/install-r1-validation.json)。
+366一次A5实验已到固件/共享IOVA映射、资源上电和CPU释放；HFI响应持续3，500ms超时，日志记录block reset asserted，约1秒后modem watchdog并自动重启。无完整SYS_INIT/PING/PC_ACK，原worker没有正常终态。ramoops和原状态私存保留；不能把旧terminal=false改成功，不能把watchdog原因归结为某单行代码。恢复启动ICP模块/节点不在、17时钟0、taint0，临时固件副本按哈希清理，原厂和事务副本均保留。
 
-361的分发器生命周期修复已纳入r29。362另修CAMSS同步IPC提交所有权，以及公共PipelineHandler同camera递归提交顺序。r1先越过空队列崩溃但暴露请求硬件顺序错误，已保留失败；r2/r3五模式隔离138帧+线程/实景57帧通过。不能删除断言、禁用隔离或重放旧事务。正常实景取流不等于绝对光学校准；五Preview模式不能外推所有模式/用途。
+恢复启动SSC file server exit4导致SensorProxy/桌面未起；367执行正常停服务和一次bootloader/reboot，不刷分区、不重试A5，恢复后实际状态/采集见reference/kernel367各验证JSON。完整目标继续active。
 
-## 源码与回退
+## 维护源／工具与回退
 
-工作区E:/RealmeX2Pro edk2；Git镜像WSL /home/cy122/edk2-samurai/repo/Platform/Realme/sm8150。完整源码/mnt/samurai-full282/libcamera362-serialized-built/src/libcamera-v0.7.2；正式配方linux-port/packages/libcamera和samurai-camera-config已同步，0037/0038/0039补丁纳入。模块源/mnt/samurai-full282/source348，samurai-ife-gamma348、30086bae4d60abe70784a1176bbe418434833b2f。
+完整内核源/mnt/samurai-full282/source354，分支samurai-icp-board-dt365，提交e217016006e609333a715c10f2f3e442dc4da95f；含精确HFI ready364与诊断1947eb7，但实际Image固定ba61，静态DT来自e217。临时ICP模块按k363构建，没有永久加载。libcamera源/mnt/samurai-full282/libcamera362-serialized-built/src/libcamera-v0.7.2，正式r29/r24配方已保存。进入ext4先用reference/kernel284/storage.py::mounted_build()，SDK bind串行。
 
-完整13包及7运行包签名仓库私存E:/edk2-samurai-out/kernel362；手机/var/lib/samurai/k362-install-r1为成功新事务，repository/rollback保留r27/r22离线包，backup保存原338模块、四份344私有配置、APK world及仓库指针。回退必须组合恢复旧配置/模块/包，不能只降用户空间后继续使用新默认。原厂数据/私有校准/固件/密钥/原始认证日志不进公共Git。
+私存E:/edk2-samurai-out/kernel363～367。boot366候选c3e4e9c85d80c8ec37605cd522cf716525ae5ebe4fa801342dbf7586c292d924；logdump365 aca01bc2c91928f1a6a6690f62d14db014351ec5049e5684590b40c3c93de8da。boot276和logdump363可组合回退DT；原k298模块树/logdump和362事务的r27/r22包＋338模块＋344私有配置也保留。NV/OTP/工厂备份未写，原厂固件、校准、认证日志及密钥不进公共Git。
 
-SDK /home/cy122/x2pro-linux/libcamera214-root；进入E盘ext4先调用storage284.mounted_build()，SDK /work/libcamera bind串行且退出释放。构建及安装已终态，不重启旧handle。
+## 下一步
 
-树外364候选：依据363原厂ELF入口12场景，已准备精确HFI ready等待补丁及生产start函数8场景ASan/UBSan回归，旧版提前接受3可复现。尚未应用到source354/未编译模块/未发机；reference/kernel364/README.md和apply-source.py包含363完成后的前提。不要在363构建期间改其固定源码。
+优先复用已取得的原厂CAMERA_ICP.elf、AndroidR固定源码及352上游原型，离线查响应3的写入者、CSR/共享地址语义和停机顺序；当前不安排重复A5 CPU释放。363 ELF入口和命令路径指令测试是局部证据，平台/OS等为桩，不能外推整固件状态。IPE图像会话与IO/IQ、后级Gamma/LTM/CCM尚未打通。
 
-## 剩余
+四颗已测为三后摄＋前摄；官方还有2MP人像摄像头，vendor的OV02A1B仅库名证据，实际身份未确认。AndroidR cam-sensor@4与现前摄共享PHY2/MCLK2/reset12，GPIO29选择关系待解，不能直接加冲突GPIO节点或当OV02A10。见reference/kernel363/REMAINING-CAMERA-SCOPE.md。
 
-ICP内核源/mnt/samurai-full282/source354，samurai-iommu-node-lifetime357、ba61a62293e0f6bc5838c06f2e85e033e3d702a8。357公共OF/IOMMU引用修正已构建未装；356正确Realme firmware0x9ab00000/5MiB命名memory-region第7构建未发机，错误generic0x8b700000不可复用。旧356R5无正常终态，不改写成功；360已恢复当前Linux启动。尚无完整SYS_INIT/PING/PC_ACK及真实IPE会话。继续优先原厂ELF/源码/反编译和352固定上游原型；350/351/352后级Gamma/LTM/CCM待硬件会话接入。
-
-动态FrameDurationLimits、自动频率检测、其它模式/用途、绝对颜色/黑电平/阴影、几何/多摄同步及连续AF仍开放。IFE Gamma不是最终原厂显示色调，未知前摄裁剪保持generic，缺IQ的高分辨率不造表。
+动态FrameDurationLimits、自动防频闪、其它模式、绝对颜色/黑电平/阴影、几何/多摄同步和连续AF仍开放，延期纯色/遮光可后做。不要把已取流与现有个体WB/LSC/CCM/default Gamma集成称为完整校准。

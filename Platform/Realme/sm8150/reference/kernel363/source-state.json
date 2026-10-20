@@ -9,5 +9,7 @@
   "common_iommu_fix_stage": 357,
   "diagnostic_modules_default_disabled": true,
   "existing_checkout_reused": true,
-  "installed": false
+  "installed": true,
+  "installed_evidence": "reference/kernel363/postboot-validation.json",
+  "current_image_still_deployed": true
 }

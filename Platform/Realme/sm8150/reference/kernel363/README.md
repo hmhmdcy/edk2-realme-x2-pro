@@ -1,8 +1,10 @@
-# 363：统一内核与原厂 HFI 入口核对（进行中）
+# 363：统一内核已部署、四颗传感器回归和原厂 HFI 入口核对
 
-362已把r29/r24、VFE175 Gamma和完整Preview默认安装到k298；继续ICP之前，需要让357公共OF/IOMMU节点引用修正进入实际Image。当前复用`/mnt/samurai-full282/source354`、固定提交`ba61a62293e0f6bc5838c06f2e85e033e3d702a8`构建独立k363；包括已测传感器/CAMSS348代码，实验ICP模块默认不启用。没有为了模块卸载去在相机驱动里补偿框架引用计数。
+独立k363已完成构建、刷写、启动和相机验证。固定提交`ba61a62293e0f6bc5838c06f2e85e033e3d702a8`包含348 Gamma和357公共OF/IOMMU节点生命周期修正，778模块同release、depmod无未解析符号；实验ICP模块默认不启用。没有在相机驱动里补偿框架引用计数。用户空间保持362的r29/r24和私有完整Preview默认。
 
-已有Image298和配置在准备时与298完整构建记录匹配，旧构建产物已另存，原initramfs293保留；新initramfs363只替换与新release匹配的三个蓝牙模块。构建目标为完整Image、DTB和独立778模块，签名用户空间及四份私有默认保持362。构建/打包/切换是否完成，以对应验证JSON及NEXT-SESSION为准；源码文件存在不代表设备已切换。
+原initramfs293保留，新initramfs363只替换三个匹配release的蓝牙模块，实际Image内CPIO字节已核对。42个CAMSS组件W=1/-Werror无诊断；全内核另有62条既有W=1诊断，不能称全树零警告。构建中一次有意从3并行改为8并行的终止和续作均保留。[完整构建](boot-candidate-build-validation.json)、[封装](boot-package-validation.json)、[实际启动](postboot-validation.json)。
+
+运行时已验证IMX471、IMX319、S5K3M5、S5KGW1各12帧GStreamer硬件采集，主摄隔离IPA另27帧／5控制阶段和Gamma回执；无新相关故障，九路电源关闭，CAMSS/双CCI休眠，服务恢复，taint0。[回归](camera-runtime-validation.json)。首轮复用的313 fixture硬编码k298，媒体操作前退出3；只更新为k363身份检查并重新编译，未删除guard，首份失败保留。
 
 继续优先反编译已提取的原厂`CAMERA_ICP.elf`，没有重复下载或读校准分区。离线执行原始Thumb `fwEntryFunction` 的全部本体，12场景覆盖成功、共享/堆地址缺失、映射失败、ISR/信号/互斥量/线程创建失败。成功路径写HFI响应1，失败路径写2，早期idle线程失败保持0；测试路径没有写3。[结果](firmware-init-validation.json)。
 
@@ -10,4 +12,4 @@
 
 另执行原始`ICPDomainCmdHandler`的SYS_INIT及三种64位cookie的PING路径：分别生成56字节0x20001和16字节0x20006回复；初始化error字段和PING cookie均从偏移8开始，符合当前解析器关键字段。[回执证据](firmware-messages-validation.json)。消息投递/日志为桩，芯片与MMIO值是合成数据，没有模拟调度器或实际硬件IRQ。
 
-切换流程准备独立模块目录和只含Image/DTB的FAT logdump候选，保留当前k298 logdump及当前r29/348模块树作回退。只有相关构建/包和当前设备身份核对完成后才执行正常停服务/一次重启、仅logdump刷写及新启动读回。没有NV/OTP/校准分区写入。ICP正确板级0x9ab00000/5MiB仍待实际CPU访问与完整SYS_INIT/PING/PC_ACK，IPE IO/IQ及后级调校仍未完成。
+本次仅刷logdump，boot276保持；旧k298模块树和logdump可离线回退。实际Linux DT来自EDK2固件卷而非FAT中的同名DT文件，后续365/366已单独核对这条加载链。没有NV/OTP/校准分区写入。ICP完整SYS_INIT/PING/PC_ACK、IPE会话及绝对光学校准仍未完成。还存在未确认的第五颗2MP人像相机，不能将四颗已测传感器称为本机全部相机：[剩余范围](REMAINING-CAMERA-SCOPE.md)。
