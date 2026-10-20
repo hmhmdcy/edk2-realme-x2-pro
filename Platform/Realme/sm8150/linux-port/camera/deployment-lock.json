@@ -1,5 +1,5 @@
 {
-  "stage": 391,
+  "stage": 392,
   "kernel_boot_stage": 389,
   "current_boot_guard_stage": 390,
   "kernel_image_stage": 363,
@@ -249,25 +249,25 @@
     "org.gnome.Snapshot.service": "f18df4682092a03962f916f84f89c92fcf6664ec0be5027f6c08e5011d202308"
   },
   "snapshot_cairo_workaround_still_required": true,
-  "current_camera_evidence": "../../reference/kernel391/README.md",
-  "final_health_evidence": "../../reference/kernel391/current-state-validation.json",
+  "current_camera_evidence": "../../reference/kernel392/README.md",
+  "final_health_evidence": "../../reference/kernel392/current-state-validation.json",
   "system_services": {
-    "stage": 391,
+    "stage": 392,
     "services": {
       "pipewire": [
         {
-          "pid": 9234,
+          "pid": 10271,
           "uid": 10000
         }
       ],
       "wireplumber": [
         {
-          "pid": 9237,
+          "pid": 10274,
           "uid": 10000
         }
       ]
     },
-    "evidence": "../../reference/kernel391/current-state-validation.json",
+    "evidence": "../../reference/kernel392/current-state-validation.json",
     "current_boot_revalidated": true
   },
   "guard_path": "/var/lib/samurai/k390-active/boot-id-private.txt",
@@ -663,7 +663,7 @@
   "candidate_hardware_af_metric": "bounded CPU spatial contrast on hardware NV12 Y; no VFE BAF",
   "candidate_hardware_af_continuous": false,
   "candidate_hardware_raw_compatibility": true,
-  "current_boot_auto_af_retest_scope": "No new optical or AF scene validation391; previous scoped implementation evidence retained.",
+  "current_boot_auto_af_retest_scope": "No optical or AF scene validation392; cancellation/input error/default application recovery only.",
   "current_boot_product_raw_cpu_auto_af_retest_pending": true,
   "candidate_camss_streams_source_stage": 314,
   "candidate_camss_streams_source_tree": "/home/cy122/x2pro-linux/camera314-streams-kernel",
@@ -688,8 +688,8 @@
   "candidate_hardware_raw_pair_max_delta_ns": 61511,
   "candidate_hardware_module_stage": 314,
   "candidate_hardware_automatic_pipeline_with_raw_verified": true,
-  "in_progress_stage": 391,
-  "in_progress_evidence": "../../reference/kernel391/README.md",
+  "in_progress_stage": 392,
+  "in_progress_evidence": "../../reference/kernel392/README.md",
   "in_progress_installed": true,
   "historical_pre316_package_payloads": [
     {
@@ -1630,7 +1630,7 @@
   "candidate_common_dispatcher_fix_regression_passed": true,
   "candidate_remaining_failure": null,
   "candidate_r28_packages_include_dispatcher_fix": false,
-  "device_closeout_evidence": "../../reference/kernel391/current-state-validation.json",
+  "device_closeout_evidence": "../../reference/kernel392/current-state-validation.json",
   "current_camss_source": "/mnt/samurai-full282/source354",
   "candidate_common_request_order_regression_passed": true,
   "candidate_isolated_preview_modes_verified": 5,
@@ -1651,11 +1651,11 @@
   "icp_latest_attempt_followed_by_modem_watchdog": false,
   "icp_latest_attempt_evidence": "../../reference/kernel382/boot-runtime-r1-validation.json",
   "icp_latest_attempt_recovery_evidence": null,
-  "icp_next_step": "Explicit in-flight cancellation and hardware-error concurrency; OEM Gamma/LTM/CCM full IQ and all363 remaining camera scope. Signed IPE userspace r30/r25 installed391; same390 boot guard. Do not replay completed390 deployment or391 package transactions.",
+  "icp_next_step": "Core must explicitly classify known-safe pre-image-submission rejection versus submitted/uncertain DMA; isolate local errors without poisoning peer. Keep unknown MAP/FRAME/UNMAP retention and reset-ACK proof. True hardware-error concurrency remains unverified, followed by OEM Gamma/LTM/CCM full IQ and all363 camera scope. Same390 boot, r30/r25 installed391.",
   "confirmed_physical_camera_count": 4,
   "portrait_2mp_identity_verified": false,
   "remaining_camera_scope_evidence": "../../reference/kernel363/REMAINING-CAMERA-SCOPE.md",
-  "latest_work_stage": 391,
+  "latest_work_stage": 392,
   "icp_response3_sfr_error_path_proven_in_original_firmware": true,
   "icp_response3_sfr_evidence": "../../reference/kernel368/firmware-sfr-validation.json",
   "a5_icp_candidate_source_branch": "samurai-icp-platform389",
@@ -1673,12 +1673,12 @@
   "icp_actual_sfr_text_recovered": false,
   "icp_hardware_cleanup_verified": true,
   "icp_memory_page_allocation_evidence": "../../reference/kernel369/firmware-reservation-validation.json",
-  "current_device_revalidated_stage": 391,
+  "current_device_revalidated_stage": 392,
   "icp_quiesced_failure_candidate_evidence": "../../reference/kernel371/README.md",
   "icp_quiesced_failure_hardware_verified": false,
   "icp_static_mmu_instruction_evidence": "../../reference/kernel370/firmware-mapping-validation.json",
   "icp_exception_layout_instruction_evidence": "../../reference/kernel370/exception-layout-validation.json",
-  "icp_latest_device_experiment_stage": 391,
+  "icp_latest_device_experiment_stage": 392,
   "icp_last_recovered_standard_dump_stage": 369,
   "icp_last_recovered_standard_dump_bytes": 568,
   "icp_sys_init_hardware_verified": true,
@@ -1743,9 +1743,9 @@
   "ipe_native_striping_formats_evidence": "../../reference/kernel384/formats-validation.json",
   "ipe_native_striping_actual_pixel_evidence": "../../reference/kernel384/pixels-validation.json",
   "ipe_external_striping_runtime_dependency": false,
-  "ipe_latest_hardware_stage": 391,
-  "ipe_latest_stage_actual_frames": 94,
-  "ipe_latest_stage_RT_frames": 111,
+  "ipe_latest_hardware_stage": 392,
+  "ipe_latest_stage_actual_frames": 24,
+  "ipe_latest_stage_RT_frames": 24,
   "ipe_latest_stage_non_RT_frames": 0,
   "ipe_native_striping_multisize_evidence": "../../reference/kernel385/coverage-validation.json",
   "ipe_nv21_hardware_verified": true,
@@ -1761,7 +1761,7 @@
   "ipe_m2m_platform_owner_temporary": false,
   "ipe_zero_copy_verified": true,
   "ipe_libcamera_pipeline_integrated": true,
-  "ipe_latest_stage_frames_scope": "391 newly installed r30/r25: r1 camera suite82 + r2 ordinary-user PipeWire12; r1 reused in r2 without rerun; previous counter12 excluded; final cumulative106",
+  "ipe_latest_stage_frames_scope": "392 logs:24 hardware frame completions =20 completed+4 cancelled;26 V4L2 jobs include2 expected pre-image-submit rejections. Includes failed-timing r1 actual work; previous391 counts excluded.",
   "ipe_libcamera_pipeline_hardware_verified": true,
   "ipe_libcamera_candidate_permanently_installed": true,
   "ipe_libcamera_pipeline_evidence": "../../reference/kernel391/hardware-validation.json",
@@ -1769,13 +1769,13 @@
   "ipe_libcamera_raw_only_kept": true,
   "ipe_libcamera_isolated_ipa_verified": true,
   "ipe_m2m_cancel_counter_separate_from_errors": true,
-  "ipe_actual_cancel_branch_verified": false,
+  "ipe_actual_cancel_branch_verified": true,
   "ipe_zero_copy_scope": "native m2m and candidate libcamera core image transfers only; no universal application/display or implicit-fence claim",
   "ipe_direct_dma_owner_api_required": true,
   "ipe_direct_dma_candidate_requires_modified_standard_dma_sg": true,
   "ipe_original_standard_dma_sg_restored": false,
   "ipe_export_fd_and_mmap_owner_lifetime_verified": true,
-  "current_readonly_device_evidence": "../../reference/kernel391/current-state-validation.json",
+  "current_readonly_device_evidence": "../../reference/kernel392/current-state-validation.json",
   "ipe_candidate_platform_integrated_with_camss_module": true,
   "ipe_candidate_static_board_enabled": true,
   "ipe_candidate_formal_platform_hardware_verified": true,
@@ -1811,5 +1811,22 @@
   "module_count_scope": "Derived original778 tree plus3 explicitly absent-before new modules; no new all-module hash audit",
   "kernel_source_scope": "maintained module and board source; Image363 source separately recorded",
   "ipe_installed_default_gstreamer_pipewire_verified": true,
-  "ipe_userspace_deployment_stage": 391
+  "ipe_userspace_deployment_stage": 391,
+  "ipe_cancel_concurrency_verified": true,
+  "ipe_exact_dma_pending_abort_instant_verified": false,
+  "ipe_input_validation_error_concurrency_verified": true,
+  "ipe_input_validation_error_affects_peer": true,
+  "ipe_reopen_after_input_failure_verified": true,
+  "ipe_hardware_error_concurrency_verified": false,
+  "ipe_cancel_and_input_recovery_evidence": "../../reference/kernel392/hardware-validation.json",
+  "ipe_installed_default_camera_recovery_evidence": "../../reference/kernel392/runtime-r3-validation.json",
+  "ipe_current_cumulative_counters": {
+    "jobs": 132,
+    "completed": 126,
+    "direct_completed": 126,
+    "cancelled": 4,
+    "failed": 2,
+    "first_error": -22
+  },
+  "ipe_current_failed_counter_scope": "2 expected alias/peer failures392, first_error=-22 cumulative; fatal=false and reopened default GStreamer12 verified"
 }

@@ -497,6 +497,7 @@
 | [kernel389](<../reference/kernel389/README.md>) | 389：正式 CAMSS/ICP 平台所有者与板级部署候选 |
 | [kernel390](<../reference/kernel390/README.md>) | 390：正式 CAMSS/ICP 平台部署，111帧与卸载重载通过 |
 | [kernel391](<../reference/kernel391/README.md>) | 391：正式安装 IPE 用户空间，默认四摄与 PipeWire 通过 |
+| [kernel392](<../reference/kernel392/README.md>) | 392：在途取消、双上下文与输入错误恢复实机验证 |
 | [rx33](<../reference/rx33/README.md>) | Session 33：有效 EUD RX 抓包 |
 | [rx34](<../reference/rx34/README.md>) | Session 34 的临时终端记录 |
 | [rx36](<../reference/rx36/README.md>) | Session 36：USB 描述符、旧 qcusbser 审查与已完成对照 |
