@@ -1,47 +1,47 @@
-# 当前检查点：376（两IPE会话并存/创建/销毁实机通过；图像IO/IQ/帧处理未接，目标active）
+# 当前检查点：379（两路 IPE IO 配置实机通过；图像数据面未接，目标 active）
 
-2026-10-20。先读WORKING-BOUNDARIES.md和reference/kernel376/README.md。前轮375完整HFI启停、本轮376两个IPE上下文真实通过，均为实质进展；完整多摄/ISP校准目标仍active。禁止把会话成功当作已经处理图像。
+2026-10-20。先读 WORKING-BOUNDARIES.md、reference/kernel379/README.md。优先复用固定仓库和原厂提取证据，按 SoC、板级、主线框架、驱动、用户空间区分修改。不要将会话配置成功视作图像处理或校准完成。
 
-## 当前设备与维护源
+## 当前设备与源码
 
-当前仍374恢复后的同一启动，guard `/var/lib/samurai/k374-recovered/boot-id-private.txt`；使用reference/kernel376/host.py，strict原密钥USB/known_hosts不变。375与376没有重启，没有375/376-recovered启动。376-boot-r1 worker8198与collector均已结束，state finished/terminal/passed；旧失败事务保留。
+当前是378失败后恢复的启动，guard `/var/lib/samurai/k378-recovered/boot-id-private.txt`，用reference/kernel379/host.py（委托378的动态恢复guard），strict原密钥USB/known_hosts保持。377与378都自动重启；379没有重启，379-boot-r1 worker3830与collector均结束，finished/terminal/passed。失败事务保留，不重跑377/378。
 
-实际Image363／7.3.0-rc6-rmx1931-samurai-k363+，boot366嵌入DT365、libcamera五包r29、config/stack r24及362四份私有Preview保持。原厂曝光/手动频闪、IFE Gamma、已有unit WB/CCT与动态LSC/CCM保持。候选未永久安装，静态ICP disabled。
+实际Image363／7.3.0-rc6-rmx1931-samurai-k363+、boot366嵌入DT365、libcamera五包r29、config/stack r24及362四份私有Preview保持。原厂曝光/手动频闪、IFE Gamma、unit WB/CCT与动态LSC/CCM保留。静态ICP disabled，候选未永久安装。378恢复核对boot/logdump原始读回，379无刷写，无NV/OTP/工厂校准写入。
 
-376终态CPU/IRQ/PM/backing/mapped/时钟组/电源域/会话均0，17个ICP/BPS/IPE时钟enable0、临时core/test/固件/overlay无残留、CAMSS/双CCI休眠、9相机电源disabled/users0、taint0、故障0。桌面、PW/WP、SSC、SensorProxy和adsp/slpi/modem均正常。本轮复用375同启动四摄各12帧与主摄隔离27帧/5阶段/Gamma ACK，不重复未改动相机组件扫描/采集。证据376/boot-runtime-validation.json、session-runtime-validation.json、final-state-validation.json。
+维护源 `/mnt/samurai-full282/source354`，分支samurai-a5-ack-status379，commit6b8e3b1a28ff9ea60391045b03b746499d1d9400；父3783347022f42202b9823b6945c6878189d3d64527d、3777ccaf8db4690cbedba43d44d065ccd93c119b30b。实际Image源码ba61a62293e0f6bc5838c06f2e85e033e3d702a8，静态DT源码e217016006e609333a715c10f2f3e442dc4da95f未变。379 core SHAfb98ea6014318d46816505daf45a12e3fc9a364aff24561003b0c66c21d4d2a1、test SHAae29dd03d9fc69b368a47ec0a4db056b6bd018dd3d633c0e45810eea348cec62，in-treeY/W1/Werror无诊断。
 
-维护源 `/mnt/samurai-full282/source354`，分支samurai-a5-ipe-session376，最终b6c779010ec222c6f70a4912e3d3205fd6414b5c；初始2630955b62106204ed708bbb8e96a4237406beeb，父375 94a92da1da7d6e5418e284b4a0c858100fa74fd9。实际Image源码ba61a62293e0f6bc5838c06f2e85e033e3d702a8、静态DT e217016006e609333a715c10f2f3e442dc4da95f未变。实际候选r2 core SHAa4f426c8af9f484a2c831f63d3957485323c749935a95f0324411dbf365a985e，test SHA847b38b1de2bdce468ce668cffc24780643e3b5893ff0a4584b42acd190f4e22，均in-treeY/W1/Werror无诊断。
+访问ext4前先调用reference/kernel284/storage.py::mounted_build()，返回/mnt/samurai-full282/build，source354在旁；WSL退出会卸载，不重建/格式化镜像。libcamera源 /mnt/samurai-full282/libcamera362-serialized-built/src/libcamera-v0.7.2；SDK /home/cy122/x2pro-linux/libcamera214-root，work bind串行。
 
-访问ext4先调用reference/kernel284/storage.py::mounted_build()，返回/mnt/samurai-full282/build、source354在旁；WSL退出会卸载，不重建/格式化镜像。libcamera源 /mnt/samurai-full282/libcamera362-serialized-built/src/libcamera-v0.7.2；SDK /home/cy122/x2pro-linux/libcamera214-root，work bind串行。
+## 本轮实际能力与现存降级
 
-## 必须保留的底层修正
+379 RT(type2)create→MAP→CONFIG_IO→UNMAP→非RT(type3)create→MAP→CONFIG_IO→UNMAP→逆序destroy→PC/WFI→cooperative stop→全释放/卸载通过，两个handle同时存在。实际scratch各48字节，13msgs/14IRQ/1debug，watchdog/protocol0；CMD读写120words、MSG133words按实际长度精确吻合，剩余会话/CPU/IRQ/backing/PM/mapping均0。证据379/boot-runtime-validation.json、io-runtime-validation.json。image_frames仍0。
 
-372已取原厂故障现场并纠正异常context解码，详见372/README；真正context由arch_coredump_ptr取得，ABT SP+0x58，旧SP+32槽被C handler覆盖，不能当故障PC。373 reset→wake→10个HFI参数编程+读回→INIT_REQUEST修正真实启动错误；未测得旧CSR复位前后数值，不宣称reset清零机制已证实。
+同启动379新采四摄各12帧640×480，主摄隔离IPA27帧/5阶段/GammaACK，无新增故障/taint0。17个ICP/BPS/IPE时钟enable0、9相机电源disabled/users0、CAMSS/双CCI休眠，临时core/test/DT/固件/worker无残留。四摄与ICP证据均新生成，不能继续写“复用375同启动”。
 
-374已证明资源probe、普通BUS_BOUND及overlayapply返回后显式启动，三个ACK俱全仍在块复位后重启，排除“仅probe内运行”解释。375对照原厂正常停机，PC/WFI/CONTROL关闭读回成功后不额外assert全局ICP/AHB reset，DMA退映射后释放PM；runtime_suspend同样不额外assert。失败/未初始化/未清enable仍强制reset，失败保留CPU/RAM/PM，IRQ已关重试跳过PC。375完整启停真实通过；旧重启内部总线/看门狗机制仍未直接测定。不要回退这些修正或重新重演旧失败启动。
+378恢复启动时SSC自动启动出现旧FastRPC attach EPERM/daemon exit4模式，清理后SLPI offline、SensorProxy stopped、桌面未自动启动。379保存上下文，按实际状态临时nodeps启动greetd，依赖配置未改；桌面PW/WP/phoc/phosh各一进程已恢复。没有盲目重新attach共享池，没有重启整机。自动旋转/SSC尚不可用，不能把whole_platform_healthy写true。见379/ssc-failure-validation.json、desktop-restore-validation.json、final-state-validation.json；final-state passed仅相机/ICP收尾。
 
-## 376实现与实际证据
+## 原厂ABI与必须保留的底层修正
 
-优先复用352固定CAMSS原型ebd1e440...与Realme GPL9668fcdc.../355管理器；再次检索未取得可直接替代本机A5的实现，不代表所有仓库都没有。原型async比A5多一字段，且原固定树缺会话函数定义，不能直接套用。
+372异常现场解码、373 reset/wake后编程并读回HFI参数、375 PC/WFI/CONTROL关闭确认后避免额外全局ICP/AHB块复位、376双token与IRQ join/错误锁存修正均保留，细节见376/README与旧NEXT对应文档。失败/未知/未清CPU使能仍强制复位；复位失败保留CPU/DMA/PM。旧强制复位后重启的具体总线/看门狗机制未直接测定。
 
-原厂完整create handler指令与destroy caller片段/分配器callback/释放指令已在Unicorn执行，OS/流/分配/cache/log/postMessage为桩。create命令28/ACK32；destroy命令44/**实际ACK48**，其payload16字节而原头文件packed声明12。两个64位头token回显；destroy payload不保证回显token，ACK无handle字段。证据376/firmware-session-validation.json，所有原始汇编/回包私存。
+优先已有352固定CAMSS原型ebd1e440443121d18f730ab2aeea5586a754f36f、Realme GPL9668fcdc6ec15be7a10d66f7b93c347829e0fdb6（352/oem与355/oem/cam_icp_hw_mgr.c），CamxChi9f17f1b568626b393e785b369c5dc94543774d7a（350/sources/camxipenode.cpp与377/sources/camxipenode.h私存）。原型不完整且async多一字段，不能直接套本机。CamxChi的ipe_data.h外部依赖未取得，优先本机HAL实际指令。
 
-SoC核心新增camss_a5_ipe_create(a5,session,type2/3)、destroy及会话list，多个独立对象/命令mutex串行。对象首次需清零，并活到成功destroy或stop，不得跨owner并发复用。唯一递增双64token关联实际handle与命令，拒绝错误类型/长度/token/opcode/返回状态；duplicate handle、序号溢出也处理。排队后超时或不可信应答导致session_uncertain阻止新命令；明确FW拒绝的销毁保留handle可重试；stop先销毁已知会话，失败/未知状态走强制复位，复位失败保留会话/CPU/DMA/PM。无图像IO或frame命令，后续必须单独管理图像DMA活跃状态。
+本机HAL camera.qcom.so-private在kernel281，SHAe2b1b9b6379507052464d9f9573c2a5a1b1cf37c43947b53645ddc8948a70dde，debugELF/符号在350；原始SetConfigIOData0x2e4b88..0x2e4f00完整执行18例，确认image_desc84、format20、Y stride52/height56、UV stride60/height64、uvSwap24。payload1216（旧GPL头文件848不适用），maxBatch1192、尾userArg1208。自写encoder12组14592字节与原HAL完整输出相同，13invalid不改输出。
 
-扩展generic send_packet供SYS与会话复用，清expected后synchronize_irq，pending状态复用前加入IRQ解析。成功ACK不再覆盖同批hardIRQ watchdog/protocol错误，join期间错误在返回前重读；旧函数体25/26反例失败，新代码27路径ASAN/UBSAN通过。owner23路径、worker分发与清理模型也通过；提供者均是桩，不与硬件证据混同。
+create命令28/ACK32，destroy44/实际ACK48，CONFIG_IO间接命令40/ACK56、scratch在reply36；MAP/UNMAP直接命令56/ACK44。MAP/UNMAP **只有header状态有效，12字节tail是未初始化分配器内容**，不得再读作payload错误；CONFIG_IO与DESTROY仍检查有效payload状态。379原厂指令模型改用dirty allocator，旧parser反例失败，新parser与40会话/25owner场景通过ASAN/UBSAN。
 
-唯一376实际实验：INIT/PING→createRT(type2/active1)→create非RT(type3/active2)→destroy非RT(active1)→destroyRT(active0)→PC/WFI→正常停机/全释放/卸载。两个handle不同（core重复检测），7msgs/8IRQs/1debug、watchdog/protocol0；队列CMD读写44word、MSG61word，按INIT56/PING16/create32×2/destroy48×2/PC12精确对应，提供实际ABI长度佐证。session_creates2/destroys2/peak2/remaining0；image_frames0。还没有IPE处理图像、引擎DMA、输出画质或多摄同步证据。
+377配置槽07420000落入固件debug映射：debug存储100KiB但原始HFI_QueueGetQHdr建立07403000起1MiB映射，原始重叠检查复现首次MAP拒绝；实际377未记录精确HFI错误码。378移至07600000实机MAP/CONFIG成功，却误读UNMAP尾，二次UNMAP被拒绝，强制清理后自动重启。377/378各自attempt-audit-validation.json严格只取最新窗口，worker未落终态，不冒充正常清理成功。
 
-## 下一步
+## 下一步直接工作
 
-进入IPE CONFIG_IO、IQ/命令buffer布局和内存归属、SMMU SID与帧完成，再接libcamera m2m和已提取的Gamma/LTM/CCM。原厂头文件私存352/oem/hfi_session_defs.h中image_info约423、ipe_frame_process_data479、hfi_cmd_ipe_config507；355/oem/cam_icp_hw_mgr.c create4555、destroy2731、ACK1758/1875/2084，配置IO和patchbuffer查相关函数。优先复用已有源，必要时只按固定路径取文件，禁止partial clone全目录git grep触发海量lazyfetch。
+进入IPE frame处理所需的图像/命令/IQ/striping/CDM布局、DMA所有权与完成通知；控制配置已有真实硬件证据，无需重复同一握手/配置来回扫描。核对原厂GPL管理器buffer patch、acquire/config/frame流程和HALSetup/striping路径，按固定文件取源，禁止partial clone全树git grep导致海量lazyfetch。
 
-当前temp overlay只使用A5 SID0x2222（SM8150v2），A5、BPS、IPE引擎的DMA权限/共享域与SID不能直接等同，必须核对原厂DT和当前主线绑定，避免抢现有CAMSS的stream。HFI IO区域从0x10c00000起，已加载的firmware/shared/heap有固定别名；新增图像/IO配置buffer应走现有内核DMA/IOMMU API并落实寿命/缓存/错误回滚，不能用户空间MMIO或盲写地址。两个会话的创建成功未验证这些数据面。
+A5当前SID2222只证明控制CPU映射，IPE/BPS引擎SID、上下文/共享域不能等同。图像缓冲走内核DMA/IOMMU和明确寿命/缓存/错误回滚，不能抢CAMSS现有stream，不能用户空间MMIO。命令别名07600000/4KiB已避开固件队列映射，处于既有shared保留窗口；没有新板级DT保留区。确认引擎帧完成与输出后再接libcamera m2m及Gamma/LTM/CCM。
 
-第五2MP身份仍未知（OV02A1B库名非硬件识别，前摄共享PHY2/MCLK2/reset12，GPIO29选择待解）；更多模式、动态FrameDurationLimits、自动防频闪、光学/几何/同步/连续AF仍待，见363/REMAINING-CAMERA-SCOPE.md。延期纯色遮光可后做。整体goal继续active。
+第五2MP身份仍未知，OV02A1B库名不算识别；共享front PHY2/MCLK2/reset12与GPIO29 mux待解。更多模式、动态帧时长、自动防频闪、光学/几何/同步/连续AF等见363/REMAINING-CAMERA-SCOPE.md。延期纯色/遮光可后做，整体goal active。
 
-## 私存与回退
+## 私存、工具与回退
 
-公共Git /home/cy122/edk2-samurai/repo，范围Platform/Realme/sm8150；根目录不是Git。私存E:/edk2-samurai-out/kernel376含模型/模块/成功实验完整日志和原厂ABI回包。原厂ELF kernel352/CAMERA_ICP.elf-private，3,630,392 bytes SHA a22bc8adbb4ae97e4f8d728eecb1fd19c1bf866250b0bb7e668951c41c159e63。objdump -m armv7；Unicorn /home/cy122/x2pro-linux/private-k329-venv/bin/python。原固件、完整日志/异常现场、个体校准与密钥仅私存。
+公共Git /home/cy122/edk2-samurai/repo，范围Platform/Realme/sm8150；根目录不是Git。原厂ELF kernel352/CAMERA_ICP.elf-private，3630392bytes SHAa22bc8adbb4ae97e4f8d728eecb1fd19c1bf866250b0bb7e668951c41c159e63。完整汇编370/firmware-armv7-private.asm，objdump -m armv7；Unicorn /home/cy122/x2pro-linux/private-k329-venv/bin/python。377/378失败pstore与379成功日志/模型/模块均私存kernel对应目录。raw固件、回包、异常、校准、密钥不进公共Git。
 
-boot366 SHA c3e4e9c85d80c8ec37605cd522cf716525ae5ebe4fa801342dbf7586c292d924，logdump365 aca01bc2c91928f1a6a6690f62d14db014351ec5049e5684590b40c3c93de8da，374恢复读回保持；375/376无刷写。boot276+logdump363、旧k298模块/logdump、362 r27/r22+338module+344private组合保留。原厂9ab00000/5MiB保留区证据356可复用。
+boot366 SHAc3e4e9c85d80c8ec37605cd522cf716525ae5ebe4fa801342dbf7586c292d924；logdump365 SHAaca01bc2c91928f1a6a6690f62d14db014351ec5049e5684590b40c3c93de8da。旧boot276+logdump363、旧k298模块/logdump与362回退包均保留。未请求push/PR，仅本地提交。

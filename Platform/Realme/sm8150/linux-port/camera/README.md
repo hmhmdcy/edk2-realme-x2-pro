@@ -1,4 +1,4 @@
-376当前：两个IPE RT/非RT独立会话实机并存后分别销毁，完整HFI/停机/卸载通过，同启动故障/taint0；尚未配置IO或处理图像。Image363/boot366/DT365/r29/r24保持，候选未永久安装；四摄证据复用375同启动结果。完整目标active。[376证据](../../reference/kernel376/README.md)。以下为历史。
+379当前：两路IPE会话各MAP/CONFIG_IO/UNMAP并销毁，完整HFI/停机/卸载实机通过，图像帧仍0；新四摄取流及主摄隔离Gamma通过。Image363/boot366/DT365/r29/r24保持，候选未永久安装。恢复启动SSC attach失败未解决，桌面已恢复，SensorProxy未运行。目标active。[379证据](../../reference/kernel379/README.md)。以下为历史。
 
 361收尾：四摄五模式十原厂线程上下文完成r28曝光／频闪／Gamma请求274帧；隔离模式仍有CAMSS队列重入错误。公共分发器修复ARM64回归通过，未打新包／未安装；设备已恢复r27/r22、338/k298及服务，taint0、资源休眠。 [361交接](../../reference/kernel361/README.md)。以下为历史。
 

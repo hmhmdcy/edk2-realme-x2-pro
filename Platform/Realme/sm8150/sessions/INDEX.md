@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [379两路IPE IO配置实机通过](../reference/kernel379/README.md)
+
 - [376两IPE会话创建/并存/销毁](../reference/kernel376/README.md)
 
 - [375原厂A5/HFI完整启停与四摄回归](../reference/kernel375/README.md)
