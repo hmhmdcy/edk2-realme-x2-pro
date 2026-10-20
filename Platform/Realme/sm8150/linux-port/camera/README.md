@@ -1,3 +1,5 @@
+362已部署：r29/config-r24、CAMSS348和原厂完整Preview调校已默认；五模式隔离137帧及Gst/PW各12帧通过。公共请求顺序与CAMSS队列重入修复，ICP/IPE及绝对光学校准继续。 [362结果](../../reference/kernel362/README.md)。以下为历史。
+
 361收尾：四摄五模式十原厂线程上下文完成r28曝光／频闪／Gamma请求274帧；隔离模式仍有CAMSS队列重入错误。公共分发器修复ARM64回归通过，未打新包／未安装；设备已恢复r27/r22、338/k298及服务，taint0、资源休眠。 [361交接](../../reference/kernel361/README.md)。以下为历史。
 
 360当前：Gamma与原厂曝光已合并、r28/r23完整包构建签名及组合检查通过，未装；手机已恢复原密钥USB SSH，原r27/338四摄各4帧正常、taint0。新候选实机及完整ICP/IPE等继续。[360详情](../../reference/kernel360/README.md)。以下为历史。

@@ -1,3 +1,5 @@
+362已部署：r29/config-r24、CAMSS348和原厂完整Preview调校已默认；五模式隔离137帧及Gst/PW各12帧通过。公共请求顺序与CAMSS队列重入修复，ICP/IPE及绝对光学校准继续。 [362结果](../../../reference/kernel362/README.md)。以下为历史。
+
 361收尾：348 Gamma模块仅临时用于请求链验证，已恢复338；k298/taint0/双CCI与CAMSS休眠。公共用户空间分发器已修，隔离CAMSS请求队列仍待修；357 IOMMU补丁及356正确板级内存候选未安装。 [361交接](../../../reference/kernel361/README.md)。以下为历史。
 
 325当前（2026-10-20）：GW1标准测试图案控制已部署，主摄两模式factory LSC渐变彩条与默认GStreamer/PipeWire通过；四摄均有LSC运行配置实机证据，广角另含真实unit，默认仍未启用。298 Image＋305长焦＋318 CAMSS＋325 GW1，libcamera r26/config-r21。维护源samurai-gw1-tpg325/4318dd1c2f7b8971b267cc50d9129e86e99bccdb；只更新GW1模块，未重建/部署完整Image。[325证据](../../../reference/kernel325/README.md)。正式光学/个体/多摄完整校准仍active。以下按历史阅读。

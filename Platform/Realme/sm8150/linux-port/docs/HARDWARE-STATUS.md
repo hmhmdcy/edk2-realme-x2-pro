@@ -1,3 +1,5 @@
+362已部署：r29/config-r24、CAMSS348和原厂完整Preview调校已默认；五模式隔离137帧及Gst/PW各12帧通过。公共请求顺序与CAMSS队列重入修复，ICP/IPE及绝对光学校准继续。 [362结果](../../reference/kernel362/README.md)。以下为历史。
+
 361收尾：已安装r27/r22与CAMSS338/k298；四摄基础取流沿用360，候选十线程上下文274帧请求通过，隔离队列仍失败；新候选未安装。ICP/IPE、完整光学与多摄校准未完成。 [361交接](../../reference/kernel361/README.md)。以下为历史。
 
 315（2026-10-19）：libcamera候选接入RAW-only、NV12-only及RAW＋硬件NV12同请求；六模式默认AE/AWB、四摄RAW-only、主摄双流／RAW-only AF和取消、一次缓冲暂停恢复通过。902请求／1405应用缓冲，868次SOF事件时间关联均匹配。RAW直接DMA，RAW-only暂保留内部PIX；事件时间不是曝光时间或硬件帧ID。仅临时候选，已恢复309，产品仍RAW＋CPU ISP，完整校准与产品接入未完成。[315实现与实测](../../reference/kernel315/README.md)。以下按历史阅读。

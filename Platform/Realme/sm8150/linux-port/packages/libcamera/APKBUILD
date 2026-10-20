@@ -4,7 +4,7 @@ maintainer="Robert Mader <robert.mader@collabora.com>"
 pkgname=libcamera
 _pkgver=0.7.2
 pkgver=9999$_pkgver
-pkgrel=27
+pkgrel=29
 pkgdesc="Linux camera framework"
 url="https://libcamera.org/"
 arch="all"
@@ -96,6 +96,9 @@ source="https://gitlab.freedesktop.org/camera/libcamera/-/archive/v$_pkgver/libc
 	0034-camss-runtime-reference-lux.patch
 	0035-camss-runtime-aec-colour-correction.patch
 	0036-camss-dynamic-lens-shading.patch
+	0037-camss-static-ife-gamma.patch
+	0038-camss-factory-exposure-program.patch
+	0039-synchronous-ipa-reentrancy.patch
 	qcam.desktop
 	$_tuning_files
 	"
@@ -261,4 +264,7 @@ e1c8fa27b388532bcff887ec6ea4bce629f04470dcd1f74ede2a027e6f3f0cb6bde0bf096d63d111
 56140973abbdc4c536d08db02eed624143ceaf2fbe852b4e1e593d57862fe8054b121d7532ad267d2116ae6127e6bec6d99069343f4743414cdf2bb2bd48add2  0034-camss-runtime-reference-lux.patch
 9eba783588792c940d9e28902fa377c061fa23b1c62e99b2c892a150ff20817d168cc7395048b8aadc5329d954ef62660d8a269bbcad07761e2593ed043c4a8b  0035-camss-runtime-aec-colour-correction.patch
 7efa753e88e7a40d7c4e9f731b158bec84fd94977fe02d4ae5fd27842914d0143239472f757a03ced30fdf06e62f8fab65b3a796066436cf1eac708e1f6f2402  0036-camss-dynamic-lens-shading.patch
+c1fdd9576f8987f5b9e1d0cab0840340337df88691321a1b5552a7345e254edca7b645cb7cfb727d816b1dec8544275d3c95c2cc0a2831f2fd86bdce3c466341  0037-camss-static-ife-gamma.patch
+b3e2cc066844727359d8ab0c03da5b83c59507c8b8be14ef732cfe3e461a9354ef0bbe8158625c37bac776b84b280157148fc507dfa6a9e8f88dea67975084ff  0038-camss-factory-exposure-program.patch
+868194789e800a1a4b6c4a3960b9d1f7bba7ece61ce095fc12609614bd1daaeac4cec5c14f0d2b37c542d196dcf7bba835e26d12ce292da09fb7f4301f5f6d9f  0039-synchronous-ipa-reentrancy.patch
 "

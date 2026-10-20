@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [362 隔离请求修复及原厂曝光/Gamma默认部署](../reference/kernel362/README.md)
+
 - [361 请求链实测、公共分发器修复与收尾交接](../reference/kernel361/README.md)
 
 ## 早期拆分与快照

@@ -1,4 +1,6 @@
-361收尾：正式配方/安装仍r27。360 r28候选完整包已构建但含旧公共base；361修复分发器并过ARM64回归，实机暴露第二处隔离队列错误，尚无下一版完整包。 [361交接](../../../reference/kernel361/README.md)。以下为历史。
+362已部署：r29/config-r24、CAMSS348和原厂完整Preview调校已默认；五模式隔离137帧及Gst/PW各12帧通过。公共请求顺序与CAMSS队列重入修复，ICP/IPE及绝对光学校准继续。 [362结果](../../../reference/kernel362/README.md)。以下为历史。
+
+360候选：libcamera r28／config r23已完整构建和签名检查，尚未安装。包含349 Gamma与359原厂曝光程序，启用私有Gamma配置需348参数ABI；公共默认YAML不变。原r27／r22配方仍为已安装版本。[360记录](../../README.md)。以下为历史。
 
 342当前：r27/config-r22已部署，CAMSS338保持。已合入个体WB/CCT、实时lux驱动CCM及动态LSC；四摄安装后显式配置通过，默认YAML无个体表。实际模式曝光表选择及正常光学校准继续。[342证据](../../../reference/kernel342/README.md)。以下为历史。
 
