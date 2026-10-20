@@ -1,35 +1,39 @@
-# 当前检查点：392（取消与输入错误恢复实测，目标active）
+# 当前检查点：393（IPE局部错误隔离已正式部署，目标active）
 
-读WORKING-BOUNDARIES.md、reference/kernel392/README.md。完整多摄／ISP校准目标仍active，用户关灯黑场／噪点不单独判故障。391全部部署资料已归档archive/NEXT-SESSION-through391-2026-10-21.md；390内核／板级与391用户空间保持，本轮无内核、DT、模块、FW、包或个体配置改动，无重启／刷写／卸载。
+读WORKING-BOUNDARIES.md、reference/kernel393/README.md。392完整交接归档archive/NEXT-SESSION-through392-2026-10-21.md。多摄／ISP校准目标仍active，用户关灯黑噪点不单独判链路故障，依赖照明的校准后做。
 
-## 新证据与实际状态
+## 已改源和正式部署
 
-在正式平台上使用真实V4L2客户端，/dev/kmsg新尾部等到本次CONFIG_IO后发取消。r1前三用例通过：输出先STREAMOFF、捕获先STREAMOFF、直接close；全部实际cancelled增加，重启帧Y正确。r1第四首次在活动作业期间才计算peer CRC，约10ms准备导致取消太晚，三个作业正常完成但取消计数不增，断言失败；该窗口保留为失败，资源已回收／服务恢复。没因客户端时序改驱动。
+修复392发现的输入错误连带peer问题：核心新增camss_a5_ipe_run_status及显式RESET_REQUIRED/REJECTED/COMPLETE结果，保留旧camss_a5_ipe_run符号／调用方式。默认全局恢复；只有配置／引擎可信、未尝试本作业transfer MAP、清理成功且临时作业映射／DMA-BUF引用均释放时，负返回才可REJECTED。任何作业MAP尝试后的负返回、失效状态／IRQ／协议／残留 backing仍默认全局停机。不是按EINVAL/ETIMEDOUT猜安全，也不是从未发过session配置命令。未知MAP/FRAME/UNMAP保留/resetACK与owner机制不变。
 
-r2只把peer准备移到启动之前，补并发取消和别名输入错误，未重跑前三。并发取消实际cancel+1，peer和同fd重启Y正确。同一个导出DMABUF作输入输出触发核心物理别名-EINVAL；当前adapter视为全设备错误、停后端/fatal，peer报-EIO。全部关闭后fatal清除，重新打开Y正确。两次失败是预期错误路径，非硬件fault注入，不能据此宣称未知DMA/IRQ/超时并发恢复完成。
+adapter仅对显式REJECTED不置全局fatal、不重启后端，坏队列ERROR/EIO后仍需STREAMOFF修复。source354 branch samurai-ipe-errors393，HEAD64aaf4f78c05f0912e658780294fbded531d87ce，干净。改boot.c/ipe.h/m2m.c三个文件，reference/kernel393/local-job-errors.patch保存完整差分。访问源码/build先284/storage.py::mounted_build()，现32GiB ext4 backing不得重建／格式化。
 
-r3只补默认r30应用恢复，无LD_LIBRARY_PATH／配置覆盖的广角GStreamer640×480 NV12完成12帧，IPE增加12/bus-errors0/fixture恢复。历史failed2和first_error=-22保持，未通过模块重载清零掩盖。实际job_abort计数4，硬件24次完成日志（20正常＋4上层取消）；26个V4L2作业=20completed+4cancelled+2预期失败。含r1失败时序窗口的真实工作量，不能重复累计或丢掉。合成正常输出7个核对有效Y，另一个r1首次正常完成的活动帧未做像素验收。精确DMA-pending瞬间未采样。
+18核心/DMA＋10实际device_work用例均ASan/UBSan通过，保留未知MAP/FRAME/UNMAP引用；固件/MMIO provider不外推硬件错误。ARM64 W=1/-Werror诊断0。首构建缺modpost依赖，补媒体依赖后通过；SG/m2m helper未变，未替换。
 
-当前累计jobs132/completed126/direct126/cancel4/failed2/first_error=-22，starts/stops20；旧391基线106。当前fatal/running/pinned/orphans/users均0。最后FW单session12帧/43消息/43IRQ，INIT/PC完成、watchdog/protocol0。三次worker/client/collector都终态，无dump/timeout、新fault0/taint0；CPU/IRQ/PM/backing/map/import释放，ICP/CAMSS/双CCI suspended，17clks0，9rails disabled/users0。PW10271/WP10274各一/uid10000，owner_refs53是桌面CAMSS句柄；测试close后曾短暂owner_refs2来自延迟fput，外层等归0后恢复桌面。
+只正式替换两个匹配模块，393-intree-r2：core352776B SHAe22253916088e58a221c1948f025c44c939c819310c7d3f67106053dd39502f6；adapter119368B SHAff2bfa7a9439b2ef67087ff6f5db8c9d26e9a92596cd1f63b14c3a047111d4c1。两者成对使用。原qcom-camss复合模块389、标准SG/helper、Image363、boot389/logdump365、DT389、FW和用户空间r30/r25保持，无重启或刷写。正常停止消费者、模块卸载/成对换文件/depmod/modprobe，最终新磁盘摘要和加载note匹配。原两文件精确backup在设备/var/lib/samurai/k393-deployment-r4/backup，private389原件仍在。
 
-不要复用旧“failed必须0/first_error必须0”作为当前健康检查，也不要因此重置平台。读392/current-state-validation.json，区分累计预期失败与活动fatal；新工作应核对计数增量。
+## 实机、失败和当前计数
 
-## 正式部署保持
+r4完整窗口：同DMA-BUF输入输出局部-EINVAL，failed只加1/fatalfalse；坏文件仍打开时peer连续两帧不同模式／时间戳／有效Y正确。坏队列单独STREAMOFF，原fd换不重叠DMA-BUF出帧，peer session保持，starts1/stops0。并发取消回归cancel1、peer与原fd重启帧正确。默认r30 GStreamer四摄各12，共48处理帧，bus0，fixture恢复，无LD_LIBRARY_PATH或私有配置覆盖。
 
-同一390启动，host392→host391→host390；guard=/var/lib/samurai/k390-active/boot-id-private.txt，经private390/postboot-adoption-private.json。原USB SSH密钥／known_hosts保持，旧378guard失效，不重新授权。真实icp@ac10000绑定qcom-sm8150-icp，正常CAMSS/ICP同模块、五模块/FW/DT永久部署，无test/overlay。
+最终r4新epoch：jobs55=completed/direct53+cancel1+预期failed1，first_error=-22累计诊断，starts/stops7；硬件完成日志54=53正常+1上层取消。最后FW单会话12帧/43消息/44IRQ，INIT/PC完成、watchdog/protocol0。不要按旧failed/first_error全0断言误判或额外清零；后续比增量和fatal。
 
-包：五libcamera 99990.7.2-r30，config/stack0.1.0-r25；391共13包/7实装，完整功能保留、六IPA签名通过且二进制同r29。四份个体/etc Preview配置未改，公共包无个体表。部署核心SHA b948765ea94423d628a1d455a7de8f737a84b45b3bee969a949b6886a4dee6b8；维护源/mnt/samurai-full282/libcamera391-ipe-r30-built/src/libcamera-v0.7.2。正常包配方已更新。391原默认四摄／RAW／隔离IPA82＋PipeWire12共94direct证据保持，不重复全部回归。
+失败均保留，核心源/模块未变：r1误判静态device应消失，旧文件没替换，独立恢复原平台/桌面；r2 probe瞬时owner1未等待，自动回退；r3客户端offset16无额外空间，peer两帧已成功但同fd修复QBUF失败，自动回退。r4用offset0补齐通过。细节见attempts-validation和README，不重跑已有worker。r3两帧不计入r4的53，全尝试日志共56帧。392旧132已在正常卸载前归档，各模块epoch不得混算。
 
-WSL Ubuntu root，源码/build访问先284/storage.py::mounted_build()；现32GiB ext4 backing不能格式化／重建。驱动source354 branch samurai-icp-platform389，HEAD a3c2b4cfacad2eefaadd4ef3efd35de3d9244d07，干净。Image363/源ba61a62293e0f6bc5838c06f2e85e033e3d702a8，release7.3.0-rc6-rmx1931-samurai-k363+；后续模块源不同。boot389 SHAe0256ff5bad0f6a2139de8690974d5fc25a0b58cad4cec1bb22f26bf0280884f，logdump365 SHAaca01bc2c91928f1a6a6690f62d14db014351ec5049e5684590b40c3c93de8da保持。实际DT389七SID/5仅IOVA节点，原camera_mem保持。
+current-state：新两文件及loaded note、原两备份相符，原CAMSS note未变；七包仍r30/r25、四份私有配置SHA保持。CPU/IRQ/PM/backing/map/import回收，ICP/CAMSS/双CCI suspended，17clks0，9rails disabled/users0。PW12387/WP12390各一/uid10000；m2m users0/runningfalse/fatalfalse/pinnedfalse/orphans0，owner_refs53为桌面CAMSS句柄，非缓冲数。四窗口全部worker/client/collector终态，无dump/timeout/newfault，taint0。无后台实验。
 
-389-intree-r4 qcom-camss SHA24fcfa685d07eb8d0e1a0b8356d9ee005e5413faf29c1b384e8c79c364630288，adapter SHAa0167f6acce4edad159d43101a723846ed494cf71fe3bb27857d2d145b44a7b8；core/helper/SG同388，新SG owner符号不可混旧SG。原778＋新增3=781。FW=/lib/firmware/qcom/sm8150/camera-icp.elf/SHAa22bc8adbb4ae97e4f8d728eecb1fd19c1bf866250b0bb7e668951c41c159e63。390正常卸载/重载、owner导出生命周期和111direct已实测。
+## 保持的启动／用户空间与回退
+
+同一390启动，host393→392→391→390，guard=/var/lib/samurai/k390-active/boot-id-private.txt，private390/postboot-adoption-private.json；原USB密钥/known_hosts不变，旧378guard失效，勿重授权。真实icp@ac10000绑定qcom-sm8150-icp，CAMSS/ICP同模块，静态7SID/5仅IOVA节点，无test/overlay。静态device在卸载后应仍存在，要查driver和m2m_status是否注销，不能要求device目录消失。新probe可能有临时owner1，等其归0且无作业、无FW启动后继续。
+
+Image363/release7.3.0-rc6-rmx1931-samurai-k363+、boot389/logdump365、原qcom-camss复合模块和SG/helper、7SID/5IOVA板级DT与原厂FW保持；具体摘要／来源见源锁、393 README及archive/NEXT-SESSION-through392-2026-10-21.md。当前只是core/adapter新pair，不是完整Image重建；模块总781不变，新SG owner API不可换回旧SG配现adapter。
+
+五libcamera r30/config-stack r25保持，用户空间维护源libcamera391-ipe-r30-built；391四摄／RAW／隔离IPA／PipeWire与六IPA签名证据复用。
+
+393 pair回退：先停消费者并确认DMA/owner0，卸载qcom_camss→adapter→core，成对恢复r4/backup原两文件、depmod、modprobe正常CAMSS并恢复服务；r2/r3已走通。不得重跑已有state的worker。用户空间旧七包仍391，整个平台原CAMSS/SG与原缺失三模块/FW记录、boot366仍390；细节见归档，restore-files.py只恢复文件/depmod，不切已加载代码，不全量重装778模块。
 
 ## 下一步和完整范围
 
-本轮发现已知未提交图像DMA的输入别名拒绝仍让peer失败。优先让SoC核心明确报告安全局部拒绝／已提交／未知完成边界，adapter只隔离可证明安全的局部错误；不能仅按errno猜测、不能放松未知MAP/FRAME/UNMAP的引用保留及A5/IRQ+IPE resetACK。真实硬件错误并发仍待独立验证。
+真实硬件错误／未知完成的并发恢复仍未实测；不能把提交前局部拒绝或模型故障当作硬件fault证明。继续原厂Gamma/LTM/CCM完整IQ与reference/kernel363/REMAINING-CAMERA-SCOPE.md全部：第五2MP身份/mux、多模式、动态帧长/防频闪、几何/多摄同步、连续AF和光学画质。仍1:1 NV12/NV21 IQ旁路，异步implicit-fence发布/缩放未证明；不因局部隔离完成缩小总目标。低光照后做相关标定，旧SSC间歇EPERM/daemon4未宣称修复。
 
-然后推进原厂Gamma/LTM/CCM完整IQ，保留reference/kernel363/REMAINING-CAMERA-SCOPE.md全部第五2MP身份/mux、多模式、动态帧长/防频闪、几何/多摄同步、连续AF与光学画质。仍1:1 NV12/NV21 IQ旁路、显式V4L2所有权，异步implicit-fence发布/缩放未证明；不得把取消验证缩成总目标完成。光照相关测试等合适环境，旧SSC间歇EPERM/daemon4未宣称修复。
-
-回退：391设备k391-install-r2/repository/rollback有签名r29/r24七包，backup有world/repo；r1已实测回退，r2新包保持。内核仍390原两模块/原缺失三模块与FW记录、boot366 SHA c3e4e9c85d80c8ec37605cd522cf716525ae5ebe4fa801342dbf7586c292d924；restore-files.py --offline-files-only只恢复文件/depmod，须停消费者回收DMA并配合boot366，不全量重装778模块。392未执行任何回退。
-
-保留373/375/376/379启动与ACK、381未知DMA/reset、388 DMA-only SG禁sg_page/sg_phys及自有IOMMU别名、377/378失败审计、383 Unicorn全局MEM_READ破坏ThumbIT/SP。private=/mnt/e/edk2-samurai-out/kernel392及前序，FW/HAL/ASM/CDM/全日志/图像/个体配置不公开。公共mirror=/home/cy122/edk2-samurai/repo/Platform/Realme/sm8150，只有本地提交，不push/PR，保留其它改动。
+保留373/375/376/379启动与ACK、381未知DMA/reset、388 DMA-only SG禁sg_page/sg_phys及自有IOMMU别名、377/378失败审计、383 Unicorn全局MEM_READ破坏ThumbIT/SP。private=/mnt/e/edk2-samurai-out/kernel393及前序；FW/HAL/ASM/CDM/全日志/图像/个体配置不公开。公共mirror=/home/cy122/edk2-samurai/repo/Platform/Realme/sm8150，仅本地提交、不push/PR、保留其它改动。
