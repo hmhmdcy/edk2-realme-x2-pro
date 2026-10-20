@@ -1,4 +1,4 @@
-388当前：IPE核心直接DMA，原生18＋libcamera81共99帧通过，导出FD/mmap平台所有权实测；原SG/CAMSS恢复后四摄回归通过。未永久安装，正式平台/板级部署、硬件错误并发与完整IQ/多摄校准仍待，目标active。[388证据](../../reference/kernel388/README.md)。以下为历史。
+389当前：正常CAMSS/ICP共享模块owner、板级七SID/IOVA候选与实际EDK2 DT载体已构建验证，尚未部署；手机保持388收尾状态，最近实机仍为388。下一步正式启用及回归，完整IQ/多摄校准目标active。[389证据](../../reference/kernel389/README.md)。以下为历史。
 
 361收尾：四摄五模式十原厂线程上下文完成r28曝光／频闪／Gamma请求274帧；隔离模式仍有CAMSS队列重入错误。公共分发器修复ARM64回归通过，未打新包／未安装；设备已恢复r27/r22、338/k298及服务，taint0、资源休眠。 [361交接](../../reference/kernel361/README.md)。以下为历史。
 

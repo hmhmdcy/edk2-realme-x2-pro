@@ -6,7 +6,7 @@
 
 | 需要了解 | 唯一维护位置 |
 | --- | --- |
-| 当前适配进展 | [388 IPE直接DMA、导出所有权与99帧实机](reference/kernel388/README.md)、[当前检查点](NEXT-SESSION.md) |
+| 当前适配进展 | [389 正式CAMSS/ICP平台与板级部署候选](reference/kernel389/README.md)、[当前检查点](NEXT-SESSION.md) |
 | 最后核对的部署、源码/产物差异、回退依据与续作项 | [NEXT-SESSION](NEXT-SESSION.md) |
 | 历史清理、保留产物与重建方法 | [2026-10-19交接](reference/maintenance-2026-10-19/README.md) |
 | 当前有效操作规则 | [WORKING-BOUNDARIES](WORKING-BOUNDARIES.md) |

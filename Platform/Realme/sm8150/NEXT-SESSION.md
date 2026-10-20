@@ -1,39 +1,35 @@
-# 当前检查点：388（IPE直接DMA与导出owner实测，目标active）
+# 当前检查点：389（正式 CAMSS/ICP 部署候选，目标active）
 
-先读WORKING-BOUNDARIES.md、reference/kernel388/README.md。387交接归档archive/NEXT-SESSION-through387-2026-10-21.md。用户已关灯，黑场／噪点按低照度解释，不能单凭亮度判故障；照明校准后做，不阻塞底层。完整目标未完成、未暂停、未blocked。
+先读WORKING-BOUNDARIES.md、reference/kernel389/README.md。388交接归档archive/NEXT-SESSION-through388-2026-10-21.md。本轮是实质源码／构建／部署候选进展，没有设备状态切换。完整目标仍active；用户关灯条件继续，黑／噪点不单独判故障。
 
-## 源与设备
+## 当前源码与产物
 
-WSL Ubuntu root。源码／build访问先reference/kernel284/storage.py::mounted_build()，持久ext4 /mnt/samurai-full282，绝不格式化／重建32GiB backing。主源source354，branch samurai-ipe-direct-dma388，HEAD95caf30a629bbaf454ebfc9ed25ce16ea3a952b5，父3878003933b7e31e4b5f4d27d21789d42da686831ba，干净。source-state.json、direct-dma.patch为最终；prepare-source.py仅初稿，后续脚本修正过。close-current确认最终源／proposed／父提交补丁一致。
+WSL Ubuntu root，任何源码/build访问先reference/kernel284/storage.py::mounted_build()，持久ext4 /mnt/samurai-full282；绝不格式化／重建32GiB backing。source354分支samurai-icp-platform389，HEAD a3c2b4cfacad2eefaadd4ef3efd35de3d9244d07，干净，父38895caf30a629bbaf454ebfc9ed25ce16ea3a952b5。source-state.json、platform-and-board.patch为最终，verify-source已核对源/proposed/父提交patch。实际模块r4源fcaf366...，最终只修YAML pattern；DTB源bdce399...，DTS后续未改。
 
-libcamera沿用387候选，/mnt/samurai-full282/libcamera387-ipe-built/src/libcamera-v0.7.2；库SHA60181b3cd025febfeb1812996bc63aaa53721a47ba45bd6ef1d3f92596329c3d，dispatcher/IPA未变。core350472B、adapter118752B、新SG100104B，private388 *-intree-r4.ko，W1/-Werror无诊断，9目标，共享build输出/config/symvers恢复。核心与较早307001测试版本相同，adapter后补owner。
+新增camss-icp-platform.c，匹配qcom,sm8150-camss-icp，不含overlay／测试参数／固件RAM读取；probe不请求固件或释放CPU。正常CAMSS与ICP同一个qcom-camss模块所有者，注册CAMSS→ICP、退出逆序。IPE contexts/exports/retained DMA因此同时保留共享CPAS供应者；两driver suppress_bind_attrs，静态设备，不声称任意热拔插。PM回调复用core，系统挂起委托runtime PM，backing忙时拒绝断电。
 
-手机同一378恢复boot，host388委托387→378→371→360原USBkey／known_hosts，guard /var/lib/samurai/k378-recovered/boot-id-private.txt。Image363/boot366内DT365、五包r29/config-stack r24、362四个私有Preview不变。没有永久安装／刷写／重启。静态ICPdisabled／仅SID2222；七SID仍临时owner。SSC旧EPERM/daemon4/SLPI offline未修，不盲重启DSP。
+m2m bound回调改bool(struct device*)，正式路径用device_is_bound，旧test回调也已适配。允许NULL owner供built-in；owner_refs对NULL安全。模块态真实Kconfig选ICP=y、CAMSS/core/m2m=m；26例provider覆盖module/builtin参数，未构建完整builtin vmlinux。owner_refs如今是整个qcom-camss的引用数，PW/WP打开普通相机也计数；不能当导出buf数，停桌面服务后再判断0。
 
-## DMA与所有权
+private=/mnt/e/edk2-samurai-out/kernel389。*-intree-r4.ko：qcom-camss2838304B/SHA24fcfa685d07eb8d0e1a0b8356d9ee005e5413faf29c1b384e8c79c364630288；adapter118944B/SHAa0167f6acce4edad159d43101a723846ed494cf71fe3bb27857d2d145b44a7b8。core350472B/SHA036f590...，helper/SG及其它4vb2均与388二进制一致。标准SG含388新增owner导出符号，旧SG不能加载新adapter/CAMSS。现有v4l2-isp与新产物全哈希不同，但.text/.rodata完全一样，保留现有ISP模块。11目标W1/-Werror无诊断，build相关目录/config/symvers均恢复。所有build exec会话已终态。
 
-新增camss-icp-a5-dma.c/h：核心持有DMA-BUF/attach/map，同一A5+IPE域直接DMA IOVA，校验偏移／连续DMA区间／32位／物理重叠。物理地址经自有IOMMU域查询，不能读导入sg_page/sg_phys，DMABUF_DEBUG剥离页字段。直接模式不分配image_input/output或复制像素，保留旧CPU fixture。未知MAP/FRAME/UNMAP继续保留，A5/IRQ+IPE reset/quiesce完成才放。
+SoC DTS完整7SID但默认disabled；Samurai候选status=okay，firmware-name=qcom/sm8150/camera-icp.elf，原camera_mem9ab00000/5MiB/no-map不变，加入五个仅iommu-addresses的保留节点，未新增物理RAM。DTB samurai389-private.dtb115927B/SHA0cc9dfd29044d7ca9ed2dbadbb62cedacd0298eba23fce377112ffe70d3b5db7；970个变化引用单元目标路径保持，其余属性语义不变。dtschema2026.9验证新binding及实际DTB，四个负例拒绝；本地binding草案未上游评审。验证范围不外推全板binding。
 
-m2m用标准vb2_dma_sg，MMAP也经DMA-BUF进入核心。新增通用vb2_dma_sg_get_dmabuf_owner指定原始导出文件owner；旧接口THIS_MODULE行为不变、公共vb2结构体ABI不改。实际平台owner依赖adapter→SG，DMA-BUF allocator release完成后才module_put。m2m只覆盖get_dmabuf，status新增owner_refs。平台临时驱动suppress_bind_attrs，正式解绑生命周期尚待。
+EDK2真实载体boot-partition-k389-icp-platform.img100663296B/SHAe0256ff5bad0f6a2139de8690974d5fc25a0b58cad4cec1bb22f26bf0280884f。与boot366逐FFS比较仅DT模块变，其它固件代码/数据、shim/ramdisk/Android头/compat/尾部不变；30个既有诊断模板，无新增。仓库DT及3个共享固件输出恢复。回退boot366私有原件SHAc3e4e9c85d80c8ec37605cd522cf716525ae5ebe4fa801342dbf7586c292d924。
 
-原型wrapper c0fc6e...仅构建、未上机，因内层deferred fput/observer问题revert到cd30cba...，不要复用unused-*。最终95caf...要求新SG符号，原SG不能加载新adapter；只能在framework事务或正式完整部署中使用。
+## 下一步：实际部署与回归
 
-显式V4L2 QBUF/DQBUF所有权，导入前等已有fence；未实现／证明完整异步implicit-fence发布互操作。去复制范围限候选m2m／libcamera→核心图像路径，不外推所有应用。仍1:1 NV12/NV21／IQ旁路，未宣称缩放或完整IQ。
+部署清单deployment-manifest-private.json、完整deployment-bundle-private.tar.gz已生成／成员重核；含boot、5模块、原厂ELF，未上传。完整包约24MB，不通过短超时SSH stdin整包上传。modules-firmware-private.tar.gz是分离的小包，module-stage-manifest-private.json带boot摘要关联；boot继续复用原本本地fastboot流程。prepare-package.py和prepare-module-payload.py非幂等，已有产物先查，不要重跑覆盖。
 
-## 最终实机及失败
+先核对实际boot和模块文件存在/缺失、initramfs是否包含旧相机模块、原依赖和原文件离线回退，再设计守护事务：精确5模块(CAMSS/core/adapter/helper/SG)＋原厂ELF＋depmod，正式DT载体；保留Image363、logdump365、已安装r29/r24，不重装全部778模块。参考366/build-boot.py、prepare-deployment.py/flash-boot.py的验证流程，但必须用现在378guard及boot366回退，不能直接运行旧guard旧rollback脚本。
 
-/var/lib/samurai/k388-framework-r1，outer25554及native/pipeline客户端collector均终态。事务停PW/WP→卸原CAMSS/SG→临时新SG→重载原CAMSS→两套测试→恢复磁盘原SG/CAMSS并核对note/文件→已安装四摄各12帧回归→恢复服务。未覆盖原模块磁盘文件。final framework-runtime-validation通过。
+手机未改：同一378恢复boot，host389→388→378→371→360原USB SSH key/known_hosts；guard /var/lib/samurai/k378-recovered/boot-id-private.txt。current-state只读核对原CAMSS/SG文件和loaded-note一致、候选模块/正式FW不存在、静态ICPdisabled、taint0、CAMSS双CCI suspended。Image363/boot366/DT365、五包r29/config-stack r24和362私有Preview仍在；SSC旧EPERM/daemon4/SLPI offline未修，勿盲重试DSP。389无后台设备worker。
 
-导出探针关闭video FD后users0/jobs0/owner_refs1；关DMA-BUF FD只留mmap仍1；内容正确，最后munmap归0。原生18帧：NV12 MMAP6、NV21 stride672/sourceoffset16 DMABUF4、双并发各4。最终管线81：四摄各12、主摄RAW+NV12六、RAW-only六不启IPE、隔离主摄27/五阶段/GammaACK1。总direct99/copy0/cancel0/failed0；原始IFE时间戳与SOF保留。没有实测取消分支或HW错误并发。
+启用后检查真正icp@ac10000正常driver绑定、无test模块和临时overlay，再验证导出FD/mmap保留共享owner、原生像素、四摄libcamera/主摄RAW/隔离IPA、已安装IFE路径和恢复。libcamera继续先复用387私有候选，SHA60181b3cd025febfeb1812996bc63aaa53721a47ba45bd6ef1d3f92596329c3d；正式用户空间包后续落地。389没有正式driver实机帧，不把388的99 direct/0copy/0cancel/0failed移作389证明。
 
-check-framework-pixels独立核对18帧输入CRC／客户端每帧Y相同、各组末帧全图CRC/UV；UV MAE.203125不变，padding保留调用方0xa7（旧bounce0xa5）。模型20503 DMA边界、13核心生命周期、4导出生命周期ASAN/UBSAN均通过，不能代替完整硬件故障并发。
+## 审计与完整范围
 
-先前native-r1因读取DEBUG SG页字段失败，未提交图像、具体旧errno未记录；r2修好18帧、早期pipeline-r2为81。pipeline-r1上传中断，目录/worker未创建，孤立接收Python23617经pidfd核对终止。现已缓存校验复用大库。close-current首次核对器误把unified/git两种diff字节比较，修核对器后通过，不是源码错误。attempts-validation保留全部。
+r1属性组命名编译错已修；r2 modpost漏v4l2-isp构建目标已补；r3通过后加空固件名检查，最终r4通过。DT核对器补齐hwlocks/resets/GPIO等已有引用属性后逐单元核对，没有允许其它属性变化。schema标准路径修正，minLength换合法pattern；26模型／4负例通过。失败均未上机。
 
-current-state：所有本轮worker/client/collector不活跃，原SG和CAMSS恢复，临时模块/video/media/FW移除，taint0、CAMSS/双CCI suspended、9rails disabled/users0，PW25932/WP25938各一。PID仅历史证据，后续查实态。
+388直接DMA的DMA-only SG与自有IOMMU域物理重叠校验、未知完成保留DMA、A5/IRQ+IPE resetACK后释放仍有效；显式V4L2所有权，不声称完整implicit-fence发布互操作。继续正式部署、在途取消/硬件错误并发，原厂Gamma/LTM/CCM完整IQ，以及363/REMAINING-CAMERA-SCOPE.md全部：第五2MP、多模式、动态帧时长/防频闪、几何/多摄同步、连续AF。383 Unicorn全局MEM_READ破坏ThumbIT/SP陷阱，373/375/376/379、381、377/378失败审计保留。
 
-## 接续
-
-优先正式SoC平台owner／板级启用，补显式在途取消／硬件错误并发，再接原厂Gamma/LTM/CCM完整IQ与reference/kernel363/REMAINING-CAMERA-SCOPE.md全部范围：第五2MP身份、更多模式、动态帧时长／防频闪、几何／多摄同步、连续AF。不得缩成只四摄或99帧。
-
-继续保留373 reset后HFI、375 PC/WFI、376 token/严格ACK、379 MAP/UNMAP长度、381七SID/DMA retain与resetACK、377/378失败审计。383 Unicorn全局MEM_READ破坏Thumb IT/SP，只用有界hooks+完整CDM/job比较。原FW/HAL/汇编/CDM/完整日志/图像/个体校准仅private。公共mirror /home/cy122/edk2-samurai/repo的Platform/Realme/sm8150，本地提交，不push/PR，保留其它改动。
+FW/HAL/汇编/CDM/日志/图像/个体校准仅private。公共mirror /home/cy122/edk2-samurai/repo的Platform/Realme/sm8150，只本地提交，不push/PR，保留其它改动。
