@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [383原生分区与原厂CDM差分](../reference/kernel383/README.md)
+
 - [382内核ICA默认配置与幅度修复](../reference/kernel382/README.md)
 
 - [381实机首帧IPE像素通路](../reference/kernel381/README.md)

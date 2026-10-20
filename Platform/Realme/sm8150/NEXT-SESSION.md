@@ -1,53 +1,59 @@
-# 当前检查点：382（内核ICA默认配置修复幅度，实机Y精确一致；完整目标active）
+# 当前检查点：383（内核原生分区组件与原厂CDM差分；完整striping未完成，目标active）
 
-先读WORKING-BOUNDARIES.md、reference/kernel382/README.md。上一轮382取得底层实机修正，属于progress。381完整交接存archive/NEXT-SESSION-through381-2026-10-20.md，380更早交接也保留；遇到未详列的生命周期、资源及失败历史先查这些文件。
+先读WORKING-BOUNDARIES.md、reference/kernel383/README.md。本轮增加SoC分区算法并构建，建立完整原固件准备差分验证器，属于progress；未改设备。382完整交接保存在archive/NEXT-SESSION-through382-2026-10-20.md，381/380旧交接也保留，具体DMA/复位修正不能丢。
 
-## 最新结果和状态
+## 当前源、设备和实机范围
 
-仍是378恢复后的同一启动，guard `/var/lib/samurai/k378-recovered/boot-id-private.txt`。用reference/kernel382/host.py（委托381→380→379→378动态guard），原密钥USB/known_hosts严格验证不变。本轮一次 `/var/lib/samurai/k382-boot-r1` worker11416，collector均finished/terminal/passed且已退出。没有刷写、主机重启命令或永久安装，不可重演同名事务。
+维护源 /mnt/samurai-full282/source354，分支samurai-a5-ipe-partitions383，HEADa9f823f210344ab551e4859b4889358916345fbb，父38247475238dc6a0d4b28a5db22b0c1af223dc50297，干净。383核心304424字节SHA c80e564872f5c9cbfe376c6da77a48a9494dd067f14d36dbe71d17c02eceedb2；测试100104字节SHA2281097c4c94e17a643a0bc15880ae903a3e08c6da42dc563d5d017688fe5a98，与382相同。真实k363配置in-tree/W1/-Werror无诊断，未安装。
 
-382同输入/同striping/同域与映射，内核ICA默认值使640×480 NV12的307200个Y字节全与输入一致，修正381的Y=input/4。UV143040/153600字节一致，MAE0.203125，U差异全在阶跃横向4个亮度像素内，V在2色度行内；离开这些邻域完全相同，实际滤波/舍入算法未证。不宣称全平面identity或完整IQ/光学校准。本次四默认值同时改变，未硬件隔离单字段因果。输入/输出CRC3426410711/3085177422，主机重算吻合，raw只私存382。
+仍是378恢复启动，guard `/var/lib/samurai/k378-recovered/boot-id-private.txt`；用reference/kernel383/host.py委托382→381→380→379→378动态guard，严格原密钥USB/known_hosts不变。383只读确认taint0、CAMSS/双CCI休眠、ICP模块与临时固件无残留、静态ICPdisabled。未启动新候选、刷写、重启或相机重采。
 
-事务INIT/PING、两RT/非RT handle并存各CONFIG_IO（scratch48/48）、RT一帧、MAP/UNMAP、两destroy、PC/WFI、cooperative stop、所有DMA/PM与卸载通过。frame opcode6/间接40/ACK72，CMD158/MSG173words，16msgs/17IRQ/1debug，wd/protocol0，最终所有pending/FWmap/backing/PM0。见382/boot-runtime-validation.json、io-runtime-validation.json、pixels-validation.json、chroma-validation.json。
+最近实机仍是382 /var/lib/samurai/k382-boot-r1 worker11416，collector均finished/terminal/passed退出。INIT/PING，两RT/非RT handle并存各CONFIG_IO（scratch48/48），RT一帧640×480、FRAME40/ACK72、图像MAP/UNMAP、双destroy、PC/WFI/cooperative stop、全部DMA/PM/模块回收；CMD158/MSG173words、16msgs/17IRQ/1debug、wd/protocol0。Y307200字节全等输入，UV MAE0.203125，仅U阶跃4亮度横向像素内/V阶跃2色度行内有差，实际滤波/舍入未推导。完整IQ/光学校准未验，不能叫全平面identity。实际输入输出只私存382。
 
-382只改IQ初始化/接口，未改四摄/板级/用户空间，复用381同启动四摄各12帧640×480、主摄隔离IPA27帧/5阶段/GammaACK1，未重复采集。新收尾taint0、CAMSS/双CCI休眠、9rails disabled/users0、17ICP/BPS/IPEclk enable0，临时DT（含images）/模块/两固件文件/worker无残留。见382/final-state-validation.json。SSC旧attach失败/daemon exit4、SLPIoffline、SensorProxystopped仍在；桌面379恢复后保持，未盲目reattach/改依赖，不宣称全平台健康。
+最近四摄仍381同启动imx471/imx319/s5k3m5/s5kgw1各12帧640×480、主摄隔离IPA27帧/5阶段/GammaACK1；未重复未改组件。382收尾9rails disabled/users0、17ICP/BPS/IPEclk enable0等保持为最近完整资源证据；383只读复核相关PM/残留。SSC旧attach失败/daemon exit4、SLPIoffline/SensorProxystopped未修复，桌面379恢复后保持，不宣称全平台健康。
 
-实际Image363／7.3.0-rc6-rmx1931-samurai-k363+，boot366嵌入DT365，libcamera五包r29、config/stack r24及362四份私有Preview保持，原厂曝光/手动频闪、IFE Gamma、unitWB/CCT与动态LSC/CCM保持。静态ICP disabled，仅A5 SID2222。
+实际Image363/7.3.0-rc6-rmx1931-samurai-k363+、boot366嵌入DT365、libcamera五包r29、config/stack r24与362四份私有Preview保持。原厂曝光/手动频闪、IFE Gamma、unitWB/CCT与动态LSC/CCM保留。实际Image源码ba61a62293e0f6bc5838c06f2e85e033e3d702a8、DT源码e217016006e609333a715c10f2f3e442dc4da95f不变。
 
-## 维护源与新增实现
+## 383新增可复用代码
 
-维护源 /mnt/samurai-full282/source354，branch samurai-a5-ipe-alignment382，HEAD47475238dc6a0d4b28a5db22b0c1af223dc50297，父38124a9f41f97c9fbadf5f941bde2d22fe3ac59c6c8。实际Image源码ba61a62293e0f6bc5838c06f2e85e033e3d702a8、DT源码e217016006e609333a715c10f2f3e442dc4da95f不变。382 core302520字节SHA36bf8d8bd3a0bd0258b6303349469afedf02c13d849e3c4e851990c2161bd7b5，test100104字节SHA2281097c4c94e17a643a0bc15880ae903a3e08c6da42dc563d5d017688fe5a98。实际k363配置in-tree/W1/-Werror无诊断，临时模块已卸载。
+camss_a5_ipe_bypass_partitions(width,cores,output,capacity,count)写u16 inclusive fetch/output范围，从右到左；仅模块关闭、全帧1:1、8位NV12/NV21。width偶数128..8192，core1/2，分区数量ceil(width/328)再向core倍数取整，边界floor(width*i/count)向下对齐2，fetch边界向外4像素并限幅。非法参数/容量不足先拒绝，输出/count不改。不是固定320宽：328单核1条、330两条、656两条、658三条，双核再取偶数。
 
-SoC/驱动新增camss_a5_ipe_encode_bypass_iq，清零2584字节后四个u32偏移52/68/244/260置1，分别ICA1/2 invalidPixelModeInterpolationEnabled和eightBitOutputAlignment。API camss_a5_ipe_job已移除iq/iq_bytes，核心自行生成；测试模块只加载samurai-ipe382-stripe.bin，不再要外部IQ。board复用381临时overlay无改，主线框架/用户空间无改，未做软件乘4补偿。
+76组与完整原HAL算法一致，含临界邻域、不同高度、端口8/9、NV12/NV21；ASAN/UBSAN，无空洞/重叠/fetch越界，真实内核构建通过。函数只是范围组件，尚未接入run，不生成全striping blob、不消除私存文件依赖。下一步必须完成序列化再实机，不把该组件当完整后端。
 
-证据：固定CamxChi IPENode源350/sources/camxipenode.cpp对应逻辑；本机HAL原指令2e08a8..2e08c4（caller x25=IQ、有效sp夹具）实际执行四store；完整HAL request未执行。原FW18b12..18b26将ICA IQ+68归一化布尔，1528e..152a4写两引擎ICA_TOP_EIGHT_BIT_OUTPUT_ALIGNMENT寄存器0x129c/0x169c，原始指令执行8cases。完整引擎handler未在模型执行。原HAL完整striping差分5cases（zero、ICA1align、ICA2align、both、fourdefaults）输出与380脏初始化baseline逐字节相同，仅640×480端口8核心1；更多新默认配置组合待扩展。
+原厂stripe布局显示输出范围在每stripe+20，视频输出在+24；fetch在+4/+6。最初额外port9比较错用+20，修正oracle读偏移后通过，未改原生算法来迎合错误fixture。完整metadata字段和closed模块语义仍须继续推导。
 
-IQ实际函数体ASAN/UBSAN，所有short/null无写、oversized尾不变，输出与HAL片段2584字节一致。transfer24cases在提交时核对所有IQ字节，同时验证旧不确定DMA/复位失败retain/globalfree路径；owner26/worker7/dispatch10通过。详见382模型与补丁。381资源/SID/quiesce与380帧编码器未改，已有证据复用。
+## 新原厂验证器与观察器陷阱
 
-## 下一步直接推进
+reference/kernel383/engine_model.py::prepare执行原FW DoFirstRead0x7998、完整CONFIG_IO0x16534、FRAME_PROCESS准备0x17f30，停在HardwareDriver_EnqueueJob入口0x220a2。模型版本寄存器0xe0040000=0x10705，原函数得到chip3/info100664；不是从手机新读出的版本值。OS分配器、日志、流句柄/私有上下文与命令回收建模；几何/拓扑/FE/WE/ICA/CDM原函数并未替换为桩。没有执行硬件enqueue、engine或pixelDMA。
 
-当前仍依赖原HAL算法生成的私存striping文件，尚不能成为独立通用m2m后端。优先把已核实的8位线性NV12模块关闭几何/striping生成收敛到内核，按保留原厂完整算法差分；扩展尺寸、端口8/9、核心1/2与连续帧，随后接V4L2 m2m/libcamera及原厂Gamma/LTM/CCM。避免只重复相同单帧作为新进展。未实现IQ模块语义/完整调优，不能将旁路验收替代全目标。
+原HAL完整striping×原FW准备验证12组640×480/1920×1080/4608×3456 ×port8/9 ×core1/2。限定striping范围的MEM_READ观察和完全无观察生成的整512KiB CDM缓冲+32B job逐字节相等。读取stripe字节数534、1330、3121/3320。HAL分配器和输出区分别填0xa5/0x5a，取两结果不变bits、将其余bits清零的canonical stripe，以上12组CDM/job仍逐字节相等；两dirtyseed本身CDM也同。不能将该证据扩到开启高级IQ后的语义。
 
-380完整算法入口HAL144348create、1448f0execute、144988destroy，reference/kernel380/hal-machine.py与check-striping.py可复用，标准malloc/free/memset/memcpy/memcmp模型、算法本身非桩；12组640×480/1920×1080/4608×3456 ×port8/9 ×cores1/2，输出1pass，stripe数2/6/15或16，BL容量156512/228512/396512。条带实际消费2268+624Σstripe（passCount20、每pass412、stripeCount428+412*i）。输出中保留未写0xa5字节，别把这些当有效字段。原框架IpeFrameDataCollator和firmware实际消费可作字段使用证据。
+私存383/{width}x{height}-p{port}-c{core}-canonical-stripe-private.bin、-defined-bits-private.bin、-original-cdm-private.bin、-canonical-cdm-private.bin、-reads-private.json；prep报告脱敏。后续native serializer可调用该验证器比较整CDM/job，不必强行复制未初始化输出padding。注意原HALCPU写轨迹mask不包含libc provider中uc.mem_write，不是完整初始化mask；用互补seed与实际消费差分验证。
 
-帧payload3816、IQ2584、header92/frameSet232，14ports×2planes及metadata，最多16batch；单帧copy324，BL内部减32、CDM数组按base修正。userArg3808。380原FW分发/callback模型12组、编码器55invalid；381实际像素补足数据面，382修幅度。原HAL params为5Q+I：IQ、ICA1、ICA2、zoom、previousZoom、cores，勿混成一份IQ直接传所有ICA结构。
+全局UC_HOOK_MEM_READ在当前Unicorn2.1.4中会破坏Thumb IT返回：原始FreeCdmProgramArray0xf21e空数组，无钩子或钩子限定无关区间正常SP0；全局空callback却跳过f274正常返回序列，SP差-32。该问题导致初版full模型栈错乱，不是设备故障；已用check-observer.py最小复现。改限定读范围并对12组整个生成CDM/job与无观察运行一致后才采用轨迹。既有reference内未发现383之前使用该读取钩子的脚本。禁止为了观察而直接加全局READ钩子后信任输出。
 
-## 保留的资源规则和失败纠正
+probe-engine.py --full也只停到0x220a2，不是完整引擎执行；--no-reads可对照。probe-free.py是诊断工具，check-observer.py为正式回归。前期失败日志保留私存engine-full-failure/engine-unobserved-private.log等。没有新增手机失败事务。
 
-381临时组合域SID2222/0、2080/20、20a0/20、2100/20、2120/20、20c0/0、2140/0，mask核对与CAMSS无交，sameprovider/准确7项及node引用平衡。图像IOVA20000000+08000000只保留名字空间、不新分配RAMcarveout；input20000000/output24000000各≤64MiB。命令parcel07800000≤1MiB在已有共享预留内（frame/stripe/IQ/scratch/BL），config07600000/4KiB。
+## 下一步与范围
 
-核心拥有三BO，只有合法72ACK/token/opcode/status后copy输出→FWunmap→释放。任何未知/错误完成retain pending和全部BO；A5停机/IRQjoin后，两IPE的CDM reset0xf/TOP3清旧ACK→取新ACK→清ACK均确认才可free；失败保留backing/PM供明确重试。启动前相同ACK[3,3]实际通过。未猜测写IRQmask/CORE_EN/CPASQoS；失败注入是模型，硬件未故意失败。测试module pin与suppress_bind_attrs保留。
+先将原生partition接上pass纵向几何、各端口裁剪与FE/WE/ICA启用字段，形成完整内核striping序列化；与本轮原厂CDM/job verifier差分并实机验证像素，再扩连续帧和V4L2m2m/libcamera、原厂Gamma/LTM/CCM。当前仍加载samurai-ipe382-stripe.bin才能运行，不能称独立通用后端。不用用户空间近似替代硬件目标。
 
-保留373 reset/wake后HFI参数编程/readback，375正常PC/WFI/CONTROL确认关CPU后避免额外全局ICP/AHB复位，376双token/IRQjoin/错误锁存，379MAP/UNMAP56命令/ACK44仅header状态有效（尾12是未初始化分配器内容）。CONFIG40/ACK56 scratch36、DESTROY44/ACK48有效payload状态，FRAME40/ACK72。失败/未知复位仍retain。377撞原FW07403000起1MiB debug映射，378CONFIG成功却误读UNMAP尾强制清理；两轮自动重启无正常事务终态，内部原因未测，审计保留。372 context/PC解码纠正保留。EUD9505被动capture377已退役/com-off，本轮未改。
+380 HAL入口144348create、1448f0execute、144988destroy，hal-machine.py可复用；params五Q+I分别IQ、ICA1、ICA2、zoom、previousZoom、cores。383/trace-striping.py::execute可设dirty与uv_swap，完整原算法非桩。原FWpayload frame3816/IQ2584/header92/frameSet232、14ports×2plane，batch最多16、单帧copy324，userArg3808，BL内部扣32。条带使用2268+624Σstripe，passCount20、每pass412、stripeCount428+412*i。striping数组按原包装顺序是右到左。
 
-第五2MP身份未知（OV02A1B库名不算识别，front共享PHY2/MCLK2/reset12、GPIO29mux待解），更多模式、动态帧时长/自动防频闪、光学/几何/同步/连续AF见363/REMAINING-CAMERA-SCOPE.md；延期纯色/遮光可后做。整体goal active。
+382内核已自行生成IQ默认：清零2584后u32偏移52/68/244/260=1（ICA1/2 invalidPixel interpolation/eightBit alignment），job已移除外部iq/iq_bytes；raw数据与383 helper scope保持模块关闭，不接受任意IQ/CDM。本次未改该运行路径。完整原HAL request/原FW engine未在模型执行。
 
-## 路径、来源与私存
+第五2MP身份未明（OV02A1B库名非识别，front共享PHY2/MCLK2/reset12，GPIO29mux待解）、更多模式、动态帧时长/自动防频闪、光学/几何/同步/连续AF与完整校准仍待，363/REMAINING-CAMERA-SCOPE.md保留；延期纯色/遮光可后做。目标active。
 
-访问ext4前调用reference/kernel284/storage.py::mounted_build()，build /mnt/samurai-full282/build、source354旁置，不重建或格式化镜像。libcamera源/mnt/samurai-full282/libcamera362-serialized-built/src/libcamera-v0.7.2，SDK/home/cy122/x2pro-linux/libcamera214-root，work bind串行。exec返回session必须等同一handle终态后再依赖操作。
+## 资源修正、来源与私存
 
-原HAL281/camera.qcom.so-private SHAe2b1b9b6379507052464d9f9573c2a5a1b1cf37c43947b53645ddc8948a70dde；350debugELF仅符号，没有可反汇编执行段，objdump应读原HAL（本轮已改fetch脚本）。FW352/CAMERA_ICP.elf-private SHAa22bc8adbb4ae97e4f8d728eecb1fd19c1bf866250b0bb7e668951c41c159e63，完整armv7 asm370，objdump -m armv7。Unicorn /home/cy122/x2pro-linux/private-k329-venv/bin/python。382保留ICA/upscaler片段、fixed源、probe夹具与图像私存，不进公共Git。
+保留381临时组合SID2222/0、2080/20、20a0/20、2100/20、2120/20、20c0/0、2140/0（与CAMSS mask无交）、images IOVA20000000+08000000仅地址名字空间，不新增RAMcarveout；input20000000/output24000000各≤64MiB，parcel07800000≤1MiB在既有共享预留内，config07600000/4KiB。三BO由核心拥有，未知/错误完成retain pending/BO/PM，A5停机IRQjoin后两IPE CDM reset0xf/TOP3新ACK且清除都成功才能free；失败保留供明确重试。启动前ACK[3,3]已实机验证。未猜测写IRQmask/CORE_EN/CPASQoS。
 
-固定Realme GPL9668fcdc6ec15be7a10d66f7b93c347829e0fdb6，CamxChi9f17f1b568626b393e785b369c5dc94543774d7a（382/sources ICA/upscaler/icasetting/icautils），原型ebd1e440443121d18f730ab2aeea5586a754f36f不完整/旧async多字段；外部ipe_data.h未取得，避免partial clone全树gitgrep触发lazyfetch。
+保留373 reset/wake后HFI参数编程/readback，375正常PC/WFI/CONTROL确认关CPU后避免额外全局ICP/AHB复位，376双token/IRQjoin/错误锁存，379MAP/UNMAP56命令/ACK44仅header状态有效（尾12未初始化分配器内容）。CONFIG40/ACK56 scratch36、DESTROY44/ACK48有效payload状态，FRAME40/ACK72。377/378失败/自动重启事务不能重演或改称成功，内部机制未测，审计保留。372context解码纠正保留，EUD9505被动capture377已retire/com-off。
 
-公共Git /home/cy122/edk2-samurai/repo，范围Platform/Realme/sm8150，本地提交不push/PR。原厂固件、原始输出/日志、个体校准/密钥仅/mnt/e/edk2-samurai-out/kernelNNN私存。boot366 SHAc3e4e9c85d80c8ec37605cd522cf716525ae5ebe4fa801342dbf7586c292d924、logdump365 SHAaca01bc2c91928f1a6a6690f62d14db014351ec5049e5684590b40c3c93de8da保持，378恢复读回已核；旧boot276/logdump363、k298模块/logdump和362回退包保留。
+访问ext4前用reference/kernel284/storage.py::mounted_build()，/mnt/samurai-full282/build与source354旁置，不重建/格式化镜像。libcamera源/mnt/samurai-full282/libcamera362-serialized-built/src/libcamera-v0.7.2，SDK/home/cy122/x2pro-linux/libcamera214-root，work bind串行。exec session须等同一handle终态再依赖操作。
+
+固定Realme GPL9668fcdc6ec15be7a10d66f7b93c347829e0fdb6，CamxChi9f17f1b568626b393e785b369c5dc94543774d7a，原型ebd1e440443121d18f730ab2aeea5586a754f36f不完整/旧async多字段；ipe_data.h外部定义未取得。383另查维护者2026 CAMSS stats/params RFC（README链接），仍draft，未提供本机条带算法，暂未改UAPI。避免partial clone全树gitgrep触发lazyfetch。
+
+HAL281/camera.qcom.so-private SHAe2b1b9b6379507052464d9f9573c2a5a1b1cf37c43947b53645ddc8948a70dde；350debugELF仅符号，objdump原HAL。FW352/CAMERA_ICP.elf-private SHAa22bc8adbb4ae97e4f8d728eecb1fd19c1bf866250b0bb7e668951c41c159e63，armv7完整asm370，objdump -m armv7。Unicorn/home/cy122/x2pro-linux/private-k329-venv/bin/python。原固件/HAL/源码/生成blob/CDM/图像/完整日志/校准/密钥仅/mnt/e/edk2-samurai-out/kernelNNN，不入公共Git。
+
+公共Git/home/cy122/edk2-samurai/repo，Platform/Realme/sm8150范围，本地提交不push/PR。boot366 SHAc3e4e9c85d80c8ec37605cd522cf716525ae5ebe4fa801342dbf7586c292d924、logdump365 SHAaca01bc2c91928f1a6a6690f62d14db014351ec5049e5684590b40c3c93de8da保持，378恢复读回已核；旧回退均保留。
