@@ -1,4 +1,4 @@
-380当前：完整原厂striping与固件frame分发模型、内核帧编码/边界检查通过并构建；尚无引擎DMA或图像帧提交。本轮未改设备，复用379两路IO配置和四摄实机结果；SSC启动故障仍在。Image363/boot366/DT365/r29/r24保持，完整目标active。[380证据](../../../reference/kernel380/README.md)。以下为历史。
+381当前：实机首帧IPE合成NV12和完整生命周期通过，逐像素确认数据通路；零IQ输出幅度为输入/4，正常幅度与完整IQ待修。四摄及主摄隔离IPA/Gamma回归通过，无资源残留；SSC故障仍在。Image363/boot366/DT365/r29/r24保持，目标active。[381证据](../../../reference/kernel381/README.md)。以下为历史。
 
 361收尾：348 Gamma模块仅临时用于请求链验证，已恢复338；k298/taint0/双CCI与CAMSS休眠。公共用户空间分发器已修，隔离CAMSS请求队列仍待修；357 IOMMU补丁及356正确板级内存候选未安装。 [361交接](../../../reference/kernel361/README.md)。以下为历史。
 

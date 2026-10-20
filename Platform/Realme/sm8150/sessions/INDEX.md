@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [381实机首帧IPE像素通路](../reference/kernel381/README.md)
+
 - [380原厂striping与内核帧编码](../reference/kernel380/README.md)
 
 - [379两路IPE IO配置实机通过](../reference/kernel379/README.md)
