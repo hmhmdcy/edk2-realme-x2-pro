@@ -506,6 +506,7 @@
 | [kernel398](<../reference/kernel398/README.md>) | 398：纠正 IPE CCM 分支及偏移位宽，核实前后颜色转换契约 |
 | [kernel399](<../reference/kernel399/README.md>) | 399：恢复原厂 CST／CV 模式树，接入内核逐帧转换链 |
 | [kernel400](<../reference/kernel400/README.md>) | 400：CST／CV 与 CCM 组合实像素通过，恢复正式四摄 |
+| [kernel401](<../reference/kernel401/README.md>) | 401：原厂 Gamma DMI 契约与 LUT 请求所有权已接入候选 |
 | [rx33](<../reference/rx33/README.md>) | Session 33：有效 EUD RX 抓包 |
 | [rx34](<../reference/rx34/README.md>) | Session 34 的临时终端记录 |
 | [rx36](<../reference/rx36/README.md>) | Session 36：USB 描述符、旧 qcusbser 审查与已完成对照 |
