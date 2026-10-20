@@ -1,4 +1,4 @@
-367当前：Image363统一内核、boot366/静态DT365和r29/r24已用；四颗传感器回归。A5实际释放后响应3超时并出现modem watchdog，完整ICP握手未通过，正常基线恢复及后续离线分析继续。 [367状态](../../reference/kernel367/README.md)。
+375当前：原厂A5固件INIT/PING/PC/WFI、DMA/PM释放和模块卸载实机完整通过，same boot、fault/taint0；四摄与主摄隔离Gamma回归通过。Image363/boot366/DT365/r29/r24保持，候选未永久安装。IPE图像会话及完整多摄光学校准仍未完成，目标active。[375证据](../../reference/kernel375/README.md)。以下为历史。
 
 361收尾：四摄五模式十原厂线程上下文完成r28曝光／频闪／Gamma请求274帧；隔离模式仍有CAMSS队列重入错误。公共分发器修复ARM64回归通过，未打新包／未安装；设备已恢复r27/r22、338/k298及服务，taint0、资源休眠。 [361交接](../../reference/kernel361/README.md)。以下为历史。
 

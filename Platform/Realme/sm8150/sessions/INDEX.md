@@ -452,6 +452,9 @@
 
 ## 最新交接
 
+- [375原厂A5/HFI完整启停与四摄回归](../reference/kernel375/README.md)
+- [374绑定后三握手与停机重启](../reference/kernel374/README.md)
+
 - [373就绪与SYS_INIT、退出重启恢复](../reference/kernel373/README.md)
 - [372真实复位前异常现场](../reference/kernel372/README.md)
 
