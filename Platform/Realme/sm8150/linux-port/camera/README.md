@@ -1,4 +1,4 @@
-390当前：正常CAMSS/ICP与板级DT已实际部署，111帧direct及正常卸载/重载通过，原r29 IFE四摄回归通过；Image363/logdump365保持，guard390。IPE用户空间仍私有候选，完整IQ/多摄校准目标active。[390证据](../../reference/kernel390/README.md)。以下为历史。
+391当前：正式r30/r25 IPE用户空间已安装，默认四摄／RAW／隔离IPA82作业＋普通用户PipeWire12，共94新增direct、错误0；r1错误进程映射检查已审计并回退，r2修正复用82作业。内核／板级390与个体配置保持，完整IQ／多摄校准目标active。[391证据](../../reference/kernel391/README.md)。以下为历史。
 
 361收尾：四摄五模式十原厂线程上下文完成r28曝光／频闪／Gamma请求274帧；隔离模式仍有CAMSS队列重入错误。公共分发器修复ARM64回归通过，未打新包／未安装；设备已恢复r27/r22、338/k298及服务，taint0、资源休眠。 [361交接](../../reference/kernel361/README.md)。以下为历史。
 

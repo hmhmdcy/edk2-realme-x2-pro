@@ -1,10 +1,10 @@
 {
-  "stage": 390,
+  "stage": 391,
   "kernel_boot_stage": 389,
   "current_boot_guard_stage": 390,
   "kernel_image_stage": 363,
-  "framework_version": "99990.7.2-r29",
-  "configuration_version": "0.1.0-r24",
+  "framework_version": "99990.7.2-r30",
+  "configuration_version": "0.1.0-r25",
   "pipewire_core_spa_gstreamer_version": "1.6.9-r3",
   "package_recipe": "../packages/libcamera/APKBUILD",
   "configuration_recipe": "../packages/samurai-camera-config/APKBUILD",
@@ -12,162 +12,163 @@
   "built_packages": [
     {
       "name": "libcamera",
-      "version": "99990.7.2-r29",
+      "version": "99990.7.2-r30",
       "arch": "aarch64",
-      "file": "libcamera-99990.7.2-r29.apk",
-      "bytes": 1025067,
-      "sha256": "ab76b51ceb2e40b0ec48cd17d7987c8c13b85c0a74d26f9f777634f1b494f231",
+      "file": "libcamera-99990.7.2-r30.apk",
+      "bytes": 1030015,
+      "sha256": "db37675ffc43dedc2abc568dc126df07c1a2d976b7ec88346db8f36e05a5ad54",
       "runtime": true
     },
     {
       "name": "libcamera-dbg",
-      "version": "99990.7.2-r29",
+      "version": "99990.7.2-r30",
       "arch": "aarch64",
-      "file": "libcamera-dbg-99990.7.2-r29.apk",
-      "bytes": 9332,
-      "sha256": "e32d91ce34ac824a23f8dc34312483c06507ce276624796f18c90e60980dadd3",
+      "file": "libcamera-dbg-99990.7.2-r30.apk",
+      "bytes": 9342,
+      "sha256": "18507701fd3a921976b0b7f084d964467a0c207d3a22400a15406a0ec2403dd7",
       "runtime": false
     },
     {
       "name": "libcamera-dev",
-      "version": "99990.7.2-r29",
+      "version": "99990.7.2-r30",
       "arch": "aarch64",
-      "file": "libcamera-dev-99990.7.2-r29.apk",
+      "file": "libcamera-dev-99990.7.2-r30.apk",
       "bytes": 27226,
-      "sha256": "f34a36e29a3582f708b48e851cba4747489be68d85d56e4a1df9c20bd336421b",
+      "sha256": "363b2136c293c4a16e439c1c4c52c4488a273a153d67ca135156c702f1d113fb",
       "runtime": false
     },
     {
       "name": "libcamera-gstreamer",
-      "version": "99990.7.2-r29",
+      "version": "99990.7.2-r30",
       "arch": "aarch64",
-      "file": "libcamera-gstreamer-99990.7.2-r29.apk",
+      "file": "libcamera-gstreamer-99990.7.2-r30.apk",
       "bytes": 57329,
-      "sha256": "5168a0d11b8b63cc2dbdafb544be37a84734ec99e0e0d1c624f6e5af7d1c439c",
+      "sha256": "e3192778a9443b1990d319ac8efc280ca383866da80d29997c1ae21a64a43e70",
       "runtime": true
     },
     {
       "name": "libcamera-ipa",
-      "version": "99990.7.2-r29",
+      "version": "99990.7.2-r30",
       "arch": "aarch64",
-      "file": "libcamera-ipa-99990.7.2-r29.apk",
-      "bytes": 907063,
-      "sha256": "a608d4f447265c33b0170dc3537558ef6f21efffaa7988359543648570320df3",
+      "file": "libcamera-ipa-99990.7.2-r30.apk",
+      "bytes": 907062,
+      "sha256": "5cffdb5c2940d1bbc617c83483c18180beb49166959662927ff9e3c8c67ca9b0",
       "runtime": true
     },
     {
       "name": "libcamera-raspberrypi",
-      "version": "99990.7.2-r29",
+      "version": "99990.7.2-r30",
       "arch": "aarch64",
-      "file": "libcamera-raspberrypi-99990.7.2-r29.apk",
-      "bytes": 375344,
-      "sha256": "f46cb5d64d66fe43501002a3496856003c773843131be8f978618e22ea8073fe",
+      "file": "libcamera-raspberrypi-99990.7.2-r30.apk",
+      "bytes": 375346,
+      "sha256": "a86ef59555b8fd2ea6f621cab155f736e5c8598ca3d8ff32e37c26dd57af2f14",
       "runtime": false
     },
     {
       "name": "libcamera-tools",
-      "version": "99990.7.2-r29",
+      "version": "99990.7.2-r30",
       "arch": "aarch64",
-      "file": "libcamera-tools-99990.7.2-r29.apk",
-      "bytes": 130577,
-      "sha256": "e7300f77bb1022e4ddeab39b7ede385d814fde732e6842fe03d08b4121e7a86b",
+      "file": "libcamera-tools-99990.7.2-r30.apk",
+      "bytes": 130579,
+      "sha256": "44a7e0bd0d217fa3bc46bdc97a247b8cb7bd8640b8ef455b7fe364b1715c356d",
       "runtime": true
     },
     {
       "name": "libcamera-v4l2",
-      "version": "99990.7.2-r29",
+      "version": "99990.7.2-r30",
       "arch": "aarch64",
-      "file": "libcamera-v4l2-99990.7.2-r29.apk",
+      "file": "libcamera-v4l2-99990.7.2-r30.apk",
       "bytes": 33865,
-      "sha256": "65b16a330ec4ba1359135cf5f83260f14b6f934b53e34b15d186044271699719",
+      "sha256": "36b6c467c9c8b718b8633c14f59acc5699a58cf5e9109bf47e9729160777a3a4",
       "runtime": true
     },
     {
       "name": "py3-libcamera",
-      "version": "99990.7.2-r29",
+      "version": "99990.7.2-r30",
       "arch": "aarch64",
-      "file": "py3-libcamera-99990.7.2-r29.apk",
-      "bytes": 317098,
-      "sha256": "b32e0317524e65c78a09b43970c77cc402414fd5ddb4c1ff92a75b6a0b1484c8",
+      "file": "py3-libcamera-99990.7.2-r30.apk",
+      "bytes": 317097,
+      "sha256": "af65ea15aafcb8b99dbc7544a271a6f22746947a2c8b0a2ec6f6d9fe7210e698",
       "runtime": false
     },
     {
       "name": "py3-libcamera-pyc",
-      "version": "99990.7.2-r29",
+      "version": "99990.7.2-r30",
       "arch": "noarch",
-      "file": "py3-libcamera-pyc-99990.7.2-r29.apk",
-      "bytes": 1553,
-      "sha256": "a1e047a9272b127c07a31c2024ffd56c8406f85d1830b96acc04bc21bbf2d376",
+      "file": "py3-libcamera-pyc-99990.7.2-r30.apk",
+      "bytes": 1551,
+      "sha256": "3e01fc82251df9f7fa888d6020fa1ef45d8cf3dc57345b2293561b3e797fc0c5",
       "runtime": false
     },
     {
       "name": "qcam",
-      "version": "99990.7.2-r29",
+      "version": "99990.7.2-r30",
       "arch": "aarch64",
-      "file": "qcam-99990.7.2-r29.apk",
-      "bytes": 78250,
-      "sha256": "3d6daa6dd179377794fc2f7dcb56bf332648ae8d4a4de6093f358b6e7d9f7e85",
+      "file": "qcam-99990.7.2-r30.apk",
+      "bytes": 78251,
+      "sha256": "433c924813bc547bd96c5c1566420d3bb9589254fdf21d9095b9fc6628a9158e",
       "runtime": false
     },
     {
       "name": "samurai-camera-config",
-      "version": "0.1.0-r24",
+      "version": "0.1.0-r25",
       "arch": "noarch",
-      "file": "samurai-camera-config-0.1.0-r24.apk",
-      "bytes": 3368,
-      "sha256": "2337bbc2d3e72284a1e85890429d48f47321139d494c9ef1d08d03ed9b419294",
+      "file": "samurai-camera-config-0.1.0-r25.apk",
+      "bytes": 3366,
+      "sha256": "0a611778aaef71ea1114ae1482b2d03306dc1f360e04b9cc42ee697bcb8b6648",
       "runtime": true
     },
     {
       "name": "samurai-camera-stack",
-      "version": "0.1.0-r24",
+      "version": "0.1.0-r25",
       "arch": "noarch",
-      "file": "samurai-camera-stack-0.1.0-r24.apk",
-      "bytes": 989,
-      "sha256": "6908c06ebde6e26584e8ab1793400ce1898cbe1fba30b988cb0f1c34e302bb42",
+      "file": "samurai-camera-stack-0.1.0-r25.apk",
+      "bytes": 988,
+      "sha256": "a47a01b0b7303ba07b9182819cc3d8febb6a4191c565db3ea564301da57e7718",
       "runtime": true
     }
   ],
   "installed_package_count": 961,
-  "ko_count": 778,
+  "ko_count": 781,
   "kernel_modules": {
     "qcom_camss": {
-      "sha256": "c7ebd3b6d4e288530d88455e3a2504b23f627fa12bb34efeac6659365c6f256f",
+      "sha256": "24fcfa685d07eb8d0e1a0b8356d9ee005e5413faf29c1b384e8c79c364630288",
       "loaded": true,
       "loaded_note_matches_disk": true,
       "intree": "Y",
-      "parameters": {}
+      "parameters": {},
+      "targeted_validation_stage": 390
     },
     "i2c_qcom_cci": {
-      "sha256": "59ce03f1177ffa10d677446f3587e70d5c779e9cccc6aebac05bcd16aba3db4f",
+      "sha256": "26cc009609791991f9a64d8575bb6d11e3fdff7cfafb1c531c5c51b64974bd4d",
       "loaded": true,
       "loaded_note_matches_disk": true,
       "intree": "Y",
       "parameters": {}
     },
     "s5k3m5": {
-      "sha256": "d1a85e75b9344423097c8189ed65a0320abcb3f7ba3d5fdac34e3c8758f056c9",
+      "sha256": "966b29d8e05236ad3d123bdd60bf0202cc60886f60fc3186e06eda4df4059f29",
       "loaded": true,
       "loaded_note_matches_disk": true,
       "intree": "Y",
       "parameters": {}
     },
     "s5kgw1": {
-      "sha256": "61c81f47bd29925f95ef6ad146e8f3231b3b01b3f64f458a09680eb450d2a167",
+      "sha256": "834f711edb5fb3cfe73f034fd838e97cf9b5a3ac057098e4ccb0bb9acb0c4dff",
       "loaded": true,
       "loaded_note_matches_disk": true,
       "intree": "Y",
       "parameters": {}
     },
     "imx319": {
-      "sha256": "1a1669559653f79b03cbb7907245bd9964e8ab33501a30fe2ab732ce97309bf6",
+      "sha256": "4e3163d8eb7f36e2d74db335009106075b8f949f9f4b712a208af117c0fd2029",
       "loaded": true,
       "loaded_note_matches_disk": true,
       "intree": "Y",
       "parameters": {}
     },
     "imx471": {
-      "sha256": "0608394be72e11f29057ab99f4a842ba76fb81887bcfa6c79667b9c9c7658a04",
+      "sha256": "58d94c32b47a64d4a7d228a42a3c5457635d901f99da05879bb1c9d4df73c516",
       "loaded": true,
       "loaded_note_matches_disk": true,
       "intree": "Y",
@@ -176,32 +177,64 @@
       }
     },
     "lc898219xi": {
-      "sha256": "a1b74210df03f103710e813b2c562a26ab92b656aff0570eaeed44dd9abcb8cb",
+      "sha256": "f46a5db2b1cd3d54e7598fba2828c6e291325f8f30a2e1dad8b9dbf63d16d54f",
       "loaded": true,
       "loaded_note_matches_disk": true,
       "intree": "Y",
       "parameters": {}
     },
     "qcom_pm8008": {
-      "sha256": "1b05ad4f6c7f64054c4e3d94d11eb6ecc0ebdff0aac492853900ec7de576fff7",
+      "sha256": "3e9d625672fcc8c5a034c764943000fb9faf9eed9644070c9cde56d20245d647",
       "loaded": true,
       "loaded_note_matches_disk": true,
       "intree": "Y",
       "parameters": {}
     },
     "qcom_pm8008_regulator": {
-      "sha256": "15ef5ca414e0b5daded33f708cea3f12f87e8b76e54cd8240988dee249d6cafe",
+      "sha256": "854610b20a1cd2afe2d716d7a9f0b77dc4800f7cf5f343f1d3cccb9d09a5739f",
       "loaded": true,
       "loaded_note_matches_disk": true,
       "intree": "Y",
       "parameters": {}
     },
     "v4l2_cci": {
-      "sha256": "7c8a18cbc404986ae0193d88906d15cbd92a3e26cede670fbec034b711ba7abf",
+      "sha256": "232c5140e5bb7f8058bcb103822a9c643e12b5fe60acf8fe2fd17dc58234e705",
       "loaded": true,
       "loaded_note_matches_disk": true,
       "intree": "Y",
       "parameters": {}
+    },
+    "qcom_camss_icp_a5_core": {
+      "sha256": "036f590c603097c15188316c9fd20d66e8f4cd437644e746b848b7e424706cb0",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {},
+      "targeted_validation_stage": 390
+    },
+    "camss_icp_a5_m2m": {
+      "sha256": "a0167f6acce4edad159d43101a723846ed494cf71fe3bb27857d2d145b44a7b8",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {},
+      "targeted_validation_stage": 390
+    },
+    "v4l2_mem2mem": {
+      "sha256": "a00c9410b34755c68bdf9c925ce92a9f509e91590fc76ecb443448d35ab411d9",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {},
+      "targeted_validation_stage": 390
+    },
+    "videobuf2_dma_sg": {
+      "sha256": "735bded11ddedc9e0cad393bb3e35d2aa97b9d161161562ae9856f909cd6a643",
+      "loaded": true,
+      "loaded_note_matches_disk": true,
+      "intree": "Y",
+      "parameters": {},
+      "targeted_validation_stage": 390
     }
   },
   "boot_sha256": "e0256ff5bad0f6a2139de8690974d5fc25a0b58cad4cec1bb22f26bf0280884f",
@@ -216,23 +249,28 @@
     "org.gnome.Snapshot.service": "f18df4682092a03962f916f84f89c92fcf6664ec0be5027f6c08e5011d202308"
   },
   "snapshot_cairo_workaround_still_required": true,
-  "current_camera_evidence": "../../reference/kernel390/README.md",
-  "final_health_evidence": "../../reference/kernel344/install-r1-validation.json",
+  "current_camera_evidence": "../../reference/kernel391/README.md",
+  "final_health_evidence": "../../reference/kernel391/current-state-validation.json",
   "system_services": {
-    "stage": 344,
+    "stage": 391,
     "services": {
       "pipewire": [
-        28486
+        {
+          "pid": 9234,
+          "uid": 10000
+        }
       ],
       "wireplumber": [
-        28492
+        {
+          "pid": 9237,
+          "uid": 10000
+        }
       ]
     },
-    "evidence": "../../reference/kernel344/install-r1-validation.json",
-    "observed_before_recovered360_boot": true,
-    "current_boot_revalidated": false
+    "evidence": "../../reference/kernel391/current-state-validation.json",
+    "current_boot_revalidated": true
   },
-  "guard_path": "/var/lib/samurai/k298-work/boot-id-private.txt",
+  "guard_path": "/var/lib/samurai/k390-active/boot-id-private.txt",
   "goal_status": "active_incomplete",
   "previous_lock_archive": "../../archive/camera-before309-2026-10-19/linux-port/camera/deployment-lock.json",
   "snapshot_gui_evidence_stage": 270,
@@ -625,7 +663,7 @@
   "candidate_hardware_af_metric": "bounded CPU spatial contrast on hardware NV12 Y; no VFE BAF",
   "candidate_hardware_af_continuous": false,
   "candidate_hardware_raw_compatibility": true,
-  "current_boot_auto_af_retest_scope": "No independent optical or AF scene retest390; prior scoped implementation evidence retained.",
+  "current_boot_auto_af_retest_scope": "No new optical or AF scene validation391; previous scoped implementation evidence retained.",
   "current_boot_product_raw_cpu_auto_af_retest_pending": true,
   "candidate_camss_streams_source_stage": 314,
   "candidate_camss_streams_source_tree": "/home/cy122/x2pro-linux/camera314-streams-kernel",
@@ -650,8 +688,8 @@
   "candidate_hardware_raw_pair_max_delta_ns": 61511,
   "candidate_hardware_module_stage": 314,
   "candidate_hardware_automatic_pipeline_with_raw_verified": true,
-  "in_progress_stage": 390,
-  "in_progress_evidence": "../../reference/kernel390/README.md",
+  "in_progress_stage": 391,
+  "in_progress_evidence": "../../reference/kernel391/README.md",
   "in_progress_installed": true,
   "historical_pre316_package_payloads": [
     {
@@ -1109,13 +1147,13 @@
   ],
   "historical_pre316_package_payloads_stage": 278,
   "installed_camera_packages": {
-    "libcamera": "99990.7.2-r26",
-    "libcamera-gstreamer": "99990.7.2-r26",
-    "libcamera-ipa": "99990.7.2-r26",
-    "libcamera-tools": "99990.7.2-r26",
-    "libcamera-v4l2": "99990.7.2-r26",
-    "samurai-camera-config": "0.1.0-r21",
-    "samurai-camera-stack": "0.1.0-r21"
+    "libcamera": "99990.7.2-r30",
+    "libcamera-gstreamer": "99990.7.2-r30",
+    "libcamera-ipa": "99990.7.2-r30",
+    "libcamera-tools": "99990.7.2-r30",
+    "libcamera-v4l2": "99990.7.2-r30",
+    "samurai-camera-config": "0.1.0-r25",
+    "samurai-camera-stack": "0.1.0-r25"
   },
   "gstreamer_hardware_consumer_verified": true,
   "pipewire_hardware_consumer_verified": true,
@@ -1574,8 +1612,8 @@
   "candidate_dynamic_frame_duration_pending": true,
   "candidate_gamma349_merge_pending": false,
   "full_camera_runtime_goal_verified": false,
-  "candidate_framework_version": "99990.7.2-r29",
-  "candidate_configuration_version": "0.1.0-r24",
+  "candidate_framework_version": "99990.7.2-r30",
+  "candidate_configuration_version": "0.1.0-r25",
   "candidate_package_evidence": "../../reference/kernel362/package-artifact-validation.json",
   "candidate_gamma_and_factory_ae_combined": true,
   "candidate_combined_hardware_verified": false,
@@ -1592,7 +1630,7 @@
   "candidate_common_dispatcher_fix_regression_passed": true,
   "candidate_remaining_failure": null,
   "candidate_r28_packages_include_dispatcher_fix": false,
-  "device_closeout_evidence": "../../reference/kernel390/current-state-validation.json",
+  "device_closeout_evidence": "../../reference/kernel391/current-state-validation.json",
   "current_camss_source": "/mnt/samurai-full282/source354",
   "candidate_common_request_order_regression_passed": true,
   "candidate_isolated_preview_modes_verified": 5,
@@ -1613,11 +1651,11 @@
   "icp_latest_attempt_followed_by_modem_watchdog": false,
   "icp_latest_attempt_evidence": "../../reference/kernel382/boot-runtime-r1-validation.json",
   "icp_latest_attempt_recovery_evidence": null,
-  "icp_next_step": "Package and install the verified387 IPE userspace integration on the normal390 kernel/board platform; then explicit in-flight cancellation/hardware failure concurrency and OEM Gamma/LTM/CCM full IQ plus all remaining camera calibration. Normal platform111 direct frames, unload/reload and original IFE four-camera regression verified. Guard390; do not run old378 host or reflash the completed transition.",
+  "icp_next_step": "Explicit in-flight cancellation and hardware-error concurrency; OEM Gamma/LTM/CCM full IQ and all363 remaining camera scope. Signed IPE userspace r30/r25 installed391; same390 boot guard. Do not replay completed390 deployment or391 package transactions.",
   "confirmed_physical_camera_count": 4,
   "portrait_2mp_identity_verified": false,
   "remaining_camera_scope_evidence": "../../reference/kernel363/REMAINING-CAMERA-SCOPE.md",
-  "latest_work_stage": 390,
+  "latest_work_stage": 391,
   "icp_response3_sfr_error_path_proven_in_original_firmware": true,
   "icp_response3_sfr_evidence": "../../reference/kernel368/firmware-sfr-validation.json",
   "a5_icp_candidate_source_branch": "samurai-icp-platform389",
@@ -1635,12 +1673,12 @@
   "icp_actual_sfr_text_recovered": false,
   "icp_hardware_cleanup_verified": true,
   "icp_memory_page_allocation_evidence": "../../reference/kernel369/firmware-reservation-validation.json",
-  "current_device_revalidated_stage": 390,
+  "current_device_revalidated_stage": 391,
   "icp_quiesced_failure_candidate_evidence": "../../reference/kernel371/README.md",
   "icp_quiesced_failure_hardware_verified": false,
   "icp_static_mmu_instruction_evidence": "../../reference/kernel370/firmware-mapping-validation.json",
   "icp_exception_layout_instruction_evidence": "../../reference/kernel370/exception-layout-validation.json",
-  "icp_latest_device_experiment_stage": 390,
+  "icp_latest_device_experiment_stage": 391,
   "icp_last_recovered_standard_dump_stage": 369,
   "icp_last_recovered_standard_dump_bytes": 568,
   "icp_sys_init_hardware_verified": true,
@@ -1705,8 +1743,8 @@
   "ipe_native_striping_formats_evidence": "../../reference/kernel384/formats-validation.json",
   "ipe_native_striping_actual_pixel_evidence": "../../reference/kernel384/pixels-validation.json",
   "ipe_external_striping_runtime_dependency": false,
-  "ipe_latest_hardware_stage": 390,
-  "ipe_latest_stage_actual_frames": 111,
+  "ipe_latest_hardware_stage": 391,
+  "ipe_latest_stage_actual_frames": 94,
   "ipe_latest_stage_RT_frames": 111,
   "ipe_latest_stage_non_RT_frames": 0,
   "ipe_native_striping_multisize_evidence": "../../reference/kernel385/coverage-validation.json",
@@ -1723,10 +1761,10 @@
   "ipe_m2m_platform_owner_temporary": false,
   "ipe_zero_copy_verified": true,
   "ipe_libcamera_pipeline_integrated": true,
-  "ipe_latest_stage_frames_scope": "390 normal platform: native18 + pipeline81 before reload + candidate12 after reload; current counter reset to12; original IFE48 excluded",
+  "ipe_latest_stage_frames_scope": "391 newly installed r30/r25: r1 camera suite82 + r2 ordinary-user PipeWire12; r1 reused in r2 without rerun; previous counter12 excluded; final cumulative106",
   "ipe_libcamera_pipeline_hardware_verified": true,
-  "ipe_libcamera_candidate_permanently_installed": false,
-  "ipe_libcamera_pipeline_evidence": "../../reference/kernel390/hardware-validation.json",
+  "ipe_libcamera_candidate_permanently_installed": true,
+  "ipe_libcamera_pipeline_evidence": "../../reference/kernel391/hardware-validation.json",
   "ipe_libcamera_original_sof_and_timestamp_preserved": true,
   "ipe_libcamera_raw_only_kept": true,
   "ipe_libcamera_isolated_ipa_verified": true,
@@ -1737,7 +1775,7 @@
   "ipe_direct_dma_candidate_requires_modified_standard_dma_sg": true,
   "ipe_original_standard_dma_sg_restored": false,
   "ipe_export_fd_and_mmap_owner_lifetime_verified": true,
-  "current_readonly_device_evidence": "../../reference/kernel390/current-state-validation.json",
+  "current_readonly_device_evidence": "../../reference/kernel391/current-state-validation.json",
   "ipe_candidate_platform_integrated_with_camss_module": true,
   "ipe_candidate_static_board_enabled": true,
   "ipe_candidate_formal_platform_hardware_verified": true,
@@ -1751,7 +1789,7 @@
     "current_boot_tele_ae_effective_revisions_stage306": 3,
     "current_boot_tele_ae_control_writes_stage306": 6
   },
-  "in_progress_installed_scope": "normal kernel platform owner, five modules, firmware and board DT installed; IPE userspace still private387 candidate",
+  "in_progress_installed_scope": "normal kernel platform owner, five modules, firmware and board DT390; signed IPE userspace r30/r25 now installed391",
   "boot_deployment_stage": 390,
   "effective_dt_stage": 389,
   "logdump_dt_stage": 365,
@@ -1762,7 +1800,7 @@
   "ipe_normal_platform_owner_hardware_evidence": "../../reference/kernel390/hardware-validation.json",
   "ipe_modified_standard_dma_sg_owner_api_installed": true,
   "ipe_export_lifetime_hardware_owner": "qcom_camss",
-  "installed_userspace_current_versions_evidence": "../../reference/kernel390/installed-packages-validation.json",
+  "installed_userspace_current_versions_evidence": "../../reference/kernel391/install-r2-validation.json",
   "current_boot_tele_delivered_test_frames": 24,
   "current_boot_tele_test_scope": "Two12-frame GStreamer captures (candidate IPE and installed original IFE); no exhaustive sensor-frame or dedicated AE count claimed",
   "ssc_current_service_running": true,
@@ -1771,5 +1809,7 @@
   "installed_new_module_files_stage390": 3,
   "installed_replaced_module_files_stage390": 2,
   "module_count_scope": "Derived original778 tree plus3 explicitly absent-before new modules; no new all-module hash audit",
-  "kernel_source_scope": "maintained module and board source; Image363 source separately recorded"
+  "kernel_source_scope": "maintained module and board source; Image363 source separately recorded",
+  "ipe_installed_default_gstreamer_pipewire_verified": true,
+  "ipe_userspace_deployment_stage": 391
 }

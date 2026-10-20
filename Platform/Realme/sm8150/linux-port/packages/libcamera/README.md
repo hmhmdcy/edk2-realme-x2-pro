@@ -1,6 +1,6 @@
-362已部署：r29/config-r24、CAMSS348和原厂完整Preview调校已默认；五模式隔离137帧及Gst/PW各12帧通过。公共请求顺序与CAMSS队列重入修复，ICP/IPE及绝对光学校准继续。 [362结果](../../../reference/kernel362/README.md)。以下为历史。
+391当前：libcamera r30/config-stack r25已正式安装，默认IPE四摄／RAW／隔离IPA及普通用户PipeWire共94新增作业通过，个体配置未打入公共包；完整IQ与多摄校准继续。[391证据](../../../reference/kernel391/README.md)。以下为历史。
 
-360候选：libcamera r28／config r23已完整构建和签名检查，尚未安装。包含349 Gamma与359原厂曝光程序，启用私有Gamma配置需348参数ABI；公共默认YAML不变。原r27／r22配方仍为已安装版本。[360记录](../../README.md)。以下为历史。
+360候选：libcamera r28／config r23已完整构建和签名检查，尚未安装。包含349 Gamma与359原厂曝光程序，启用私有Gamma配置需348参数ABI；公共默认YAML不变。原r27／r22配方仍为已安装版本。[360记录](../../../reference/kernel360/README.md)。以下为历史。
 
 342当前：r27/config-r22已部署，CAMSS338保持。已合入个体WB/CCT、实时lux驱动CCM及动态LSC；四摄安装后显式配置通过，默认YAML无个体表。实际模式曝光表选择及正常光学校准继续。[342证据](../../../reference/kernel342/README.md)。以下为历史。
 
