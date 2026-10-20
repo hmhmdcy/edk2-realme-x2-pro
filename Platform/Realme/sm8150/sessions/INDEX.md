@@ -452,6 +452,9 @@
 
 ## 最新交接
 
+- [373就绪与SYS_INIT、退出重启恢复](../reference/kernel373/README.md)
+- [372真实复位前异常现场](../reference/kernel372/README.md)
+
 - [371持有模式实验与新启动恢复](../reference/kernel371/README.md)
 
 - [370离线A5故障窗口与MMU证据](../reference/kernel370/README.md)
