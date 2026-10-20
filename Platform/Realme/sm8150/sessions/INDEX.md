@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [380原厂striping与内核帧编码](../reference/kernel380/README.md)
+
 - [379两路IPE IO配置实机通过](../reference/kernel379/README.md)
 
 - [376两IPE会话创建/并存/销毁](../reference/kernel376/README.md)

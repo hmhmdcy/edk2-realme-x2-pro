@@ -1,4 +1,4 @@
-379当前：两路IPE会话各MAP/CONFIG_IO/UNMAP并销毁，完整HFI/停机/卸载实机通过，图像帧仍0；新四摄取流及主摄隔离Gamma通过。Image363/boot366/DT365/r29/r24保持，候选未永久安装。恢复启动SSC attach失败未解决，桌面已恢复，SensorProxy未运行。目标active。[379证据](../../reference/kernel379/README.md)。以下为历史。
+380当前：完整原厂striping与固件frame分发模型、内核帧编码/边界检查通过并构建；尚无引擎DMA或图像帧提交。本轮未改设备，复用379两路IO配置和四摄实机结果；SSC启动故障仍在。Image363/boot366/DT365/r29/r24保持，完整目标active。[380证据](../../reference/kernel380/README.md)。以下为历史。
 
 361收尾：已安装r27/r22与CAMSS338/k298；四摄基础取流沿用360，候选十线程上下文274帧请求通过，隔离队列仍失败；新候选未安装。ICP/IPE、完整光学与多摄校准未完成。 [361交接](../../reference/kernel361/README.md)。以下为历史。
 
