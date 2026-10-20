@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [382内核ICA默认配置与幅度修复](../reference/kernel382/README.md)
+
 - [381实机首帧IPE像素通路](../reference/kernel381/README.md)
 
 - [380原厂striping与内核帧编码](../reference/kernel380/README.md)
