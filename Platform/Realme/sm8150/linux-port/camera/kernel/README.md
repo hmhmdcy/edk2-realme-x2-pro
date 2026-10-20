@@ -1,4 +1,4 @@
-389当前：正常CAMSS/ICP共享模块owner、板级七SID/IOVA候选与实际EDK2 DT载体已构建验证，尚未部署；手机保持388收尾状态，最近实机仍为388。下一步正式启用及回归，完整IQ/多摄校准目标active。[389证据](../../../reference/kernel389/README.md)。以下为历史。
+390当前：正常CAMSS/ICP与板级DT已实际部署，111帧direct及正常卸载/重载通过，原r29 IFE四摄回归通过；Image363/logdump365保持，guard390。IPE用户空间仍私有候选，完整IQ/多摄校准目标active。[390证据](../../../reference/kernel390/README.md)。以下为历史。
 
 361收尾：348 Gamma模块仅临时用于请求链验证，已恢复338；k298/taint0/双CCI与CAMSS休眠。公共用户空间分发器已修，隔离CAMSS请求队列仍待修；357 IOMMU补丁及356正确板级内存候选未安装。 [361交接](../../../reference/kernel361/README.md)。以下为历史。
 
