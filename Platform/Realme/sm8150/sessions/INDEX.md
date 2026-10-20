@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [376两IPE会话创建/并存/销毁](../reference/kernel376/README.md)
+
 - [375原厂A5/HFI完整启停与四摄回归](../reference/kernel375/README.md)
 - [374绑定后三握手与停机重启](../reference/kernel374/README.md)
 

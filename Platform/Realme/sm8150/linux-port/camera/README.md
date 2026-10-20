@@ -1,4 +1,4 @@
-375当前：原厂A5固件INIT/PING/PC/WFI、DMA/PM释放和模块卸载实机完整通过，same boot、fault/taint0；四摄与主摄隔离Gamma回归通过。Image363/boot366/DT365/r29/r24保持，候选未永久安装。IPE图像会话及完整多摄光学校准仍未完成，目标active。[375证据](../../reference/kernel375/README.md)。以下为历史。
+376当前：两个IPE RT/非RT独立会话实机并存后分别销毁，完整HFI/停机/卸载通过，同启动故障/taint0；尚未配置IO或处理图像。Image363/boot366/DT365/r29/r24保持，候选未永久安装；四摄证据复用375同启动结果。完整目标active。[376证据](../../reference/kernel376/README.md)。以下为历史。
 
 361收尾：四摄五模式十原厂线程上下文完成r28曝光／频闪／Gamma请求274帧；隔离模式仍有CAMSS队列重入错误。公共分发器修复ARM64回归通过，未打新包／未安装；设备已恢复r27/r22、338/k298及服务，taint0、资源休眠。 [361交接](../../reference/kernel361/README.md)。以下为历史。
 
