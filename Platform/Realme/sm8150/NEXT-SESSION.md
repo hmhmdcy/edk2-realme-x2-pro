@@ -2,6 +2,8 @@
 
 先读WORKING-BOUNDARIES.md、reference/kernel398/README.md。397完整交接归档archive/NEXT-SESSION-through397-2026-10-21.md。完整多摄／骁龙ISP目标active；关灯黑场／噪点按低照度，正常照明光学校准后做。
 
+最新现场条件：用户已开灯出门上班，后续样本重新核实照明与曝光，不默认仍是夜间关灯。
+
 ## 本轮纠正与验证
 
 实际IPE CC调用者输出type2（常量及真实初始化指令执行确认）。396误用type1，13位offset作为IPE契约的结论撤回；398候选改signed11、范围-1024…1023、掩码0x7ff。矩阵signed12/Q(7+shift)、GBR排列、固定9word包0x5e68保持。397实机单位／零／半幅全部zerooffset，既有观察仍有效，但不证明负offset。

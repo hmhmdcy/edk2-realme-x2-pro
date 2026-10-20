@@ -1179,7 +1179,7 @@
   "lsc_unit_candidate_zero_nodes_repaired": false,
   "lsc_individual_values_applied": true,
   "lsc_hardware_programmed": true,
-  "night_work_scope": "User switched lights off; continue offline/source/internal-pattern work. Do not treat ambient dark-room frames as normal-light calibration.",
+  "night_work_scope": "User reports lights switched on and left for work on2026-10-21. Reassess illumination/exposure for new samples; historical dark-room samples retain their original context.",
   "current_camss_source_tree": "/mnt/samurai-full282/source338",
   "current_camss_source_branch": "samurai-iommu-node-lifetime357",
   "current_camss_source_commit": "ba61a62293e0f6bc5838c06f2e85e033e3d702a8",
