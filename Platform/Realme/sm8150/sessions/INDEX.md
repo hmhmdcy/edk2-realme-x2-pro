@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [371持有模式实验与新启动恢复](../reference/kernel371/README.md)
+
 - [370离线A5故障窗口与MMU证据](../reference/kernel370/README.md)
 
 - [369真实A5故障快照与恢复基线](../reference/kernel369/README.md)
