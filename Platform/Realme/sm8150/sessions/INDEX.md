@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [384原生完整bypass条带与实机像素](../reference/kernel384/README.md)
+
 - [383原生分区与原厂CDM差分](../reference/kernel383/README.md)
 
 - [382内核ICA默认配置与幅度修复](../reference/kernel382/README.md)
