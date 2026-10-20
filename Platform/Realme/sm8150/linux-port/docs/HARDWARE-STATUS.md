@@ -1,4 +1,4 @@
-386当前：V4L2 m2m/媒体入口18帧实机通过，覆盖MMAP、DMABUF导入导出/源offset16/stride672、双上下文及STREAMOFF/close；资源正常回收。libcamera、零拷贝、正式平台owner和完整IQ/多摄校准仍待，目标active，未永久安装。[386证据](../../reference/kernel386/README.md)。以下为历史。
+387当前：四摄实际libcamera→IPE、RAW配对及隔离IPA候选验证通过，最终82个IPE作业/处理错误0；RAW-only保持原路径。临时模块/固件已清理、服务恢复，未永久安装。零拷贝、正式平台owner与完整IQ/多摄校准仍待，目标active。[387证据](../../reference/kernel387/README.md)。以下为历史。
 
 361收尾：已安装r27/r22与CAMSS338/k298；四摄基础取流沿用360，候选十线程上下文274帧请求通过，隔离队列仍失败；新候选未安装。ICP/IPE、完整光学与多摄校准未完成。 [361交接](../../reference/kernel361/README.md)。以下为历史。
 

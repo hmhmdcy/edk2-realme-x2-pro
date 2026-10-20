@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [387 四摄libcamera接入IPE与82帧实机](../reference/kernel387/README.md)
+
 - [386 V4L2 m2m入口与18帧实机](../reference/kernel386/README.md)
 
 - [385多尺寸/格式及交替会话16帧](../reference/kernel385/README.md)

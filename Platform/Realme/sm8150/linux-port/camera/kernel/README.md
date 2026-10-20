@@ -1,4 +1,4 @@
-386当前：V4L2 m2m/媒体入口18帧实机通过，覆盖MMAP、DMABUF导入导出/源offset16/stride672、双上下文及STREAMOFF/close；资源正常回收。libcamera、零拷贝、正式平台owner和完整IQ/多摄校准仍待，目标active，未永久安装。[386证据](../../../reference/kernel386/README.md)。以下为历史。
+387当前：四摄实际libcamera→IPE、RAW配对及隔离IPA候选验证通过，最终82个IPE作业/处理错误0；RAW-only保持原路径。临时模块/固件已清理、服务恢复，未永久安装。零拷贝、正式平台owner与完整IQ/多摄校准仍待，目标active。[387证据](../../../reference/kernel387/README.md)。以下为历史。
 
 361收尾：348 Gamma模块仅临时用于请求链验证，已恢复338；k298/taint0/双CCI与CAMSS休眠。公共用户空间分发器已修，隔离CAMSS请求队列仍待修；357 IOMMU补丁及356正确板级内存候选未安装。 [361交接](../../../reference/kernel361/README.md)。以下为历史。
 
