@@ -1,6 +1,16 @@
-# 当前检查点：367（基线恢复，完整多摄／ISP目标 active）
+# 当前检查点：368（SFR故障处理候选已构建，现机367基线）
 
 2026-10-20。先读WORKING-BOUNDARIES.md。原密钥USB SSH，当前boot guard `/var/lib/samurai/k367-work/boot-id-private.txt`，reference/kernel367/host.py为入口。Image/778模块363、boot固件366、静态DT来源365；libcamera五运行包99990.7.2-r29，config/stack0.1.0-r24，四份私有完整Preview默认保持362。全部相机/ISP目标尚未完成。
+
+## 368最新进展（未部署）
+
+原厂SendSfrMessage完整348字节指令执行11路径证明：先处理SFR，再在1b9f2向e001004c发布3；3为错误路径，不能等待它转1或发SYS_INIT。cache/log/format/power为明确桩，不冒充整RTOS。新core以3为终态失败，清理前用标准devcoredump保存568字节有界LE快照；SFR受声明/实际分配双边界限制。DMA别名及backing改在PM供电释放前回收，unmap失败保留PM引用，watchdog原因仍未证明。
+
+实际start13组、stop7组、诊断helper与解码器ASan/UBSan通过，旧版4个反例保留。源码source354现在samurai-a5-terminal-sfr368／9c60745372258f2f37374862a06c9fd09eeaf240；只有A5后端一个C文件变更，k363实际in-tree core W1/Werror零诊断（232352字节），共享输出/config恢复，未部署。当前设备/guard/包/DT保持下述367基线，没有再次CPU释放或重启。
+
+定点只读专用9ab00000固件RAM的一个4KiB代码页与ELF不符，停止未读异常状态页；不能据此恢复实际SFR或判断异常寄存器。raw数据私存368。解码器reference/kernel368/decode-start-dump.py只读已收集的私有devcoredump，不自动操作设备。
+
+下一步以新的针对性诊断预先收集devcoredump，取得实际SFR原因并验证回收次序；不重放366，不在未保全错误前重复启动。尚无完整SYS_INIT/PING/PC_ACK、IPE或完整多摄校准。详见reference/kernel368/README.md。
 
 ## 实际新结果
 
@@ -14,7 +24,7 @@
 
 ## 维护源／工具与回退
 
-完整内核源/mnt/samurai-full282/source354，分支samurai-icp-board-dt365，提交e217016006e609333a715c10f2f3e442dc4da95f；含精确HFI ready364与诊断1947eb7，但实际Image固定ba61，静态DT来自e217。临时ICP模块按k363构建，没有永久加载。libcamera源/mnt/samurai-full282/libcamera362-serialized-built/src/libcamera-v0.7.2，正式r29/r24配方已保存。进入ext4先用reference/kernel284/storage.py::mounted_build()，SDK bind串行。
+实际DT来源提交e217016006e609333a715c10f2f3e442dc4da95f（365），维护检出source354现在为上列368候选；含精确HFI ready364与诊断1947eb7，但实际Image固定ba61，静态DT来自e217。临时ICP模块按k363构建，没有永久加载。libcamera源/mnt/samurai-full282/libcamera362-serialized-built/src/libcamera-v0.7.2，正式r29/r24配方已保存。进入ext4先用reference/kernel284/storage.py::mounted_build()，SDK bind串行。
 
 私存E:/edk2-samurai-out/kernel363～367。boot366候选c3e4e9c85d80c8ec37605cd522cf716525ae5ebe4fa801342dbf7586c292d924；logdump365 aca01bc2c91928f1a6a6690f62d14db014351ec5049e5684590b40c3c93de8da。boot276和logdump363可组合回退DT；原k298模块树/logdump和362事务的r27/r22包＋338模块＋344私有配置也保留。NV/OTP/工厂备份未写，原厂固件、校准、认证日志及密钥不进公共Git。
 

@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [368原厂SFR响应3与错误诊断／DMA回收候选](../reference/kernel368/README.md)
+
 - [367基线恢复及363～366 ICP/DT实测](../reference/kernel367/README.md)
 
 - [362 隔离请求修复及原厂曝光/Gamma默认部署](../reference/kernel362/README.md)
