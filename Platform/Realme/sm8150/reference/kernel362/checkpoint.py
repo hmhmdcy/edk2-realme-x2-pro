@@ -22,7 +22,7 @@ for rel,prefix in [('linux-port/camera/deployment-lock.json','../../'),('linux-p
         current_camera_configuration_stage=362,framework_version='99990.7.2-r29',configuration_version='0.1.0-r24',
         current_camss_module_stage=348,current_camss_module_note_sha256=final['camss_note_sha256'],
         current_camss_source=kernel['source'],current_camss_source_branch=kernel['branch'],current_camss_source_commit=kernel['commit'],
-        installed_ipa_source=source['source'],installed_ipa_source_stage=362,ipa_candidate_source_stage=362,ipa_candidate_source=source['source'],
+        installed_ipa_source=source['source'],installed_ipa_source_stage=362,ipa_candidate_source_stage=362,ipa_candidate_source=source['source'],deployed_snapshot_is_historical=False,
         ipa_candidate_source_evidence=prefix+'reference/kernel362/source-state.json',current_device_runtime_state_verified=True,
         device_current_taint=0,device_closeout_evidence=prefix+'reference/kernel362/final-state-validation.json',
         candidate_camss_v1_isolated_ipc_verified=True,candidate_remaining_failure=None,candidate_common_dispatcher_fix_regression_passed=True,

@@ -2,6 +2,8 @@
 
 2026-10-20。四摄／骁龙ISP目标active，尚未完成；下一步转ICP/A5固件和IPE会话。规则见WORKING-BOUNDARIES.md。
 
+363进行中：正在从source354固定357提交构建独立k363的完整Image/778模块，尚未切换设备；现场仍为下述362组合。构建worker759，私有kernel363/boot-build-state-private.json为状态入口，已有执行只轮询，不重复启动。相关新脚本与原厂入口12场景证据见reference/kernel363/README.md。
+
 ## 当前设备与新增结果
 
 严格原密钥USB SSH 169.254.42.1；沿用360恢复后的boot guard。当前Image仍7.3.0-rc6-rmx1931-samurai-k298+，固件boot276未改。已安装libcamera五运行包99990.7.2-r29、config/stack0.1.0-r24；CAMSS现为348 Gamma模块，note SHA256 d8c0f30d189aa8e69e377ba58c891955f3bc795abfb6b8ed6a9562a1d118333a。其余传感器及板级DT未改。
@@ -17,6 +19,8 @@
 完整13包及7运行包签名仓库私存E:/edk2-samurai-out/kernel362；手机/var/lib/samurai/k362-install-r1为成功新事务，repository/rollback保留r27/r22离线包，backup保存原338模块、四份344私有配置、APK world及仓库指针。回退必须组合恢复旧配置/模块/包，不能只降用户空间后继续使用新默认。原厂数据/私有校准/固件/密钥/原始认证日志不进公共Git。
 
 SDK /home/cy122/x2pro-linux/libcamera214-root；进入E盘ext4先调用storage284.mounted_build()，SDK /work/libcamera bind串行且退出释放。构建及安装已终态，不重启旧handle。
+
+树外364候选：依据363原厂ELF入口12场景，已准备精确HFI ready等待补丁及生产start函数8场景ASan/UBSan回归，旧版提前接受3可复现。尚未应用到source354/未编译模块/未发机；reference/kernel364/README.md和apply-source.py包含363完成后的前提。不要在363构建期间改其固定源码。
 
 ## 剩余
 

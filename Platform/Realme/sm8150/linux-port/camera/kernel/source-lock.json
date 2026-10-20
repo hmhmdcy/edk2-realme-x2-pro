@@ -751,7 +751,7 @@
   "corrected_board_carveout_runtime_tested": false,
   "device_current_ssh_status": "strict_original_key_usb_restored",
   "current_device_runtime_state_verified": true,
-  "deployed_snapshot_is_historical": true,
+  "deployed_snapshot_is_historical": false,
   "iommu_node_lifetime_candidate_commit": "ba61a62293e0f6bc5838c06f2e85e033e3d702a8",
   "iommu_node_lifetime_fix_installed": false,
   "device_current_usb_mode": "NCM",
