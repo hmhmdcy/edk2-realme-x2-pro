@@ -1,4 +1,4 @@
-385当前：原生bypass四尺寸/两端口/NV12-NV21/max_cores1-2配置共16变化帧实机通过，RT/非RT交替、Y等于当前输入、正常回收；待接V4L2m2m/libcamera与完整IQ，多摄校准目标active。未永久安装。[385证据](../../reference/kernel385/README.md)。以下为历史。
+386当前：V4L2 m2m/媒体入口18帧实机通过，覆盖MMAP、DMABUF导入导出/源offset16/stride672、双上下文及STREAMOFF/close；资源正常回收。libcamera、零拷贝、正式平台owner和完整IQ/多摄校准仍待，目标active，未永久安装。[386证据](../../reference/kernel386/README.md)。以下为历史。
 
 361收尾：已安装r27/r22与CAMSS338/k298；四摄基础取流沿用360，候选十线程上下文274帧请求通过，隔离队列仍失败；新候选未安装。ICP/IPE、完整光学与多摄校准未完成。 [361交接](../../reference/kernel361/README.md)。以下为历史。
 

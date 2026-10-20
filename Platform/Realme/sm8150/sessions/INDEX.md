@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [386 V4L2 m2m入口与18帧实机](../reference/kernel386/README.md)
+
 - [385多尺寸/格式及交替会话16帧](../reference/kernel385/README.md)
 
 - [384原生完整bypass条带与实机像素](../reference/kernel384/README.md)
