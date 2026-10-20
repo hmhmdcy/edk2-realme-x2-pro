@@ -6,7 +6,7 @@
 
 | 需要了解 | 唯一维护位置 |
 | --- | --- |
-| 当前适配进展 | [369真实故障快照与恢复基线](reference/kernel369/README.md)、[当前检查点](NEXT-SESSION.md) |
+| 当前适配进展 | [370离线A5故障窗口与MMU证据](reference/kernel370/README.md)、[当前检查点](NEXT-SESSION.md) |
 | 最后核对的部署、源码/产物差异、回退依据与续作项 | [NEXT-SESSION](NEXT-SESSION.md) |
 | 历史清理、保留产物与重建方法 | [2026-10-19交接](reference/maintenance-2026-10-19/README.md) |
 | 当前有效操作规则 | [WORKING-BOUNDARIES](WORKING-BOUNDARIES.md) |

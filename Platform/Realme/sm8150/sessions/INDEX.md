@@ -452,6 +452,8 @@
 
 ## 最新交接
 
+- [370离线A5故障窗口与MMU证据](../reference/kernel370/README.md)
+
 - [369真实A5故障快照与恢复基线](../reference/kernel369/README.md)
 
 - [368原厂SFR响应3与错误诊断／DMA回收候选](../reference/kernel368/README.md)
