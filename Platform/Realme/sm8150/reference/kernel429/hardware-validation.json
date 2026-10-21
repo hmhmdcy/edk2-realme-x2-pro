@@ -50,7 +50,7 @@
   "counterfactual_output_difference_not_causal_proof_because_real_repeat_also_differs": true,
   "formal_modules_services_and_resources_restored_after_r2": true,
   "new_related_faults_in_r2": 0,
-  "later_r3_diagnostic_fault_and_unfinished_recovery_recorded_separately": true,
+  "later_r3_diagnostic_fault_and_subsequent_recovery_recorded_separately": true,
   "feature_acceptance_passed": false,
   "evidence_and_transport_audit_passed": true,
   "passed": true

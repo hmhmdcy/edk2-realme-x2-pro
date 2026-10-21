@@ -30,7 +30,7 @@ r=dict(stage=429,scope='Temporary two-core paired-source m2m replay; transport a
  dc_statistics_writeout_verified=False,ltm_dc_consumption_verified=False,
  counterfactual_output_difference_not_causal_proof_because_real_repeat_also_differs=True,
  formal_modules_services_and_resources_restored_after_r2=True,new_related_faults_in_r2=0,
- later_r3_diagnostic_fault_and_unfinished_recovery_recorded_separately=True,
+ later_r3_diagnostic_fault_and_subsequent_recovery_recorded_separately=True,
  feature_acceptance_passed=False,evidence_and_transport_audit_passed=True,passed=True)
 (HERE/'hardware-validation.json').write_text(json.dumps(r,indent=2)+'\n')
 s=json.loads((P/'runtime-collected-r3/state.json').read_text());kernel=(P/'runtime-collected-r3/kernel-log-private.txt').read_text()
@@ -45,5 +45,16 @@ i=dict(stage=429,scope='Incident evidence audit; not a successful experiment or 
  new_boot_not_yet_verified=True,ssh_connection_refused_on_latest_probe=True,user_physical_restart_requested=True,
  formal_disk_modules_unchanged=True,flash_nv_otp_persist_untouched=True,forced_unload_or_unsafe_dma_release_not_attempted=True,
  evidence_audit_passed=True,device_recovery_complete=False,passed=True)
+if (HERE/'camera-recovery-validation.json').exists():
+ recovery=json.loads((HERE/'camera-recovery-validation.json').read_text())
+ if recovery['passed']:
+  i.update(scope='Historical r3 incident audit plus subsequent verified physical-restart recovery',
+   new_boot_not_yet_verified=False,ssh_connection_refused_on_latest_probe=False,device_recovery_complete=True,
+   physical_restart_confirmed_by_user=True,new_boot_and_formal_modules_verified=True,
+   formal_four_camera_recovery_frames=sum(r['frames'] for r in recovery['captures'].values()),
+   desktop_services_restored=True,recovery_taint=0)
+  if (HERE/'single-core-hardware-validation.json').exists():
+   fixed_hw=json.loads((HERE/'single-core-hardware-validation.json').read_text())
+   assert fixed_hw['passed'];i.update(fixed_core_build3_not_hardware_validated=False,fixed_core_build3_direct_jobs=4)
 (HERE/'incident-validation.json').write_text(json.dumps(i,indent=2)+'\n')
 print(json.dumps(dict(transport=r,incident=i),indent=2))

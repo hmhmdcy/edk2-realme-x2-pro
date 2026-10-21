@@ -12,14 +12,28 @@ assert json.loads((HERE/'runtime-validation.json').read_text())['passed']
 probe=json.loads((HERE/'client-build-validation.json').read_text());assert probe['passed']
 assert probe['source_sha256']==hashlib.sha256((HERE/'pd10-ipe.c').read_bytes()).hexdigest()
 assert probe['probe_sha256']==hashlib.sha256((P/'pd10-ipe').read_bytes()).hexdigest()
+assert build['attempt']==3,'Only the build with the unsafe MMIO diagnostic removed is eligible'
+recovered=json.loads((P/'postboot-adoption-private.json').read_text());guard=recovered['guard_path']
+baseline_code='''from pathlib import Path
+import hashlib,json
+d=Path('/sys/bus/platform/devices/ac10000.icp')
+print(json.dumps(dict(taint=int(Path('/proc/sys/kernel/tainted').read_text()),status=json.loads((d/'m2m_status').read_text()),notes={n:hashlib.sha256(Path('/sys/module',n,'notes/.note.gnu.build-id').read_bytes()).hexdigest() for n in ['qcom_camss','camss_icp_a5_m2m','qcom_camss_icp_a5_core']})))
+'''
+q=host.ssh('python3 -c '+shlex.quote(baseline_code),timeout=20);q.check_returncode();baseline=json.loads(q.stdout)
+normal=json.loads((P/'runtime-collected-r3/state.json').read_text())['before_notes']
+assert baseline['taint']==0 and baseline['notes']==normal
+assert not any(baseline['status'][k] for k in ['users','running','fatal','pinned','orphans','failed','cancelled','first_error'])
+assert baseline['status']['jobs']==baseline['status']['completed']==baseline['status']['direct_completed']
+(P/('preflight-'+attempt+'-private.json')).write_text(json.dumps(baseline,indent=2)+'\n')
 prefix=(HERE.parent/'kernel342/native-install.py').read_text().split('def versions():')[0].replace("'stage':342","'stage':429")
 body=(HERE.parent/'kernel428/multicamera-worker-body.py').read_text()
+body=body.replace('/var/lib/samurai/k394-recovered/boot-id-private.txt',guard).replace("assert state['taint_before']==512","assert state['taint_before']==0")
 a=body.index(" expected_jobs=793");z=body.index(" items=services();",a)
-body=body[:a]+''' prior=json.loads(Path('/var/lib/samurai/k428-ds4-r6/state.json').read_text())
- assert prior['terminal'] and prior['passed'] and prior['formal_modules_restored'] and prior['services_restored']
- assert notes()==prior['before_notes']
- assert status()['jobs']==status()['completed']==0 and not any(status()[k] for k in ['users','running','fatal','pinned','orphans','failed','cancelled','first_error'])
-'''+body[z:]
+body=body[:a]+''' baseline=BASELINE
+ assert notes()==baseline['notes']
+ assert all(status()[k]==baseline['status'][k] for k in ['jobs','completed','direct_completed','failed','cancelled','first_error'])
+ assert not any(status()[k] for k in ['users','running','fatal','pinned','orphans'])
+'''.replace('BASELINE',repr(baseline))+body[z:]
 a=body.index(" state['captures']={}");z=body.index(" state['candidate_final_status']",a)
 body=body[:a]+''' import fcntl
  video=[str(Path('/dev')/p.parent.name) for p in Path('/sys/class/video4linux').glob('video*/name') if p.read_text().strip()=='qcom-ipe-a5']
@@ -71,6 +85,6 @@ for m in members:
 for n,digest in json.loads((root/'manifest.json').read_text()).items():assert hashlib.sha256((root/n).read_bytes()).hexdigest()==digest
 (root/'pd10-ipe').chmod(0o700)
 print(json.dumps(dict(staged=True,root=str(root),passed=True)))
-'''.replace('ROOT',repr('/var/lib/samurai/k429-pd10-ipe-'+attempt)).replace('NAMES',repr(set(files)|{'manifest.json'}))
+'''.replace('/var/lib/samurai/k394-recovered/boot-id-private.txt',guard).replace('ROOT',repr('/var/lib/samurai/k429-pd10-ipe-'+attempt)).replace('NAMES',repr(set(files)|{'manifest.json'}))
 q=host.ssh('python3 -c '+shlex.quote(code),input=payload.getvalue(),timeout=30);print(q.stdout.decode());q.check_returncode()
 (HERE/('runtime-staging-'+attempt+'-validation.json')).write_bytes(q.stdout)

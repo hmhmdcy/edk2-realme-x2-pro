@@ -1,6 +1,9 @@
 from pathlib import Path
-import json
+import json,runpy
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
+if (HERE/'single-core-hardware-validation.json').exists():
+ runpy.run_path(str(HERE/'checkpoint-recovered.py'),run_name='__main__')
+ raise SystemExit(0)
 for n in ['source','runtime','owner','one-core-oracle','hardware','incident','intree-build']:
  assert json.loads((HERE/(n+'-validation.json')).read_text())['passed'],n
 s=json.loads((HERE/'source-state.json').read_text());h=json.loads((HERE/'hardware-validation.json').read_text());incident=json.loads((HERE/'incident-validation.json').read_text())

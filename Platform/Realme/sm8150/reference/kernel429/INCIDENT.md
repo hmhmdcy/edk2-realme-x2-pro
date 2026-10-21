@@ -1,4 +1,6 @@
-# 429 r3：新增 PPS 诊断越过映射窗口，设备恢复待核实
+# 429 r3：新增 PPS 诊断越过映射窗口；后续四摄恢复已核实
+
+当前状态：用户已强制重启进入 Linux，[新启动](postboot-validation.json)与[正式四摄](camera-recovery-validation.json)均通过核验，48 帧 IPE 完成，服务恢复、taint 0。修正版 build r3 的 r4 单核回放也已完成 4 作业并恢复正式模块／服务，无新增 fault；[统计与重复性仍未通过](single-core-hardware-validation.json)。下文保留故障发生时的事实，其中“尚未恢复”指当时状态。
 
 r3 在原厂支持的单核双遍请求后添加了一个错误的只读诊断：直接以 IPE TOP 映射基址加固件 PPS 寄存器偏移读取 LTM 控制。该偏移不在现有内核映射窗口内。实际 Oops 为 `readl` 的 level 3 translation fault，调用者是 `run_colour_status`，与新增诊断代码和故障地址对应。**这是本轮加入的诊断错误，不是原厂固件、PD10 像素或用户环境导致。**
 
