@@ -1,29 +1,31 @@
-# 当前检查点：427（DS4底层输出候选已上机；帧内停滞／overflow未解决）
+# 当前检查点：428（原厂 Crop 修正色度坐标；四摄 DS4 完整同帧输出通过）
 
-完整多摄／骁龙ISP目标active，未完成，无需用户输入。先读WORKING-BOUNDARIES、reference/kernel427/README.md。426是progress，427有实际内核接线、Werror构建与实机失败定位，不能标为自动链路完成。
+完整多摄／骁龙 ISP 目标 active，未完成，无需用户输入。先读 WORKING-BOUNDARIES、reference/kernel428/README.md。427 是实际接线和失败定位的 progress；428 是原厂真实几何生产纠错、底层修复和四摄实机通过的 progress。下一步直接接 IPE 粗级消费，不重跑已过数学矩阵。
 
-## 当前源码与实机结果
+## 维护源码与修复根因
 
-维护内核 /mnt/samurai-full282/source354，branch samurai-vfe175-ds4-dma427，HEAD a993cd8a1db892bb5d68d9e6bcccfcc048aec9fd，parent426 dbefc5bdd8de8da07128171423f098a38d6e45b0。427/ds4-dma.patch相对426，12文件。真实DS4图像节点msm_vfe0_ds4、标准VIDEO_CAPTURE_MPLANE/DMA-SG、独立WM5/group1、参数块8（flags/reserved0，仅系数；流生命周期开关）。本地QP10 FourCC未上游保留，明确description避免核心WARN；逻辑mbus0x2027，像素位序未验证。未改变DT、传感器、OTP/NV/persist。
+原32GiB镜像 /mnt/samurai-full282，source354/build。HEAD 906a6b9d26afe0e7c3f3758dad2fb5c0e778634e，branch samurai-ds4-precrop-isolation428，parent427 a993cd8a1db892bb5d68d9e6bcccfcc048aec9fd。precrop-chroma.patch 相对427仅一文件修正色度crop X：交织色度分量宽仍等于FULL，只有高度减半。427夹具注入半宽X，局部oracle只证明错误输入的寄存器一致，不能当有效几何。428先绕过precrop诊断r3成功，再原使能恢复且X修正r4/r5/r6成功；precrop-isolation.patch仅中间诊断，不要安装。
 
-四摄原厂系数沿用426的提取/模式选择/原Parse和DS410。DS4数据寄存器+precrop+10bitround+PD10pack已接MMIO；原HAL节点ProgramIQModuleEnableConfig 0x2a8900补充发现DS4 Y/C局部crop/round/clamp使能0xd8c/dac=0xe00。夹具节点0xff74 FULL、+4 DS4 bool=1，calc输入沿用DS410+PreCrop+Round+R2PD，完整汇总21寄存器；不是完整HAL节点初始化或真实IFE striping。7组几何actual C与原指令72B逐字一致、hostASAN/UBSAN+ARM64 qemu通过。裁剪几何仍由夹具提供，须恢复真实IFE几何，不能把局部oracle当硬件验收。
+执行本机HAL完整FULL Crop Create315e88/Execute3161b0，path0 VideoFull（1是FD）。构造cfg必须有效可写；最后hook确认无写原映像。cfg/full尺寸和MNDS比例+144给定，产生calculated+2c78 preCrop：640x480时Y(0,0,639,479)、C(0,0,639,239)。再原PreCrop/DS410/Round/R2PD/NodeEnable，7组actual C逐字一致、hostASAN/UBSAN+ARM64 qemu过。5组wholeCrop生产检查过；MNDS完整执行、任意sensor ROI/striping未完成，不能扩大范围。原厂系数和4物理模块/模式选择沿用426；原件私存。
 
-运行候选640x480 FULL对应160x120 PD10，stride768/slice60/46080B；WM活动宽640bytes、高60，frame_inc是含slice padding的layout.bytes。32bit IOVA/SG/16B对齐约束保留。缓冲拥有后arm WM、写地址FIFO、单次reg_update，空队列不启DS4。修复旧RDI fallback提前启动，WM arm顺序对齐现有路径；顺序修正本身未解决物理问题。断粮/重开/共享SOF/独立完成/缺校准与SOF错误仅模型通过，实机尚未验收。
+最新Werror build r2 10匹配模块终态通过，CAMSS a9096d39b368eff3c59c133fd03e493d65294edc0635cf6c5ded46df9f5050c7，core ae2ca7e3ede81ccb019422d7250376c23377537d2c328571817a3390db179099不变425，m2m不变427。共享build输出和配置恢复，源码干净、补丁无fuzz/offset复放。无DT/传感器/ABI/队列变化，无永久安装。
 
-实际临时事务r1..r8均terminal，正式模块/服务/格式恢复。r1探针memcmp附加字段过严；r2/3诊断不足，r3还发生未先poll构建终态便准备载荷，不能依赖其新版诊断；r4起source+binary SHA guard且终态后stage。r5加FULL对照/SOF；r6 FIFO顺序仍失败；r7局部使能仍失败；r8诊断确认DMA部分写入而无完整DONE。
+## 最终硬件与像素结论
 
-最新r8 FULL-only对照24帧正常、tail未改；同开656 SOF但FULL/DS4均0交付。停流后安全读未交付映射：DS4仅首buffer前4 packedrows变化，前三行到byte639、第四行到511，后续全未写；FULL首buffer也只写一部分，其它buffer未写。不是图像/统计成功，不交IPE、不推进IPA历史。IRQ status1见0x800/1000；OEM281 camif error_mask1=0xefff7e80命中、原camif归overflow。无新SMMU/WARN并不代表无硬件错误！原先ISR未报告这些错误。r8诊断时间窗内错误IRQ密集，最后源码只在前4SOF事件输出，日志收敛后构建不改像素配置。最新实际二进制SHA b5b94ec927765f0ca007696fd89d53d37d1386ffdd2c941d6d7f202704df466d，最终源码/构建是后续只改日志版本，别混为一个。
+r6 worker终态通过：主GW1 4608x3456/tele3M5 2104x1560/frontIMX471 2304x1728/wideIMX319 1632x1224，各现有一模式顺序拍。FULL640x480 NV12+DS4160x120 PD10，stride768/slice60/46080B，WM5/group1。main FULLonly24；8个pattern/scene各18DS4，共144完整帧，全部同SOF FULL完成伙伴，共236同时FULL。每次断粮一处预期SOF缺口、恢复成功；DS4独立停流后FULL至少再6帧。所有mmap尾部与PD10行padding未改。采样前4SOF共32诊断未命中OEM CAMIF错误掩码，不代表所有错误注入验收。
 
-## 下一步直接定位帧内回压
+V4L2 timestamp是DONE完成时刻，seq才是SOF标签；两个DONE差最多154us，不要求时间戳相等。r5旧探针3缓冲且每FULL落盘导致main-scene一个DS4无FULL伙伴，不能声称r5有144配对。r6四缓冲、只保存FULL第4/18帧+所有DS4后通过。未来生产仍必须丢弃孤立粗级帧，hold已提交历史，不能依赖probe永不掉帧。
 
-优先对照原厂真实IFE裁剪/striping、模块局部使能与输出端口、WM消费/行数/队列，解决0x800/1000内部overflow；不要重跑已过数学矩阵或盲加新版ISP位。现有partial DMA证明开始写但不能证明格式/完整像素。内核对这些错误应最终有可追踪失败回执，未交付的SOF不能推进任何数值历史。完整DS4后再验同帧FULL配对、断粮恢复/晚开/重开/独立停止。
+r1尺寸替换损坏460800前置失败，r2tele复现partialDMA，r3bypass诊断成功，r4恢复precrop+正确X成功；r5/r6四摄成功。均终态恢复正式模块、媒体格式、PW/WP。r6私有capture-collected-r6，公共hardware/pixel-layout/source等validation可复查。
 
-随后连接真实PD10→IPE粗级backing、C multipass striping、scratch/session/frame端口1，验证DC写出/full IP消费，再合并IPA自动触发和最终成功历史实拍。425原HAL+FW oracle已证明DC双遍：640/650 scratch71488/75584，不能用单遍48；CONFIG_IO+2896是遍次，不是BL，HAL minBL181024。旧C固定单遍；较新fromDownscale未证本机支持。
+PD10每8byte：6个高8bit字节，随后LE低12bit按同6分量顺序各2bit，高4reserved；分量存储Y00,Y10,Y01,Y11,Cb,Cr，raster索引0,2,1,3。3普通色条共7904恒定邻域10bit差最多3；main ShadeColorBars有垂直渐变，不能套等值色条。4路scene全24排列各自最佳均列优先，参考只是近似4x4均值，不等于精确原厂filter相位；144帧reserved高4均零。pd10.py为诊断decoder，QP10仍本地未保留FourCC。已查看front FULL/coarse构图色彩相符，但上游仍雾/偏色，未声称最终画质校准完成。
 
-TMC11实际触发/BHIST1024+曝光/gain/lux→LTM13与IPEGamma及6008B request/成功history沿用423/424，当前同帧上游GTM生效版本因果仍缺。IFE/BPS GTM与IPE LTM必须区分；TMC非零GTM份额不能清零伪造完整。前摄OEM TMC关保持，单曝光unityDRC/noHDR/noLED/no-face不等于完整AndroidAEC。
+## 下一步直接接真实 PD10 → IPE
 
-## 设备与恢复
+425原HAL/FW已经证明DC0一遍/DC1两遍、PD10端口1影响CDM重定位，640/650 scratch71488/75584；CONFIG_IO+2896是遍次，不是BL，HAL minBL181024。旧维护C仍固定单遍48，不得继续。连接真实PD10 backing所有权、C multipass striping、scratch/session/frame端口1；先证明DC统计实际写出及full IP消费，然后合并IPA。避免新固件fromDownscale猜测，本机未证。
 
-same394启动，Image363/DT389/CAMSS389正式、420 r31/r26+419 core/adapter未永久改。首次reload前793 IPE direct成功已归档，reload后每模块生命周期jobs=completed=failed=cancelled=0，无新IPE job；这不是历史job失败。owner_refs53桌面枚举，资源/电源/映射均释放，taint历史512不增，PW/WP各1恢复。最新成功现场照片仍424：410帧/402history/2Focused且仍雾感偏色；本轮pattern失败使scene分支未执行。其它模式/视频/第五2MP身份等见363/REMAINING-CAMERA-SCOPE。
+处理域：GTM在IFE/BPS上游，LTM在IPE。TMC非零GTM份额与同图像实际应用版本因果仍缺，不得清零伪造完成。423/424现有IPA实际曝光/gain/lux+同SOF preWB1024BHIST+IFEgamma→原TMC11→LTM13/IPEGamma→6008B request、最终成功才提交数学history、单pending/缺BG或lux hold。424最后自动IPE现场410帧/402history/2Focused且雾偏色；428是新IFE现场成功，不是新自动IPE成功。front OEM TMC关保持；单曝光unityDRC/noHDR/noLED/no-face不等于完整AndroidAEC。
 
-所有构建/设备worker终态后才能改依赖或新部署。每次WSL source/build/ext4访问先root storage284.mounted_build挂原32GiB镜像；source354/build不重建格式化。Unicorn PYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。OEM原件、完整ASM/寄存器/系数/图像只在private；公共保留泛化代码与脱敏记录。本地mirror scoped提交保护其它index和3处工作树，不push；完整目标继续active。
+same394启动、Image363、DT389/CAMSS389正式、420 r31/r26+419 core/adapter未改。427reload前793历史IPE完成保留，reload后当前生命周期jobs/completed/failed/cancelled=0，428无IPE job；不是历史失败。owner_refs53桌面枚举，资源/映射/电源释放，taint历史512不增。其它模式/视频/第五2MP身份见363/REMAINING-CAMERA-SCOPE。
+
+每次WSL source/build/ext4前先root storage284.mounted_build挂原镜像，不能重建格式化。构建/worker先poll terminal再stage/deploy；无pending shell或remote worker。Unicorn PYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。OEM原件/ASM/系数/图像仅private；泛化代码/证据public。mirror scoped本地commit保留其它index和3处工作树，不push，完整目标继续active。
