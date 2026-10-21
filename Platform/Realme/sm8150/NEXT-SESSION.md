@@ -1,33 +1,29 @@
-# 当前检查点：426（四摄原厂DS4参数与VFE175寄存器编码恢复；DMA／实拍未接通）
+# 当前检查点：427（DS4底层输出候选已上机；帧内停滞／overflow未解决）
 
-完整多摄／骁龙ISP目标active、未完成。先读WORKING-BOUNDARIES与reference/kernel426/README。425是progress：PD10布局/IO与原厂DC双遍确认；426新增提取、原指令验证、内核代码和构建。425归档archive/NEXT-SESSION-through425-2026-10-21.md。
+完整多摄／骁龙ISP目标active，未完成，无需用户输入。先读WORKING-BOUNDARIES、reference/kernel427/README.md。426是progress，427有实际内核接线、Werror构建与实机失败定位，不能标为自动链路完成。
 
-## 426实际结果
+## 当前源码与实机结果
 
-维护内核/mnt/samurai-full282/source354，branch samurai-vfe175-ds4-codec426，HEAD dbefc5bdd8de8da07128171423f098a38d6e45b0，parent425 faf093770826a3bbe4b6f21f3b93303c62591627；中间1ebfb0711是初版，后补显式linux/bits.h。新增camss-vfe-175-ds4.c/.h及Kbuild，vfe_175_ds4_encode只构造Y/filter/C/R2PD四寄存器，检查高度2..8192偶数、每系数<=256及sum256..512，保留无关位、清旧PD8模式，失败输出保持/允许inplace。没有MMIO、模块开启、DS4节点/DMA注册、用户UAPI、DT/传感器变化，运行时未引用。当前实际DS4生产仍未实现。
+维护内核 /mnt/samurai-full282/source354，branch samurai-vfe175-ds4-dma427，HEAD a993cd8a1db892bb5d68d9e6bcccfcc048aec9fd，parent426 dbefc5bdd8de8da07128171423f098a38d6e45b0。427/ds4-dma.patch相对426，12文件。真实DS4图像节点msm_vfe0_ds4、标准VIDEO_CAPTURE_MPLANE/DMA-SG、独立WM5/group1、参数块8（flags/reserved0，仅系数；流生命周期开关）。本地QP10 FourCC未上游保留，明确description避免核心WARN；逻辑mbus0x2027，像素位序未验证。未改变DT、传感器、OTP/NV/persist。
 
-从保留333索引/原BIN和模式树提取IFE DS4/DS16/显示四类原厂reserve。SunnyGW1 4根/4普通上下文，IMX471 4/2，Qtech3M5 20/4，IMX319 36/4，共64根*4pass、14上下文*4tag=56模式查询。原厂ParameterParser XML逐项一致，原GetModule选择一致；分析副本仅过滤非目标表解析标记，数据区/模式树不改。系数/XML/全对象私存kernel426。既有物理来源，不认证EEPROM或把QtechGW1另算摄像头。
+四摄原厂系数沿用426的提取/模式选择/原Parse和DS410。DS4数据寄存器+precrop+10bitround+PD10pack已接MMIO；原HAL节点ProgramIQModuleEnableConfig 0x2a8900补充发现DS4 Y/C局部crop/round/clamp使能0xd8c/dac=0xe00。夹具节点0xff74 FULL、+4 DS4 bool=1，calc输入沿用DS410+PreCrop+Round+R2PD，完整汇总21寄存器；不是完整HAL节点初始化或真实IFE striping。7组几何actual C与原指令72B逐字一致、hostASAN/UBSAN+ARM64 qemu通过。裁剪几何仍由夹具提供，须恢复真实IFE几何，不能把局部oracle当硬件验收。
 
-完整原HAL DS4 Parse 0x1fcdf0输出200B，四pass运行时数组offset136，与独立BIN解码完全相同。真实RunCalculation0x31d130读对象140/144/148，即PASS_FULL系数；不是猜某份pass。64根系数作为first-DS4编码夹具，4高度*3旧寄存器种子=768组，hostASAN/UBSAN和ARM64静态qemu12288B与完整DS410/R2PD原指令0差。每架构10invalid及inplace过。14完整Create/Execute只绑定已选ds4to1v10_ife_full_dc4（不是DS16/显示绑定），Getter由framework provider返回外部原管理器选定并本机Parse生成的对象；寄存器写传输记录provider，数学/依赖更新不替换。未声称全模式管理器也在Unicorn内执行。DS16硬件未实现。
+运行候选640x480 FULL对应160x120 PD10，stride768/slice60/46080B；WM活动宽640bytes、高60，frame_inc是含slice padding的layout.bytes。32bit IOVA/SG/16B对齐约束保留。缓冲拥有后arm WM、写地址FIFO、单次reg_update，空队列不启DS4。修复旧RDI fallback提前启动，WM arm顺序对齐现有路径；顺序修正本身未解决物理问题。断粮/重开/共享SOF/独立完成/缺校准与SOF错误仅模型通过，实机尚未验收。
 
-完整原指令DS410→PreCrop→RoundClamp→R2PD同calculated frame覆盖128/640/650/1920/4096五组几何：DS4滤波0xd60起；前裁剪Y0xd84/C0xda4；独立round/clamp Y0xd98/C0xdb8，保留10bit/roundbits0/pattern3；PD10 packmode0，R2PD0xd6c；0x4c模块使能合计0x5500（Y/C降采样+precrop+R2PD）。原厂GPL总线DS4=WM5、packer0、活动宽align(qw*4,16)bytes，高qh/2。backing仍425规则192byte/4packedrows，不能把WM活动宽度当stride。这些仅配置证据，非实际像素/统计产出。
+实际临时事务r1..r8均terminal，正式模块/服务/格式恢复。r1探针memcmp附加字段过严；r2/3诊断不足，r3还发生未先poll构建终态便准备载荷，不能依赖其新版诊断；r4起source+binary SHA guard且终态后stage。r5加FULL对照/SOF；r6 FIFO顺序仍失败；r7局部使能仍失败；r8诊断确认DMA部分写入而无完整DONE。
 
-W=1/Werror构建r3 48.30s，CAMSS/core/adapter+7匹配媒体helper共10模块零诊断；qcomcamss含真实codec符号，SHA101cc9b977d5c7582215391772130c19393b38150708b8fe888d0bdda9081d44；core与425同SHAae2ca7e3ede81ccb019422d7250376c23377537d2c328571817a3390db179099。r1缺显式bits.h（已修源码）；r2缺匹配VB2/ISP/m2m符号（已补目标），未忽略错误。均terminal后再改源/重建，共享构建目录恢复；源码干净、零fuzz/offset重放，候选未安装。当前没有活动构建或设备事务。
+最新r8 FULL-only对照24帧正常、tail未改；同开656 SOF但FULL/DS4均0交付。停流后安全读未交付映射：DS4仅首buffer前4 packedrows变化，前三行到byte639、第四行到511，后续全未写；FULL首buffer也只写一部分，其它buffer未写。不是图像/统计成功，不交IPE、不推进IPA历史。IRQ status1见0x800/1000；OEM281 camif error_mask1=0xefff7e80命中、原camif归overflow。无新SMMU/WARN并不代表无硬件错误！原先ISR未报告这些错误。r8诊断时间窗内错误IRQ密集，最后源码只在前4SOF事件输出，日志收敛后构建不改像素配置。最新实际二进制SHA b5b94ec927765f0ca007696fd89d53d37d1386ffdd2c941d6d7f202704df466d，最终源码/构建是后续只改日志版本，别混为一个。
 
-## 下一步直接做真正DS4传输，不绕回重复矩阵
+## 下一步直接定位帧内回压
 
-当前camss-vfe-17x只注册FULL output0/params1/stats2，vfe_register_meta_nodes只处理metadata；VFE175 full验证器只接受1/2/3输出。需补DS4图像格式/节点、WM5传输、队列/启停/错误回收，再应用precrop/filter/depth/R2PD和原厂系数。PD10不是NV12，也不能假装metadata；注意格式描述与upstream接口范围。现有vfe_add_ds可声明额外output，公共video格式换算/注册需补PD10布局，普通分支保持。
+优先对照原厂真实IFE裁剪/striping、模块局部使能与输出端口、WM消费/行数/队列，解决0x800/1000内部overflow；不要重跑已过数学矩阵或盲加新版ISP位。现有partial DMA证明开始写但不能证明格式/完整像素。内核对这些错误应最终有可追踪失败回执，未交付的SOF不能推进任何数值历史。完整DS4后再验同帧FULL配对、断粮恢复/晚开/重开/独立停止。
 
-现有175 SOF标签遍历所有活动output，组合完成vfe_buf_done可复用，但要验证FULL+DS4共享组合组与缓冲断粮/晚开/重开/停止时不提前DONE，SG覆盖范围与32bit IOVA不放宽。FULL MNDS输出/裁剪→DS4四分之一输出必须同SOF；先得到有效PD10现场样本，再接IPE，不能提交空/虚构backing。原厂precrop/round/R2PD完整模型已在ds4-model.py和check-producer-geometry.py，可继续作为oracle。
+随后连接真实PD10→IPE粗级backing、C multipass striping、scratch/session/frame端口1，验证DC写出/full IP消费，再合并IPA自动触发和最终成功历史实拍。425原HAL+FW oracle已证明DC双遍：640/650 scratch71488/75584，不能用单遍48；CONFIG_IO+2896是遍次，不是BL，HAL minBL181024。旧C固定单遍；较新fromDownscale未证本机支持。
 
-随后接IPE粗级backing所有权、C multipass striping、scratch/session/frame端口1地址，再确认DC统计写入与fullIP消费，最后与IPA同SOF触发/最终成功数值历史合并实拍。425已有实际C IO→完整HAL striping→完整FWprepare证明：640/650宽粗级端口存在时DC0实际1遍、DC1实际2遍；PD10改址仅改变对应硬件地址。scratch71488/75584不可用单遍48；CONFIG_IO+2896是配置遍次，不是BL容量，HAL minBL181024。当前旧C stripe固定单遍，实际接口仍未接粗级路径。
+TMC11实际触发/BHIST1024+曝光/gain/lux→LTM13与IPEGamma及6008B request/成功history沿用423/424，当前同帧上游GTM生效版本因果仍缺。IFE/BPS GTM与IPE LTM必须区分；TMC非零GTM份额不能清零伪造完整。前摄OEM TMC关保持，单曝光unityDRC/noHDR/noLED/no-face不等于完整AndroidAEC。
 
-较新IPE fromDownscale机制尚未证明本机支持，勿套新版本标志。GTM另属IFE/BPS，TMC有非零GTM份额尚未应用；本机GTM Execute0x31fc00/setting0x37c818待恢复树/数学与上游生效版本→同图像IPE因果绑定，不能把当前hist算出的曲线冒充已改同帧上游或清零份额伪造完整。
+## 设备与恢复
 
-## 保留的运行时与来源
+same394启动，Image363/DT389/CAMSS389正式、420 r31/r26+419 core/adapter未永久改。首次reload前793 IPE direct成功已归档，reload后每模块生命周期jobs=completed=failed=cancelled=0，无新IPE job；这不是历史job失败。owner_refs53桌面枚举，资源/电源/映射均释放，taint历史512不增，PW/WP各1恢复。最新成功现场照片仍424：410帧/402history/2Focused且仍雾感偏色；本轮pattern失败使scene分支未执行。其它模式/视频/第五2MP身份等见363/REMAINING-CAMERA-SCOPE。
 
-426无手机访问。最近424主摄普通/隔离各205帧、402数值提交、两次Focused，仍雾感偏色；793direct、failed/cancel0，资源/服务恢复，历史taint512保留。具体见424证据，不是426新健康读数。
-
-正式仍420 r31/r26、419生产core63131c.../adapter46f91c...，Image363/DT389/CAMSS389未被本轮修改。候选424 IPA324a821f...未永久安装；已修lux历史坐标、缺BG/lux持有committed、最终成功回执提交，主摄4608x3456单曝光unityDRC/HDR/LEDoff/no-face策略非完整Android；前摄原厂TMC关保持。其它镜头/视频/2592硬测/第五2MP身份mux等见reference/kernel363/REMAINING-CAMERA-SCOPE.md。
-
-CamxChi固定9f17f1b568626b393e785b369c5dc94543774d7a，原HAL SHAe2b1b9b6379507052464d9f9573c2a5a1b1cf37c43947b53645ddc8948a70dde，281 debugdata精确符号复用；原厂GPL9668fcdc6ec15be7a10d66f7b93c347829e0fdb6、生成寄存器头296复用。每次WSL source/build/ext4访问先root storage284.mounted_build挂原32GiB镜像，不格式化。Unicorn PYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。先等进程handle终态才改依赖/部署。原件/系数/ASM/XML/寄存器/图像仅private，本地scoped mirror护其它index、不push；没有用户输入阻塞，继续功能工作。
+所有构建/设备worker终态后才能改依赖或新部署。每次WSL source/build/ext4访问先root storage284.mounted_build挂原32GiB镜像；source354/build不重建格式化。Unicorn PYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。OEM原件、完整ASM/寄存器/系数/图像只在private；公共保留泛化代码与脱敏记录。本地mirror scoped提交保护其它index和3处工作树，不push；完整目标继续active。
