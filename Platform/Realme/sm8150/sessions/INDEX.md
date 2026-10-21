@@ -525,6 +525,7 @@
 | [kernel417](<../reference/kernel417/README.md>) | 417：类型化逐帧 ISP 参数通过 Media Request 真机验证 |
 | [kernel418](<../reference/kernel418/README.md>) | 418：libcamera IPE 请求链路与三方完成回收通过真机验证 |
 | [kernel419](<../reference/kernel419/README.md>) | 419：逐帧IQ失ACK恢复与错误缓冲出队 |
+| [kernel420](<../reference/kernel420/README.md>) | 420：生产IPE请求通道打包集成 |
 | [rx33](<../reference/rx33/README.md>) | Session 33：有效 EUD RX 抓包 |
 | [rx34](<../reference/rx34/README.md>) | Session 34 的临时终端记录 |
 | [rx36](<../reference/rx36/README.md>) | Session 36：USB 描述符、旧 qcusbser 审查与已完成对照 |

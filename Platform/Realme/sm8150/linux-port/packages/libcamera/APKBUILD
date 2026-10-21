@@ -4,7 +4,7 @@ maintainer="Robert Mader <robert.mader@collabora.com>"
 pkgname=libcamera
 _pkgver=0.7.2
 pkgver=9999$_pkgver
-pkgrel=30
+pkgrel=31
 pkgdesc="Linux camera framework"
 url="https://libcamera.org/"
 arch="all"
@@ -100,6 +100,7 @@ source="https://gitlab.freedesktop.org/camera/libcamera/-/archive/v$_pkgver/libc
 	0038-camss-factory-exposure-program.patch
 	0039-synchronous-ipa-reentrancy.patch
 	0040-camss-ipe-pipeline.patch
+	0041-camss-ipe-request.patch
 	qcam.desktop
 	$_tuning_files
 	"
@@ -269,4 +270,5 @@ c1fdd9576f8987f5b9e1d0cab0840340337df88691321a1b5552a7345e254edca7b645cb7cfb727d
 b3e2cc066844727359d8ab0c03da5b83c59507c8b8be14ef732cfe3e461a9354ef0bbe8158625c37bac776b84b280157148fc507dfa6a9e8f88dea67975084ff  0038-camss-factory-exposure-program.patch
 868194789e800a1a4b6c4a3960b9d1f7bba7ece61ce095fc12609614bd1daaeac4cec5c14f0d2b37c542d196dcf7bba835e26d12ce292da09fb7f4301f5f6d9f  0039-synchronous-ipa-reentrancy.patch
 ac954846c969b93c088696f47a53439af2563639981111c55b8626398d84ad285944822d5dad37a56cae3784c9620a9e4dcc86cb77e7119c85f8bddd2dec89f9  0040-camss-ipe-pipeline.patch
+ddb4ebbfa72df7bc8a5f05d06233ff66b2452a3bc970dcc5999ecbb986bb55ce577d110ecc95ea2e93a0631f2223acb909b01c9ff3d802356679b0d570b9f90b  0041-camss-ipe-request.patch
 "

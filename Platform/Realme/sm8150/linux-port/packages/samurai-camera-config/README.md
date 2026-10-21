@@ -1,3 +1,5 @@
+420当前：419生产驱动与签名libcamera r31/config-stack r26已正式安装；四摄/RAW双流/隔离IPA/普通用户PipeWire共93direct完成，错误与取消0，各摄日志requests=1。资源回收、新fault0，历史taint512保留。自动IPE画质参数仍旁路，完整校准继续。[420证据](../../../reference/kernel420/README.md)。以下为历史。
+
 391当前：libcamera r30/config-stack r25已正式安装，默认IPE四摄／RAW／隔离IPA及普通用户PipeWire共94新增作业通过，个体配置未打入公共包；完整IQ与多摄校准继续。[391证据](../../../reference/kernel391/README.md)。以下为历史。
 
 360候选：libcamera r28／config r23已完整构建和签名检查，尚未安装。包含349 Gamma与359原厂曝光程序，启用私有Gamma配置需348参数ABI；公共默认YAML不变。原r27／r22配方仍为已安装版本。[360记录](../../../reference/kernel360/README.md)。以下为历史。

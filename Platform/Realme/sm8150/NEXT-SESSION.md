@@ -1,35 +1,35 @@
-# 当前检查点：419（逐帧IQ失ACK恢复及ERROR缓冲出队修复）
+# 当前检查点：420（逐帧IQ生产通道已正式安装）
 
-读WORKING-BOUNDARIES.md、reference/kernel419/README.md。完整目标active。已开灯。418归档archive/NEXT-SESSION-through418-2026-10-21.md；不要扩大已通过TMC矩阵。
+读WORKING-BOUNDARIES.md、reference/kernel420/README.md。完整多摄/骁龙ISP目标active；已开灯。419全文归档archive/NEXT-SESSION-through419-2026-10-21.md；不再反复扩大已通过算法矩阵。
 
-## 419当前证据
+## 正式设备
 
-维护内核samurai-ipe-error-buffer419 commit07d2ca735f88649587c0e89802febff6dbf2b443干净，父417f0b6ea869e3e748e6c1ccfe06865ac8d02c3ef3a。仅适配器device_work：七项逐帧所有权都释放时不queue_error，ERROR缓冲可DQBUF；任一未释放继续poison/保引用。全局fatal与395两微秒复位脉冲/readback/双IPE freshACK后退役顺序保留。
+已安装五个libcamera运行包99990.7.2-r31与config/stack0.1.0-r26、419生产core+adapter。13包构建/签名核对，6IPA签名匹配包内核心，6IPA二进制与r30相同；原40补丁/全功能子包/IPA接口保留，新增0041请求补丁。公共配置payload不变，精确依赖pin更新；/etc四份个体配置未变，原厂表不进公共包。
 
-24项ASanUBSan实际worker+vb2模型通过；生产in-tree W1/Werror无诊断。private419生产核心qcom-camss-icp-a5-core-intree-r1.ko 419848B SHA63131c5719526ca796955f4d833380a12c36c62557ccf539e85bd58c0f070632（同417），适配器camss-icp-a5-m2m-intree-r1.ko 132400B SHA46f91cc8dd024626f05a276e63dd8384bb6a056d15bf441c7d44a91ab4c2e06f。**临时吞ACK核心425344B SHAe27ad5242e374140b6bc2a308ba020b612f7c300c4b5ee71e9e6e414346991a6禁止部署为生产**。
+候选源码/mnt/samurai-full282/libcamera420-request-r31/src/libcamera-v0.7.2复制418已验证源，四文件hash相同，复用418零fuzz及37模型/16非零实像素证据。包内strip核心SHAd8c841d28f65bd1746e240beea71af33b83087f511e6359ba75099ea09c0b05b，不混418未strip实验库55721…。linux-port/packages两配方与源锁已更新。
 
-复用418实库，两个wrapper各先非零LA暖帧。A提交有效LTM+Gamma，testcore只吞一次完整成功ACK，超时约5.1秒；IQ8944B+wholeparcel548864B保留到停机/双freshACK后退役，失败输出不当成功交付。旧idle上下文保持fatal；关闭最后旧上下文才清fatal。新wrapper恢复LA1024全部460800字节等406参考。各变体3success/3failed，无cancel；导出FD仍在时ownerrefs8正常，client退出后0。
+420一次事务root /var/lib/samurai/k420-install-r1，worker10893/client/collector终态且passed。停止消费者→owner/DMA释放→原子替换2模块/depmod/重载→七包精确离线升级→测试→重启原用户服务。正式磁盘文件与loaded notes一致，测试参数无。旧r30/r25七包/签名索引/world/repo/395核心393适配器备份保留，本轮没有执行回退。勿重启已完成事务或重新stage旧root。准备阶段两次只读查询错误已修，无状态切换。
 
-旧适配器r1与新419适配器r2各故障一次，两次总计；有实际驱动变化才重复。r2被fatal拒绝的新wrapper失败回调0.00666163秒，旧r1看门狗日志约3.006532秒；计时边界不同不算严格倍数。wrapper watchdog日志从3变1。物理停机失败仅模型覆盖，未向硬件注入。
+生产93jobs=93done/direct，failed/cancel/firsterror0，starts/stops7：四摄各12=48；主RAW+NV12六（原IFE SOF匹配）；RAW-only六对无IPE；独立进程IPA27/五control阶段/GammaACK1；普通用户PipeWire四节点/广角12。四摄/dual/isolated日志均requests=1；WirePlumber实际映射系统库。GammaACK为IFE，**自动IPE参数仍全零旁路**，不称自动原厂画质。
 
-**r2原始runtime-validation.state.passed=false必须保留**：worker用printk与uptime数值比较，四条预期错误被错分unexpected；client passed，failure/cleanup_failure null，正式恢复true。fault-validation.json严格按唯一drop→reset→IQ保留→双ACK3,3→retirement→PMrelease→新SYS_INIT顺序验证，恰好核心[-110]适配器[-110,-5,-5]且无其它fault，原unexpected恰等这4条。实验判定passed，原报告仍false；不为修报告再注入。未来模板改dmesg锚点，未重启旧事务。
+最终PW11073/WP11076 uid10000单例，owner_refs53为桌面CAMSS句柄。ICP/CAMSS双CCI suspended、17clk0/9railsdisabled-users0，CPU/IRQ/PM/backing/map/import释放；新fault/dump0、watchdog/protocol0。guard394=/var/lib/samurai/k394-recovered/boot-id-private.txt不变，本轮无重启。taint512源417-r2已修WARN，保留不清标记，不声称taint0。
 
-419-r1worker8177/r2worker9088、client/collector均终态，root /var/lib/samurai/k419-typed-ack-r1..r2。当前正式core395/adapter393/CAMSS389、r30/r25已恢复，四摄各12=48app/48IPE，extra0，失败/取消0，starts/stops4。ICP/CAMSS双CCI suspended，17clk0/9railsdisabled-users0，CPU/IRQ/PM/图像/映射释放。PW9335/WP9340 uid10000各一，owner_refs53桌面句柄。guard394不变；taint512源417-r2已修WARN，保留历史不清标记。没有419重启。Image363 release7.3.0-rc6-rmx1931-samurai-k363+、DT389/logdump365/SGownerFW未改。
+## 内核和恢复依据
 
-## 418候选通道
+source354 branch samurai-ipe-error-buffer419 commit07d2ca735f88649587c0e89802febff6dbf2b443干净，420未改代码。生产core419848B SHA63131c5719526ca796955f4d833380a12c36c62557ccf539e85bd58c0f070632；adapter132400B SHA46f91cc8dd024626f05a276e63dd8384bb6a056d15bf441c7d44a91ab4c2e06f。**e27ad524…吞ACK临时核心绝不能当生产**。Image363 release7.3.0-rc6-rmx1931-samurai-k363+、DT389/CAMSS389/logdump365/SGownerFW保持。SoC/板级/主线/UAPI/驱动/用户空间分层描述。
 
-候选libcamera=/mnt/samurai-full282/libcamera418-request-iq/src/libcamera-v0.7.2，基于391r30；0041-camss-ipe-request.patch四文件零fuzz复现/源hash核对，库SHA55721a2340f3f71f6aadba4e0ba8ade380901ab3774a9961c4eb847c68d9d303。尚未打包/永久装，IPA算法/接口/签名不变。池用标准allocateRequests/V4L2controls/U8固定6008packet，OUTPUT带request，CAPTURE普通。input/output/request三方完成才归还job；Queued finish避V4L2Request信号栈内销毁pool，serial拒旧通知。无参数显式零旁路；旧驱动显式非零返回ENOTSUP。STREAMOFF失败先close/join再释放FD，保IFE SOF元数据。
+419 ERROR缓冲修复：七项逐帧所有权均释放才不queue_error，便于DQBUFFER返回已知ERROR；未知DMA继续poison及保引用，全局fatal不删。24实际worker/vb2模型、W1/Werror构建、真实typed LTM+Gamma成功ACK被吞一次/变体通过。约5.1秒reset，IQ8944B/parcel548864B保留到双freshACK3,3后退役；恢复460800字节等406参考。blocked失败回调6.7ms。物理停机失败仅模型覆盖，本轮未重复故障注入。
 
-418有37模型/6完成顺序，实库16非零诊断全有效像素等406，4wrapper取消=2kernelcancel另2未成job；pipeline81request完成（四摄48/dual6/isolated27），RAW-only6不启IPE；候选99job97done2cancel。**自动IPA生成参数仍全零旁路**，非零只诊断。418r1测试逻辑plane布局失败在imageDMA前，修探针单连续plane后r2通过，生产未变。
+419原始r2 worker报告state.passed=false必须保留：混printk/uptime误把4条预期错误归unexpected。严格fault-validation按唯一drop→reset→retirement→下一SYS_INIT边界，恰一核心-110与适配器[-110,-5,-5]，无其它fault；client通过/正式恢复。原报告不改，不为修报告重做实验。保护394丢ACK重启/ramoops及395两微秒复位/readback/freshACK后释放修复。
 
-UAPI CID USER_BASE+1240本地下游非上游分配；6008包v1/size/knownflags/reserved-padding0或全零旁路，colour104/gamma3072/LTM2800；仅worker s_ctrl，EXECUTE_ON_WRITE，imageimport前copy/check/setup。417缺buf_out_validate警告已修ANY→NONE拒隔行，不用r2旧适配器。
+## 下一步（主线工作）
 
-## 接续
+接IPA prepare/result、407..416原厂数学与真实曝光/增益/统计/输入域，生成非零LTM/LCE；history只最终图像processed(success)提交，失败discard。Media Request完成不等于图像成功。IFE已有CC/Gamma，未经域证明不再次叠原厂RGB曲线。补实际缺的LA/mask/weights/scalars/inverseGamma，优先主摄再复用四摄；基础AE/AWB/IFE调校已存在。当前通道已部署，不再把打包或失ACK验证当未完成主线。
 
-优先把419生产模块+418用户空间通道打包收敛，然后接IPA prepare/result、407..416原厂算法和真实曝光/增益/统计/输入域。history只最终图像成功commit、失败discard，Media Request完成不等于成功。IFE已有CC/Gamma，不未经证明再叠原厂RGB曲线；补实际缺的LA/mask/weights/scalars/inverseGamma与非零LTM/LCE实机。基础AE/AWB/IFE已存在。
+完整scope读reference/kernel363/REMAINING-CAMERA-SCOPE.md：四摄GW1主/IMX319广角/S5K3M5长焦/IMX471前基础可用不等于原厂画质；第五2MP身份未定，vendor OV02A1B不足以证明，PHY2/MCLK2/reset12/GPIO29与前共享需正确mux，不能猜OV02A10。多模式/帧长/防频闪、连续AF/光学/几何/多摄同步、implicitfences/SSC/旋转未全复验。
 
-全scope读reference/kernel363/REMAINING-CAMERA-SCOPE.md：现四摄GW1/IMX319/S5K3M5/IMX471基础取流通过；第五2MP/OV02A1B身份未定，共享PHY2/MCLK2/reset12/GPIO29需正确mux，不能猜OV02A10。多模式/帧长/防频闪/持续AF/光学/几何/多摄同步、implicitfences/SSC/旋转未全复验。SoC/板级/主线/UAPI/驱动/用户空间区分。
+原厂数学细节416及419归档：IPE input SP340非SP240；2760调校管理器非版本；cache149a8.version1才设request1，否则初始0/ptr3024。HDR88/92槽1/0 time/sensitivity比，control2零。154TMC两架构一致仅合成统计。darkY不clipanchor1/nohistBYTE1/原地左值已更新/firstgain>=1024不夹unity；raw124/140身份未解、90次计算非帧、历史atten前ADRC后待commit。406显式IP位勿回退HAL DC/quarter gate，maskhalo/crop保留；405unknownDMA整parcel+images保引用。
 
-原厂数学细节416及418归档：IPE input SP340非SP240；2760调校管理器非版本，cache node149a8.version1只设request1否则初始0，ptr3024；HDR88/92为槽1/0 time/sensitivity比，control2零。154TMC Execute两架构一致是合成统计不代表自动调校。darkY不clipanchor1、nohist BYTE1、平滑左值已更新、firstgain>=1024不夹unity；raw124/140身份未解，90次计算非帧，历史atten前/ADRC后待commit。406显式IP不要回退HAL DC/quarter gate，maskhalo/crop保留。405unknownDMA整parcel+images保引用。
+## 环境
 
-每次WSL访问source/build/ext4先root storage284.mounted_build挂原32GiB，勿重建/格式化；source354/build在/mnt/samurai-full282。root PYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。原厂系数/二进制/图像/日志私存/mnt/e/edk2-samurai-out/kernel419与前序。公共仅作者代码/脱敏报告，mirror本地scoped commit护无关index，不push/PR。保护NV/OTP/备份/密钥/电池温控；未知事务先查。
+每次WSL访问source/build/ext4先root storage284.mounted_build挂原32GiB，勿重建/格式化；source354/build在/mnt/samurai-full282。root PYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。原厂系数/夹具/ELF/图像/完整日志仅/mnt/e/edk2-samurai-out/kernel420及前序。公共仅作者代码/脱敏报告，mirror本地scoped commit护无关index，不push/PR。保护NV/OTP/个体备份/密钥/电池温控；未知事务先查。按改动验证、复用未变结果，不默认全量扫描/固定次数/重复下载。

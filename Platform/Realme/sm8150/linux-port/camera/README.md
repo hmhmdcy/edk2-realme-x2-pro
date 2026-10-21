@@ -1,4 +1,4 @@
-419当前：逐帧IQ真实失ACK恢复通过，驱动修复安全停机后的ERROR缓冲出队；未知DMA仍保留poison及引用。原worker混时钟误分类false保留，严格有序日志验证通过；正式395/393 r30/r25恢复四摄48帧、历史taint512保留。候选尚未打包，自动IPA参数仍旁路。[419证据](../../reference/kernel419/README.md)。以下为历史。
+420当前：419生产驱动与签名libcamera r31/config-stack r26已正式安装；四摄/RAW双流/隔离IPA/普通用户PipeWire共93direct完成，错误与取消0，各摄日志requests=1。资源回收、新fault0，历史taint512保留。自动IPE画质参数仍旁路，完整校准继续。[420证据](../../reference/kernel420/README.md)。以下为历史。
 
 400当前：固定CST/CV+CC组合NV12/NV21各八模式实像素通过，单位/零/半幅/通道交换/有符号偏移及格式等价已验证；随后恢复正式395/393四摄48、资源释放。399候选未永久装，完整Gamma/LTM与自动/光学校准继续。[400证据](../../reference/kernel400/README.md)。以下为历史。
 
