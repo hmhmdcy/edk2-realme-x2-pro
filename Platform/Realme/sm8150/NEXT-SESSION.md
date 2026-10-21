@@ -1,41 +1,37 @@
-# 当前检查点：405（LTM类型化请求与所有权，最后实机402）
+# 当前检查点：406（LTM固定实像素通过，显式IP修正，正式395／393恢复）
 
-先读WORKING-BOUNDARIES.md、reference/kernel405/README.md。完整多摄／骁龙ISP目标active。用户已开灯出门，后续按实际照明判断。404交接归档archive/NEXT-SESSION-through404-2026-10-21.md。
+先读WORKING-BOUNDARIES.md、reference/kernel406/README.md。完整多摄／骁龙ISP目标active。用户已开灯出门，后续按实际照明判断；本轮LTM诊断为合成输入。405交接归档archive/NEXT-SESSION-through405-2026-10-21.md。
 
-## 候选实现与证据
+## 源码与关键修正
 
-branch samurai-ipe-ltm-ownership405，HEAD 3b65d2989ca8d71b658f8a859e8784be3e6bb965，父404 5bd98599e9d920c46be03c416b13287336a05bc5。四文件colour.c/h、boot.c、ipe.h；干净未安装。新增camss_a5_ipe_run_ltm_status(a5,session,job,colour,gamma,ltm,result)，NULL LTM回原Gamma/colour。旧job/colour/Gamma布局和函数体未变，404几何未变。内部API已实现，不等于产品已调用或物理验证。
+candidate branch samurai-ipe-full-pass-ip406，HEAD b4f382affa9a8be089ccec6170c34d74005103ce，父405 3b65d2989ca8d71b658f8a859e8784be3e6bb965；仅ipe.c一个SoC编码文件，干净未永久安装。芯片板级/传感器/主线框架/产品用户空间不变。405 typed接口与所有权保留，旧CC/Gamma ABI及opcode1不变。
 
-LTM CPU类型2800B：IQ22个有名u32（enable由显式请求固定1）；weights12xu16；LA2x64、curve64、mask64为u12base/s12delta，scale64/LCE2x16为s12base/s12delta；RGamma5x64为u14base/s14delta。拒绝越界/非0或1标志，不接任意CDM/寄存器/设备LUT地址。
+最关键：stripe+416驱动物理LTM IP_EN（reg5c60 bit10）。原HAL把它绑定DC和quarter>=72x54，造成当前显式单全帧DC0/IP1时硬件IP仍关闭、但处理crop按IP+mask扩2。R1 mask-only后续条带恰好移位2px，LAzero/1024/2048无效。原HAL完整多pass流程不据此判错；是移植策略不适合当前接口。406直接令字段416=image_processing。勿再把404原quarter/DC规则恢复为显式IP语义。
 
-组合IQ8944B/PAGE_ALIGN12288。arraybase2592、空common0、pre32(absolute2624,max2)、post96(2688,max3)；CST2784/56、CC2840/44、CV2884/40；GammaDMI2928/36、LUT2976/3072；LTMDMI6048/156、LUT6208/2736。pre CSTgeneric20+LTM11，post CC/CVgeneric20+Gamma12。旧Gamma路径6016/8192、pre32/post64仍保留，不能拿新post96用于旧API。
+IP&&mask仍324step/6halo/处理扩2，否则328/4；输出crop/plane/radial用原output。32组actualC hostASanUBSan/ARMQEMU及完整FW准备证明至多只改5c60 bit10，其余CDM/job不变，IP0与bypass全字节一致。小尺寸128/282只有本轮离线证据。
 
-lock内先复制Gamma（可选）再LTM，校验副本后才coherent alloc/MAP；geometry DC/IP/mask从已检查ltm_copy读取。IQ/LUT与frame/stripe/scratch/BL在同一保留请求；临时CPU副本所有出口释放。未知MAP/frame/UNMAP或清理失败保留DMA backing，quiesce/reset前禁止释放。原有DMA/reset所有权未放宽。
+W1/Werror0diag；正确R2核心415720B/SHA b0fbf678b045aa52f9db1eb54b6bfecce6fa5c10c76bb1dadbea5329d4dd28b4，private406/qcom-camss-icp-a5-core-intree-r1.ko。406/test-intree旧核心仍是405 SHAec8bf38d…，勿误用为修正核心。R1/R2 adapter和client完全相同：adapter5036ef88…/113952B，client5af0eba2…/976936B。test源码/共享build config/outputs/symvers均恢复。
 
-parcel实际C hostASanUBSan/ARMQEMU各128cases1144832B零差，110invalid保持输出/tail；IQ92B对实际HAL3669e0..366b4c，DMI对实际WriteDMI/nested（type1 opcode1）。LUT packing在private编译403固定source四个packer，e2；仅量化打包，不是full numeric HWSetting/ADRC。夹具修正见405README，HAL未改。
+## 两轮实机与像素
 
-firmware59cases：实际C页+404实际Cgeometry，完整HALstriping与FW CONFIG_IO/frameprepare止enqueue前，整512KiB CDM/32B job零差；全部colour/Gamma组合、NV12/21、128/326/650/1920/4608/8192和650分区改变DC/IP/mask组合；pre32/post96各链接一次，IQ页不变。base37+--extra22，无物理帧。
+R1 root k406-ltm-r1，core405，worker20269/collector20313终态，52transport+正常48恢复，但mask-only640差5736B、650差10703B，后续条带Y/UV等于左移2px输入；LA几种表全无效。pixels-validation-r1 passed=false保留。命令定位DC0/1仅blob416和5c60 bit10不同；原字节一致不等于期望功能正确。
 
-transfer145cases ASanUBSan：原4种路径、新LTM无/有Gamma、NULL LTM Gamma回退；每种18故障/成功情形，额外非法/分配失败。调用方在kmemdup后被provider改为ff，最终wire和geometry仍取副本；LTM或第二份copy失败均清理CPU副本/不分配coherent，不确定完成保留整个request和图像refs。transport/alloc/geometry是provider，404几何math另证；不冒称硬件fault/concurrency通过。source-model匹配15colour+6DMA+15request/cleanup共36真实函数。
+R2 root k406-ltm-r2，core406，worker21352/collector21413/client均终态。52诊断/starts-stops52/error0，44LTM、8组合Gamma，port8/core2，width640/650,H480,NV12/NV21,13固定模式。mode0旁路；1转换对；2LTM子模块off；3IP零scale；4IP+mask；5LAzero；6LA2048；7RGammazero；8RGammalinear；9LA1024；10DC+IP+mask；11同4+linearGamma；12同4+zeroGamma。
 
-W1/Werror构建0diag，核心415752B/SHAec8bf38df201464f7e724bd090c30f113aeea1495dbfd78d6cc38e627d15bb85；共享config/outputs/symvers恢复。正式设备与adapter未动，Gamma opcode1保留，
+R2 mode2/3/4/8/10与mode1全图零差，2px位移消失；mode5/7/12全Y0 UV128；LA2048/1024在每尺寸/格式8灰阶块所有内部像素分别128/64，误差0，不称整张彩色图恒定。mode11较mode4最大差1（640为100B、650为160B）；全部13模式NV12/21归一化所有字节相同。640转换对与402旧460800B一致，R1未受修正影响的控制图像也一致。host CRC/输入生成器，client输入不变/canary/sequence/timestamp通过。两轮各52+48=200direct，不能称200全像素通过；最后正常epoch只48。
 
-## 下一步与既有约束
+本轮没有非零LTMscale/LCE全公式、DC统计读回、动态factory插值、全部尺寸、连续参数变化或LTM强制丢ACK/故障复位证明。不能把DC flag提交成功叫完整统计支持。新接口只是暂时在固定adapter使用，正式默认仍旁路高级IPE IQ。
 
-继续完整LTM数值/动态触发与输入域；尽快用固定诊断adapter验证405实际LTM组合像素和错误恢复，再恢复正式路径。不可将离线原厂packer和FW enqueue前对照当实机LTM支持。接标准media request/libcamera前明确IFE/IPE CCM/Gamma/逆Gamma职责与原HALANR440==1或topology2624==3的启用策略；当前内核API显式enable，不自动选择Chromatix。
+## 当前正式设备
 
-404 geometry：仅IP&&mask用324步长/6halo/处理左右扩2，否则328/4；输出crop/plane/radial用原output范围。DC全帧继承IP条件为DC&&IP&&(((W+7)/4)&~1)>=72&&(((H+7)/4)&~1)>=54（even282x210），非288x216。full-frame1:1 port8/9/core1/2、even128..8192和合法padding；缩放/旋转/多pass未实现。403 raw LTM partition helper仅用于mask开启路径。
+已恢复formal core395/adapter393/CAMSS389，r30/r25四摄IMX471/IMX319/S5K3M5/GW1各12共48direct，error/cancel/extra0，starts-stops4。CPU/IRQ/PM/backing/maps/import释放，ICP/CAMSS/双CCI suspended，17clks0，9railsdisabled/users0，taint0；PW21581/WP21584单例uid10000，owner_refs53桌面CAMSS句柄。无test_cc/chain/gamma/ltm/dropACK、dump/timeout/新相关fault/reboot/刷写。current-state-validation.json有正式notes/文件/profile核对。
 
-403 LTM ABI：13offsets0/48/304/560/816/1072/1328/1392/1456/1712/1968/2224/2480，sizes48,5x256,2x64,5x256，2736B传输；resource3296B额外560用途未证。type1/CDMDMI opcode1 reg5c08 selector1..13头156B/pretype11，IQ2096..2184/23u32/92B。原逆Gamma29输入miss/hit7424B对352sourceoracle零差，输入IFEgreen64而非IPE256。
+host406→405…394，guard=/var/lib/samurai/k394-recovered/boot-id-private.txt，同一boot394。保留394 ACK丢失失败reboot及206061Bramoops、395 reset assert2us/deassert/readback与双IPE新ACK后释放修复。旧worker全终态，不重启旧事务。Image363/release7.3.0-rc6-rmx1931-samurai-k363+、boot/静态DT389/logdump365、SGownerAPI、FW不变；正常回退文件/个体备份保护。
 
-原厂完整调校树在350／351／399私有目录，未默认激活；完整数值调校、光学与全部模式仍未完成。
+## 后续与既有契约
 
-## 最后设备402（405无访问／帧／安装）
+继续原厂完整LTM数值/动态触发、非零scale/LCE、统计与输入域；接标准media request/libcamera，厘清IFE/IPE CCM/Gamma/逆Gamma职责。原HAL ANR440==1或topology2624==3是上层选择策略，当前内核显式接口不自动复刻。需要时做LTM/Gamma连续请求及强制故障恢复。不得以本轮固定诊断替代完整调校。
 
-402-r1 opcode10的Gamma16帧像素失败但20传输正常，随后正式四摄48恢复；r1worker15169/collector15245终态，不重启。401fixture误sourceCmdType3，实际Gamma资源type1/CDMDMI，修opcode1后402-r2同adapter/client20帧通过：linear最大差1、zeroY0UV128、constant512全128、half误差半LSB、G/B/R各8灰阶误差1、原厂曲线8灰阶误差0、NV12/NV21十模式归一化全等。失败历史保留。
+405 LTM类型2800B，先lock内CPU copy/check再coherent/MAP，IQ/DMI/LUT同request保留，临时copy所有出口释放。NULL LTM回旧Gamma/colour。组合IQ8944/PAGE12288，arraybase2592，pre32最多CST20+LTM11，post96最多CC/CV20+Gamma12；旧Gamma6016/pre32/post64仍独立。CST2784/CC2840/CV2884，GammaDMI2928/LUT2976，LTMDMI6048/LUT6208。13LUT2736B，type1/opcode1/reg5c08/selectors1..13；resource3296额外560用途仍未证。原逆Gamma29输入miss/hit7424B对352oracle零差，输入IFEgreen64，不可用IPE256。
 
-402-r2root=/var/lib/samurai/k402-gamma-r2，worker15997/collector16092/client全终态。恢复正式core395/adapter393，r30四摄各12共48direct/starts-stops4/error0/extra0；CPU/IRQ/PM/backing/maps/import释放、ICP/CAMSS/双CCI suspended、17clks0、9railsdisabled/users0、taint0。PW16240/WP16247单例uid10000，owner_refs53桌面句柄。无test_cc/chain/gamma/dropACK，无新fault/dump/timeout/reboot。最终normal epoch48；两次402总136direct不可写全像素通过。403／404／405只复用该历史证据。
-
-正式core395 SHA68ab5b3d6626a51ae91dd13003aed8e199a58f3ba34c1fd24ebad7e16c688a88，adapter393 SHAff2bfa7a9439b2ef67087ff6f5db8c9d26e9a92596cd1f63b14c3a047111d4c1，CAMSS389 SHA24fcfa685d07eb8d0e1a0b8356d9ee005e5413faf29c1b384e8c79c364630288。Image363/release7.3.0-rc6-rmx1931-samurai-k363+、boot/静态DT389/logdump365、SGownerAPI、FW、r30/r25不变，module781差量沿用。host405→404→403→402…394，guard=/var/lib/samurai/k394-recovered/boot-id-private.txt，原USBkey/knownhosts。395失ACK恢复及394失败reboot/206061Bramoops与旧回退副本保护。
-
-363/REMAINING-CAMERA-SCOPE.md全部继续：第五2MP身份/mux、多模式、帧长/防频闪、连续AF/光学、几何/多摄同步；implicit异步fence、SSC/旋转未全面复验。source/build先root storage284.mounted_build挂原32GiB ext4，勿格式化重建；rootPython PYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。原FW/HAL/OEM/ASM/CDM/图像/个体表私存405与前序，公共mirror只本地提交、不push/PR、保护无关index。
+原厂完整树在350/351/399私有目录；factory完整LTM/ADRC math和插值未完成。363/REMAINING-CAMERA-SCOPE.md全范围继续：第五2MP身份/mux，多模式，帧长/防频闪，连续AF/光学，几何/多摄同步；异步implicit fence、SSC/旋转未全面复验。source/build先root storage284.mounted_build挂原32GiB ext4，勿格式化/重建；rootPython PYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。原FW/HAL/OEM/ASM/CDM/表/日志/图像/密钥私存406及前序；公共mirror只本地提交、不push/PR、保护无关index。
