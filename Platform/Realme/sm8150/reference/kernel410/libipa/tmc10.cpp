@@ -45,7 +45,9 @@ bool coefficients(Tmc10Curve &curve)
 }
 uint32_t gainIndex(float gain)
 {
-	return std::min(uint32_t(std::round(std::log(double(gain)) / std::log(double(1.03f)))), 94U);
+	/* The retained target uses logf and rounds the float quotient. A double
+	 * quotient selects a different step at some half-index boundaries. */
+	return std::min(uint32_t(std::round(std::log(gain) / std::log(1.03f))), 94U);
 }
 } /* namespace */
 
@@ -60,8 +62,6 @@ bool calculateTmc10Curve(const Tmc10Parameters &in, Tmc10Curve *output)
 	float ratio = std::clamp(mul(in.drcGainDark - 1, in.darkBoostRatio) + 1 + in.coreReserve1, 1.0f, 16.0f);
 	Tmc10Curve result{};
 	result.darkGain = mul(gain, ratio);
-	if (std::abs(ratio - 1) < 0.0001f)
-		ratio = 1.0001f;
 	float maxPercentage = std::log(8.0f) / std::log(std::pow(1.03f, float(gainIndex(result.darkGain))));
 	maxPercentage = std::min(maxPercentage, 1.0f);
 	result.ltmPercentage = in.ltmPercentage;
