@@ -22,6 +22,6 @@
 
 ## 后续与边界
 
-实际版本metadata仍未验证：从私有412的`version-near-0x2e014c-private.asm`、原HAL `0x2dffe4`附近继续，ISPInput+112为16B元数据、+116为版本；版本0/1分支布局不同，不能根据两个根的enable猜运行版。仍需定位HDR88/92上游身份及408 raw124/140、请求候选state提交。
+实际版本metadata仍未验证：从私有412的`version-near-0x2e014c-private.asm`、原HAL `0x2dffe4`附近继续；版本0/1分支布局不同，不能根据两个根的enable猜运行版。415已纠正此前“ISPInput+112/+116”标签：这里是IPE节点内部辅助基址+112/+116，对应node+0x149a8的ADRC缓存头，详见[415](../kernel415/README.md)。仍需定位HDR88/92上游身份及408 raw124/140、请求候选state提交。
 
 继续LA/mask/weights/scalars、inverseGamma、IFE/IPE输入域与统计粗级，随后非零完整调校实像素、连续参数／恢复及标准media request/libcamera接入。完整LTM数值／产品／默认提交仍未完成。第五2MP身份mux、多模式／帧长／防频闪、连续AF／光学、几何与多摄同步等完整目标见[363剩余范围](../kernel363/REMAINING-CAMERA-SCOPE.md)。现场已开灯，后续样本按实际照明、曝光和元数据解释。
