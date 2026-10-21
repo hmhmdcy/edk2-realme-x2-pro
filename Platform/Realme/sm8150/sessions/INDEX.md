@@ -517,6 +517,7 @@
 | [kernel409](<../reference/kernel409/README.md>) | 409：ADRC 增益转 LTM 曲线、混合与原生 LUT 通过 |
 | [kernel410](<../reference/kernel410/README.md>) | 410：原厂 TMC10 提取、增益采样及 ADRC 数值链路通过 |
 | [kernel411](<../reference/kernel411/README.md>) | 411：按本机 HAL 修正 TMC10 膝点，补齐 AEC 插值 |
+| [kernel412](<../reference/kernel412/README.md>) | 412：TMC11 原厂树、模式绑定及 PCHIP／对比度采样 |
 | [rx33](<../reference/rx33/README.md>) | Session 33：有效 EUD RX 抓包 |
 | [rx34](<../reference/rx34/README.md>) | Session 34 的临时终端记录 |
 | [rx36](<../reference/rx36/README.md>) | Session 36：USB 描述符、旧 qcusbser 审查与已完成对照 |
