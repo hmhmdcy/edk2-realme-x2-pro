@@ -33,11 +33,11 @@ uint32_t segment(int base, int next, bool lce)
 	int delta = next - base;
 	uint32_t lo = uint32_t(base) & 0xfff;
 	uint32_t hi = uint32_t(delta) & 0xfff;
-	/* LTM forces a negative difference's sign bit. The LCE packer only masks
-	 * its difference, even when it exceeds signed 12-bit range. */
+	/* LTM's shifted difference test also forces the sign bit for positive
+	 * deltas >=32768. LCE only masks differences after its earlier clamp. */
 	if (base < 0)
 		lo |= 0x800;
-	if (delta < 0 && !lce)
+	if (!lce && (delta < 0 || delta >= 32768))
 		hi |= 0x800;
 	return lo | (hi << 12);
 }

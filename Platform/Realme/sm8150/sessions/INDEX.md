@@ -514,6 +514,7 @@
 | [kernel406](<../reference/kernel406/README.md>) | 406：LTM 实像素通过，修正单全帧 IP 启用策略 |
 | [kernel407](<../reference/kernel407/README.md>) | 407：移植 LTM 曲线生成、曝光衰减及非零 scale／LCE 量化 |
 | [kernel408](<../reference/kernel408/README.md>) | 408：恢复本机 Face 平滑状态，接入完整曲线阶段顺序 |
+| [kernel409](<../reference/kernel409/README.md>) | 409：ADRC 增益转 LTM 曲线、混合与原生 LUT 通过 |
 | [rx33](<../reference/rx33/README.md>) | Session 33：有效 EUD RX 抓包 |
 | [rx34](<../reference/rx34/README.md>) | Session 34 的临时终端记录 |
 | [rx36](<../reference/rx36/README.md>) | Session 36：USB 描述符、旧 qcusbser 审查与已完成对照 |
