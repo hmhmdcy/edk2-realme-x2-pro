@@ -17,6 +17,17 @@ bool valid(const std::array<float, N> &values)
 	return std::all_of(values.begin(), values.end(), [](float v) { return valid(v); });
 }
 
+float attenuationFor(const Ltm13CurveInput &in)
+{
+	float change = std::abs(in.exposureIndex - in.previousExposureIndex);
+	change = std::min(change, in.attenuationEnd);
+	change = std::max(change, in.attenuationStart);
+	if (in.attenuationEnd == in.attenuationStart)
+		return 1.0f;
+	return std::clamp((in.attenuationEnd - change) /
+			  (in.attenuationEnd - in.attenuationStart), 0.0f, 1.0f);
+}
+
 uint32_t segment(int base, int next, bool lce)
 {
 	int delta = next - base;
@@ -54,7 +65,8 @@ bool encode(const std::array<float, N> &input, std::array<uint32_t, N - 1> &outp
 }
 } /* namespace */
 
-bool calculateLtm13Curves(const Ltm13CurveInput &in, Ltm13Curves *output)
+static bool calculateCurves(const Ltm13CurveInput &in, Ltm13Curves *output,
+			    bool withAttenuation)
 {
 	const std::array<float, 14> controls = {
 		in.strength, in.lceStrength, in.attenuationStart, in.attenuationEnd,
@@ -107,13 +119,7 @@ bool calculateLtm13Curves(const Ltm13CurveInput &in, Ltm13Curves *output)
 		}
 	}
 
-	float change = std::abs(in.exposureIndex - in.previousExposureIndex);
-	change = std::min(change, in.attenuationEnd);
-	change = std::max(change, in.attenuationStart);
-	float attenuation = 1.0f;
-	if (in.attenuationEnd != in.attenuationStart)
-		attenuation = std::clamp((in.attenuationEnd - change) /
-					 (in.attenuationEnd - in.attenuationStart), 0.0f, 1.0f);
+	float attenuation = withAttenuation ? attenuationFor(in) : 1.0f;
 	for (float &value : result.scale) {
 		value *= in.strength;
 		value *= attenuation;
@@ -128,6 +134,36 @@ bool calculateLtm13Curves(const Ltm13CurveInput &in, Ltm13Curves *output)
 	}
 	if (!valid(result.scale) || !valid(result.lcePositive) || !valid(result.lceNegative))
 		return false;
+	*output = result;
+	return true;
+}
+
+bool calculateLtm13Curves(const Ltm13CurveInput &input, Ltm13Curves *output)
+{
+	return calculateCurves(input, output, true);
+}
+
+bool prepareLtm13Curves(const Ltm13CurveInput &input, Ltm13Curves *output)
+{
+	return calculateCurves(input, output, false);
+}
+
+bool attenuateLtm13Curves(const Ltm13CurveInput &input, const Ltm13Curves &curves,
+			 Ltm13Curves *output)
+{
+	const std::array<float, 4> controls = {input.exposureIndex, input.previousExposureIndex,
+		input.attenuationStart, input.attenuationEnd};
+	if (!output || !valid(controls) || !valid(curves.scale) ||
+	    !valid(curves.lcePositive) || !valid(curves.lceNegative))
+		return false;
+	Ltm13Curves result = curves;
+	float attenuation = attenuationFor(input);
+	for (float &value : result.scale)
+		value *= attenuation;
+	for (float &value : result.lcePositive)
+		value *= attenuation;
+	for (float &value : result.lceNegative)
+		value *= attenuation;
 	*output = result;
 	return true;
 }
