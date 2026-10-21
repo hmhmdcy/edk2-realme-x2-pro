@@ -1,5 +1,5 @@
 {
-  "stage": 423,
+  "stage": 424,
   "upstream_base": "a90ee4305c4a5df72c11b31dacfdc76e00fcf78a",
   "maintained_branch": "samurai-ipe-error-buffer419",
   "maintained_commit": "07d2ca735f88649587c0e89802febff6dbf2b443",
@@ -849,7 +849,7 @@
   "confirmed_physical_camera_count": 4,
   "portrait_2mp_identity_verified": false,
   "remaining_camera_scope_evidence": "../../../reference/kernel363/REMAINING-CAMERA-SCOPE.md",
-  "latest_work_stage": 423,
+  "latest_work_stage": 424,
   "icp_response3_sfr_error_path_proven_in_original_firmware": true,
   "icp_response3_sfr_evidence": "../../../reference/kernel368/firmware-sfr-validation.json",
   "a5_icp_candidate_source_branch": "samurai-icp-platform389",
@@ -867,7 +867,7 @@
   "icp_actual_sfr_text_recovered": false,
   "icp_hardware_cleanup_verified": true,
   "icp_memory_page_allocation_evidence": "../../../reference/kernel369/firmware-reservation-validation.json",
-  "current_device_revalidated_stage": 423,
+  "current_device_revalidated_stage": 424,
   "icp_quiesced_failure_candidate_evidence": "../../../reference/kernel371/README.md",
   "icp_quiesced_failure_hardware_verified": false,
   "icp_static_mmu_instruction_evidence": "../../../reference/kernel370/firmware-mapping-validation.json",
@@ -1291,5 +1291,12 @@
   "ipe_auto_scene_hardware_evidence": "../../../reference/kernel423/hardware-validation.json",
   "ipe_auto_tone_scope": "423 temporary IPA3 candidate: main4608x3456 single-exposure linear-AE/no-face,unity DRC/HDR split;144 real IPE images,108 numeric commits.Native and isolated optical scene captured;full OEM GTM/HDR/DC statistics/quality and other cameras not complete.",
   "ipe_full_factory_tone_pipeline_complete": false,
-  "ipe_auto_tone_evidence": "../../../reference/kernel423/README.md"
+  "ipe_auto_tone_evidence": "../../../reference/kernel423/README.md",
+  "ipe_ltm_lux_attenuation_candidate_corrected": true,
+  "ipe_ltm_lux_attenuation_candidate_hardware_verified": true,
+  "ipe_missing_lux_reuses_committed_program": true,
+  "ipe_auto_tone_main_af_scene_verified": true,
+  "ipe_auto_tone_latest_evidence": "../../../reference/kernel424/README.md",
+  "ipe_ltm_full_dc_coarse_pass_implemented": false,
+  "ipe_ltm_single_pass_dc_flag_no_native_command_effect_verified": true
 }
