@@ -521,6 +521,7 @@
 | [kernel413](<../reference/kernel413/README.md>) | 413：TMC11 直方图、膝点和对比度曲线生成通过 |
 | [kernel414](<../reference/kernel414/README.md>) | 414：原厂 TMC11 三层触发插值与动态数值链 |
 | [kernel415](<../reference/kernel415/README.md>) | 415：TMC11 状态／版本策略、IPE 元数据缓存及 LTM 选择分支 |
+| [kernel416](<../reference/kernel416/README.md>) | 416：真实 IPE 版本绑定、HDR 输入域及完整 SWTMC11 执行 |
 | [rx33](<../reference/rx33/README.md>) | Session 33：有效 EUD RX 抓包 |
 | [rx34](<../reference/rx34/README.md>) | Session 34 的临时终端记录 |
 | [rx36](<../reference/rx36/README.md>) | Session 36：USB 描述符、旧 qcusbser 审查与已完成对照 |
