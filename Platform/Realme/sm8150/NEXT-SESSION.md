@@ -1,33 +1,33 @@
-# 当前检查点：424（修正LTM衰减坐标与统计缺失恢复；主摄AF＋自动曲线实拍通过）
+# 当前检查点：425（原厂PD10粗级IO已恢复；DC双遍原固件命令确认，尚未实拍）
 
-完整多摄／骁龙ISP目标active，未完成。先读WORKING-BOUNDARIES与reference/kernel424/README。上一轮423是progress：真实主摄单曝光TMC/LTM闭环与144帧实拍；本轮继续实际源码／设备工作，不重跑旧大矩阵或手机事务。423交接归档archive/NEXT-SESSION-through423-2026-10-21.md。
+完整多摄／骁龙ISP目标active、未完成。先读WORKING-BOUNDARIES与reference/kernel425/README。425是真实底层进展：维护内核代码、原厂完整双遍prepare、构建通过；不是新的设备采集。424交接归档archive/NEXT-SESSION-through424-2026-10-21.md，不重跑旧矩阵或旧实拍。
 
-## 424修复与证据
+## 425当前源码与已验证结果
 
-发现423衰减坐标错误：原厂LTM的IFE父节点0x10000用请求+2892 luxIndex更新current/prev，而423用了曝光×增益推算的exposureIndex。实际原HAL0x35fe8c..0x35ffbc八组绑定／暖机检查确认，无provider。新IpeToneProfile曲线用frame.luxIndex，IpeToneState保存ltmLuxValid/ltmLuxIndex，仍仅最终图像+RAW成功回执提交；首次有效计算previous=current。Android最大流水线延迟/BET暖机另有规则，未冒充已映射Linux同语义。
+维护内核/mnt/samurai-full282/source354，branch samurai-ipe-coarse-io425，commit faf093770826a3bbe4b6f21f3b93303c62591627，parent419 07d2ca735f88649587c0e89802febff6dbf2b443。三文件补丁增加camss_a5_ipe_pd10_quarter与共享camss_a5_ipe_encode_io可选粗级端口。普通runtime仍传NULL，尚无实际粗级session提交/PD10像素生产，没有新UAPI或板级改动。源码干净、零fuzz复现。
 
-实际编译profile对象验证：固定lux仅改物理曝光坐标输出不变；重现旧域反例改变123字节；只改已确认lux历史时LTM改变120字节。实际原厂样例TMC同时gtmEnabled1且非零gtmFraction，不能说GTM未应用自然无影响。
+本机完整HAL InitializeFormatParams0x453ab8/SetConfigIOData0x2e4b88证明Camx PD10=18，固件格式10，单平面。quarter=((full+7)/4)&~1；stride=ceil(qw*4/192)*192；slice=ceil(qh/8)*4；bytes=stride*slice。本机与较新Camx额外256byte/32line规则不同。640x480→160x120,stride768,slice60,46080B；650→164x120同bytes。未猜PD10像素位序。
 
-prepareIpeParameters已有观测无有效lux/BG时持有committedTone，不推进数学历史；无历史则已有旁路。恢复后从最后成功state计算。保留token/epoch/size/真正计算错误检查。实际ARM64 IPA四模式检查首次缺BG、提交后缺BG、恢复、失败/忙/旧回执/restart通过；原423真实模块同夹具首帧返回-ENODATA，反例保留。缺BG是合法BHIST-only测试，未放宽解析器／未手机注入故障。三包通过当前native kernel validator。
+check-io实际候选C函数，64组/24invalid每架构，host ASAN/UBSAN和ARM64静态qemu156928B一致；PD10layout和84B描述符对照本机原指令，NULLcoarse与旧419NV12/NV21输出相同，错误输出保持。小布局有效不代表满足DC最小尺寸。
 
-候选/mnt/samurai-full282/libcamera424-tone-domains/src/libcamera-v0.7.2，来源423。仅3个生产文件变，0045补丁从423零fuzz复现。私有IPA仍3，kernelUAPI1/6008B。build-r1 64.12s，源码前后hash一致且实际camss.cpp与ipe_tone_profile.cpp对象重编。core SHA14b6842a4d4005d0a2b72a8065d4fe00d5bdee7ea2fae5c68b785857d12b25b8、proxy8cc147afe57aeaea21f3359f1c7eb935d401ebeb2e1ed091cf8e150438ba45d5与423相同；IPA324a821f1c72f0ebb983d73f33a4500c4d696640932c362e0020e10958088129，新签名已验。未永久安装，正式仍420 r31/r26+419生产驱动。
+check-multipass使用实际ARM64 C IO→完整原厂HAL Create/Execute/Destroy→完整ICP CONFIG_IO/frame prepare，无enqueue/无DMA。在640/650两宽、DC0时配置2但实际stripe1遍且无PD10引用；DC1实际2遍、PD10地址引用1处、LTM控制写2次。striping/job/CDM实际变化；PD10改址仅改变对应命令输入地址。scratch71488/75584，不能用单遍48。CONFIG_IO+2896=配置遍次，不是BL容量；HAL minBL181024。完整原件私存kernel425。测试初期DC0也应2遍/读PD10的断言被原厂否定，已修正，不是原厂函数失败。
 
-## 实拍／设备
+W=1/Werror core-only内核构建24.27s、零诊断，boot.o/ipe.o等实际重编。core候选SHA ae2ca7e3ede81ccb019422d7250376c23377537d2c328571817a3390db179099，未安装。构建terminal；共享目录恢复，包括原本不存在的ICP .ko/.o；qcom-camss.ko与before逐字节相同。勿用旧报告的“standard helper build”字段；425已改成仅core构建的准确元数据。
 
-新capture在AE预热24帧后用标准AfTrigger实际扫描，等待Focused/Failed终态再16帧，期限20s；帧数随扫描决定。主摄4608×3456→640×480 NV12／testPattern0，普通及隔离IPA各205帧、161份Scanning，最终都Focused。数值提交202/200共402，逐项同SOF观测摘要→6008B queue→最终成功回执，并核对previous-ltm-lux=上一提交lux；独立摘要56/59。持有3/5次不推进历史。没有应用滤镜。
+## 下一实际工作：硬件生产PD10与完整粗级运行时
 
-按元数据选择预热最后帧与最终帧，普通FoM1005→1633，隔离810→1598；中央归一化梯度0.000565→0.001267、0.000489→0.001211。已查看AF前后原始解码图，中心细节提升但仍有雾感／偏色；这不是绝对MTF/色准/噪声／全景焦面验收。样本私存在/mnt/e/edk2-samurai-out/kernel424；手机/var/lib/samurai/k424-tone-r1保留205帧/组，host收final和warmup样本。
+固定CamxChi /home/cy122/x2pro-linux/refs/CamxChi-k117，rev9f17f1b568626b393e785b369c5dc94543774d7a；原HAL camera.qcom.so SHA e2b1b9b6379507052464d9f9573c2a5a1b1cf37c43947b53645ddc8948a70dde；ICP SHA a22bc8adbb4ae97e4f8d728eecb1fd19c1bf866250b0bb7e668951c41c159e63。sources私存425/sources。
 
-410个IPE作业全部direct成功，新增内核fault0/dump0/取消0/failed0/first_error0；最终jobs=completed=direct793，starts/stops25。users/running/fatal/pinned/orphans0，core电源/时钟所有权/IRQ/映射/DMA/导入释放，PW/WP各恢复一个，owner_refs53桌面CAMSS，历史taint512不清。worker/client/collector终态，无活动build/SDK bind。正式419模块、Image363/DT389/CAMSS389/FW/SGowner以及原厂文件不改。
+本机SetConfigIOData无新参考的fromDownscale绑定，HAL无fromDownscale/InternalDownscale/DownscaleInput字符串。不能凭此宣称所有内部降采样不存在，但不能套新版本标志或向硬件提交空PD10。固定参考IFE DS4端口输出ISPFormatPD10并开videoDS4R2PDEnable；DS410/precrop/roundclamp来源已私存。当前camss-vfe-17x只注册FULL/params/stats三个输出，VFE175尚无DS4注册/DMA生命周期。
 
-## 已确认下一实际缺口（不要回避为更多固定调色）
+优先从原厂实际DS4寄存器/WM/R2PD恢复VFE175 DS4生产，严格对齐FULL的尺寸/裁剪/同SOF；然后接IPE粗级backing所有权、C multipass striping、scratch容量、运行时session和frame端口1地址。原厂LTMDCStripeConfiguraion0x1556a0及mode0x155770/outW0x1557a8/outH0x1557b8可复用。native-model.py全HAL和firmware-model.py全FW能做反例/差分。当前用户UAPI未扩展。禁止把普通像素变化、scratch额外字节、DC标志当粗级统计生产通过。接通后实际检查粗级内容→DC写入→全尺寸IP消费，再合入IPA当前同SOF/最终回执数值历史并实拍。
 
-当前单full-pass kernel编码器固定passes1、仅全尺寸输入/输出。用当前实际kernel函数、主摄实际LTM/colour/gamma程序、完整原固件prepare，640和650×480双核分别DC0/1：striping/32B job/整512KiB CDM完全相同。data_collection标志不创建粗级pass；完整DC尚未实现。probe首轮仅ctypes自动NUL造成tail多比1字节，修精确capacity后过，无native code改动。勿将flag1/普通像素变了/无关scratch当DC统计已验证。
+GTM另属IFE/BPS域：原厂TMC输出确有非零GTM份额，尚未实际应用；实际GTM Execute0x31fc00/setting0x37c818已定位。需本机树/数学与IFE参数生效版本→对应图像IPE因果绑定，不能把当前hist算出的曲线声称已应用上游同帧，不能清零gtmFraction伪造完整。
 
-下一步优先恢复原厂粗级遍次、维度/裁剪及缓冲绑定，再验证粗级数据产生和full-pass IP消费。原HAL保留符号：LTMDCStripeConfiguraion0x1556a0，generateLTMDCmode0x155770，generateLTMDCoutW0x1557a8/outH0x1557b8；原完整striping/FW oracle来自404/406可复用。现有current kernel/完整HAL两组命令对照私存424/coarse-width-*。这是具体已证缺口，非阻塞用户输入。
+## 设备与已有IPA成果（本轮没有访问设备）
 
-GTM是IFE/BPS路径，固定CamxChi源码64个18bit base/26bit slope/64bit DMI，只是reference非本机已验。实际IFEGTM10::Execute0x31fc00、IQInterface::GTM10CalculateSetting0x37c818已定位，尚未执行/适配。需从既有OEM文件提取真正GTM树/本机数学，并把GTM/ADRC版本关联到实际IFE parameterHistory和对应图像IPE，遵守stats→未来IFE生效→同图像IPE的因果顺序，不能用当前图像hist声称已改同帧上游GTM，不能清零gtmFraction伪造完整。
+最近实际424：普通/隔离IPA各205真实主摄图像，402数值提交、各161 Scanning，最终两次Focused。已看图：中心细节提升仍雾感偏色。当前793direct、failed/cancel/firsterror0、25starts/stops，核心电源/时钟/IRQ/映射/DMA/导入释放，users/running/fatal/pinned/orphans0，桌面owner_refs53；PW/WP恢复。历史taint512保持。worker/client/collector终态，425无新手机实验/照片。
 
-423单曝光unityDRC/HDR/LEDoff/no-face策略仍明确，不是Android两槽/rawAEC124/140。前摄原厂TMC关闭保持，其他摄像头／视频模式tone未扩展，主摄2592调校导出未硬测。后续扩多摄、配套包部署、连续/清晰场景画质。完整scope见reference/kernel363/REMAINING-CAMERA-SCOPE.md：第五2MP身份/mux不猜OV02A10、多模式帧长防频闪、连续AF、几何/多摄同步等保持。
+正式仍420 libcamera99990.7.2-r31/配置0.1.0-r26，419 core SHA63131c5719526ca796955f4d833380a12c36c62557ccf539e85bd58c0f070632与adapter46f91cc8dd024626f05a276e63dd8384bb6a056d15bf441c7d44a91ab4c2e06f。Image363/DT389/CAMSS389/FW/SGowner不改。候选424 IPA SHA324a821f1c72f0ebb983d73f33a4500c4d696640932c362e0020e10958088129未永久安装。424已修LTM衰减lux而非曝光乘积，缺BG/lux持有committed，不推进历史；token/epoch/fail仍校验。原生主摄4608x3456单曝光unityDRC/HDR/LEDoff/no-face策略非完整Android，前摄原厂TMC关闭保持。其它镜头/视频/2592硬测/第五2MP身份mux等见reference/kernel363/REMAINING-CAMERA-SCOPE.md。
 
-每次WSL source/build/ext4访问先root storage284.mounted_build挂原32GiB镜像，不重建格式化；Unicorn PYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。先确认build进程terminal才改输入源码/部署，避免423早期残留对象。原厂系数/ELF/ASM/完整日志/图像私存，公共仅作者代码/脱敏摘要，本地scoped mirror提交护无关index，不push。保护NV/OTP/备份/密钥/电池温控。
+每次WSL source/build/ext4访问先root storage284.mounted_build挂原32GiB镜像，不重建/格式化。Unicorn PYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。构建/命令handle须terminal后才改依赖输入或部署。原厂ELF/系数/ASM/CDM/完整日志/图像仅private，公共作者代码+脱敏摘要；本地scoped mirror护其它index，不push。没有需要用户输入的实际阻塞；继续功能工作。

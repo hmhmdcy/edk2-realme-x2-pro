@@ -1,5 +1,5 @@
 {
-  "stage": 424,
+  "stage": 425,
   "kernel_boot_stage": 389,
   "current_boot_guard_stage": 394,
   "kernel_image_stage": 363,
@@ -1659,7 +1659,7 @@
   "confirmed_physical_camera_count": 4,
   "portrait_2mp_identity_verified": false,
   "remaining_camera_scope_evidence": "../../reference/kernel363/REMAINING-CAMERA-SCOPE.md",
-  "latest_work_stage": 424,
+  "latest_work_stage": 425,
   "icp_response3_sfr_error_path_proven_in_original_firmware": true,
   "icp_response3_sfr_evidence": "../../reference/kernel368/firmware-sfr-validation.json",
   "a5_icp_candidate_source_branch": "samurai-icp-platform389",
@@ -2101,5 +2101,11 @@
   "ipe_auto_tone_main_af_scene_verified": true,
   "ipe_auto_tone_latest_evidence": "../../reference/kernel424/README.md",
   "ipe_ltm_full_dc_coarse_pass_implemented": false,
-  "ipe_ltm_single_pass_dc_flag_no_native_command_effect_verified": true
+  "ipe_ltm_single_pass_dc_flag_no_native_command_effect_verified": true,
+  "ipe_ltm_pd10_coarse_io_candidate_implemented": true,
+  "ipe_ltm_pd10_coarse_io_candidate_installed": false,
+  "ipe_ltm_coarse_native_two_pass_prepare_verified": true,
+  "ipe_ltm_coarse_pd10_pixel_producer_implemented": false,
+  "ipe_ltm_coarse_latest_evidence": "../../reference/kernel425/README.md",
+  "latest_work_phone_accessed": false
 }
