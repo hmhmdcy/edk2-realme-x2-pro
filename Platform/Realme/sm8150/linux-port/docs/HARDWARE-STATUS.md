@@ -1,4 +1,4 @@
-417当前：类型化逐帧IQ经标准Media Request真机16帧通过，全部有效像素等固定参考；libcamera自动调校仍未接。已恢复正式395/393四摄48应用帧/49IPE；r2已修警告留下taint512，r4无新增fault。[417证据](../../reference/kernel417/README.md)。以下为历史。
+418当前：候选libcamera接入逐帧Media Request，实库16非零参数帧与固定参考像素一致、4取消回调正常；四摄/双流/隔离IPA共81处理图像请求通过，但IPA参数仍旁路。正式395/393 r30/r25已恢复四摄48帧，本轮新fault0、历史taint512保留。[418证据](../../reference/kernel418/README.md)。以下为历史。
 
 400当前：固定CST/CV+CC组合NV12/NV21各八模式实像素通过，单位/零/半幅/通道交换/有符号偏移及格式等价已验证；随后恢复正式395/393四摄48、资源释放。399候选未永久装，完整Gamma/LTM与自动/光学校准继续。[400证据](../../reference/kernel400/README.md)。以下为历史。
 
