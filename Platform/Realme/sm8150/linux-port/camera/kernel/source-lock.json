@@ -1,5 +1,5 @@
 {
-  "stage": 421,
+  "stage": 422,
   "upstream_base": "a90ee4305c4a5df72c11b31dacfdc76e00fcf78a",
   "maintained_branch": "samurai-ipe-error-buffer419",
   "maintained_commit": "07d2ca735f88649587c0e89802febff6dbf2b443",
@@ -849,7 +849,7 @@
   "confirmed_physical_camera_count": 4,
   "portrait_2mp_identity_verified": false,
   "remaining_camera_scope_evidence": "../../../reference/kernel363/REMAINING-CAMERA-SCOPE.md",
-  "latest_work_stage": 421,
+  "latest_work_stage": 422,
   "icp_response3_sfr_error_path_proven_in_original_firmware": true,
   "icp_response3_sfr_evidence": "../../../reference/kernel368/firmware-sfr-validation.json",
   "a5_icp_candidate_source_branch": "samurai-icp-platform389",
@@ -1281,5 +1281,9 @@
   "ipe_numeric_tmc_ltm_history_integrated": false,
   "ipe_candidate_private_ipa_version": 2,
   "ipe_statistics_publication_reentry_candidate_fixed": true,
-  "ipe_statistics_publication_reentry_fix_installed": false
+  "ipe_statistics_publication_reentry_fix_installed": false,
+  "latest_read_only_device_stage": 422,
+  "ipe_numeric_frame_assembly_verified": true,
+  "ipe_numeric_frame_assembly_evidence": "../../../reference/kernel422/README.md",
+  "ipe_numeric_static_library_built_not_runtime_referenced": true
 }
