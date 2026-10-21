@@ -1,37 +1,35 @@
-# 当前检查点：416（真实版本绑定/HDR域/完整TMC11执行通过；实机仍406）
+# 当前检查点：417（逐帧IQ真机通过）
 
-先读WORKING-BOUNDARIES.md、reference/kernel416/README.md。完整多摄/骁龙ISP目标active。415归档archive/NEXT-SESSION-through415-2026-10-21.md。用户开灯上班，问完成时间；已答全scope粗估数周且可能更长，未承诺日期。后续优先可运行候选请求/实机闭环，不再扩展已通过TMC离线矩阵。
+读WORKING-BOUNDARIES.md、reference/kernel417/README.md。完整目标active。用户开灯上班，完整工期粗估数周且可能更长，不承诺日期。优先产品请求/实机，勿扩大已通过TMC矩阵。416归档archive/NEXT-SESSION-through416-2026-10-21.md。
 
-## 416新增与415纠正
+## 417已完成
 
-真实ISPInput在IPE主函数SP+340，2cf504..2cf514 memset19928B、2d7a64传模块Execute。415错用SP240早256B，把2cfa9c管理器指针写入当作版本；actual为input2760 TuningManager，公共415README已更正，不再追全局版本表。真实binder2d6564..2d6590读node149a8+4 version，仅==1写请求1，否则保持初始化0；始终指向node149a8缓存到input3024。16版号/初值组合执行原指令核对。
+维护内核branch samurai-ipe-request-iq417，commit f0b6ea869e3e748e6c1ccfe06865ac8d02c3ef3a，parent406 b4f382affa9a8be089ccec6170c34d74005103ce，干净已提交未永久装。4文件改：adapter/colour.c/colour.h、新UAPI include/uapi/linux/qcom-ipe-a5.h。公共request-iq.patch和source-state含hash。core419848B SHA63131c5719526ca796955f4d833380a12c36c62557ccf539e85bd58c0f070632；adapter131888B SHA8fa34a55d07a47c7acadbb8f71b16062c96b7a4657e268744e7077538daf65f2，private417 intree-r3配对，不要用r2遗漏回调版。W1/Werror构建/28项ASanUBSan实际validator通过。
 
-HDR377120..3771b8：AEC槽0 time/gain/sens偏移0/8/12，槽1为24/32/36；2872/2876/2880为槽1/0的时间/增益/灵敏度比。time0==0或float分母abs<1e-9保持1。TMC11 module88←2872曝光时间比、92←2880灵敏度比，身份/域已证；Long/Short枚举名未假定。control2仍零，不是2876增益比。1002valid+4invalid，两架构20120B等；两target溢出结果拒绝，16memset/35588target指令。
+实验本地CID USER_BASE+1240非上游分配；compoundU8 packet6008固定宽度无指针/CDM。全零旁路，否则v1/size6008/knownflags/reserved/padding0；colour104/gamma3072/LTM2800。每request恰1 OUTPUT且显式params，CAPTURE普通入队；legacy nonrequest仍旁路。s_ctrl仅当前hardwareworker任务能向pending私有快照拷贝，直接设置EACCES；EXECUTE_ON_WRITE重复包生效；try_ctrl先校验，worker在图像import前setup/copy/check。req_complete/STREAMOFF/cancel回调齐；buf_out_validate ANY→NONE、拒绝隔行。核心405先copy/check再MAP、未知DMA整parcel/image引用保留不变。
 
-execute-model实际call383728到RET非拼接片段，已有清零ADRC4236存储，原factory root/完整reserve；不测分配。execute-runner单进程组合415policy/414tree/413gen/415cache/416binding/LTMgate，对4物理14普通上下文各11步=154完整调用/72重算，两架构1316392B0差。原Execute17899720指令；math logf/expf/powf hostlibm非Bionic。两不可变合成hist，仅UID/enable副本和14次缺失属性为明确合成，根选择器复用412不重跑。
+r4两个context共16帧：NV12 640x480 MMAP；NV21 650x480 stride672导出DMABUF，sourceoffset16。各0/1/2/2/3/4/0/1=bypass/colour/zeroGamma/zeroGamma/LA2048/LA1024/bypass/colour；两个请求FD复用、提交后用户内存覆盖、完成读回原包一致。全部有效图像与406固定参考逐字节相同，GammaY0UV128，LA8灰块内部128/64；输入未改、尾部/seq/timestamp/控件完成通过。不能称整个彩色图恒定。无globalsysfs或诊断模块参数。libcamera/IPA仍未接新请求，formal高级IQ仍旁路。
 
-序列涵盖hist-only/force相等不换hist/锁缓存更新/解锁不重算/force用旧hist/缺属性/新UID关闭恢复/同UID翻enable不刷新/敏感度变化。12次module.version0但ADRC旧version1，IPE按对象头仍bind1；wire一致不是硬件有效性证明。整个IFE发布/整个IPE Execute未执行，Android实际metadata/产品request未接，fullTMC11产品/fullLTM/default仍false。
+失败保留：r1脚本查不存在/sys/class/media，改枚举/dev/media+模型；r2遗漏必需buf_out_validate，首次QBUF被拒产生vb2 WARN、无图像DMA，已修构建r3；r3把灰块内部结论扩至边缘断言失败，固件完成6次不计像素通过。r4无新增fault，但**taint512来自r2仍保留**，未清标记/未重启，不要要求0或误报新增fault。所有事务terminal worker/clients/collector均退。r1pid3323/r2pid3702/r3pid4160/r4pid4605；根/var/lib/samurai/k417-request-r1..r4，绝不盲重启事务。
 
-415原状态733+7/consumer1152+3/cache63+1两架构44400/18480/271360B等保持。policy仅UID变刷新，raw enable→3016，六floatabs→double<1e-9；禁用仍发布旧ADRC3024/清module104，双锁在缓存/版本更新后抑calc；metadata缺失只清enable/未知版留旧knees，v0拷32/v1拷40。此前ISPInput112标签也已纠正为node14938辅助基址+112=node149a8缓存头。LTM own10 gate rootenable1/useLtm1/requestversion0，否则copyupstreamLtm，无globalenable/version再gate，自身10分配/完整计算未跑。
+## 设备与下步
 
-## 下一步以候选请求和实机验收推进
+最新417-r4恢复正式core395/adapter393/CAMSS389、r30/r25原配置/加载notes已核对。四摄各12应用帧=48，IPE49（前摄extra1，勿写48direct）。m2m49/49/49,error/cancel0,starts/stops4；资源释放、ICP/CAMSS双CCI suspended、17clk0、9railsdisabled/users0，PW4835/WP4838 uid10000单实例，owner_refs53桌面CAMSS句柄正常。guard394仍/var/lib/samurai/k394-recovered/boot-id-private.txt，taint512已知。Image363 release7.3.0-rc6-rmx1931-samurai-k363+、DT389/logdump365/SGownerFW不改。保护394丢ACK重启证据、395reset2us/readback/双IPE freshACK后退役修复。
 
-先读405/406 typed LTM接口及固定诊断客户端、现有r30/r25分发/IPA路径，落实407..416数值接入候选request的状态/表生成接口；逐项确认非零调校真正需要的LA/mask/weights/scalars、352inverseGamma、IFE/IPE输入域/统计缺口，针对该缺口补，避免再重复TMC已通过用例。408raw124/140身份、state候选随完成提交/失败丢弃仍需解决。随后受控非零LTM/颜色/曝光实机、连续参数/资源恢复/标准media request-libcamera；不把离线通过写成实机完成。
+下一步读已维护libcamera391-ipe-r30-built/src/libcamera-v0.7.2/src/libcamera/pipeline/camss-vfe/camss_ipe.{h,cpp}和包0040补丁，给CamssIpe及IPA接417 typed request，随OUTPUT关联、完成/取消正确回收；自动参数/history成功commit失败discard。再接407..416数值，针对LA/mask/weights/scalars/inverseGamma、IFE/IPE统计域缺口补证。当前仅合成固定诊断payload，不是完整原厂自动调校；新request带IQ的强制失ACK恢复还未测。
 
-reference/kernel363/REMAINING-CAMERA-SCOPE.md全目标保持：第五2MP/OV02A1B身份mux勿猜OV02A10、多模式/帧长/防频闪、自动与连续AF/光学、几何多摄同步，implicitfences/SSC/旋转未全复验。
+reference/kernel363/REMAINING-CAMERA-SCOPE.md全scope仍有效：第五2MP/OV02A1B身份共享mux勿猜OV02A10，多模式/帧长/防频闪、持续AF/光学、几何/多摄同步，implicitfences/SSC/旋转未全复验。SoC/板级DT/主线实验UAPI/驱动/用户空间分层描述，不用上层补丁掩盖底层问题。
 
-## 414/413/412/411保留
+## 407—416保留的关键约束
 
-414 actual三层383cdc..384048，2846+15两架构514980B等；68根198区全ctrl[0,0]且DRC/HDR各1段，forcedgain/HDR1/2/多层只夹具，qtechGW1未绑定不是第五相机。136动态chain/51gap/131LUT67072B等、5subunity拒绝，最终原HALpacker未跑。root136/DRC24/HDR40/AEC192、rootctrl68/72 core120/128，X23=SP64；完整细节见414。
+416纠正415：实际IPE ISPInput=SP340，SP240早256B，2cfa9c写actual2760 TuningManager不是版本。真实binder2d6564..2d6590仅cache(node149a8).version1才写请求1否则保初始0，始终绑定缓存ptr3024。HDRmodule88/92为AEC槽1/0时间/灵敏度比（槽0 t/g/s0/8/12，槽1 24/32/36），不是增益比；control2仍0。1002+4及16binder组合两架构20120B等。完整TMC11 Execute383728到RET 154调用/14context/4物理/72calc两架构1316392B等，12module0/旧property1差保留。合成stats/UID/缺失，不是Android元数据或硬件自动调校；详416。
 
-413gen384048..38565c，31组覆盖198区156+12两架构1393056B等，154finite/2nonfinite拒绝；142LUT72704B等/12subunity拒绝。X24=module112编译Gamma257末1023，controlledGamma非运行证据；darkY=anchor2/ratio不clipanchor1，r1 26项251B失败已修；model-r1 X23错/r2漏X24保留。nohist是BYTE1不是float1；hist4轮原地平滑左值已更新，coeff b按/h再/h。412模式树/411TMC10差异详其README；旧测试复用。
+415仅UID变刷新root，禁用仍发布旧ADRC，双锁在缓存/版本更新后抑calc；equalforce不换histptr；metadata缺失只清enable，未知版留旧knees，v0拷32/v1拷40。LTM own10 gate rootenable1/useLtm1/requestversion0，自身10分配完整计算未跑。414树2846+15两架构514980B等，68根198区全ctrl00且DRC/HDR各1段，多层/HDR其它仅夹具；qtechGW1未绑定非第五摄。
 
-## 底层与设备
+413 darkY=anchor2/ratio不clipanchor1；nohist BYTE1非float1；4轮原地平滑左更新，PCHIP b按/h再/h；X24 module112编译Gamma257末1023。413154finite/2nonfinite拒绝，142LUT72704B等/12subunity拒绝；411目标floatlog和fine-onlyunity bump，先前coarse .0001错。409scale3/curve4原地平滑，firstgain>=1024不硬夹unity；407 signed delta<0或>=32768置bit11。408raw124/140身份未解，90次计算更新非帧、.05各float、历史保存atten前、ADRC后，需requestcommit。完整数值表/ASM/原厂数据私存不可公共输出。
 
-维护内核406 samurai-ipe-full-pass-ip406 b4f382affa9a8be089ccec6170c34d74005103ce干净未永久装；407-416仅用户空间数值，SoC/板级DT/主线/传感器/DMA/请求/default不改，phone/新worker/新帧0。原厂源码/系数/表/ASM/XML/产物/日志图像密钥私存/mnt/e/edk2-samurai-out/kernel416及前序，公共mirror仅本地提交不push/PR，保护无关index。
+406 stripe416=explicitIP→reg5c60bit10，不恢复HAL DC&&IP&&quarter gate至当前fullframeAPI；IP&&mask step324/halo6/crop±2否则328/4。405IQ8944/pre32/post96/13LUT2736/type1op1reg5c08，typedLTM2800先copy/check后MAP，unknownDMA保留。
 
-408Face首指针124float，BPS10003或raw140==1跳state，勿猜HDR/flash；signal>0切换重置90次计算非帧，previous+(current-previous)*.05独立float；strength→smoothing→保存proposed历史→atten→quant，ADRC后，history勿存atten后，仍需requestcommit。409 scale3/curve4顺序平滑更新左值；407signed delta<0或>=32768置bit11，漏大正delta698B已修。
+## 环境
 
-406 stripe416=explicitIP→reg5c60bit10，勿恢复原HAL DC&&IP&&quarter>=72×54 gate到当前单fullframeAPI；IP&&mask324step/6halo/crop±2else328/4，outputcrop保持。正确private406/core-intree-r1.ko415720B SHA b0fbf678b045aa52f9db1eb54b6bfecce6fa5c10c76bb1dadbea5329d4dd28b4，test-intree旧405。406R2 fixed52=44LTM+8Gamma 640/650×480 NV12/21，mask移位修，LA灰块非彩色全图常量，LTM+linearGamma最大差1；两轮200仅transport。20269/20313及21352/21413/clients终态。恢复正式395/393/CAMSS389，r30/r25四摄48/error-cancel-extra0，资源释放/双CCI等休眠/17clks0/9railsdisabled-users0/taint0，PW21581/WP21584 uid10000单例/owner_refs53桌面句柄。407-416未访问不作新健康声明。
-
-host406→…394同boot394，guard=/var/lib/samurai/k394-recovered/boot-id-private.txt；保护394丢ACK重启/206061Bramoops和395reset2us/readback/双IPE freshACK后退役修复。未知事务先查；Image363/DT389/logdump365/SGownerFW不改。405typed2800锁内copy/check后MAP，IQ8944/pre32/post96/type1-opcode1-reg5c08/13LUT2736，未知DMA整parcel保留。source/build先root storage284 mounted_build()挂原32GiB ext4勿格式化；rootPYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。保护NV/OTP/个体备份/密钥/电池温控。
+每次WSL访问source/build/ext4先root调用reference/kernel284/storage.py mounted_build()挂原32GiB ext4，绝不重建格式化。source354/build在/mnt/samurai-full282。root PYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。原厂系数/夹具/二进制/图像日志私存/mnt/e/edk2-samurai-out/kernel417及前序，公共仅作者代码/脱敏报告。本地mirror仅scoped commit保护无关index，不push/PR。保护NV/OTP/个体备份/密钥/电池温控；未知事务先查状态。
