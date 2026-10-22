@@ -1,5 +1,5 @@
 {
-  "stage": 431,
+  "stage": 432,
   "upstream_base": "a90ee4305c4a5df72c11b31dacfdc76e00fcf78a",
   "maintained_branch": "samurai-ipe-request-coarse431",
   "maintained_commit": "52127e558704de6a640d076ef605182fe6fff0d7",
@@ -849,7 +849,7 @@
   "confirmed_physical_camera_count": 4,
   "portrait_2mp_identity_verified": false,
   "remaining_camera_scope_evidence": "../../../reference/kernel363/REMAINING-CAMERA-SCOPE.md",
-  "latest_work_stage": 431,
+  "latest_work_stage": 432,
   "icp_response3_sfr_error_path_proven_in_original_firmware": true,
   "icp_response3_sfr_evidence": "../../../reference/kernel368/firmware-sfr-validation.json",
   "a5_icp_candidate_source_branch": "samurai-icp-platform389",
@@ -1304,7 +1304,7 @@
   "ipe_ltm_coarse_native_two_pass_prepare_verified": true,
   "ipe_ltm_coarse_pd10_pixel_producer_implemented": true,
   "ipe_ltm_coarse_latest_evidence": "../../../reference/kernel430/README.md",
-  "latest_work_phone_accessed": true,
+  "latest_work_phone_accessed": false,
   "maintained_core_io_candidate_stage": 425,
   "vfe175_ds4_oem_reserves_recovered": true,
   "vfe175_ds4_register_codec_candidate_implemented": true,
@@ -1372,5 +1372,12 @@
   "latest431_transition_direct_jobs": 4,
   "ipe_auto_dual_pass_evidence": "../../../reference/kernel431/hardware-validation.json",
   "ipe_bank_policy_evidence": "../../../reference/kernel431/bank-validation.json",
-  "formal_disk_modules_unchanged_after431": true
+  "formal_disk_modules_unchanged_after431": true,
+  "last_live_hardware_evidence_stage": 431,
+  "ipe_gtm_stock_roots_decoded_and_native_parsed": 45,
+  "ipe_gtm_tmc11_native_active_calculations": 9,
+  "ipe_gtm_model2_portable_host_arm64_cases_each": 27,
+  "ipe_gtm_model2_portable_verified": true,
+  "ipe_gtm_model2_production_ipa_integrated": false,
+  "ipe_gtm_hardware_application_verified": false
 }
