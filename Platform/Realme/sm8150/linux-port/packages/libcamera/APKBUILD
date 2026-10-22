@@ -4,7 +4,7 @@ maintainer="Robert Mader <robert.mader@collabora.com>"
 pkgname=libcamera
 _pkgver=0.7.2
 pkgver=9999$_pkgver
-pkgrel=31
+pkgrel=32
 pkgdesc="Linux camera framework"
 url="https://libcamera.org/"
 arch="all"
@@ -101,6 +101,16 @@ source="https://gitlab.freedesktop.org/camera/libcamera/-/archive/v$_pkgver/libc
 	0039-synchronous-ipa-reentrancy.patch
 	0040-camss-ipe-pipeline.patch
 	0041-camss-ipe-request.patch
+	0042-camss-ipe-frame-history.patch
+	0043-camss-tmc-ltm-numeric-assembly.patch
+	0044-camss-ipa-request-tone-history.patch
+	0045-camss-ltm-lux-history-and-stats-hold.patch
+	0046-camss-pd10-auto-pair.patch
+	0047-camss-gtm-applied-tone-history.patch
+	0048-camss-same-frame-tone-trace.patch
+	0049-camss-applied-white-balance-status.patch
+	0050-camss-front-ipe-colour.patch
+	0051-camss-raw-only-pd10-policy.patch
 	qcam.desktop
 	$_tuning_files
 	"
@@ -271,4 +281,14 @@ b3e2cc066844727359d8ab0c03da5b83c59507c8b8be14ef732cfe3e461a9354ef0bbe8158625c37
 868194789e800a1a4b6c4a3960b9d1f7bba7ece61ce095fc12609614bd1daaeac4cec5c14f0d2b37c542d196dcf7bba835e26d12ce292da09fb7f4301f5f6d9f  0039-synchronous-ipa-reentrancy.patch
 ac954846c969b93c088696f47a53439af2563639981111c55b8626398d84ad285944822d5dad37a56cae3784c9620a9e4dcc86cb77e7119c85f8bddd2dec89f9  0040-camss-ipe-pipeline.patch
 ddb4ebbfa72df7bc8a5f05d06233ff66b2452a3bc970dcc5999ecbb986bb55ce577d110ecc95ea2e93a0631f2223acb909b01c9ff3d802356679b0d570b9f90b  0041-camss-ipe-request.patch
+7523f630ea4f684a6443fc8c8ba113d1b272b80d9174cd2ab0ccfaf6870545ed7425b9268b99b53dc0c3a052a752a156fc73e872d69aa0e5a3675367a0d6e6ce  0042-camss-ipe-frame-history.patch
+766be6ebf6e5ec02cc4f8817e039bc8446f0cae5f11127f125fbb687d5d64c0a01e2801c429de84e9d33071ee267d5f676e602bbe167b40df1a2fa627ac63071  0043-camss-tmc-ltm-numeric-assembly.patch
+b4fac344aa943deab2ab6bee55d6ad3998b20a71fac53ac232739ef2769bb82c2d04a2945ee20a189ca4d076a5810b280e57c3541c38f23c0a0391d861563254  0044-camss-ipa-request-tone-history.patch
+7a71180a0ae5be924d83a52e67e0ede1ec70645402a9a4e5bc500010ad28d17cb80218ebf5ac85b380980ae81edff5b2d0fd82bb9d80e5ae08e67862aab0ffad  0045-camss-ltm-lux-history-and-stats-hold.patch
+c204b696ad76ff07ff2d525bf085b72e6e702d050f73e31502979399972803b6307587f58e9ca6e31eec013e403204040c37cc130659d2704b69df2f07d30521  0046-camss-pd10-auto-pair.patch
+a35be08d21f5576285002d0958a475131721ad2ecd8404fa075a97ca71be071e1f62404ef5bd4bdd5ae14015d0602dc67a83ff26cb40f45ff7caf224a0d0ca93  0047-camss-gtm-applied-tone-history.patch
+56182955d9d72e9e72318eb0f188e2a912bd4cc13b95fb991708e3081d56d69294976e1a98de128111a7c534fcf7ebb709e4dc4c833d629188b5453bb5cd0e62  0048-camss-same-frame-tone-trace.patch
+3e16b2f2aa2c910317f33e888ec76fae6d1aa7e3249cdb21f74d083c3e83565754759a5f48bc0d75da2a9de7b058c431cdc0893057d993a3803bff242a9b9086  0049-camss-applied-white-balance-status.patch
+e50a79a93514abad092dfe6863b3df0623edd6a725aa64f8608c76f026815f7b3377aff777472730dee29a610adc40112bc70e74708ec3dac4c2dec0c6b5fa03  0050-camss-front-ipe-colour.patch
+3844cea9af0ee5051172a6424da883f61c92a882073dbdea0a7c47f05bf9b81bea66b255111655dffeed59a9299a0d713b7d9a5485826ec5aaa2c9691df567da  0051-camss-raw-only-pd10-policy.patch
 "

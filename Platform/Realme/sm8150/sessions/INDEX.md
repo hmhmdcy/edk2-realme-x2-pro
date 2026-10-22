@@ -527,6 +527,25 @@
 | [kernel419](<../reference/kernel419/README.md>) | 419：逐帧IQ失ACK恢复与错误缓冲出队 |
 | [kernel420](<../reference/kernel420/README.md>) | 420：生产IPE请求通道打包集成 |
 | [kernel421](<../reference/kernel421/README.md>) | 421：真实统计观测、最终图像回执与统计发布重入修复 |
+| [kernel422](<../reference/kernel422/README.md>) | 422：原厂 LTM 标量、LA／mask 与完整类型化帧组装 |
+| [kernel423](<../reference/kernel423/README.md>) | 423：主摄原厂 TMC／LTM 接入 IPA、同帧请求与数学历史实拍 |
+| [kernel424](<../reference/kernel424/README.md>) | 424：修正 LTM 衰减坐标，补统计缺失恢复，实拍完成自动对焦 |
+| [kernel425](<../reference/kernel425/README.md>) | 425：恢复原厂粗级 PD10 IO，确认 DC 实际增加 IPE 处理遍次 |
+| [kernel426](<../reference/kernel426/README.md>) | 426：复用四摄原厂 DS4 调校，恢复 VFE175 降采样与 PD10 寄存器编码 |
+| [kernel427](<../reference/kernel427/README.md>) | 427：原厂 DS4 接入底层输出队列，实机定位到帧内停滞 |
+| [kernel428](<../reference/kernel428/README.md>) | 428：原厂 Crop 纠正 DS4 色度坐标，四摄完整输出通过实拍 |
+| [kernel429](<../reference/kernel429/README.md>) | 429：四摄恢复通过；真实 PD10 双遍完成，统计与重复性仍未通过 |
+| [kernel430](<../reference/kernel430/README.md>) | 430：修复 DC 遍次被丢弃；同输入重复性与 LTM 粗级消费通过 |
+| [kernel431](<../reference/kernel431/README.md>) | 431：原厂 bank 策略确认；生产 IPA 同帧 PD10 自动双遍实拍通过 |
+| [kernel432](<../reference/kernel432/README.md>) | 432：原厂 GTM 数据恢复与 TMC11→GTM 数学验证 |
+| [kernel433](<../reference/kernel433/README.md>) | 433：IFE GTM 提交契约、驱动参数与 SOF 生效回执候选 |
+| [kernel434](<../reference/kernel434/README.md>) | 434：原厂 GTM 实机生效、双 bank 重复性及重开流修复 |
+| [kernel435](<../reference/kernel435/README.md>) | 435：主摄生产 IPA 接通原厂 GTM／TMC／LTM 与最终成功历史 |
+| [kernel436](<../reference/kernel436/README.md>) | 436：恢复原厂 BLS，定位并减轻主摄雾感与环状亮度 |
+| [kernel437](<../reference/kernel437/README.md>) | 437：AWB 收敛状态与实际 WB 增益关联 |
+| [kernel438](<../reference/kernel438/README.md>) | 438：广角、长焦原厂 tone 与真实 PD10 自动链路实拍 |
+| [kernel439](<../reference/kernel439/README.md>) | 439：前摄原厂 IPE CCM13 与自动双遍链路 |
+| [kernel440](<../reference/kernel440/README.md>) | 440：四摄原厂自动调校整合版 r32 已安装 |
 | [rx33](<../reference/rx33/README.md>) | Session 33：有效 EUD RX 抓包 |
 | [rx34](<../reference/rx34/README.md>) | Session 34 的临时终端记录 |
 | [rx36](<../reference/rx36/README.md>) | Session 36：USB 描述符、旧 qcusbser 审查与已完成对照 |
