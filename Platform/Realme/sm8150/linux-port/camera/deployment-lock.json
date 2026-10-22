@@ -1,5 +1,5 @@
 {
-  "stage": 432,
+  "stage": 433,
   "kernel_boot_stage": 389,
   "current_boot_guard_stage": 429,
   "kernel_image_stage": 363,
@@ -1659,7 +1659,7 @@
   "confirmed_physical_camera_count": 4,
   "portrait_2mp_identity_verified": false,
   "remaining_camera_scope_evidence": "../../reference/kernel363/REMAINING-CAMERA-SCOPE.md",
-  "latest_work_stage": 432,
+  "latest_work_stage": 433,
   "icp_response3_sfr_error_path_proven_in_original_firmware": true,
   "icp_response3_sfr_evidence": "../../reference/kernel368/firmware-sfr-validation.json",
   "a5_icp_candidate_source_branch": "samurai-icp-platform389",
@@ -2178,5 +2178,8 @@
   "ipe_gtm_model2_portable_host_arm64_cases_each": 27,
   "ipe_gtm_model2_portable_verified": true,
   "ipe_gtm_model2_production_ipa_integrated": false,
-  "ipe_gtm_hardware_application_verified": false
+  "ipe_gtm_hardware_application_verified": false,
+  "ipe_gtm_typed_ife_driver_candidate": true,
+  "ipe_gtm_pix_ack_sof_driver_candidate": true,
+  "ipe_gtm_driver_hardware_verified": false
 }
