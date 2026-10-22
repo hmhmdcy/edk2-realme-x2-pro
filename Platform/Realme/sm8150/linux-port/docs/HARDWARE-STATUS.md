@@ -1,4 +1,4 @@
-438当前：广角/长焦各自原厂GTM/TMC11/LTM与真实同SOF PD10自动链路实拍通过，96图91数学提交，两路连续8白平衡锁定；复用437源码和434内核，只扩展私有配置及原BLS。前摄IPE非单位矩阵/禁用tone语义及完整画质继续；正式恢复，无fault/taint0，未永久安装。[438证据](../../reference/kernel438/README.md)。以下为历史。
+439当前：前摄原厂IPE CCM13与LTM/Gamma及真实同SOF PD10实拍通过，83图79成功数学提交+4bootstrap；5回放stock重复等于实拍，关LTM或CCM均改变输出。原TMC/GTM/IFE CCM关闭保留。正式恢复，无fault/taint0，未永久安装；绝对画质、四摄整合发布及完整范围继续。[439证据](../../reference/kernel439/README.md)。以下为历史。
 
 400当前：固定CST/CV+CC组合NV12/NV21各八模式实像素通过，单位/零/半幅/通道交换/有符号偏移及格式等价已验证；随后恢复正式395/393四摄48、资源释放。399候选未永久装，完整Gamma/LTM与自动/光学校准继续。[400证据](../../reference/kernel400/README.md)。以下为历史。
 
