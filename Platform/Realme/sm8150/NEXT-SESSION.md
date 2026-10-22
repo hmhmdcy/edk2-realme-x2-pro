@@ -1,37 +1,41 @@
-# 当前检查点：430（DC 遍次修复；同输入重复性与 LTM 粗级消费通过）
+# 当前检查点：431（原厂 bank 策略确认；生产 IPA 同帧 PD10 自动双遍 48 帧通过）
 
-完整多摄／ISP目标未完成。先读 WORKING-BOUNDARIES、reference/kernel430/README.md。用户已强制重启，429四摄正式恢复48帧通过；不要再请求重启。430完成底层修复和主摄新实拍输入验证，尚未完成自动IPA双遍与GTM/history。
+完整多摄／ISP目标未完成。先读 WORKING-BOUNDARIES 与 reference/kernel431/README.md。429硬件重启与正式四摄48帧恢复保留；430已解决丢DC和重复性，431接生产自动双遍。GTM生效版本/history、片内平均表字节读出、画质/其它模式仍未完。
 
-## 当前设备与维护源码
+## 当前设备与候选
 
-430 r1/r2/r3均终态通过，正式模块／服务／资源恢复，无新fault、taint0，worker/client死。正式420 r31/r26＋419 core/adapter、Image363/DT389保持，磁盘模块未改、无永久安装。当前正式IPE计数在卸载候选后重置为0；PW/WP枚举owner_refs53正常，非DMA泄漏。host.py沿用429新guard，原key/known_hosts保留；prepare-runtime动态核对当前正式notes、taint和jobs基线。
+431 r4终态passed，普通／隔离IPA各24主摄scene，48direct双遍+48数学提交；另4个旁路/DC会话转换，jobs=completed=direct52，failed/cancel/first_error0。正式模块/服务/媒体图/资源已恢复，无新fault，taint0，worker/client死。当前仍正式420 r31/r26、419 core/adapter、Image363/DT389，无永久安装、刷写或NV/OTP/persist访问。正式模块重载计数0，PW/WP枚举owner_refs53正常，非DMA泄漏。
 
-source354 branch samurai-ipe-dc-topology430、HEAD d4ac27ac5cf595c9fc7c612dfdfdbcc1a002675a，parent429 91be804b。仅2文件14行dc-topology.patch：有coarse时IO config+1200 topology3；粗级pass/stripe补6个Y/chroma写出范围半字。UAPI、6008B、DMA/m2m所有权、传感器/DT/电源不变。源码干净、哈希和零fuzz/offset回放通过。
+host431沿用429新guard与原SSH key/known_hosts；prepare-runtime动态正式notes/taint/jobs基线。所有本地build/exec和远端worker终态。此前自加MMIO越界Oops在429/INCIDENT保留，危险429build2 core da4591...禁止加载，当前未加任何MMIO读取。
 
-build r1十匹配模块W1/Werror零诊断，core439608B d391fa248a2c56c7f1a7e65760dc3cc0be599e6fd3120982bc19915797df2cf3；CAMSS933bda...和m2mc4d983...与429候选相同。共享构建输出/配置/symvers恢复。无需无故重建。429 r2错误MMIO诊断build core da4591...禁止加载；430没有新MMIO读取。自身诊断Oops及恢复历史保留429/INCIDENT，别归因原厂。
+维护kernel source354 HEAD52127e558704de6a640d076ef605182fe6fff0d7，branch samurai-ipe-request-coarse431，parent430 d4ac27ac。只改m2m23增9减：use_coarse来自已校验当前params的LTM/DC；ensure_session匹配单/双遍，模式改变先用原destroy保护再create/configure，第三平面仅在需要DC时导入；VB2一直持有两个提交平面。core/板级DT/传感器/电源/UAPI/6008B/不确定DMA保留策略未变。
 
-## 根因、原厂证据与实机结果
+intree build1十匹配模块W1/Werror零诊断，m2m141624B e6828a0ca8069181f3f7f9818fdfe888d141c140d0ea753f52af2de00500dcb5；core d391fa...和CAMSS933bda...与430相同。共享build输出/config/symvers已恢复。session-validation执行实际ensure_session C，ASAN/UBSAN和ARM64 qemu七转换/失败保持用例通过。无需无故重建。
 
-旧oracle仅到HardwareDriver_EnqueueJob，遗漏后续DistributeJob和BLGenerator_GenerateBL。本轮probe-native-bl.py执行原厂BL初始化/最终调度：旧topology0粗级mask[0,0]、FULL[3,0]，DC被丢弃。仅topology3仍不够；补6范围后粗级[1,0]、FULL[3,0]。原HAL PostPipelineCreate 0x2cd8b0..0x2cd8d8片段16条件确认PPSprofile2且passes>=2用3，不是猜常量。
+## 原厂平均值表策略
 
-native-bl-validation：compiled C IO/stripe对全native HAL，完整512KiB程序、2MiBheap、全部存活分配/work/context和队列一致，40二进制对象；unused stripe脏padding不复制。OS/queue provider是夹具非原厂OS；窄READ观察不改程序/heap。C ASAN/UBSAN+ARM64输出11472B一致，legacy DCoff不变、invalid no-write/overlap检查通过。固定FULL640x480/display8＋PD10160x120 stride768/slice60/46080B，DC需IP+mask；其它尺寸未泛化。
+trace-banks/check-banks执行原firmware handle mapping/context store和最终LTM序列化，非默认夹具值推断。m2m RT type2→kind0→DC/IP bank0，非RT type3→kind1→bank1离线反例；本机HAL原位插入确认bit14/15。粗级DC1/IP0/sum-clear1，全尺寸DC0/IP1/sum-clear0，同bank。实际r4内核日志确认type2；仍无片内bank读回或平均值表逐字节导出。sum-clear是命令策略，不能称已读到所有SRAM单元为0。scratch46128仍不是已验统计导出。
 
-control：正式FULL-only4jobs，LTMoff重复0byte；单遍IP/DC0重复164373bytes/YmeanAbs4.73536，证明旧不稳依赖LTM。
-r1：复用428/main同SOF17 FULL/PD10和424原厂6008B包，4个real/black/white/repeat-real，首尾0byte；只变PD10输出改变。
-r2：scene-pair.c新主摄pattern0，6对FULL/PD10完整同SOF、tail0，选SOF5后4个双遍jobs；首尾0byte，黑对照332742bytes/Y26.2614，白352298bytes/Y13.2961。
-r3：同r2真实输入，在一次open/STREAMON内4连续request，序号0..3、scratch request1..4、requestDONE poll；四种输出各自与r2逐字节一致、首尾0byte。starts/stops1。没有依赖每帧重启来清历史。
-总16direct，修复候选12；hardware-validation.json自动核对。ANR/TFoff、FULL固定，粗级变化→输出变化且重复相同，为LTM实际消费粗级输入的因果证据。
+保留430原厂DistributeJob/BLGenerator最终同步与program/heap/队列一致证据；当前paired用1核，DC→IP由固件控制，未加CPU bank切换。431同一开流旁路/DC/旁路/DC四请求成功，两个旁路/两个DC各相同，DC还等于430新主摄SOF5真实输入输出。初始化/转换行为稳定。
 
-## 统计与自动链路仍缺什么
+## 生产用户空间与实拍
 
-scratch原厂所需从71488变46128（46080+48），r1/r2/r3仍全a7；不是已验证DC表导出。固定参考独立LTMAverageLUT/avg3d DMI pingpong与13调校LUT不同；真正片内average RAM的具体bank、reset和字节读出尚未完成。当前恢复DC遍次后的冷/连续行为稳定，不等同已逐字节导出内部统计。不要读未映射PPS或凭猜bank改寄存器。
+候选/mnt/samurai-full282/libcamera431-pd10-auto/src/libcamera-v0.7.2，基424，9文件patch0046。IPA4私有SensorControlConfiguration增加pd10能力（proxy/core/module同版），按模式解析可选ife_ds4，上传零flags16B typed DS4 block，actual IPA bytes等于428原厂块。私有factory-s5kgw1只在4608x3456模式插入原厂426/428 sensorMode2 Preview coeff；另4608x2592模式未加。前摄TMC关保持。旧profile无能力不强启粗级。
 
-本轮仍固定424包，IPA数学提交0。下一步把生产libcamera424的FULL/PD10同SOF成组队列接CamssIpe：OUTPUT QN10两planes，CAPTURE NV12，保持两源FD到双DQ+requestDONE，stop先join再释放，完整缺帧/旧SOF/epoch失败不提交历史。生产源码在/mnt/samurai-full282/libcamera424-tone-domains/src/libcamera-v0.7.2，pipeline/camss-vfe，IPA/camss-vfe。本轮只读取，没有修改或克隆它。
+pipeline链接/配置/分配内部DS4，在FULL前streamon；真实kernelSOF配对FULL640x480和PD10160x120 stride768/46080B。NV12两个逻辑Y/UV同FD连续offset和容量检查后合成FULL内存plane，再加PD10；两个FD及原SOF持有至双DQ+requestDONE，stop先join。single-pending数值串行在最终frameProcessed发送后派发下一图像；每张arrival判断250ms，sensorContexts有界保留至迟到统计，不放宽AE校验。
 
-423/424已有BHIST1024/真实曝光gain/lux/IFEgamma→TMC11→LTM13/IPEGamma→6008B和最终成功提交、single pending、缺lux hold。GTM在IFE/BPS，LTM在IPE；本机IFEGTM10::Execute0x31fc00、IQInterface::GTM10CalculateSetting0x37c818已定位但原树/数学/寄存器应用未恢复。原厂非零GTM份额不能清零。统计→后续IFE GTM生效版本→对应图像IPE→最终成功history，不能逆因果。同帧关联未验收，自动链路最后成功仍424，前摄TMC关保持。
+最终用户build7 libcamera SHA d03e076e8211026a3c663d217f73ab9998e91f81c57d109ca5e7af4ec0668a8f，IPA62505f0...、proxy3cb416...；IPA与build3后相同，actual IPA4 Werror合约+签名通过，缺lux/busy/失败/旧回执/停止重启历史复用并验证，数学/历史实现与424字节不变。source-validation两个patch零fuzz/offset，产物hash匹配。
 
-其余四摄模式/视频/第五2MP/光学个体校准/多摄同步见363剩余清单。普通新scene已拍但没宣布画质校准通过。
+r4普通24帧/24commit/23种参数摘要，隔离24/24/22；每次previous-ltm-lux等于上一成功提交lux。硬件审计匹配PD10_READY SOF、真实BHIST/lux/exposure/gain、6008B新包、实际请求成功及最终数值回执，图像实际Y均值/大小匹配元数据；无IMAGE_PAIR_TIMEOUT或AE拒绝。隔离多1份无应用图像的观测停止时abort，不提交数值。
 
-## 工具和接续
+r1/r2/r3失败保留私存：r1误将NV12两个逻辑视图当1plane，提交前本地拒绝，0commit；r2首帧成功/1commit，busy导致下一空旁路在旧paired session被拒；r3转换4job+13commit过，但旧global deadline提前处理新图并删曝光上下文，AE拒绝。均恢复正式环境/taint0。不得将它们写为整链通过。r4才通过完整本轮。
 
-所有WSL source/build/ext4操作前root导入reference/kernel284/storage.py并mounted_build；原32GiB镜像不重建。Unicorn PYTHONPATH=/home/cy122/.local/lib/python3.14/site-packages。私件kernel430有build、bl-*、control-collected-r1、runtime-collected-r1/r2/r3，所有worker/build/exec终态。原件/ASM/系数/图像不出私存。公共自有脚本+脱敏证据，scoped mirror保护无关index和3处工作树，不push。
+看过未调色NV12解码样本：场景可辨认，仍雾感/偏色，未画质验收、未重做AF/光学矩阵。原图/完整日志/系数/ASM均在private kernel431。
+
+## GTM接续
+
+inspect-gtm已定位本机IFEGTM10::Execute0x31fc00(2200B)和IQInterface::GTM10CalculateSetting0x37c818(10324B)，私存asm。四原厂文件GTM IFE/BPS45module roots，不把180内部目录项当roots。14普通IFE模式查询与原stock-selection-manager全部一致，私存*-gtm-directory/selections。尚未执行GTM数学、恢复typed参数块或应用到IFE。
+
+下一步优先原厂GTM parse/tree/math→IFE参数/真实ACK生效版本→对应图像ADRC/LTM/history。GTM在IFE/BPS上游，不能用本图hist逆因果；原厂GTM份额非零不能清零伪完整。当前48次数学提交只覆盖已有TMC/LTM+真实PD10，绝不称GTM关联通过。其它四摄自动/尺寸/视频/第五2MP/个体光学/几何同步见363剩余清单。
+
+WSL每次source/build/ext4先root storage284.mounted_build，原32GiB镜像不重建。Unicorn PYTHONPATH14。私件保密，公共仅自有代码/脱敏证据，scoped mirror保留无关index与3处工作树，不push。
