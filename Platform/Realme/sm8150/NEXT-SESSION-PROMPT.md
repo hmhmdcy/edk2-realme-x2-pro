@@ -1,1 +1,9 @@
-继续完整多摄/ISP目标active，读NEXT-SESSION/WORKING-BOUNDARIES/reference/kernel440/README。440已正式安装r32/r27、三434模块、四原厂私有配置；source440、IPA5、0051修RAW-only错误强制PD10。四摄native/isolated406图386math+20bootstrap、90RAW-only无IPE、6dual通过。默认路径GST48/dual6/mainauto52/frontauto44/PW12跨r2/r3共162成功；r3复用相同载荷7案例，当前epoch56direct失败取消0，服务/PM/DMA释放，taint0无fault。r1/r2验收计数错误均已完整回滚，原报告false保留；按SOF/token/最终成功history审计，主额外3观察正常discard。成功事务k440-install-r3终态不可重启，离线旧r31/r26/三模块/四配置备份齐全，无重启。下一步扩真实PD10双遍至其它预览录像尺寸，原厂striping/DC网格/模式绑定底层收敛；640x480当前限制、完整模式/video/HDR/光学/连续AF/第五2MP/多摄几何同步继续。前摄原IPE CCM与TMC/GTM关闭域保持。原32GiB盘284挂载、SDKbind串行、429guard，原件私存，scoped本地提交不push。
+相机／骁龙ISP按用户要求暂停，先完成充电；本次仅文档与提交，不恢复设备/SDK/构建。先读NEXT及reference/kernel491/HANDOFF.md。未明确恢复前不申请相机窗口。
+
+正式相机基线：484实装r33/r28，441三ISP KO＋468 sensor／四原厂profile；真实升级→r32/r27精确回退→再升级，3 native APK exit0。14例Gst256、RAW24、dual12，268IPE=242math+26bootstrap，实际/usr签名/UID/maps/lease过。
+
+489 core b345af8b…8bdd仅两对象：487原厂属性＋488格式，485 Meson去RUNPATH。IPA6/签名/proxy/base/数学/KO/profile不变，ARM SDK加载/验签/路径解析过，未start CM/exec worker。490 r34/r29签名七包及精确r33回退、缓存solver过；491 package-only八例/强制恢复工具已离线验收及独审，未绑定/上传/实装，仅r1可用。
+
+441/442主摄720/1080、469长焦720、474长焦1080同帧PD10/LTM因果复用。bootstrap单遍；新工具无硬件DC/pass计数。441积压失败未关闭，479控制SOF+2不外推全局delay。
+
+手机归充电，当前boot/501进展以其最终记录为准。恢复须新boot/endpoint/guard/原钥及owner；核476旧363 pin，使用private481/formal-expected（1c458491…4705），不可套440或重放终态。WSL原guard/32GiB留2GiB；原厂/样本私存，selected脱敏。光学/AF/录像/热/多摄/第五未完。

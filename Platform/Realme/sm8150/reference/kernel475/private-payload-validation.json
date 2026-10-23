@@ -1,0 +1,90 @@
+{
+  "stage": 475,
+  "signed_forward_packages": 7,
+  "exact440_rollback_packages": 7,
+  "modules": [
+    {
+      "name": "qcom_camss",
+      "path": "/lib/modules/7.3.0-rc6-rmx1931-samurai-k363+/kernel/drivers/media/platform/qcom/camss/qcom-camss.ko",
+      "resolved_path": "/usr/lib/modules/7.3.0-rc6-rmx1931-samurai-k363+/kernel/drivers/media/platform/qcom/camss/qcom-camss.ko",
+      "forward_sha256": "b7edf58ebba8a252c01e17dedaf893cbd16790e284ed83727b9ea72a7dc37f20",
+      "rollback_sha256": "3edb28d1fc5f23eb208ecc9532db4fcb1617f3f0f3ff821c0af2f60a90006ca2",
+      "forward_note_sha256": "380af5b6a88427c32912f475746762b2424620ac0cfa95aa2b4714c46e7f5be7",
+      "rollback_note_sha256": "7307e4f62cfc86668df936f297fcb9dbd29460f0c8fa85351fcc81e9571664c0"
+    },
+    {
+      "name": "qcom_camss_icp_a5_core",
+      "path": "/lib/modules/7.3.0-rc6-rmx1931-samurai-k363+/kernel/drivers/media/platform/qcom/camss/qcom-camss-icp-a5-core.ko",
+      "resolved_path": "/usr/lib/modules/7.3.0-rc6-rmx1931-samurai-k363+/kernel/drivers/media/platform/qcom/camss/qcom-camss-icp-a5-core.ko",
+      "forward_sha256": "5f2659c51847adc00e5836166399df9a8addea1a4ac758a9079f83cf51290c3e",
+      "rollback_sha256": "d391fa248a2c56c7f1a7e65760dc3cc0be599e6fd3120982bc19915797df2cf3",
+      "forward_note_sha256": "2cb3702681976886bd34bd399031b047cbd4fbbbbeb5adac4658283aaa46032d",
+      "rollback_note_sha256": "694e17c4bb06548909cbb7e4c4ab8bcfcf99c8452649192f6906b6ee72e738ca"
+    },
+    {
+      "name": "camss_icp_a5_m2m",
+      "path": "/lib/modules/7.3.0-rc6-rmx1931-samurai-k363+/kernel/drivers/media/platform/qcom/camss/camss-icp-a5-m2m.ko",
+      "resolved_path": "/usr/lib/modules/7.3.0-rc6-rmx1931-samurai-k363+/kernel/drivers/media/platform/qcom/camss/camss-icp-a5-m2m.ko",
+      "forward_sha256": "6054060184aeebca566702711d5e682e92e5a28b95db262f8411e56616e4ac64",
+      "rollback_sha256": "e6828a0ca8069181f3f7f9818fdfe888d141c140d0ea753f52af2de00500dcb5",
+      "forward_note_sha256": "b695af3811e2b63f19ea631711b868c518d9f07d74e07173c51c90721a04e172",
+      "rollback_note_sha256": "c9f67c0ddafaf0b653be6167938560c42f5a5cfe87f885984f4f370f62b22ece"
+    },
+    {
+      "name": "s5k3m5",
+      "path": "/lib/modules/7.3.0-rc6-rmx1931-samurai-k363+/kernel/drivers/media/i2c/s5k3m5.ko",
+      "resolved_path": "/usr/lib/modules/7.3.0-rc6-rmx1931-samurai-k363+/kernel/drivers/media/i2c/s5k3m5.ko",
+      "forward_sha256": "494910c99ef116b88038ac3dfcc020a90aa35bfcc610b6b37c152601ee758392",
+      "rollback_sha256": "966b29d8e05236ad3d123bdd60bf0202cc60886f60fc3186e06eda4df4059f29",
+      "forward_note_sha256": "a52ef87a2388757c542768e5438120d858e785bd334c080b55dec0f532c54d13",
+      "rollback_note_sha256": "1ad773945fe3f046e1ddb1b595430fe8c4135d38870dba86fd348763fe000814"
+    }
+  ],
+  "profiles": [
+    {
+      "model": "s5kgw1",
+      "path": "/etc/libcamera/ipa/camss-vfe/s5kgw1.yaml",
+      "resolved_path": "/etc/libcamera/ipa/camss-vfe/s5kgw1.yaml",
+      "forward_sha256": "b5669d84977cbfa3c552485fed90157773f14b0427ef5ab7901f2cf0807138d6",
+      "rollback_sha256": "b4b6daa2d8039963a9c07a6a09b27e87a293a0b102644a1f0ca3e89648f4c40b",
+      "forward_source_stage": 443
+    },
+    {
+      "model": "imx319",
+      "path": "/etc/libcamera/ipa/camss-vfe/imx319.yaml",
+      "resolved_path": "/etc/libcamera/ipa/camss-vfe/imx319.yaml",
+      "forward_sha256": "d1fdfae8c06e3438f702e581ab28b283e29f4d7d2e7b4366369ae6ce68855c65",
+      "rollback_sha256": "d1fdfae8c06e3438f702e581ab28b283e29f4d7d2e7b4366369ae6ce68855c65",
+      "forward_source_stage": 440
+    },
+    {
+      "model": "s5k3m5",
+      "path": "/etc/libcamera/ipa/camss-vfe/s5k3m5.yaml",
+      "resolved_path": "/etc/libcamera/ipa/camss-vfe/s5k3m5.yaml",
+      "forward_sha256": "6396ced1039e352a14c7a07187e780596a3a4180b22391bca0b30f7518db4094",
+      "rollback_sha256": "41cba861b491d583c685e07fdc0e97d635f8922f7132abefa15d0632d4fab0a4",
+      "forward_source_stage": 468
+    },
+    {
+      "model": "imx471",
+      "path": "/etc/libcamera/ipa/camss-vfe/imx471.yaml",
+      "resolved_path": "/etc/libcamera/ipa/camss-vfe/imx471.yaml",
+      "forward_sha256": "d98aa0297d51513e2997860eb640c0fc7e11dba17b490cbe8c1cbff3dc0551d7",
+      "rollback_sha256": "d98aa0297d51513e2997860eb640c0fc7e11dba17b490cbe8c1cbff3dc0551d7",
+      "forward_source_stage": 440
+    }
+  ],
+  "original_sensor_rollback_from_verified363_archive": true,
+  "private_factory_data_in_apks": false,
+  "private_bundle_bytes": 28547772,
+  "private_bundle_sha256": "bf7fe0602ba11ce500d684baced3126dca307dbc04de3d5fc75cc0a36680e32e",
+  "modules_loaded": false,
+  "phone_accessed": false,
+  "installed": false,
+  "isolated_root_module_profile_swap_validated": false,
+  "config_repository_world_restore_requires_fresh_device_backup": true,
+  "prior_incomplete_symbol_audit_failure_retained": true,
+  "abi_and_load_evidence_reused_from_exact441_468_and474": true,
+  "config_modversions_off_crc_not_additional_abi_proof": true,
+  "passed": true
+}
