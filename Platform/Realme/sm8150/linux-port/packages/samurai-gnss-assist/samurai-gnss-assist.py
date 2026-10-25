@@ -344,6 +344,106 @@ def retry_seconds(result):
     return 600
 
 
+class GnssPowerPolicy:
+    """Own only power changes made for GNSS on a SIM-missing RMX1931.
+
+    OFFLINE is an explicit user state and is never resumed or used for cleanup.
+    This firmware accepts SHUTTING_DOWN -> ONLINE and ONLINE <-> LOW_POWER;
+    OFFLINE -> ONLINE/LOW_POWER was rejected on the device.
+    """
+
+    def __init__(self, supported):
+        self.supported = supported
+        self.generation = None
+        self.owned = False
+        self.blocked = False
+        self.failed_request = None
+        self.state = {'owned': False, 'online_requests': 0, 'low_requests': 0,
+                      'last_result': 'idle'}
+
+    def eligible(self, value):
+        return (self.supported and value['state'] == -1
+                and value['failure'] == 2 and value['sim_absent'])
+
+    def update(self, read, set_power, read_mode):
+        value = read()
+        if value['generation'] != self.generation:
+            self.generation = value['generation']
+            self.owned = self.blocked = False
+            self.failed_request = None
+        active = bool(value['enabled'] & 6)
+        if not active:
+            self.blocked = False
+        if self.owned and (value['power'] != 3 or not self.eligible(value)):
+            self.owned = False
+            self.blocked = active
+            self.state['last_result'] = 'external-power-or-modem-change'
+        if not self.eligible(value):
+            self.state['owned'] = self.owned
+            return
+        target = None
+        if active and not self.blocked and value['power'] in (1, 2):
+            request = (self.generation, 3, value['power'])
+            if request == self.failed_request:
+                return
+            if value['power'] == 1:
+                mode = read_mode()
+                if mode != 'shutting-down':
+                    self.state['last_result'] = ('offline-preserved' if mode == 'offline'
+                                                 else 'initial-mode-not-resumable')
+                    self.blocked = True
+                    return
+                # The GET may take time; do not turn on a stopped or replaced modem.
+                current = read()
+                if (current['generation'] != self.generation
+                        or not self.eligible(current) or not current['enabled'] & 6
+                        or current['power'] != value['power']):
+                    self.state['last_result'] = 'request-changed-during-mode-query'
+                    return
+            target = 3
+        elif not active and self.owned and value['power'] == 3:
+            target = 2
+        if target is None:
+            self.state['owned'] = self.owned
+            return
+        request = (self.generation, target, value['power'])
+        if request == self.failed_request:
+            return
+        self.state['online_requests' if target == 3 else 'low_requests'] += 1
+        try:
+            after = set_power(target)
+        except Exception as error:
+            self.failed_request = request
+            self.state['last_result'] = 'power-request-failed'
+            self.state['error_type'] = type(error).__name__
+            self.state['owned'] = self.owned
+            return
+        if after['generation'] != self.generation or after['power'] != target:
+            self.failed_request = request
+            self.owned = False
+            self.state['last_result'] = 'power-request-unconfirmed'
+            self.state['owned'] = False
+            return
+        self.owned = target == 3
+        self.failed_request = None
+        self.state.pop('error_type', None)
+        self.state.update(owned=self.owned,
+                          last_result='online-for-gnss' if self.owned else 'idle-low-power')
+        # A short-lived client can disappear while SetPowerState is in flight.
+        if self.owned and not after['enabled'] & 6:
+            self.update(read, set_power, read_mode)
+
+
+def dms_operating_mode():
+    """Read only the enum; do not log qmicli output or modem identifiers."""
+    import re
+    result = subprocess.run(['qmicli', '-p', '-d', 'qrtr://0',
+                             '--dms-get-operating-mode'], capture_output=True,
+                            text=True, timeout=20, env={**os.environ, 'LC_ALL': 'C'})
+    match = re.search(r"Mode:\s*'([^']+)'", result.stdout)
+    return match.group(1) if result.returncode == 0 and match else None
+
+
 def watch(directory):
     """Prepare UTC once per MM owner while idle; refresh data only for active GPS."""
     import dbus
@@ -365,6 +465,13 @@ def watch(directory):
     streams = []
     owner = None
     props = None
+    modem_api = None
+    modem_path = None
+    modem_interface = service + '.Modem'
+    compatible = Path('/proc/device-tree/compatible')
+    supported = (compatible.exists()
+                 and b'realme,samurai' in compatible.read_bytes().split(b'\0'))
+    power = GnssPowerPolicy(supported)
     due = 0.0
     discover_due = 0.0
     preparation_due = 0.0
@@ -379,6 +486,19 @@ def watch(directory):
     def stop(_signum, _frame):
         nonlocal stopping
         stopping = True
+
+    def power_snapshot():
+        if str(daemon.GetNameOwner(service)) != owner:
+            raise RuntimeError('Modem owner changed')
+        modem = props.GetAll(modem_interface)
+        return {'generation': (owner, modem_path),
+                'state': int(modem['State']), 'failure': int(modem['StateFailedReason']),
+                'sim_absent': str(modem['Sim']) == '/', 'power': int(modem['PowerState']),
+                'enabled': int(props.Get(interface, 'Enabled'))}
+
+    def set_power(value):
+        modem_api.SetPowerState(dbus.UInt32(value), timeout=35)
+        return power_snapshot()
 
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
@@ -413,6 +533,7 @@ def watch(directory):
                 current_owner = str(daemon.GetNameOwner(service)) if bus.name_has_owner(service) else None
                 if current_owner != owner:
                     owner, props, discover_due = current_owner, None, 0
+                    modem_api = modem_path = None
                     state['time_prepared'] = False
                     preparation_due = 0.0
                     due = 0.0
@@ -424,14 +545,24 @@ def watch(directory):
                              if interface in interfaces
                              and int(interfaces[interface]['SupportedAssistanceData']) & 1]
                     if len(paths) == 1:
-                        props = dbus.Interface(bus.get_object(service, paths[0]),
+                        modem_path = paths[0]
+                        # Pin writes to the discovered unique owner, never its replacement.
+                        modem_object = bus.get_object(owner, modem_path)
+                        props = dbus.Interface(modem_object,
                                                'org.freedesktop.DBus.Properties')
+                        modem_api = dbus.Interface(modem_object, modem_interface)
                     discover_due = time.monotonic() + 30
                 active = bool(int(props.Get(interface, 'Enabled')) & 6) if props else False
                 newly_active = active and not state['active']
                 if active != state['active']:
                     state['active'] = active
                     save()
+                if props is not None:
+                    previous_power_state = dict(power.state)
+                    power.update(power_snapshot, set_power, dms_operating_mode)
+                    state['power_policy'] = dict(power.state)
+                    if power.state != previous_power_state:
+                        save()
                 prepare = (props is not None and not active and not state['time_prepared']
                            and time.monotonic() >= preparation_due)
                 assist = active and (newly_active or time.monotonic() >= due)
@@ -446,7 +577,7 @@ def watch(directory):
                                               stdout=stdout, stderr=stderr)
                     state[('time_preparation' if prepare else 'worker') + '_starts'] += 1
                     save()
-            except dbus.DBusException:
+            except (dbus.DBusException, RuntimeError, subprocess.TimeoutExpired):
                 owner, props = None, None
                 if state['active']:
                     state['active'] = False
@@ -456,6 +587,14 @@ def watch(directory):
         # Do not kill an in-flight QMI transaction; allow its bounded cleanup to finish.
         if child is not None:
             child.wait()
+        # Release our own idle lease, while preserving any still-active GPS client.
+        if props is not None and power.owned:
+            try:
+                if not power_snapshot()['enabled'] & 6:
+                    power.update(power_snapshot, set_power, dms_operating_mode)
+                state['power_policy'] = dict(power.state)
+            except (dbus.DBusException, RuntimeError, subprocess.TimeoutExpired):
+                pass
         for stream in streams:
             stream.close()
         bus.close()
