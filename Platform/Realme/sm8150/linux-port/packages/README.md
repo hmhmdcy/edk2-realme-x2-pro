@@ -1,4 +1,21 @@
-# Samurai 本地 GNSS 软件包
+# Samurai 软件包与构建配方
+
+本目录保存已在项目中公开的设备软件包、补丁和构建输入。安装状态与实机验收必须按各目录 README 和[当前检查点](../../NEXT-SESSION.md)核对；源码或成功构建不等于已经部署。
+
+| 目录 | 内容 |
+| --- | --- |
+| [apk3](apk3/) | 固定版本 APK 构建、签名和仓库生成工具 |
+| [geoclue](geoclue/) | ModemManager GNSS 生命周期补丁与桌面定位依赖 |
+| [gst-plugin-pipewire](gst-plugin-pipewire/) | 相机 GStreamer/PipeWire 缓冲修复 |
+| [libcamera](libcamera/) | 相机驱动、IPA、ISP 与颜色处理补丁 |
+| [modemmanager](modemmanager/) | 固定 ModemManager 版本及 GNSS 相关补丁 |
+| [pipewire-common](pipewire-common/) | PipeWire 与相机客户端生命周期修复 |
+| [samurai-camera-config](samurai-camera-config/) | 四摄 libcamera 配置、调校与堆规则 |
+| [samurai-desktop](samurai-desktop/) | Phosh/greetd 桌面启动顺序配方 |
+| [samurai-gnss-assist](samurai-gnss-assist/) | GNSS 辅助数据与无 SIM 电源管理服务 |
+| [samurai-platform](samurai-platform/) | 音频、Wi-Fi、Modem、USB、蓝牙和桌面集成 |
+
+## GNSS 软件包
 
 阶段203把已经验收的 MM191 和 helper202 纳入 APK 管理。当前实机已安装；离线 rootfs132 镜像尚未更新，整机适配仍未完成。
 

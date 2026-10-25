@@ -48,7 +48,7 @@ if [ ! -d "$g" ]; then
     echo samurai >"$g/strings/0x409/manufacturer"
     echo SamuraiNCM >"$g/strings/0x409/product"
     mkdir "$g/configs/c.1"
-    echo 100 >"$g/configs/c.1/MaxPower"
+    echo 500 >"$g/configs/c.1/MaxPower"
     mkdir "$g/functions/ncm.usb0"
     echo 02:62:bc:28:a1:01 >"$g/functions/ncm.usb0/dev_addr"
     echo 02:62:bc:28:a1:02 >"$g/functions/ncm.usb0/host_addr"
@@ -58,8 +58,21 @@ test "$(cat "$g/idVendor")" = 0x0525
 test "$(cat "$g/idProduct")" = 0xa4a1
 test "$(cat "$g/strings/0x409/serialnumber")" = 62bc28a1
 test -L "$g/configs/c.1/ncm.usb0"
-if [ -z "$(cat "$g/UDC")" ]; then echo "$udc" >"$g/UDC"; fi
-test "$(cat "$g/UDC")" = "$udc"
+# MaxPower is also consumed by composite_resume. Retire the old USB
+# configuration before changing it, then let the host authorize the new one.
+power=$(cat "$g/configs/c.1/MaxPower")
+if [ "$power" != 500 ]; then
+    bound=$(cat "$g/UDC")
+    if [ -n "$bound" ]; then printf '\n' >"$g/UDC"; fi
+    bound=$(cat "$g/UDC")
+    test -z "$bound"
+    echo 500 >"$g/configs/c.1/MaxPower"
+    sleep 2
+fi
+bound=$(cat "$g/UDC")
+if [ -z "$bound" ]; then echo "$udc" >"$g/UDC"; fi
+bound=$(cat "$g/UDC")
+test "$bound" = "$udc"
 interface=$(cat "$g/functions/ncm.usb0/ifname")
 ip link set "$interface" up
 if ! ip -4 addr show dev "$interface" | grep -q "inet $address/16 "; then
