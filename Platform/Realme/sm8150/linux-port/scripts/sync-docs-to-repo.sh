@@ -1,18 +1,25 @@
 #!/bin/bash
-# Copy-only by default; publishing requires an explicit --publish invocation.
+# Use --files for incremental work; --copy-only retains the full maintenance path.
 set -euo pipefail
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 RK=${SAMURAI_REPO:-/home/cy122/edk2-samurai/repo}
 MODE=copy
 MSG=""
 case "${1:---copy-only}" in
+  --files)
+    shift
+    if [ "$#" -eq 0 ]; then echo 'Usage: sync-docs-to-repo.sh --files PATH [PATH ...]' >&2; exit 2; fi
+    python3 "$SCRIPT_DIR/docs-health-check.py" --local-only --files "$@"
+    python3 "$SCRIPT_DIR/sync-docs.py" --repo "$RK" --files "$@"
+    exec python3 "$SCRIPT_DIR/docs-health-check.py" --repo "$RK" --files "$@"
+    ;;
   --copy-only) if [ "$#" -gt 1 ]; then echo 'Unexpected arguments.' >&2; exit 2; fi ;;
   --publish)
     if [ "$#" -ne 2 ] || [ -z "$2" ]; then echo 'Usage: sync-docs-to-repo.sh --publish "commit message"' >&2; exit 2; fi
     MODE=publish
     MSG=$2
     ;;
-  *) echo 'Usage: sync-docs-to-repo.sh [--copy-only | --publish "commit message"]' >&2; exit 2 ;;
+  *) echo 'Usage: sync-docs-to-repo.sh [--files PATH [PATH ...] | --copy-only | --publish "commit message"]' >&2; exit 2 ;;
 esac
 
 if [ "$MODE" = publish ]; then

@@ -16,6 +16,7 @@ def main():
     parser.add_argument("--repo", type=Path, default=Path("/home/cy122/edk2-samurai/repo"))
     parser.add_argument("--stage", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--files", nargs="+", metavar="PATH", help="Copy only these workspace-relative manifest files.")
     args = parser.parse_args()
     root = args.workspace.resolve()
     mirror = args.repo.resolve() / "Platform/Realme/sm8150"
@@ -24,7 +25,8 @@ def main():
     spec = importlib.util.spec_from_file_location("docs_check", root / "linux-port/scripts/docs-health-check.py")
     checker = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(checker)
-    files = checker.sync_files(root, checker.load_manifest(root))
+    manifest = checker.load_manifest(root)
+    files = checker.selected_files(root, manifest, args.files) if args.files else checker.sync_files(root, manifest)
     exporter = checker.public_module(root)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     backup = root / "out/docs-mirror-backups" / stamp
@@ -68,7 +70,8 @@ def main():
         for start in range(0, len(files), 100):
             paths = [str(Path("Platform/Realme/sm8150") / path) for path in files[start:start + 100]]
             subprocess.run(["git", "-C", str(args.repo), "add", "--", *paths], check=True)
-    print(f"{'Would copy' if args.dry_run else 'Copied'} {len(changed)} changed files; manifest covers {len(files)} files.")
+    scope = "selected scope" if args.files else "manifest"
+    print(f"{'Would copy' if args.dry_run else 'Copied'} {len(changed)} changed files; {scope} covers {len(files)} files.")
     if backed_up:
         print(f"Preserved {backed_up} differing mirror files in {backup}.")
     if not args.stage:
