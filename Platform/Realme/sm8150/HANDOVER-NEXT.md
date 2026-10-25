@@ -2,11 +2,11 @@
 
 相机按用户要求暂停，进展与恢复步骤见[491交接](reference/kernel491/HANDOFF.md)。续作读[当前检查点](NEXT-SESSION.md)与[适配工作流](linux-port/docs/PORTING-WORKFLOW.md)；后文提交统计和旧阶段入口用于定位历史，不作为当前部署。
 
-用途：兼容旧交接入口、记录仓库工具与旧节号映射。文档整理：2026-10-16；部署身份、目标状态、当前待办与回退依据统一见[当前检查点](NEXT-SESSION.md)。
+用途：兼容旧交接入口、记录仓库工具与旧节号映射。文档整理：2026-10-25；部署身份、目标状态、当前待办与回退依据统一见[当前检查点](NEXT-SESSION.md)。
 
 ## 0. 从哪里继续
 
-依次阅读[检查点](NEXT-SESSION.md)、[操作边界](WORKING-BOUNDARIES.md)和[硬件清单](linux-port/docs/HARDWARE-STATUS.md)。本文件中的工具路径和仓库提交记录用于定位资料，设备状态需按检查点核对。
+先读[检查点](NEXT-SESSION.md)、[充电交接](reference/charging-management-20261023/charging-adaptation-handoff-20261025.md)、[操作边界](WORKING-BOUNDARIES.md)和[适配工作流](linux-port/docs/PORTING-WORKFLOW.md)，再按功能查[硬件清单](linux-port/docs/HARDWARE-STATUS.md)。本文件中的工具路径和仓库提交记录用于定位资料，设备状态需按检查点核对。
 
 ## 1. 下一步
 
