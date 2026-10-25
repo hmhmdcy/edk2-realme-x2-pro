@@ -8,10 +8,10 @@
 
 ## 已完成的离线候选
 
-- [MP2650 TCPM额度消费者](../charging-oem-audit-20261023/tcpm-charger-input-candidate/README.md)：采用 CURRENT_NOW 作为工作电流、CURRENT_MAX 作为能力上界；双快照和电芯采样后复核，物理在线/连接周期与协议态分开。38项真实函数测试、ASan/UBSan、单KO W1/Werror构建过；未安装，不构成完整PD/APSD或高功率支持。
-- [ADC5/VBUS板级候选](../charging-oem-audit-20261023/tcpm-measured-vbus-board-candidate/README.md)：本板PM8150B Type-C使用同PMIC ADC@3100 channel8，processed结果是µV；8项实际缩放函数测试过。DTB只增加channel和consumer引用等3处属性，其他节点/属性精确保持。候选DTB b9ecb374… 未刷写；物理精度/时序未验。
-- [PD/APSD真实5V接管](../charging-oem-audit-20261023/tcpm-apsd-handoff-candidate/measured-start/README.md)：支持off/vSafe0V和新鲜ADC证明的已连接5V sink；在启动TCPM PHY前关闭APSD/QC，并把真实PHY regulator引用转交给runtime owner。3708断言、156个PMIC故障点、8个生产PHY函数以及2个对象W1通过。full_probe_integration=false；主任务仍需接线，物理断开后的APSD新周期重建未完成。
-- [PD合同退出到5V](../charging-oem-audit-20261023/tcpm-contract-shutdown-candidate/README.md)：新Request及本次SOP Accept/PS_RDY完成后，用3次实际ADC样本确认5V，随后才允许原关闭序列；6个相关对象W1零诊断，34个生产函数的ASan/UBSan/Werror控制测试通过。通用 tcpc_dev 布局不变。platform .remove 返回void，失败时无法拒绝解绑并保证devres供电继续存活；因此 high_voltage_adoption_ready=false，不能启用高压。
+- MP2650 TCPM额度消费者（本地私人证据）：采用 CURRENT_NOW 作为工作电流、CURRENT_MAX 作为能力上界；双快照和电芯采样后复核，物理在线/连接周期与协议态分开。38项真实函数测试、ASan/UBSan、单KO W1/Werror构建过；未安装，不构成完整PD/APSD或高功率支持。
+- ADC5/VBUS板级候选（本地私人证据）：本板PM8150B Type-C使用同PMIC ADC@3100 channel8，processed结果是µV；8项实际缩放函数测试过。DTB只增加channel和consumer引用等3处属性，其他节点/属性精确保持。候选DTB b9ecb374… 未刷写；物理精度/时序未验。
+- PD/APSD真实5V接管（本地私人证据）：支持off/vSafe0V和新鲜ADC证明的已连接5V sink；在启动TCPM PHY前关闭APSD/QC，并把真实PHY regulator引用转交给runtime owner。3708断言、156个PMIC故障点、8个生产PHY函数以及2个对象W1通过。full_probe_integration=false；主任务仍需接线，物理断开后的APSD新周期重建未完成。
+- PD合同退出到5V（本地私人证据）：新Request及本次SOP Accept/PS_RDY完成后，用3次实际ADC样本确认5V，随后才允许原关闭序列；6个相关对象W1零诊断，34个生产函数的ASan/UBSan/Werror控制测试通过。通用 tcpc_dev 布局不变。platform .remove 返回void，失败时无法拒绝解绑并保证devres供电继续存活；因此 high_voltage_adoption_ready=false，不能启用高压。
 
 ## 接手顺序
 

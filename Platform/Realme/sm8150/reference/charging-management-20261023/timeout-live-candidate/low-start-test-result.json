@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "cases": [
+    "healthy13_recharging",
+    "capacity_below10",
+    "low_SOC_average_zero",
+    "low_SOC_average_negative",
+    "low_SOC_average_missing",
+    "low_SOC_cell_low",
+    "midrange_may_balance",
+    "real_timeout_does_not_require_positive_recharge",
+    "duty_zero_at_13",
+    "duty_zero_at_25"
+  ],
+  "actual_validate_and_balance_methods": true,
+  "phone_accessed": false,
+  "hardware_timer_tested": false,
+  "real_36000_second_observer_unchanged": true,
+  "minimum_SOC": 10,
+  "below20_requires_positive_average_and_each_cell_uv": 3700000,
+  "CPU_duty_zero_through_SOC": 25,
+  "worker_sha256": "1f433dc026475eb3434d78d21e0a486d0d3fe5cdd5f4a9173458f41bc03156ea",
+  "observer_sha256": "d78ad01d83c97492a611208e7e8a5731d5558533c804ece3773acebcfd61da63"
+}

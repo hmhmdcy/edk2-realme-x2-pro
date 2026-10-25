@@ -6,7 +6,7 @@
 
 本次手机由该长测占用，期间不再进行刷写、重启或USB状态切换；离线功能适配可继续。先查原PID/心跳/终态，不因SSH等待超时重启实验。以下“未上传/未启动/20%”为此前准备阶段，当前以本节和实际启动JSON为准。
 
-2026-10-25。实际驱动[计时实现](../charge-cycle.h)及[已部署R2](../../charging-session-20261023/charge-timer-hold-r2-candidate/README.md)使用BOOTTIME累计36000秒；已证实的Full/再充和60秒停充计时不重复测试。本执行器补真实到期停充与AUTO不清除到期周期，仍未装机、未绑定新boot、没有十小时实机通过结论。
+2026-10-25。实际驱动[计时实现](../charge-cycle.h)及已部署R2（本地私人证据）使用BOOTTIME累计36000秒；已证实的Full/再充和60秒停充计时不重复测试。本执行器补真实到期停充与AUTO不清除到期周期，仍未装机、未绑定新boot、没有十小时实机通过结论。
 
 失联恢复后补上[关机检测](shutdown-observer.py)：依据本机旧日志中真实的`/sbin/openrc shutdown`入口，核实际可执行文件dev/inode、root UID、精确参数、存活状态及两次startticks。worker取消并join自有负载、正常关闭服务锁；supervisor收到同一事件会先join worker，跳过关机期间的fresh服务IO。也覆盖worker先退出、关机随后开始的分支。未修改UPower/elogind策略，不依赖未经验证的普通block锁。
 
@@ -20,4 +20,4 @@
 
 [24项控制测试](../test-timeout-observation.py)覆盖提前到期、快/慢/重置计数、Full、温度/低压/故障、采样中断、取消、停止或AUTO失败、AUTO误清超时及清理失败；时间/IO建模只验证验收和收尾逻辑。[六组实际负载方法测试](test-load.py)覆盖控制方向/上限/降载、早退、重复收尾、等待超时kill及部分启动失败join。结果见[软件检查](software-result.json)；手机worker/supervisor仅语法检查，不能据此声称实体运行、到期停充、TCA或完整充电管理通过。
 
-当前[预充03已收尾](../precharge-live506-r3-recovered-result.json)，[508 R2三项及回退已通过](../../charging-oem-audit-20261023/tcpm-usb-budget-candidate/phone-trial-r2-result.json)。实际长测已在本次新506周期启动，状态见本页顶部；不依赖人工拔插。
+当前[预充03已收尾](../precharge-live506-r3-recovered-result.json)，508 R2三项及回退已通过（本地私人证据）。实际长测已在本次新506周期启动，状态见本页顶部；不依赖人工拔插。
