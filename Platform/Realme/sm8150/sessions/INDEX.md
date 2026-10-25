@@ -546,6 +546,54 @@
 | [kernel438](<../reference/kernel438/README.md>) | 438：广角、长焦原厂 tone 与真实 PD10 自动链路实拍 |
 | [kernel439](<../reference/kernel439/README.md>) | 439：前摄原厂 IPE CCM13 与自动双遍链路 |
 | [kernel440](<../reference/kernel440/README.md>) | 440：四摄原厂自动调校整合版 r32 已安装 |
+| [kernel441](<../reference/kernel441/README.md>) | 441：720p／1080p 同帧 PD10 与 LTM 消费已取得实证，候选整体验收未通过 |
+| [kernel442](<../reference/kernel442/README.md>) | 442：停止取消语义修复，两种尺寸同帧 PD10／LTM 全链路通过 |
+| [kernel443](<../reference/kernel443/README.md>) | 443：主摄 16:9 模式补齐原厂 DS4，正常 GStreamer 两尺寸双遍通过 |
+| [kernel444](<../reference/kernel444/README.md>) | 444：焦点／tone 合并同步调用，IPA6 与正常消费者验证通过 |
+| [kernel445](<../reference/kernel445/README.md>) | 445：精确优化焦点网格，实机缓存基准约快两倍 |
+| [kernel446](<../reference/kernel446/README.md>) | 446：焦点工作区复用，补齐四摄／RAW／实际 AF 覆盖 |
+| [kernel447](<../reference/kernel447/README.md>) | 447：焦点长尾包含抢占等待，大核线程对照改善稳态 |
+| [kernel448](<../reference/kernel448/README.md>) | 448：开停流管理线程容量租约，首个焦点采样已使用选定CPU |
+| [kernel449](<../reference/kernel449/README.md>) | 449：用户身份、同一 Manager 循环与五分钟取流；发现旧统计重复回执 |
+| [kernel450](<../reference/kernel450/README.md>) | 450：旧统计在同步 IPA 回执前释放本地所有权 |
+| [kernel451](<../reference/kernel451/README.md>) | 451：一次分配编码 Camss 参数，保留原线格式 |
+| [kernel452](<../reference/kernel452/README.md>) | 452：有界 FULL 所有权诊断，首次实机定位到成功FULL回调之前 |
+| [kernel453](<../reference/kernel453/README.md>) | 453：BU64253 标准镜头驱动候选 |
+| [kernel454](<../reference/kernel454/README.md>) | 454：复用原厂 OV02A1B 表与曝光控制的离线基础 |
+| [kernel455](<../reference/kernel455/README.md>) | 455：BU64253 lifetime r3 独立候选 |
+| [kernel456](<../reference/kernel456/README.md>) | 456：原 Image363 加 0064 的独立 core Image |
+| [kernel457](<../reference/kernel457/README.md>) | 457：FULL供给窗口细化与现有内核trace审查 |
+| [kernel459](<../reference/kernel459/README.md>) | 459：独占内核 trace 实例生命周期 helper |
+| [kernel460](<../reference/kernel460/README.md>) | 460：匹配 ODM AF override 的有限原指令核对 |
+| [kernel461](<../reference/kernel461/README.md>) | 461：同步 IPA 回执期间保留请求所有权 |
+| [kernel462](<../reference/kernel462/README.md>) | 462 r1：前摄共享 route／reset／MCLK 的受限代码候选 |
+| [kernel463](<../reference/kernel463/README.md>) | 463：按媒体角色选择 FULL 跟踪节点 |
+| [kernel464](<../reference/kernel464/README.md>) | 464：把FULL空队列与应用归还请求对齐 |
+| [kernel465](<../reference/kernel465/README.md>) | 465：长焦两尺寸消费者与原厂 mode2 增量 |
+| [kernel466](<../reference/kernel466/README.md>) | 466：长焦 mode2 的 CSI/link 候选已收敛 |
+| [kernel467](<../reference/kernel467/README.md>) | 467：长焦 mode3 两尺寸同帧双遍实际消费 |
+| [kernel468](<../reference/kernel468/README.md>) | 468：原厂长焦 mode2 已单模块接入并实机开流 |
+| [kernel469](<../reference/kernel469/README.md>) | 469：原厂长焦 mode2 的 720p LTM 实际消费 |
+| [kernel470](<../reference/kernel470/README.md>) | 470：长焦1080p实际串行处理超过帧节拍 |
+| [kernel471](<../reference/kernel471/README.md>) | 471：长焦1080p仅替换proxy的旧／新／旧比较 |
+| [kernel473](<../reference/kernel473/README.md>) | 473：processed IPE Manager容量租约的底层候选与实测 |
+| [kernel474](<../reference/kernel474/README.md>) | 474：组合候选的原生／隔离1080p与LTM消费 |
+| [kernel475](<../reference/kernel475/README.md>) | 475：r33／r28 可回退候选物料，未安装手机 |
+| [kernel476](<../reference/kernel476/README.md>) | 476：mode2 控制延迟离线执行准备 |
+| [kernel477](<../reference/kernel477/README.md>) | 477：目标真实 providers 的只读 APK 解算准备 |
+| [kernel479](<../reference/kernel479/README.md>) | 479：mode2 曝光／增益两帧响应的实测依据 |
+| [kernel480](<../reference/kernel480/README.md>) | 480：目标真实 APK providers，只读单次解算 |
+| [kernel481](<../reference/kernel481/README.md>) | 481：真实安装、精确回退、再安装准备 |
+| [kernel482](<../reference/kernel482/README.md>) | 482：481 安装事务的有限默认路径 probe |
+| [kernel483](<../reference/kernel483/README.md>) | 483 独立准备审查 |
+| [kernel484](<../reference/kernel484/README.md>) | 484 实际安装独立审计 |
+| [kernel485](<../reference/kernel485/README.md>) | 485：恢复 libcamera 的安装路径识别 |
+| [kernel486](<../reference/kernel486/README.md>) | 486：测量启动器的个人 HOME 环境修复 |
+| [kernel487](<../reference/kernel487/README.md>) | 487：三 sensor 静态属性候选与四摄 rotation 缺口 |
+| [kernel488](<../reference/kernel488/README.md>) | 488：识别 DS4 的 0x2027 媒体总线格式 |
+| [kernel489](<../reference/kernel489/README.md>) | 489：安装路径、原厂静态属性和总线格式的增量 core |
+| [kernel490](<../reference/kernel490/README.md>) | 490：r34/r29 七包候选与精确 r33/r28 回退包 |
+| [kernel491](<../reference/kernel491/README.md>) | 491：仅更新包的定向复验准备 |
 | [rx33](<../reference/rx33/README.md>) | Session 33：有效 EUD RX 抓包 |
 | [rx34](<../reference/rx34/README.md>) | Session 34 的临时终端记录 |
 | [rx36](<../reference/rx36/README.md>) | Session 36：USB 描述符、旧 qcusbser 审查与已完成对照 |
@@ -577,11 +625,31 @@
 | [rx63](<../reference/rx63/README.md>) | RX63 — live compatibility and guarded single-device trial tools |
 | [rx64](<../reference/rx64/README.md>) | RX64 — supported driver-loading environment remains blocked |
 | [rx65](<../reference/rx65/README.md>) | RX65 — WSL full native input succeeds; tty TX loss remains |
+| [bluetooth-20261023](<../reference/bluetooth-20261023/README.md>) | 蓝牙完整功能与现有修复固化 |
+| [bluetooth-host-adoption-20261023](<../reference/bluetooth-host-adoption-20261023/README.md>) | BNEP/UHID adoption 与回退审查 |
+| [bluetooth-host-config-20261023](<../reference/bluetooth-host-config-20261023/README.md>) | k363 蓝牙主机协议与最小配置增量 |
+| [bluetooth-host-input-cache-20261023](<../reference/bluetooth-host-input-cache-20261023/README.md>) | 现场事务输入的只读字节缓存工具 |
+| [bluetooth-host-modules-20261023](<../reference/bluetooth-host-modules-20261023/README.md>) | BNEP/UHID 独立固化候选 |
+| [bluetooth-host-trigger-20261023](<../reference/bluetooth-host-trigger-20261023/README.md>) | 原kmod trigger隔离验证的输入对齐审查 |
+| [bluetooth-le-peer-20261023](<../reference/bluetooth-le-peer-20261023/README.md>) | 手机BlueZ GATT外设与Windows中央对端（2026-10-23） |
+| [bluetooth-oem-20261023](<../reference/bluetooth-oem-20261023/README.md>) | 蓝牙原厂依据与可复用实现（2026-10-23） |
+| [bluetooth-service-prereqs-20261023](<../reference/bluetooth-service-prereqs-20261023/README.md>) | 蓝牙服务前提与手机对端角色（2026-10-23） |
+| [bluetooth-speaker-20261023](<../reference/bluetooth-speaker-20261023/README.md>) | 漫步者低音量连接与重连验收 |
+| [bluetooth-static-fixes-20261023](<../reference/bluetooth-static-fixes-20261023/README.md>) | 蓝牙六类静态问题修复与离线验证 |
+| [bluetooth-static-review-20261023](<../reference/bluetooth-static-review-20261023/README.md>) | 蓝牙当前静态审查（2026-10-23） |
+| [bluetooth-transport-20261023](<../reference/bluetooth-transport-20261023/README.md>) | 蓝牙传输与 PM 候选：2026-10-23 |
+| [bluetooth-windows-central-20261023](<../reference/bluetooth-windows-central-20261023/README.md>) | Windows BLE central：专用手机 GATT 对端 |
+| [charging-management-20261023](<../reference/charging-management-20261023/README.md>) | Realme X2 Pro充电管理：2026-10-23 |
+| charging-oem-audit-20261023（本地私人证据） | 原厂普通充电策略缺口审查 |
+| charging-session-20261023（本地私人证据） | 充电周期计时修正候选 |
+| charging-ui-audit-20261023（本地私人证据） | USB 充电图标延迟：离线链路审计 |
 | [display-handoff-comparison](<../reference/display-handoff-comparison/README.md>) | 一加、真我 Linux 显示交接方案对比 |
 | [full-upgrade-20261018](<../reference/full-upgrade-20261018/README.md>) | 2026-10-18：现有软件源全量升级完成 |
 | [maintenance-2026-10-19](<../reference/maintenance-2026-10-19/README.md>) | 2026-10-19：暂停交接与编译产物清理 |
+| [package-hardening-20261023](<../reference/package-hardening-20261023/README.md>) | 2026-10-23：平台修复固化与蓝牙 APK 候选 |
 | [publication-2026-10-14](<../reference/publication-2026-10-14/README.md>) | 2026-10-14 分类提交与公开资料 |
 | [publication-2026-10-17](<../reference/publication-2026-10-17/README.md>) | 2026-10-17：保存全部后续硬件适配源码 |
+| [publication-2026-10-26](<../reference/publication-2026-10-26/README.md>) | 2026-10-26：已适配内容整理发布 |
 | [repository-audit-20261018](<../reference/repository-audit-20261018/README.md>) | 2026-10-18：APK索引刷新与版本约束核对 |
 
 ## 早期拆分与快照

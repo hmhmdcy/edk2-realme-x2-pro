@@ -4,7 +4,7 @@
 
 2026-10-24历史：USB IRQ唤醒配置已装机并通过[一次RTC待机恢复](../../reference/charging-management-20261023/usb-irq-wake-rtc001-result.json)。当时504/USB13f41/97c/f6bef/服务83469/manifest5ef4、boot4e325；真实驻留15.019秒，success+1/fail0，前后12门、USB挂起恢复回调0、原key/NCM自动恢复与SDP500保持，无新fault，alarm/trace清理。原驱动未配置IRQ wake的缺口已补；真实USB插拔唤醒仍待现场，窗口只prepare未启动。前boot的2719完整8帧证据保留，新boot MACv2/p1实例0/0未重查。该组合USB两文件逆向0c6a6恢复ebfcb/8c5b7后冷启；更早回退属于不同范围。下面旧组合/未加载描述按历史范围读取。
 
-2026-10-25充电最新：[508合测与回退通过](../../reference/charging-oem-audit-20261023/tcpm-usb-budget-candidate/phone-trial-r2-result.json)：默认Rp预算500、软件共同0→500/原key恢复、实际关机取消释放锁。已自动回正式506 boot82d6，两载体/原充电文件/三note/PD双0核验。[预充03原1299条复核通过](../../reference/charging-management-20261023/precharge-live506-r3-recovered-result.json)。[真实计时观察已启动](../../reference/charging-management-20261023/timeout-live506-start-result.json)，初期587→885与实耗相符，低SOC零实验负载；36000秒到期/AUTO锁存尚未验收。物理USB唤醒、温界、完整PD/APSD共存、高功率等仍待完成。
+2026-10-25充电最新：508合测与回退通过（本地私人证据）：默认Rp预算500、软件共同0→500/原key恢复、实际关机取消释放锁。已自动回正式506 boot82d6，两载体/原充电文件/三note/PD双0核验。[预充03原1299条复核通过](../../reference/charging-management-20261023/precharge-live506-r3-recovered-result.json)。[真实计时观察已启动](../../reference/charging-management-20261023/timeout-live506-start-result.json)，初期587→885与实耗相符，低SOC零实验负载；36000秒到期/AUTO锁存尚未验收。物理USB唤醒、温界、完整PD/APSD共存、高功率等仍待完成。
 
 用途：按功能查询已证明能力与缺口。整理日期：2026-10-23；最后部署见[检查点](../../NEXT-SESSION.md)，操作与验证范围见[当前规则](../../WORKING-BOUNDARIES.md)和[适配工作流](PORTING-WORKFLOW.md)。按本轮功能读对应行，无需每轮通读或回归全部硬件。历史部署、帧数与过程从[会话索引](../../sessions/INDEX.md)定位，各阶段原文与失败证据保留。
 

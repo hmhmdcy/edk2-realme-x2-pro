@@ -2,7 +2,7 @@
 
 [充电交接](reference/charging-management-20261023/charging-adaptation-handoff-20261025.md)；[规则](WORKING-BOUNDARIES.md)，相机暂停，手机/SDK串行。
 
-[508三项与回退、预充1299条通过；EUD串口问题见交接。额度消费者](reference/charging-oem-audit-20261023/tcpm-charger-input-candidate/README.md)离线38例/KO过，未装；PD/APSD未验。
+508三项与回退、预充1299条通过；EUD串口问题见交接。额度消费者（本地私人证据）离线38例/KO过，未装；PD/APSD未验。
 
 [10小时观察](reference/charging-management-20261023/timeout-live-candidate/README.md)：supervisor6483/68160、worker6484/68170、CPU6485/6/68240；8643/36000秒、31%、26.2℃、平均+65mA、AUTO/Good、fault0、duty0.3。只读status；勿刷写/重启/切USB。
 

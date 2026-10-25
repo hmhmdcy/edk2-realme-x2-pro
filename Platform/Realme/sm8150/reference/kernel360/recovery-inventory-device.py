@@ -9,7 +9,7 @@ def binary(name):
     except OSError:return None
 boot=text('/proc/sys/kernel/random/boot_id');release=text('/proc/sys/kernel/osrelease');model=(binary('/sys/firmware/devicetree/base/model') or b'').rstrip(b'\0').decode()
 assert model=='Realme X2 Pro (RMX1931CN)' and release=='7.3.0-rc6-rmx1931-samurai-k298+'
-assert boot=='3501b11d-9884-42da-8262-c713ce9a7c6b','Boot changed after the initial successful SSH observation'
+assert boot=='PRIVATE_UUID','Boot changed after the initial successful SSH observation'
 root=Path('/var/lib/samurai/k356-boot-r5');state=json.loads((root/'state.json').read_text()) if (root/'state.json').exists() else None
 note=binary('/sys/module/qcom_camss/notes/.note.gnu.build-id');modules={n:Path('/sys/module',n).exists() for n in ['qcom_camss','qcom_camss_icp_a5_core','camss_icp_a5_boot_test']}
 dt=Path('/sys/firmware/devicetree/base');temporary=[str(p.relative_to(dt)) for p in [dt/'soc@0/samurai-icp356-boot@ac10000',*[dt/'reserved-memory'/('samurai-icp356-'+n+'-iova') for n in ['fw','shared','heap','trace']]] if p.exists()]

@@ -1,10 +1,10 @@
 # Linux 移植工作区：Realme X2 Pro / RMX1931 / samurai
 
-用途：Linux源码、补丁、设备树、rootfs及工具导航。文档整理：2026-10-14；部署身份与实机验收以[当前检查点](../NEXT-SESSION.md)和[硬件清单](docs/HARDWARE-STATUS.md)为准。
+用途：Linux源码、补丁、设备树、rootfs及工具导航。文档整理：2026-10-23；部署身份与实机验收以[当前检查点](../NEXT-SESSION.md)和[硬件清单](docs/HARDWARE-STATUS.md)为准。
 
 ## 续作入口
 
-先读[检查点](../NEXT-SESSION.md)与[操作边界](../WORKING-BOUNDARIES.md)。目录名、内核release、工作区Image或固件文件名不能单独证明它们与实际运行组合一致；源码路径、部署包和回退收据由检查点指路。
+先读[检查点](../NEXT-SESSION.md)与[操作边界](../WORKING-BOUNDARIES.md)，再按[适配工作流](docs/PORTING-WORKFLOW.md)选择本轮资料和验证范围。硬件/校准优先提取原厂固件或公开仓库的数据、文件与算法，缺项再实测；复用已有提取物和增量构建。目录名、内核release、工作区Image或固件文件名不能单独证明它们与实际运行组合一致；源码路径、部署包和回退收据由检查点指路。
 
 ## 内容与来源
 

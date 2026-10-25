@@ -1,6 +1,6 @@
 # EDK2 / UEFI firmware for the realme X2 Pro (RMX1931 · "samurai")
 
-用途：项目介绍、构建入口与移植说明。文档整理：2026-10-14；部署与实机状态以[当前检查点](NEXT-SESSION.md)的最后核对记录为准。
+用途：项目介绍、构建入口与移植说明。文档整理：2026-10-23；部署与实机状态以[当前检查点](NEXT-SESSION.md)的最后核对记录为准。
 
 This fork brings EDK2/UEFI and mainline Linux to the realme X2 Pro. UEFI Boot Manager, EFI Shell, the framebuffer console, side buttons and UFS enumeration have historical hardware validation. Linux hardware acceptance and remaining work are maintained in the [hardware checklist](linux-port/docs/HARDWARE-STATUS.md).
 
@@ -9,6 +9,7 @@ This fork brings EDK2/UEFI and mainline Linux to the realme X2 Pro. UEFI Boot Ma
 | Need | Document |
 | --- | --- |
 | Continue development; identify deployed images, sources and rollback | [NEXT-SESSION](NEXT-SESSION.md) |
+| Fast porting workflow; factory data and incremental validation | [PORTING-WORKFLOW](linux-port/docs/PORTING-WORKFLOW.md) |
 | Current operating boundaries | [WORKING-BOUNDARIES](WORKING-BOUNDARIES.md) |
 | Hardware capabilities and acceptance gaps | [HARDWARE-STATUS](linux-port/docs/HARDWARE-STATUS.md) |
 | Find documentation and maintenance commands | [DOCS-INDEX](DOCS-INDEX.md) |

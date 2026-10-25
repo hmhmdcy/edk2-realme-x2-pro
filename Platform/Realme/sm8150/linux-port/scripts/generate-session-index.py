@@ -2,6 +2,8 @@
 """Generate the session/evidence map without copying experimental conclusions."""
 from pathlib import Path
 import argparse
+import fnmatch
+import json
 import re
 
 
@@ -18,6 +20,13 @@ def order(path):
 
 
 def render(root):
+    manifest_path = root / "linux-port/scripts/docs-sync-manifest.json"
+    exclude = json.loads(manifest_path.read_text(encoding="utf-8")).get("exclude", [])
+
+    def private_evidence(name):
+        probe = f"reference/{name}/README.md"
+        return any(fnmatch.fnmatchcase(probe, pattern) for pattern in exclude)
+
     lines = [
         "# 会话与证据索引", "",
         "用途：定位现有会话及reference证据。结构整理：2026-10-14；由generate-session-index.py按文件清单生成，保持原始记录的标题与结论。",
@@ -36,7 +45,9 @@ def render(root):
         match = re.fullmatch(r"(kernel|rx)(\d+)", path.parent.name)
         return (match[1], int(match[2]), "") if match else ("z", 0, path.parent.name)
     for path in sorted(evidence, key=evidence_order):
-        lines.append(f"| [{path.parent.name}](<../reference/{path.parent.name}/README.md>) | {title(path)} |")
+        name = path.parent.name
+        label = f"{name}（本地私人证据）" if private_evidence(name) else f"[{name}](<../reference/{name}/README.md>)"
+        lines.append(f"| {label} | {title(path)} |")
     lines += ["", "## 早期拆分与快照", "",
               "- [旧8—30节映射](../HANDOVER-NEXT.md#旧830节映射)",
               "- [Linux技术与19—28节](../linux-port/docs/00-INDEX.md)",

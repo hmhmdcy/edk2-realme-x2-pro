@@ -21,13 +21,13 @@
 下方块由`linux-port/scripts/update-repo-state.py`从本地git生成，仅描述已提交历史；当前未提交源码以`git status`/`git diff`为准。
 
 <!-- repo-state:start -->
-    master = d3ed79b8 camera: preserve hardware pipeline and factory tuning integration
-             e36f5fca docs: publish Samurai userspace reproduction and upstream maintenance status
-             3f8a65ec samurai: publish complete source index and Linux return validation
-             6a0e4ba4 samurai: save GNSS HAL RF clock and modem investigations
-             54e18d62 samurai: preserve camera modules packages and desktop fixes
+    master = 30c1f4dc bluetooth: publish coordination and runtime index
+             dc88f8d7 charging: publish current read-only investigation and handoff
+             9635f869 docs: publish October maintenance and package audits
+             3770dc6a bluetooth: publish host stack and transport investigations
+             278ea218 platform: publish desktop and device service packages
 
-    137 commits ahead of upstream origin/master, as of the tip named above;
+    222 commits ahead of upstream origin/master, as of the tip named above;
 
     fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
 
