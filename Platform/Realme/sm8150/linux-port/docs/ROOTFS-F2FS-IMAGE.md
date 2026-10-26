@@ -16,7 +16,7 @@ rootfs 是 **userdata 分区内容**的 Android sparse 镜像，不含嵌套分�
 
 | 本地产物 | 大小 | 用途 |
 |---|---:|---|
-| `E:\edk2-samurai-out\rootfs01\samurai-rootfs-f2fs.simg` | 444,602,300 字节，约 424 MiB | userdata 的 Android sparse 镜像 |
+| `$SAMURAI_OUT\rootfs01\samurai-rootfs-f2fs.simg` | 444,602,300 字节，约 424 MiB | userdata 的 Android sparse 镜像 |
 | 同目录 `samurai-rootfs-f2fs.simg.zst` | 136,719,509 字节，约 130 MiB | 压缩保存副本，须先解压为 `.simg` |
 | 同目录 `Image-f2fs` | 约 44.6 MiB | 内置 F2FS 和 rootfs 切换逻辑的 ARM64 Linux Image |
 | 同目录 `logdump-f2fs.img` | 64 MiB | 基于本地保存的 kernel91 FAT 模板，仅替换 Image 的启动候选 |
@@ -38,7 +38,7 @@ fdd86e1f5f1072ed02aaf077944b3218183835beeb8a2c0aa217d3c4ef3172d7
 - 用户 `cy122`，UID/GID 10000，主机名 `samurai`，时区 `Asia/Shanghai`。
 - 安装 F2FS 工具、SSH、网络工具及基础 console 环境；没有安装图形桌面。
 - SSH 使用此前已授权的公钥，关闭密码 SSH 登录，root 密码锁定。
-- 临时 console/sudo 密码仅保存于 WSL 的 `/home/cy122/pmos-samurai-rootfs01/login-credentials.txt`，宿主用户所有、权限 0600。该文件不在公开资料或输出日志内。
+- 临时 console/sudo 密码仅保存于 WSL 的 `$HOME/pmos-samurai-rootfs01/login-credentials.txt`，宿主用户所有、权限 0600。该文件不在公开资料或输出日志内。
 - OpenRC 启动现有 USB NCM 脚本，设备端地址 `169.254.42.1`，由发行版 sshd 提供 SSH。保留 `ttyEUD0` console；NetworkManager 不接管 usb0。
 - `/etc/fstab` 按 UUID 挂载 F2FS，使用 `noatime`。本次没有开启 F2FS 文件压缩，也没有配置 Btrfs 式快照。
 
@@ -46,7 +46,7 @@ rootfs 未包含厂商固件、Wi-Fi 密码或 NV 快照。原有诊断 initramf
 
 ## 启动衔接与验证
 
-内核在隔离副本 `/home/cy122/pmos-samurai-rootfs01/kernel` 中编译，F2FS、xattr、ACL、安全标签支持均内置。仅增加 F2FS 配置和隔离 initramfs 路径，保留原有诊断文件及 EUD/USB 功能。原源码树的生成文件在构建期间发生变化，本轮没有将其回写或恢复；审计见 `kernel-artifact-validation.json`。
+内核在隔离副本 `$HOME/pmos-samurai-rootfs01/kernel` 中编译，F2FS、xattr、ACL、安全标签支持均内置。仅增加 F2FS 配置和隔离 initramfs 路径，保留原有诊断文件及 EUD/USB 功能。原源码树的生成文件在构建期间发生变化，本轮没有将其回写或恢复；审计见 `kernel-artifact-validation.json`。
 
 PID 1 先检查 `userdata` 分区名、PARTUUID `PRIVATE_UUID`、精确容量和 4096 字节逻辑扇区；再检查 F2FS UUID。先以 `ro,norecovery` 挂载，验证 rootfs 标识和 `/sbin/init`，之后重新读写挂载并切换到 OpenRC。识别或前置挂载失败时保留原诊断启动环境。文件系统探测已使用 initramfs 实际 BusyBox 的语法核对，不依赖 util-linux 专有参数。
 
@@ -62,4 +62,4 @@ PID 1 先检查 `userdata` 分区名、PARTUUID `PRIVATE_UUID`、精确容量和
 
 **以后刷入 userdata 将覆盖其中的 Android 数据。** 本轮仅制作镜像，没有执行刷写；也没有生成自动刷机脚本。
 
-构建环境与 raw 稀疏文件保存在 `/home/cy122/pmos-samurai-rootfs01`。私人输出目录的脚本、配置、日志和 JSON 记录可用于复核本次构建；重新定制须同时更新镜像 UUID、启动校验参数和分区容量。
+构建环境与 raw 稀疏文件保存在 `$HOME/pmos-samurai-rootfs01`。私人输出目录的脚本、配置、日志和 JSON 记录可用于复核本次构建；重新定制须同时更新镜像 UUID、启动校验参数和分区容量。

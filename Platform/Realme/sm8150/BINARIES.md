@@ -97,7 +97,7 @@ AND AND AND AND END
 
 ## Offline copy
 
-`E:\edk2-samurai-out\samurai-binaries.zip` (15 files, ~144 KB) is a local copy of
+`$SAMURAI_OUT\samurai-binaries.zip` (15 files, ~144 KB) is a local copy of
 the same tree; unpack it into
 `Platform/EFI_Binaries/Drivers/Devices/samurai/` on a machine without network
 access.

@@ -70,7 +70,7 @@ reboot2 bootloader.
 
 ### 28.2 EUD COM is full duplex (host -> device)
 
-From the official QUIC library, E:\eud-host\quic-eud\com_api.cpp:127-132:
+From the official QUIC library, $EUD_HOST\quic-eud\com_api.cpp:127-132:
 
     HWIO_PERIPH_SS_EUD_COM_RX_ID_ADDR : 0x088E000C
     HWIO_PERIPH_SS_EUD_COM_RX_LEN_ADDR: 0x088E0010
@@ -120,7 +120,7 @@ FAT nor the directory entry:
     d[90112:90112+30116352] = img
     open('logdump-new.img','wb').write(d)
 
-Template kept at E:\edk2-samurai-out\logdump.img (sha256 63e83d3e...).
+Template kept at $SAMURAI_OUT\logdump.img (sha256 63e83d3e...).
 
 Side benefit: a corrupted logdump FAT is no longer a trip through Android - the
 template can be flashed back in 1.8 s from fastboot.
@@ -143,7 +143,7 @@ Prerequisites, in order:
    fastboot; pet the hardware watchdog (CONFIG_QCOM_WDT=y) so a hang also resets;
    after the banner and diagnostics, call reboot2 bootloader.
 3. PC side: the capture daemon above (the pieces exist: eudtool, comlog2).
-4. PC side: the logdump patch script, landed in linux-port/scripts/.
+4. PC side: the logdump patch script, landed in reference/linux-port-scripts/.
 
 ### 28.5 Deltas to the shortcuts / proper-goals split (section 27.3, 27.4)
 

@@ -57,7 +57,7 @@ a90ee4305  Linux 7.3-rc6        (grafted, tag: v7.3-rc6)   ← 真正的上游�
 **下一条命令（给足时间，看它到底报什么）：**
 
 ```bash
-cd /home/cy122/x2pro-linux/upstream
+cd "$SAMURAI_LINUX_REPO"
 timeout 600 git push -u origin samurai-bringup
 timeout 60  git ls-remote origin samurai-bringup
 ```
@@ -87,7 +87,7 @@ timeout 60  git ls-remote origin samurai-bringup
 4. **`git fetch` 不能断点续传**：断了要从头来；所以之前"后台 + 多次重试"的方案注定失败，
    而"绕过代理直连"能在一次 39 秒内解决。
 
-### 23.4 本轮新增脚本（`linux-port/scripts/`）
+### 23.4 本轮新增脚本（`reference/linux-port-scripts/`）
 
 | 脚本 | 用途 |
 |---|---|

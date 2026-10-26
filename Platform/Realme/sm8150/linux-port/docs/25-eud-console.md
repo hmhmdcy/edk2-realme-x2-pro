@@ -12,9 +12,9 @@
 
 | 文件 | 大小 | sha256 | 用途 |
 |---|---|---|---|
-| `E:\edk2-samurai-out\boot-samurai-eudconsole.img` | 6,682,624 | `ea4a8f4e…` | 刷 boot 分区 |
-| `E:\edk2-samurai-out\Image-rmx1931-samurai` | 30,116,352 | `fb1a6d6a…` | 放进 logdump FAT 的 `\Image` |
-| `E:\edk2-samurai-out\samurai.dtb` | 94,739 | `68001bab…` | 可选，`\samurai.dtb` |
+| `$SAMURAI_OUT\boot-samurai-eudconsole.img` | 6,682,624 | `ea4a8f4e…` | 刷 boot 分区 |
+| `$SAMURAI_OUT\Image-rmx1931-samurai` | 30,116,352 | `fb1a6d6a…` | 放进 logdump FAT 的 `\Image` |
+| `$SAMURAI_OUT\samurai.dtb` | 94,739 | `68001bab…` | 可选，`\samurai.dtb` |
 | 回滚-固件 | 6,680,576 | — | `boot-samurai-linux-console.img`（16:01，带 keep_bootcon） |
 | 回滚-安卓 | 100,663,296 | `dfe18875…` | `backup\boot_stock_RMX1931.img` |
 

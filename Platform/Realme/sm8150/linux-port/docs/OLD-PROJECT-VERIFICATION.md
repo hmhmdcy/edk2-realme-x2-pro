@@ -1,4 +1,4 @@
-# 旧工程核实报告：`E:\Realme X2 Pro移植主线Linux`
+# 旧工程核实报告：`$SAMURAI_LEGACY_LINUX`
 
 > 2026-10-07，核实人：本次会话。被核实对象是旧的 Linux 移植工程（本工作区
 > `linux-port/README.md` 已宣布弃用它，但它的补丁、配置和实机记录仍在被引用）。
@@ -31,8 +31,8 @@
 | 手段 | 命令/脚本 | 产物 |
 |---|---|---|
 | 旧补丁能不能干净应用 | `git apply --check` | `APPLY_CHECK_OK` |
-| 旧 DTS 能不能编译、是否可以复现 | `linux-port/scripts/test-old-dts.sh` | `f0c3a820…` == 旧产物 |
-| 实机真值 | `linux-port/scripts/dump-live-dt.sh`（解包 `live-device-tree.tar`） | 见下表 |
+| 旧 DTS 能不能编译、是否可以复现 | `reference/linux-port-scripts/test-old-dts.sh` | `f0c3a820…` == 旧产物 |
+| 实机真值 | `reference/linux-port-scripts/dump-live-dt.sh`（解包 `live-device-tree.tar`） | 见下表 |
 | 交叉核对 | 读 `artifacts/*.json`、`artifacts/tests/*/transaction.json` | 见第 3 节 |
 
 证据来源三件套，优先级从高到低：
@@ -123,7 +123,7 @@ README 的说法是"前四轮主线候选已刷入测试……第五、六轮保
 | EUD earlycon 提交 | WSL `~/x2pro-linux/linux` `e4858b30a`；补丁 `linux-port/patches/0001-tty-serial-add-Qualcomm-EUD-COM-early-console.patch` | 编译通过 |
 | samurai 主线设备树 | `linux-port/dts/sm8150-samurai.dts`；补丁 `…/patches/0002-arm64-dts-qcom-add-realme-samurai-X2-Pro-bring-up-description.patch`；提交 `31491583b` | `make dtbs` 通过，DTB `1c760ec9cf74389c246e1b64a032c52910f6437dab29772371a506ead5d67b81`，94623 字节 |
 | reserved-memory 核对表 | `linux-port/artifacts/reserved-memory.txt` | 21 个节点，逐项对齐实机 |
-| 旧工程核实脚本 | `linux-port/scripts/{test-old-dts,install-samurai-dts,dump-live-dt,verify-samurai-dtb,collect-artifacts}.sh` | 可复跑 |
+| 旧工程核实脚本 | `reference/linux-port-scripts/{test-old-dts,install-samurai-dts,dump-live-dt,verify-samurai-dtb,collect-artifacts}.sh` | 可复跑 |
 
 还没做（下一轮）：诊断内核 `Image`（EFI stub + `CONFIG_SERIAL_EUD_EARLYCON=y`）、
 把 EDK2 的 `FdtBlob/samurai/` 从 cepheus 换成新 DTB、真机验证。

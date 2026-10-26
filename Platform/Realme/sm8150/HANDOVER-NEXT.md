@@ -18,7 +18,7 @@
 
 ## 3. 仓库记录
 
-下方块由`linux-port/scripts/update-repo-state.py`从本地git生成，仅描述已提交历史；当前未提交源码以`git status`/`git diff`为准。
+下方块由`reference/linux-port-scripts/update-repo-state.py`从本地git生成，仅描述已提交历史；当前未提交源码以`git status`/`git diff`为准。
 
 <!-- repo-state:start -->
     master = 30c1f4dc bluetooth: publish coordination and runtime index
@@ -39,11 +39,11 @@
 
 | 范围 | 交接路径 |
 | --- | --- |
-| EDK2仓库（WSL） | `/home/cy122/edk2-samurai/repo` |
-| Windows编辑源 | `E:\RealmeX2Pro edk2` |
+| EDK2仓库根目录 | `$SAMURAI_EDK2_ROOT` |
+| 早期编辑工作区（仅追溯） | `$SAMURAI_LEGACY_EDK2` |
 | 仓库文档镜像 | `Platform/Realme/sm8150` |
-| 镜像与备份输出 | `E:\edk2-samurai-out`；具体包按检查点证据选择 |
-| EUD主机工具 | `E:\eud-host` |
+| 镜像与备份输出 | `$SAMURAI_OUT`；具体包按检查点证据选择 |
+| EUD主机工具 | `$EUD_HOST` |
 | Linux源码/产物身份 | [检查点正式基线](NEXT-SESSION.md#正式基线与新候选)、[相机交接](reference/kernel491/HANDOFF.md) |
 
 ## 5. 工具使用依据

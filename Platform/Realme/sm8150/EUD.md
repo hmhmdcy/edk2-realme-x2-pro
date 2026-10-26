@@ -45,7 +45,7 @@ registers ten times, 200 ms apart, and prints to the framebuffer console:
 
     [SAMURAI-EUD] CSR_EUD_EN=0x00000001 INT1_EN_MASK=0x0000001c
 
-Test image: E:\edk2-samurai-out\boot-samurai-eudtest.img
+Test image: $SAMURAI_OUT\boot-samurai-eudtest.img
 sha256 a2819fbafe2e2eb4774fcdd22c4cb7ac2c1d718b463e30c8638835575e8b1ce8
 (= release3 + EUD; release3 already carried the three-button fix.)
 
@@ -119,7 +119,7 @@ After the sequence above the 9505 device enumerates correctly
 ProblemCode = 28 ("the drivers for this device are not installed"), empty Class
 and no COM port.
 
-Reason: Qualcomm's own C:\Windows\INF\oem69.inf has the 9505 entry commented
+Reason: Qualcomm's own %WINDIR%\INF\oem69.inf has the 9505 entry commented
 out:
 
     ;%QcomDevice9505%   = QportInstall00, USB\VID_05C6&PID_9505
@@ -142,7 +142,7 @@ CTLOUT_SET 0x645 (SWD payload) + attach did not make 9504 appear on this unit.
 
 ## Host tools built for this project (Windows)
 
-Everything lives in E:\eud-host\ :
+Everything lives in $EUD_HOST\ :
 
 | File | What it does |
 |---|---|
@@ -154,16 +154,16 @@ Everything lives in E:\eud-host\ :
 | eud-probe.exe | probe linked against libeud.dll (the library uses libusb on
   Windows, so it cannot see the device while qdbusb is bound - use eudtool) |
 
-MSYS2 lives at E:\msys64 (UCRT64 environment). Rebuild eudtool with:
+MSYS2 lives at $MSYS2_ROOT (UCRT64 environment). Rebuild eudtool with:
 
     export MSYSTEM=UCRT64
-    E:\msys64\usr\bin\bash.exe --login
+    $MSYS2_ROOT\usr\bin\bash.exe --login
     cd /e/eud-host && g++ -o eudtool.exe eudtool.cpp
 
 Typical use with the phone already in EUD mode:
 
-    E:\eud-host\eudtool.exe probe
-    E:\eud-host\eudtool.exe com-up
+    $EUD_HOST\eudtool.exe probe
+    $EUD_HOST\eudtool.exe com-up
 
 ## OpenOCD (host debugger, still the plan for JTAG/SWD)
 
@@ -203,7 +203,7 @@ installer 10057.4:
              2.1.3.5), qcser.cat, qcusbser.sys
     signing: qcser.cat and qcusbser.sys are Valid WHQL
              (CN=Microsoft Windows Hardware Compatibility Publisher)
-    local  : E:\eud-host\qud_10057.4.zip and unpacked E:\eud-host\qud_cab\
+    local  : $EUD_HOST\qud_10057.4.zip and unpacked $EUD_HOST\qud_cab\
 
 qcser.inf carries the 9505 model line for every architecture:
 
@@ -212,9 +212,9 @@ qcser.inf carries the 9505 model line for every architecture:
 Install (admin). The INF expects the driver binary under serial\<arch>\, so if
 you unpack the cab yourself you must recreate that layout first:
 
-    mkdir E:\eud-host\qud_cab\serial\amd64
-    copy E:\eud-host\qud_cab\qcusbser.sys E:\eud-host\qud_cab\serial\amd64\
-    pnputil /add-driver "E:\eud-host\qud_cab\qcser.inf" /install
+    mkdir $EUD_HOST\qud_cab\serial\amd64
+    copy $EUD_HOST\qud_cab\qcusbser.sys $EUD_HOST\qud_cab\serial\amd64\
+    pnputil /add-driver "$EUD_HOST\qud_cab\qcser.inf" /install
     pnputil /scan-devices
 
 Result on this machine (2026-10-06 17:4x):
@@ -273,8 +273,8 @@ the pre-BDS cost stays at zero.
 
 Host-side capture (verified):
 
-    E:\eud-host\eudtool.exe com-up
-    E:\eud-host\comlog.exe COM14 600 E:\eud-host\eud-com.log
+    $EUD_HOST\eudtool.exe com-up
+    $EUD_HOST\comlog.exe COM14 600 $EUD_HOST\eud-com.log
 
 Result: "[SAMURAI-EUD-COM] SerialPortLib test 29" was reassembled from COM14,
 proving EDK2 -> EUD COM 9505 -> qcusbser -> COMx -> host log.

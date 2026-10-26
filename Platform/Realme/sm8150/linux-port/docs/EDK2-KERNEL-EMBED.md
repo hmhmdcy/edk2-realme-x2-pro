@@ -56,9 +56,9 @@
 
 | 文件 | 大小 | sha256 |
 |---|---|---|
-| `E:\edk2-samurai-out\boot-samurai-linux.img` | 15,185,920 | `0d1ec54656fed0550a90ac8453918a8d589d93ed890914959ffba31f2b0a3439` |
-| `E:\edk2-samurai-out\SM8150_UEFI-samurai-linux.fd` | 20,971,520 | `f6a0664d6d4ce402c668fdd46fef9d49bd8e3bbabe901e55fb550c7843d58f4b` |
-| `E:\edk2-samurai-out\Image-rmx1931-samurai` | 30,116,352 | `3d5665abcf53b1b97ee5b2c32b4aaaee45265a4c45af99463b4d3c2b35427ba3` |
+| `$SAMURAI_OUT\boot-samurai-linux.img` | 15,185,920 | `0d1ec54656fed0550a90ac8453918a8d589d93ed890914959ffba31f2b0a3439` |
+| `$SAMURAI_OUT\SM8150_UEFI-samurai-linux.fd` | 20,971,520 | `f6a0664d6d4ce402c668fdd46fef9d49bd8e3bbabe901e55fb550c7843d58f4b` |
+| `$SAMURAI_OUT\Image-rmx1931-samurai` | 30,116,352 | `3d5665abcf53b1b97ee5b2c32b4aaaee45265a4c45af99463b4d3c2b35427ba3` |
 
 ## 6. 已知风险 / 未验证（真机待验）
 
@@ -77,8 +77,8 @@
 
 ```bash
 # 内核侧（WSL）
-bash linux-port/scripts/build-image.sh          # 配置 + initramfs + make Image
+bash reference/linux-port-scripts/build-image.sh          # 配置 + initramfs + make Image
 # 固件侧（WSL）
-bash linux-port/scripts/install-kernel-into-edk2.sh   # 换 DTB、装内核、注册启动项、改 FD 尺寸
+bash reference/linux-port-scripts/install-kernel-into-edk2.sh   # 换 DTB、装内核、注册启动项、改 FD 尺寸
 cd ~/edk2-samurai/repo && ./build.sh -d samurai --toolchain GCC5
 ```

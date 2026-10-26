@@ -87,7 +87,7 @@ static void eud_write(struct console *con, const char *s, unsigned int n)
 
 ```sh
 # 方式一
-E:\msys64\msys2_shell.cmd -ucrt64 -defterm -no-start -here -c "cd /e/eud-host && g++ -O2 -o comlog2.exe comlog2.cpp"
+$MSYS2_ROOT\msys2_shell.cmd -ucrt64 -defterm -no-start -here -c "cd /e/eud-host && g++ -O2 -o comlog2.exe comlog2.cpp"
 # 方式二：开 MSYS2 UCRT64 终端
 cd /e/eud-host && g++ -O2 -o comlog2.exe comlog2.cpp
 ```
@@ -95,7 +95,7 @@ cd /e/eud-host && g++ -O2 -o comlog2.exe comlog2.cpp
 用法与老的一样：
 
 ```
-comlog2.exe COM14 600 E:\eud-host\out.log      # 同时写出 out.log.raw
+comlog2.exe COM14 600 $EUD_HOST\out.log      # 同时写出 out.log.raw
 ```
 
 ### 21.5 怎么验证

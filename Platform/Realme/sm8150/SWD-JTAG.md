@@ -117,7 +117,7 @@ off. Those are separate capabilities requiring separate evidence.
 
 * Treat **EUD COM** as the primary debug channel: verified end to end, and it is
   what the firmware DEBUG() and the Linux `earlycon=eud`/`console=eud` use.
-* Keep the SWD/JTAG tooling (`E:\eud-host\eudtool.exe`, `devraw.exe`,
+* Keep the SWD/JTAG tooling (`$EUD_HOST\eudtool.exe`, `devraw.exe`,
   `swd-idcode.ps1`) for a debug-enabled/engineering device, where the same
   sequence should read DPIDR `0x5ba02477`; do not plan normal bring-up work
   around halting this phone.

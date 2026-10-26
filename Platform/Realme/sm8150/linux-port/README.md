@@ -13,10 +13,10 @@
 | [docs/](docs/00-INDEX.md) | 技术说明、rootfs研究与早期19—28节历史 |
 | [patches/](patches/) | 已保存的内核/用户态补丁；当前完整显示补丁由检查点链接，不假定此目录包含所有晚期改动 |
 | [dts/](dts/) | 保存的samurai设备树源与候选，构建时依据实际DTB证据核对 |
-| [scripts/](scripts/) | 构建、验证、日志与文档工具；早期部署脚本的参数需按当前任务核对 |
+| [scripts/](../reference/linux-port-scripts/) | 已归档的早期构建、验证和同步脚本；其中路径属于历史工作环境 |
 | [refs/19781/](refs/19781/) | 本机项目号19781的Android下游DTS摘录，见[参考说明](docs/ANDROID-DT-REFERENCE.md) |
 | [initramfs/](initramfs/) | 早期诊断用户空间与启动脚本 |
-| [packages/](packages/README.md) | GNSS辅助服务、MM源码锁与APK构建工具 |
+| [packages/](../reference/linux-port-packages/README.md) | 已归档的用户态配方快照；正式配方在`realme-x2-pro-pmaports` |
 | [radio/](radio/README.md) | modem RAM工作文件服务、固定来源与可复现构建 |
 | `eud.c`、`eud_earlycon.c` | 保存的EUD实现；与晚期源码的差异按具体会话补丁核对 |
 | `artifacts/` | 本地生成产物，不通过文档同步工具复制到仓库 |
@@ -33,4 +33,4 @@
 
 ## 文档维护
 
-编辑在Windows工作区进行，通过[文档导航](../DOCS-INDEX.md)中的命令检查并同步。原README中的早期“DTB是小米9”“GPU/Wi-Fi禁用”“真机未测”等陈述保存在[维护前快照](../archive/docs-before-maintenance-2026-10-14/README.md)，按其阶段解释。
+活动树可在任意Linux检出的同一仓库中维护。提交前按[文档导航](../DOCS-INDEX.md)运行活动树纯净性检查和EDK2构建。早期Windows工作区的同步工具保存在[归档说明](../reference/linux-port-archive-README.md)；原README中的“DTB是小米9”“GPU/Wi-Fi禁用”“真机未测”等陈述保存在[维护前快照](../archive/docs-before-maintenance-2026-10-14/README.md)，按其阶段解释。

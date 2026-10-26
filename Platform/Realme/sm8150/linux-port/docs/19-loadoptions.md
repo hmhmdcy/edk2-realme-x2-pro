@@ -14,8 +14,8 @@
 
 | 文件 | 大小 | sha256 |
 |---|---|---|
-| `E:\edk2-samurai-out\boot-samurai-linux-cmdline.img` | 15,185,920 | `b9fb2064e10f9fa8b77c04c5e5062ac1ba6362051a2390e1d4783b3c01900619` |
-| `E:\edk2-samurai-out\SM8150_UEFI-samurai-linux-cmdline.fd` | 20,971,520 | `b02b55a1c8fd6bb6295fa559af99e3a3bdd22381ac8af0ac52c7d3861f3eb4ad` |
+| `$SAMURAI_OUT\boot-samurai-linux-cmdline.img` | 15,185,920 | `b9fb2064e10f9fa8b77c04c5e5062ac1ba6362051a2390e1d4783b3c01900619` |
+| `$SAMURAI_OUT\SM8150_UEFI-samurai-linux-cmdline.fd` | 20,971,520 | `b02b55a1c8fd6bb6295fa559af99e3a3bdd22381ac8af0ac52c7d3861f3eb4ad` |
 
 EDK2 提交 `c2a3697`，已 push 到 fork `hmhmdcy/edk2-realme-x2-pro` 的 master。
 
@@ -62,7 +62,7 @@ libstub 的 `efi_convert_cmdline()` 把 LoadOptions 当 **UTF-16** 读（`efi_ch
 
 ### 19.4 离线验证（全部通过）
 
-脚本 `linux-port/scripts/verify-cmdline-firmware.py`，直接读构建树，可重跑：
+脚本 `reference/linux-port-scripts/verify-cmdline-firmware.py`，直接读构建树，可重跑：
 
 - FD = `0x1400000`（20 MiB），带 FV 头 `_FVH`；sha256 与改动前不同（`f6a0664d…` → `b02b55a1…`）；
 - 未压缩 `FVMAIN.Fv` 里有 UTF-16 命令行（offset 16231800）和 UTF-16 的
@@ -77,10 +77,10 @@ libstub 的 `efi_convert_cmdline()` 把 LoadOptions 当 **UTF-16** 读（`efi_ch
 
 | 脚本 | 用途 |
 |---|---|
-| `linux-port/scripts/patch-bootmanager-cmdline.py` | 幂等地打 §19.3 那个 PlatformBm.c 改动 |
-| `linux-port/scripts/build-cmdline-firmware.sh` | WSL 里重编 samurai 固件（后台 + 日志） |
-| `linux-port/scripts/verify-cmdline-firmware.py` | §19.4 的全部检查 |
-| `linux-port/scripts/archive-cmdline-firmware.sh` | 归档产物到 `E:\edk2-samurai-out\` 并提交 |
+| `reference/linux-port-scripts/patch-bootmanager-cmdline.py` | 幂等地打 §19.3 那个 PlatformBm.c 改动 |
+| `reference/linux-port-scripts/build-cmdline-firmware.sh` | WSL 里重编 samurai 固件（后台 + 日志） |
+| `reference/linux-port-scripts/verify-cmdline-firmware.py` | §19.4 的全部检查 |
+| `reference/linux-port-scripts/archive-cmdline-firmware.sh` | 归档产物到 `$SAMURAI_OUT\` 并提交 |
 
 ### 19.6 下一步：仍然只有真机验证
 
@@ -88,10 +88,10 @@ libstub 的 `efi_convert_cmdline()` 把 LoadOptions 当 **UTF-16** 读（`efi_ch
 `boot-samurai-linux.img`），其余步骤与 §18.3 A 完全相同：
 
 ```powershell
-E:\eud-host\eudtool.exe com-up
-E:\eud-host\comlog.exe COM14 600 E:\eud-host\samurai-linux.log
+$EUD_HOST\eudtool.exe com-up
+$EUD_HOST\comlog.exe COM14 600 $EUD_HOST\samurai-linux.log
 # 重启后 9501 出现时执行上面两行，再：
-fastboot flash boot E:\edk2-samurai-out\boot-samurai-linux-cmdline.img
+fastboot flash boot $SAMURAI_OUT\boot-samurai-linux-cmdline.img
 fastboot reboot
 # 菜单里音量键选 "Linux (mainline samurai)"，电源键确认
 ```
@@ -101,7 +101,7 @@ fastboot reboot
 
 ### 19.7 没做但该记一笔：linux-port 还没进版本库
 
-`E:\RealmeX2Pro edk2\linux-port\` 里的内核补丁、设备树源、脚本和文档目前**只在
+`$SAMURAI_LEGACY_EDK2\linux-port\` 里的内核补丁、设备树源、脚本和文档目前**只在
 Windows 上**，本地没有 git 仓库；WSL 的 `~/x2pro-linux/linux` 也没有 remote（只有
 两个本地提交 + `~/x2pro-linux/patches/` 里的 format-patch 产物）。EDK2 仓库这边只有
 `HANDOVER-NEXT.md` / `README.md` 里的引用，`linux-port/...` 这个路径在没有那份工作区

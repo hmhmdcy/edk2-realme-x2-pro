@@ -1,0 +1,23 @@
+name: realme-x2-pro cleanliness
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/realme-x2-pro-cleanliness.yml"
+      - "Platform/Realme/sm8150/**"
+  push:
+    paths:
+      - ".github/workflows/realme-x2-pro-cleanliness.yml"
+      - "Platform/Realme/sm8150/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  portable-tree:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check active tree
+        run: python3 Platform/Realme/sm8150/tools/check-portable-tree.py

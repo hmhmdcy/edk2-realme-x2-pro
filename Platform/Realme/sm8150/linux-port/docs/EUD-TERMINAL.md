@@ -71,12 +71,12 @@ TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μ
 先关闭其他 EUD 抓包/串口程序。Windows PowerShell 自带运行环境，不需要 pyserial。
 
 ```powershell
-& 'E:\eud-host\eud-terminal.cmd' -Reconnect
+& '$EUD_HOST\eud-terminal.cmd' -Reconnect
 # 当前 RX53 候选上使用原生输入；保持终端打开后连续输入命令。
-& 'E:\eud-host\eud-terminal.cmd' -Native -Port COM14
+& '$EUD_HOST\eud-terminal.cmd' -Native -Port COM14
 ```
 
-项目内同一份入口：`linux-port/scripts/eud-terminal.cmd`，也可直接双击。
+项目内同一份入口：`reference/linux-port-scripts/eud-terminal.cmd`，也可直接双击。
 不指定端口时，从当前 EUD 9505 设备自动找 COM；需要时可加 `-Port COM14`。
 `-Reconnect` 在开串口前调用已有 eudtool 的 com-off/com-up；需要手机已启动 EUD。
 它不等于修复 resource-in-use：遇到端口钉死仍需换 USB 口或重启主机。
@@ -105,9 +105,9 @@ TX 以前有小 FIFO 溢出、双 console writer 等问题，当前采用 200 μ
 ## 一次发送一条命令
 
 ```powershell
-& 'E:\eud-host\eud-terminal.cmd' -Reconnect -Command 'uname -r'
-& 'E:\eud-host\eud-terminal.cmd' -Reconnect -Command 'dmesg | tail -n 60'
-& 'E:\eud-host\eud-terminal.cmd' -Native -Port COM14 -Command 'uname -r'
+& '$EUD_HOST\eud-terminal.cmd' -Reconnect -Command 'uname -r'
+& '$EUD_HOST\eud-terminal.cmd' -Reconnect -Command 'dmesg | tail -n 60'
+& '$EUD_HOST\eud-terminal.cmd' -Native -Port COM14 -Command 'uname -r'
 ```
 
 命令模式先发送 Ctrl-U 清理旧的半行，再发送命令和换行；最后继续排空输出，默认
@@ -151,7 +151,7 @@ irq_watch 是软件计数，irq_state 是显式只读 GIC 查询；详见 sessio
 ## 日志与后续工作
 
 默认日志在 Windows `%TEMP%\eud-terminal-时间戳.*`，启动时打印完整路径。
-可用 `-LogBase 'E:\edk2-samurai-out\my-driver-test'` 指定文件名前缀：
+可用 `-LogBase '$SAMURAI_OUT\my-driver-test'` 指定文件名前缀：
 
 * `.raw`：EUD 原始输入帧；
 * `.txt`：未过滤的设备输出，保留受理日志；

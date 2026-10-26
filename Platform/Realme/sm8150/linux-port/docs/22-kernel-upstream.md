@@ -51,8 +51,8 @@ cd ~/x2pro-linux/upstream
 git rev-parse refs/tags/v7.3-rc6          # 应为 a90ee4305c4a5df72c11b31dacfdc76e00fcf78a
 
 git checkout -b samurai-bringup refs/tags/v7.3-rc6
-git am "/mnt/e/RealmeX2Pro edk2/linux-port/patches/0001-tty-serial-add-Qualcomm-EUD-COM-early-console.patch"
-git am "/mnt/e/RealmeX2Pro edk2/linux-port/patches/0002-arm64-dts-qcom-add-realme-samurai-X2-Pro-bring-up-description.patch"
+git am "/linux-port/patches/0001-tty-serial-add-Qualcomm-EUD-COM-early-console.patch"
+git am "/linux-port/patches/0002-arm64-dts-qcom-add-realme-samurai-X2-Pro-bring-up-description.patch"
 git log --oneline -3
 
 git push -u origin samurai-bringup        # 增量几百 KB
@@ -61,11 +61,11 @@ timeout 60 git ls-remote origin samurai-bringup
 
 `git am` 能干净应用的原因是：本地 baseline 的 tree 与上游 tag 的 tree **内容完全一致**（只差一个父提交）。
 
-### 22.4 本轮新增脚本（`linux-port/scripts/`）
+### 22.4 本轮新增脚本（`reference/linux-port-scripts/`）
 
 | 脚本 | 用途 | 是否幂等 |
 |---|---|---|
-| `mirror-linux-port.sh` | 把 `E:\RealmeX2Pro edk2\linux-port\{README,docs,dts,patches,scripts,refs,initramfs,eud_earlycon.c}` 镜像进 EDK2 仓库并提交推送 | 是 |
+| `mirror-linux-port.sh` | 把 `$SAMURAI_LEGACY_EDK2\linux-port\{README,docs,dts,patches,scripts,refs,initramfs,eud_earlycon.c}` 镜像进 EDK2 仓库并提交推送 | 是 |
 | `fork-linux.sh` | 查上游 tag / commit，用 GitHub API 建 fork，等 fork 就绪 | 是 |
 | `fetch-upstream-bg.sh` | 配置 `origin`(fork) + `up`(上游) 两个远端，后台 `--depth=1` 拉 v7.3-rc6 | 是（会重拉） |
 

@@ -250,7 +250,7 @@ tty TX、console 与单次 RX 数据操作使用同一 port lock。
 推迟所有打印得到 `41 90 90`。首字节成功与整帧成功必须分开报告。
 前置 printk 改变读回值有真机证据，具体硬件机制仍未证明。
 
-复测用 `linux-port/scripts/eud-step.ps1`，每次只操作一帧，独立进程、持续排空、
+复测用 `reference/linux-port-scripts/eud-step.ps1`，每次只操作一帧，独立进程、持续排空、
 Write 后 Flush、最多 5 次重发、finally 关闭并 Dispose。对于 tty 输入用
 `-Ack 'tty byte=69'` 这类已受理诊断停止重发，再排空 2 s，避免一个字符被
 重复键入；不能对整条 shell 字符串不看回显就盲发 5 遍。

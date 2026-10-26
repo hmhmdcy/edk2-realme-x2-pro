@@ -46,7 +46,7 @@ PSCI v1.1 ... Zone ... Detected CPU ... init: SLUB ... RCU ... GIC ... IPIs
 - LineageOS 在 Nokia msm8998 / 小米 beryllium / 一加 sdm845-common 上直接把 `logdump` 改成了 `/metadata`，
   提交信息明说"生产机上该分区无用"——**复用有先例**；
 - **不动 GPT**：只写分区内容，名字/大小/类型 GUID/偏移全不变；
-- 上机前做了完整备份：`E:\edk2-samurai-out\backup\{logdump_stock.bin (64 MiB, md5 E97EA65C…),
+- 上机前做了完整备份：`$SAMURAI_OUT\backup\{logdump_stock.bin (64 MiB, md5 E97EA65C…),
   gpt_lun0_live.bin, gpt_lun4_live.bin}`。
 
 格式化与写入（安卓 root 下）：
@@ -85,7 +85,7 @@ umount /mnt/kernel
 
 ### 20.4 日志通道：EUD
 
-- 固件在 BDS 开 EUD（`SAMURAI_ENABLE_EUD`），主机 `E:\eud-host\eudtool.exe com-up` 让 9505 变成
+- 固件在 BDS 开 EUD（`SAMURAI_ENABLE_EUD`），主机 `$EUD_HOST\eudtool.exe com-up` 让 9505 变成
   `COM14`，再 `comlog.exe COM14 600 <log>` 录制。
 - **`earlycon` 是 boot console，真 console 注册后会被注销**，所以最初只录到 1.2 秒的日志就断了。
   cmdline 里加 **`keep_bootcon`** 后 boot console 不再注销，EUD 就能拿到整个启动过程的日志
@@ -99,9 +99,9 @@ umount /mnt/kernel
 
 | 文件 | 说明 |
 |---|---|
-| `E:\edk2-samurai-out\boot-samurai-linux-console.img` | 加 `keep_bootcon`，sha256 `e461a8a2…`（本轮最新） |
-| `E:\edk2-samurai-out\boot-samurai-linux-mz.img` | 首次真机跑起内核的那版，sha256 `aed239e3…` |
-| `E:\edk2-samurai-out\boot-samurai-linux-fs.img` | 只注册启动项、不自动启动，sha256 `35fd18ee…` |
+| `$SAMURAI_OUT\boot-samurai-linux-console.img` | 加 `keep_bootcon`，sha256 `e461a8a2…`（本轮最新） |
+| `$SAMURAI_OUT\boot-samurai-linux-mz.img` | 首次真机跑起内核的那版，sha256 `aed239e3…` |
+| `$SAMURAI_OUT\boot-samurai-linux-fs.img` | 只注册启动项、不自动启动，sha256 `35fd18ee…` |
 | `linux-port\scripts\move-kernel-out-of-fv.py` | 把内核移出 FV + 改 FD 尺寸 |
 | `linux-port\scripts\boot-kernel-directly.py` | 在 AfterConsole 末尾直接启动内核 |
 | `linux-port\scripts\require-pe-magic.py` | 加 `MZ` 校验，修掉 modem 误选 |
@@ -109,6 +109,6 @@ umount /mnt/kernel
 
 ### 20.6 下一步
 
-1. 读完整日志（`E:\eud-host\samurai-console.log`），看内核跑到哪里、卡在什么驱动；
+1. 读完整日志（`$EUD_HOST\samurai-console.log`），看内核跑到哪里、卡在什么驱动；
 2. 把 `eud_earlycon.c` 升级成真正的 console 驱动（`console=eud`），日志就能在 cmdline 里切换、不必每次重刷固件；
 3. 然后按 §18.3 C 继续：面板 SOFEF03F_M、触控 S3706、WCN3990、充电、传感器。

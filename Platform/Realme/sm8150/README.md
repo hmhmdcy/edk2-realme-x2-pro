@@ -84,6 +84,11 @@ Output:
 - `boot-samurai.img` - flashable Android boot image
 - `workspace/Build/samurai/RELEASE_GCC5/FV/SM8150_UEFI.fd` - raw firmware volume
 
+Verify that the generated image contains the built firmware and appended compat
+DTB, without relying on local paths:
+
+    python3 Platform/Realme/sm8150/tools/verify-bootimg.py
+
 Host notes (Ubuntu, no sudo needed):
 - On very new host GCC (e.g. GCC 15) BaseTools/Pccts fail with the default C23
   standard: append `-std=gnu17` to `GCC_AARCH64_CC_FLAGS` in `tools/tools_def.txt`

@@ -20,7 +20,7 @@
 
 1. initramfs symlinks: build-image.sh ran "busybox --install -s" with an
    absolute directory, so all 305 applet links pointed at
-   /home/cy122/x2pro-linux/initramfs/bin/busybox.  Inside the initramfs /bin/sh
+   $HOME/x2pro-linux/initramfs/bin/busybox.  Inside the initramfs /bin/sh
    was dangling, /init could not exec, and the kernel panicked with
    "No working init found" -> panic=15 -> reboot loop.  Fixed by relinking to
    the relative target "busybox" and forcing a cpio rebuild

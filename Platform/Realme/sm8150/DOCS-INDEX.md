@@ -31,8 +31,8 @@
 | 音频首次初始化与停止链 | [139 TX回收](sessions/139-slimbus-unsubmitted-tx-unwind-and-live-boot.md)、[104 DMIC](sessions/104-native-digital-microphones-and-first-boot-radio-failure.md)、[164失败](reference/kernel164/README.md) |
 | 电池/充电控制与输入预算 | [2026-10-23充电适配当前进度](reference/charging-management-20261023/PROGRESS.md)、[候选源码与离线验证](reference/charging-management-20261023/README.md)、[132观测部署](sessions/132-persistent-mp2650-real-boot-and-complete-rootfs.md)、[133预算研究](sessions/133-usb-power-budget-and-charge-contract.md)、[138恢复阈值](sessions/138-readonly-charger-recharge-threshold.md) |
 | GNSS标准链路、原厂对照与modem文件服务 | [260桌面定位](reference/kernel260/README.md)、[258原生/原厂对照](reference/kernel258/README.md)、[253 RF/初始化](reference/kernel253/README.md)、[239近机型方案](reference/kernel239/RELATED-LINUX-SOLUTIONS.md)、其它阶段见[会话索引](sessions/INDEX.md) |
-| 相机驱动、原厂调校与完整范围 | [相机入口](linux-port/camera/README.md)、[484当前实装](reference/kernel484/README.md)、[491暂停交接](reference/kernel491/HANDOFF.md)、[363完整范围](reference/kernel363/REMAINING-CAMERA-SCOPE.md)、[原厂提取工作流](linux-port/docs/PORTING-WORKFLOW.md) |
-| 传感器板级方向与桌面启动顺序 | [269旋转修复与验证边界](reference/kernel269/README.md)、[平台配方](linux-port/packages/samurai-platform/README.md)、[桌面依赖配方](linux-port/packages/samurai-desktop/README.md) |
+| 相机驱动、原厂调校与完整范围 | [相机入口](reference/linux-port-camera/README.md)、[484当前实装](reference/kernel484/README.md)、[491暂停交接](reference/kernel491/HANDOFF.md)、[363完整范围](reference/kernel363/REMAINING-CAMERA-SCOPE.md)、[原厂提取工作流](linux-port/docs/PORTING-WORKFLOW.md) |
+| 传感器板级方向与桌面启动顺序 | [269旋转修复与验证边界](reference/kernel269/README.md)、[平台配方](reference/linux-port-packages/samurai-platform/README.md)、[桌面依赖配方](reference/linux-port-packages/samurai-desktop/README.md) |
 | 蓝牙、Wi-Fi与USB | [130 BlueZ](sessions/130-standard-bluez-discovery-and-startup-integration.md)、[128 Wi-Fi](sessions/128-wcn3990-pairwise-key-delete-and-5ghz.md)、[USB NCM/SSH](linux-port/docs/USB-NCM-SSH.md) |
 | EUD/调试与固件来源 | [EUD](EUD.md)、[RX](RX-CONSOLE.md)、[SWD/JTAG](SWD-JTAG.md)、[BINARIES](BINARIES.md)、[测试飞轮](FLYWHEEL.md) |
 | 同平台显示交接比较 | [参考说明](reference/display-handoff-comparison/README.md) |
@@ -49,28 +49,15 @@
 
 ## 检查与同步
 
-Windows工作区是编辑源，WSL EDK2仓库的`Platform/Realme/sm8150`为镜像。日常只检查/同步本轮改动文件，路径相对工作区根目录。在WSL运行，例如：
+旧的Windows工作区同步脚本已移到[reference/linux-port-scripts](reference/linux-port-scripts/)保存历史。归档脚本中的固定工作目录仅供追溯，不再作为公开复现入口。活动树使用以下检查：
 
 ```bash
-# 只核对本地改动时
-bash '/mnt/e/RealmeX2Pro edk2/linux-port/scripts/docs-health-check.sh' --local-only --files WORKING-BOUNDARIES.md linux-port/docs/PORTING-WORKFLOW.md
-# 需要仓库镜像时；此命令已包含改动文件的前后检查，不必另跑一遍
-bash '/mnt/e/RealmeX2Pro edk2/linux-port/scripts/sync-docs-to-repo.sh' --files WORKING-BOUNDARIES.md linux-port/docs/PORTING-WORKFLOW.md
+python3 Platform/Realme/sm8150/tools/check-portable-tree.py
+./build.sh -d samurai --toolchain GCC5 --skip-rootfs-gen
+python3 Platform/Realme/sm8150/tools/verify-bootimg.py
 ```
 
-`--files`只处理明确列出的现存文件，并保留同步清单、路径范围、脱敏和必要覆盖备份检查；不遍历会话/归档、不重生成索引、不刷新提交历史、不审计无关镜像文件。新增链接目标也应列入同步范围；涉及删除/重命名时显式处理旧镜像路径，不把复制当作删除。此按文件同步路径不会提交、暂存或推送。
-
-仅新增/移动会话或Reference入口、改标题时运行`generate-session-index.py`，并把`sessions/INDEX.md`列入本轮同步；仅需要更新提交历史块时运行`update-repo-state.py`。普通文字修改不用运行这两项。
-
-发布整合、同步清单/脱敏器变化或镜像漂移时，才按需要使用完整维护路径：
-
-```bash
-bash '/mnt/e/RealmeX2Pro edk2/linux-port/scripts/sync-docs-to-repo.sh' --copy-only
-```
-
-完整路径内置索引/历史块更新、本地检查、同步及镜像检查，不必在外层重复。`docs-health-check.sh --audit-history`用于专项历史链接审计；`mirror-linux-port.sh`是旧全Linux镜像/提交工具，按任务使用。需要提交推送时显式使用`--publish '提交说明'`，遵循当前会话的发布授权；现有不push约定保持。发布工具只暂存清单范围，已有暂存改动时停止，避免混入其它工作。
-
-同步范围见[docs-sync-manifest.json](linux-port/scripts/docs-sync-manifest.json)。设备标识、启动ID和真实无线地址继续替换为PRIVATE标记，密码/密钥禁止导出；原厂文件、个体数据和私人原件留在原目录。Python缓存、备份与原始二进制不进入文档镜像。归档是历史快照，不因普通流程修改重写或重做全量哈希；历史脚本的PRIVATE标记不能直接作为设备身份使用。
+活动树禁止出现开发者主目录、Windows盘符路径或`/mnt/<盘符>/`路径。会话、reference和archive可以保留历史原文，但其中的设备标识、启动ID和真实无线地址继续视为私有资料；密码、密钥和私人备份不得导出。
 
 ## 日常维护约定
 

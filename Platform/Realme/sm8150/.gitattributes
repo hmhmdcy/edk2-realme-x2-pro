@@ -1,0 +1,20 @@
+*.aml binary
+*.dtb binary
+*.efi binary
+*.fd binary
+*.img binary
+*.raw binary
+*.zip binary
+*.patch -text
+*.c text eol=lf
+*.h text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.dsc text eol=lf
+*.dec text eol=lf
+*.fdf text eol=lf
+*.inc text eol=lf
+*.inf text eol=lf
+*.asl text eol=lf

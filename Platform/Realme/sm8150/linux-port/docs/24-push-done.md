@@ -47,9 +47,9 @@ Git 看不出服务器已经有 `a90ee4305`，于是把 `--depth=1` 的那一份
 
    ```powershell
    Start-Process wsl.exe `
-     -ArgumentList '--','bash','/mnt/e/edk2-samurai-out/push-branch.sh' `
-     -RedirectStandardOutput 'E:\edk2-samurai-out\push.log' `
-     -RedirectStandardError  'E:\edk2-samurai-out\push.err' -WindowStyle Hidden
+     -ArgumentList '--','bash','/push-branch.sh' `
+     -RedirectStandardOutput '$SAMURAI_OUT\push.log' `
+     -RedirectStandardError  '$SAMURAI_OUT\push.err' -WindowStyle Hidden
    ```
 
    脚本本体已收进 `scripts/push-branch.sh`（关代理 → push → `ls-remote` 验证，可重复跑）。

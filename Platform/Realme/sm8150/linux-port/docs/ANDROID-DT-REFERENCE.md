@@ -11,7 +11,7 @@
    `sm8150-mtp.dtsi`（1334 行）就是本机板级描述，`sm8150-mtp-overlay.dts` 是 DTBO 入口。
    **`19781` 正是本机 `oppo,dtsi_no`。**
 2. 这份源码已经**离线**躺在本机（旧工程留下的 187 MB 浅克隆
-   `E:\Realme X2 Pro移植主线Linux\sources\realme-downstream.git`，`git ls-tree` /
+   `$SAMURAI_LEGACY_LINUX\sources\realme-downstream.git`，`git ls-tree` /
    `cat-file` 直接可读，不需要联网）。
 3. 它的价值：带标签、带注释、按功能分段的**接线真相**（GPIO 号、I2C 控制器与地址、
    中断、复位脚、供电 rail、面板初始化序列）。这正好补上主线 DTS 缺的部分。
@@ -119,11 +119,11 @@ qcom,mdss-dsi-te-pin-select = <1>;  wr-mem 0x2c/0x3c;   // TE
 重新取用（无需联网，用旧工程留下的浅克隆）：
 
 ```bash
-R="/mnt/e/Realme X2 Pro移植主线Linux/sources/realme-downstream.git"
+R="/sources/realme-downstream.git"
 git --git-dir="$R" ls-tree -r --name-only HEAD arch/arm64/boot/dts/19781
 git --git-dir="$R" cat-file -p HEAD:arch/arm64/boot/dts/19781/sm8150-mtp.dtsi
 ```
 
-参考脚本：[scripts/list-19781.sh](../scripts/list-19781.sh)、
-[scripts/extract-19781.sh](../scripts/extract-19781.sh)、
-[scripts/dump-android-facts.sh](../scripts/dump-android-facts.sh)。
+参考脚本：[scripts/list-19781.sh](../../reference/linux-port-scripts/list-19781.sh)、
+[scripts/extract-19781.sh](../../reference/linux-port-scripts/extract-19781.sh)、
+[scripts/dump-android-facts.sh](../../reference/linux-port-scripts/dump-android-facts.sh)。

@@ -18,7 +18,7 @@
      "dwc3 ... failed to get clocks" as secondary damage.
    - initramfs dead links: build-image.sh ran "busybox --install -s" with an
      absolute path, so all 305 applet symlinks in initramfs/bin point at
-     /home/cy122/x2pro-linux/initramfs/bin/busybox.  Inside the initramfs they
+     $HOME/x2pro-linux/initramfs/bin/busybox.  Inside the initramfs they
      dangle, so /init (a #!/bin/sh script) cannot exec, and the kernel panics
      with "No working init found" -> panic=15 -> reboot loop.  The screen stuck
      on repeated firmware DXE dispatch output ("stuck at EDK2") is the symptom,
@@ -64,7 +64,7 @@ TCS is an RPMh-level resource.
 ### 26.3 Fix 2: initramfs symlinks (the build-image.sh trap)
 
     ls -l initramfs/bin/sh
-    sh -> /home/cy122/x2pro-linux/initramfs/bin/busybox      <- host absolute path
+    sh -> $HOME/x2pro-linux/initramfs/bin/busybox            <- host path sample
     find initramfs -type l -lname /home/* | wc -l
     305
 
@@ -74,7 +74,7 @@ so inside the initramfs /bin/sh, /bin/ls, ... are dangling and the #!/bin/sh
 /init cannot run.  Fix (now scripted): relink every non-busybox symlink in
 initramfs/bin to the relative target "busybox", delete linux/usr/
 initramfs_data.cpio* to force a rebuild, then make Image.  Verified: the Image
-no longer contains /home/cy122/ and /bin/sh points at busybox.
+no longer contains the host home path and /bin/sh points at busybox.
 
 ### 26.4 Artifacts and state (2026-10-07 18:45)
 

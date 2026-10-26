@@ -11,7 +11,7 @@
  *   - reads continuously instead of once every 50 ms.
  *
  * build: g++ -O2 -o comlog2.exe comlog2.cpp
- * use:   comlog2.exe COM14 600 E:\eud-host\out.log
+ * use:   comlog2.exe COM14 600 %EUD_HOST%\out.log
  */
 #include <cstdio>
 #include <cstdlib>
@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
     setvbuf(stdout, NULL, _IONBF, 0);
     const char *port    = (argc > 1) ? argv[1] : "COM14";
     int         seconds = (argc > 2) ? atoi(argv[2]) : 600;
-    const char *logfile = (argc > 3) ? argv[3] : "E:\\eud-host\\eud-com.log";
+    const char *logfile = (argc > 3) ? argv[3] : "eud-com.log";
 
     char path[64];
     sprintf_s(path, sizeof(path), "\\\\.\\%s", port);
