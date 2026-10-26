@@ -12,7 +12,7 @@ function _help(){
 	echo "	--release MODE, -r MODE: Release mode for building, default is 'RELEASE', 'DEBUG' alternatively."
 	echo "	--toolchain TOOLCHAIN:   Set toolchain, default is 'CLANG38'."
 	echo "	--uart, -u:              compile with UART support, print debug messages to uart debug port."
-	echo " 	--skip-rootfs-gen:       skip generating SimpleInit rootfs to speed up building."
+	echo " 	--skip-rootfs-gen:       skip regenerating SimpleInit rootfs when its build cache exists."
 	echo " 	--no-exception-disp:     do not display exception information in DEBUG builds."
 	echo "	--acpi, -A:              compile DSDT using MS asl with wine."
 	echo "	--clean, -C:             clean workspace and output."
@@ -307,9 +307,9 @@ do
 	msgfmt -o "${_path}/simple-init.mo" "${i}"
 done
 
-if "${GEN_ROOTFS}"
+if "${GEN_ROOTFS}" || [ ! -f "${_SIMPLE_INIT}/build/rootfs.c" ]
 then
-	 bash "${_SIMPLE_INIT}/scripts/gen-rootfs-source.sh" \
+	bash "${_SIMPLE_INIT}/scripts/gen-rootfs-source.sh" \
 		"${_SIMPLE_INIT}" \
 		"${_SIMPLE_INIT}/build"
 fi
