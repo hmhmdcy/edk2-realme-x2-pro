@@ -4,7 +4,7 @@
 
 ## 发布范围
 
-本轮目标分支为 `hmhmdcy/edk2-realme-x2-pro` 的 `master`。在原发布端点 `f28c0035` 之后，分类提交包括：
+本轮目标分支为 `hmhmdcy/realme-x2-pro-edk2` 的 `master`。在原发布端点 `f28c0035` 之后，分类提交包括：
 
 | 组别 | 提交 | 内容 |
 | --- | --- | --- |
@@ -23,16 +23,18 @@
 
 内核态、用户态和 EDK2 不再混用同一个“源码仓库”。本次核对结果如下：
 
+2026-10-26 起三个正式仓库统一采用 `realme-x2-pro-<组件>` 命名。活动入口、脚本和新建 clone 使用下表新名称；`archive/`、版本化 `reference/` 及历史验证 JSON 中记录旧名称的链接保留原样，以维持当时证据的上下文。GitHub 对旧仓库名的重定向只是兼容层，不作为长期构建输入。
+
 | 层 | 正式仓库与分支 | 最终远端端点 | 内容 |
 | --- | --- | --- | --- |
-| 内核 bring-up | [`hmhmdcy/linux@samurai-bringup`](https://github.com/hmhmdcy/linux/tree/samurai-bringup) | `04d4d4f93171574201db1837a1b195e3aeccde4e` | 早期完整 camera/PMIC bring-up 历史 |
-| 内核相机公共层 | [`hmhmdcy/linux@samurai-camera-common`](https://github.com/hmhmdcy/linux/tree/samurai-camera-common) | `1f5da50bbcba4fbe89917db7987429fdf078f257` | common driver、静态 DT 描述与后续相机基线 |
-| 内核 VFE175/GTM | [`hmhmdcy/linux@samurai-vfe175-gtm-reopen434`](https://github.com/hmhmdcy/linux/tree/samurai-vfe175-gtm-reopen434) | `9bc07e6339128ae8d3525c7d5c9bca5d0fbc46f3` | VFE175、GTM/LTM 与 PD10 相机处理 |
-| 内核当前端点 | [`hmhmdcy/linux@samurai-ipe-variable-pd10-441`](https://github.com/hmhmdcy/linux/tree/samurai-ipe-variable-pd10-441) | `5b0e7a9ac5b311a4c4fe17cf48b7ed4fc9a7b91d` | variable-size PD10、无 SOF 与 auxiliary restart 诊断 |
-| 用户态配方 | [`hmhmdcy/pmaports@samurai-userspace`](https://github.com/hmhmdcy/pmaports/tree/samurai-userspace) | `01dc099de635e1b8bccaa2a730d29117bea6cb1d` | APKBUILD、补丁、OpenRC/udev/桌面配置和服务脚本 |
-| 快照与证据 | [`hmhmdcy/edk2-realme-x2-pro@master`](https://github.com/hmhmdcy/edk2-realme-x2-pro/tree/master) | 本次发布索引提交之后的 `master` | EDK2、DTB、历史源码快照、发布索引和验证证据 |
+| 内核 bring-up | [`hmhmdcy/realme-x2-pro-linux@samurai-bringup`](https://github.com/hmhmdcy/realme-x2-pro-linux/tree/samurai-bringup) | `04d4d4f93171574201db1837a1b195e3aeccde4e` | 早期完整 camera/PMIC bring-up 历史 |
+| 内核相机公共层 | [`hmhmdcy/realme-x2-pro-linux@samurai-camera-common`](https://github.com/hmhmdcy/realme-x2-pro-linux/tree/samurai-camera-common) | `1f5da50bbcba4fbe89917db7987429fdf078f257` | common driver、静态 DT 描述与后续相机基线 |
+| 内核 VFE175/GTM | [`hmhmdcy/realme-x2-pro-linux@samurai-vfe175-gtm-reopen434`](https://github.com/hmhmdcy/realme-x2-pro-linux/tree/samurai-vfe175-gtm-reopen434) | `9bc07e6339128ae8d3525c7d5c9bca5d0fbc46f3` | VFE175、GTM/LTM 与 PD10 相机处理 |
+| 内核当前端点 | [`hmhmdcy/realme-x2-pro-linux@samurai-ipe-variable-pd10-441`](https://github.com/hmhmdcy/realme-x2-pro-linux/tree/samurai-ipe-variable-pd10-441) | `5b0e7a9ac5b311a4c4fe17cf48b7ed4fc9a7b91d` | variable-size PD10、无 SOF 与 auxiliary restart 诊断 |
+| 用户态配方 | [`hmhmdcy/realme-x2-pro-pmaports@samurai-userspace`](https://github.com/hmhmdcy/realme-x2-pro-pmaports/tree/samurai-userspace) | `6e3b915fdf55c95ffee8a4be7ef2e1bd44342bcd` | APKBUILD、补丁、OpenRC/udev/桌面配置和服务脚本 |
+| 快照与证据 | [`hmhmdcy/realme-x2-pro-edk2@master`](https://github.com/hmhmdcy/realme-x2-pro-edk2/tree/master) | 本次发布索引提交之后的 `master` | EDK2、DTB、历史源码快照、发布索引和验证证据 |
 
-用户态分支在原有 6 个主题提交之后追加 5 个提交，未改写并普通推送：
+用户态分支在原有 6 个主题提交之后追加 6 个提交，未改写并普通推送：
 
 | 提交 | 内容 |
 | --- | --- |
@@ -41,8 +43,9 @@
 | `7255bd2` | PipeWire r3 与 6 个相机缓冲生命周期补丁 |
 | `e4ea949` | SensorProxy 方向、PipeWire Bluetooth、USB `MaxPower`/重绑定与旧 PMIC lab 配置移除 |
 | `01dc099` | bootstrap、rootfs/source 检查、52 补丁重放和仓库归属文档 |
+| `6e3b915` | 三个正式仓库统一为 `realme-x2-pro-<组件>` 命名并更新活动引用 |
 
-该端点的 GitHub Actions 源码作业成功，且运行记录的 `headSha` 与上表一致：[run 40248159913](https://github.com/hmhmdcy/pmaports/actions/runs/40248159913)。该工作流本次只执行 `check-sources.py`，没有触发可选的全量 ARM64 包构建，更没有进行手机刷写或硬件验收。
+该端点的 GitHub Actions 源码作业成功，且运行记录的 `headSha` 与上表一致：[run 40251202806](https://github.com/hmhmdcy/realme-x2-pro-pmaports/actions/runs/40251202806)。该工作流本次只执行 `check-sources.py`，没有触发可选的全量 ARM64 包构建，更没有进行手机刷写或硬件验收。
 
 本地发布前检查还得到：16 个配方、149 个本地 SHA512、168 个源码/脚本/补丁文件和 1 个 pmbootstrap 工具补丁通过；libcamera 52 个补丁以 `--fuzz=0` 重放成功，最终树 SHA256 为 `ae7785b15bc1c9d7434e0804961a0a6713f737beade9668630b8541680587307`；GNSS 电源策略 14 项场景通过。以上均为离线结果，`hardware_tested=false`。
 

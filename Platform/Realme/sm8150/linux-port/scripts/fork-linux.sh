@@ -11,7 +11,7 @@ echo "=== token: ${TOKEN:0:4}... (len ${#TOKEN}) ==="
 
 echo "=== ???? fork ==="
 curl -s -o /tmp/f.json -w "http=%{http_code}\n" -H "Authorization: token $TOKEN" \
-     https://api.github.com/repos/hmhmdcy/linux
+     https://api.github.com/repos/hmhmdcy/realme-x2-pro-linux
 python3 -c "import json;d=json.load(open('/tmp/f.json'));print('exist:',d.get('full_name') or d.get('message'))"
 
 echo "=== ?? fork ==="
@@ -23,7 +23,7 @@ python3 -c "import json;d=json.load(open('/tmp/fork.json'));print('fork:',d.get(
 echo "=== ?? fork ?? ==="
 for i in $(seq 1 30); do
   code=$(curl -s -o /tmp/f2.json -w "%{http_code}" -H "Authorization: token $TOKEN" \
-        https://api.github.com/repos/hmhmdcy/linux)
+        https://api.github.com/repos/hmhmdcy/realme-x2-pro-linux)
   if [ "$code" = "200" ]; then echo "ready after ${i}0s"; break; fi
   sleep 10
 done

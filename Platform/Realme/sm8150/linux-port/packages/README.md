@@ -2,9 +2,9 @@
 
 本目录保存已在项目中公开的设备软件包、补丁和构建输入。安装状态与实机验收必须按各目录 README 和[当前检查点](../../NEXT-SESSION.md)核对；源码或成功构建不等于已经部署。
 
-> **归属提示：**本目录是 EDK2 中的公开快照和证据，不是用户态 APKBUILD/补丁的最终仓库。用户态正式源码位于 [`hmhmdcy/pmaports@samurai-userspace`](https://github.com/hmhmdcy/pmaports/tree/samurai-userspace)，本发布端点固定为 `01dc099de635e1b8bccaa2a730d29117bea6cb1d`。内核正式源码位于 [`hmhmdcy/linux`](https://github.com/hmhmdcy/linux)，当前相机端点为 `samurai-ipe-variable-pd10-441@5b0e7a9ac5b311a4c4fe17cf48b7ed4fc9a7b91d`。更新配方或内核时应提交到对应仓库；不要让本快照目录反向成为构建输入。
+> **归属提示：**本目录是 EDK2 中的公开快照和证据，不是用户态 APKBUILD/补丁的最终仓库。用户态正式源码位于 [`hmhmdcy/realme-x2-pro-pmaports@samurai-userspace`](https://github.com/hmhmdcy/realme-x2-pro-pmaports/tree/samurai-userspace)，本发布端点固定为 `6e3b915fdf55c95ffee8a4be7ef2e1bd44342bcd`。内核正式源码位于 [`hmhmdcy/realme-x2-pro-linux`](https://github.com/hmhmdcy/realme-x2-pro-linux)，当前相机端点为 `samurai-ipe-variable-pd10-441@5b0e7a9ac5b311a4c4fe17cf48b7ed4fc9a7b91d`。更新配方或内核时应提交到对应仓库；不要让本快照目录反向成为构建输入。
 
-当前正式用户态目录对应 `temp/libcamera`、`temp/geoclue`、`temp/pipewire` 和 `device/testing/samurai-*`。该端点通过 [Actions run 40248159913](https://github.com/hmhmdcy/pmaports/actions/runs/40248159913) 的源码哈希与语法作业；本次没有执行可选的全量 ARM64 构建或硬件验收。
+当前正式用户态目录对应 `temp/libcamera`、`temp/geoclue`、`temp/pipewire` 和 `device/testing/samurai-*`。该端点通过 [Actions run 40251202806](https://github.com/hmhmdcy/realme-x2-pro-pmaports/actions/runs/40251202806) 的源码哈希与语法作业；本次没有执行可选的全量 ARM64 构建或硬件验收。
 
 | 目录 | 内容 |
 | --- | --- |

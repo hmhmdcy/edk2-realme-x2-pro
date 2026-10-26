@@ -51,7 +51,7 @@ new3 = (
 "             9923607  gitignore: keep the built kernel Image out of the tree\n"
 "             7b9dc82  docs: EUD COM is a real console now (sections 29-30)\n"
 "\n"
-"    fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro\n"
+"    fork remote: https://github.com/hmhmdcy/realme-x2-pro-edk2\n"
 "                 push with:  git push fork master\n"
 "                 (a plain git push goes to upstream edk2-porting/edk2-msm - never do that)\n"
 "    Roughly 50 commits ahead of upstream origin/master; all of them are on the fork.\n"

@@ -12,7 +12,7 @@ needs, where to get each one, and how to install them.
 which carries the samurai device blobs - so a recursive clone is all you need:
 
 ```bash
-git clone --recursive https://github.com/hmhmdcy/edk2-realme-x2-pro.git
+git clone --recursive https://github.com/hmhmdcy/realme-x2-pro-edk2.git
 ```
 
 Already have a clone? Just re-sync the submodule:

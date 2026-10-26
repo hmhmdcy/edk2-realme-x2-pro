@@ -2,7 +2,7 @@
 D=/home/cy122/x2pro-linux/upstream
 mkdir -p "$D"; cd "$D"
 [ -d .git ] || git init -q
-git remote get-url origin >/dev/null 2>&1 || git remote add origin https://github.com/hmhmdcy/linux.git
+git remote get-url origin >/dev/null 2>&1 || git remote add origin https://github.com/hmhmdcy/realme-x2-pro-linux.git
 git remote get-url up     >/dev/null 2>&1 || git remote add up     https://github.com/torvalds/linux.git
 echo "remotes:"; git remote -v
 pkill -f 'git fetch --depth=1' 2>/dev/null

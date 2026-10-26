@@ -32,7 +32,7 @@ cd "$RK"
 git add Platform/Realme/sm8150/HANDOVER-NEXT.md Platform/Realme/sm8150/linux-port
 git -c user.name=cy122 -c user.email=cy122@localhost commit -q -m "docs: the kernel bring-up branch is on GitHub; push needs an attached WSL session
 
-Section 23 stopped at the push; samurai-bringup is now on hmhmdcy/linux at
+Section 23 stopped at the push; samurai-bringup is now on hmhmdcy/realme-x2-pro-linux at
 a89e94cd5, verified with ls-remote, so the kernel side finally has a real
 upstream ancestry on the remote as well.
 

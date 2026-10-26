@@ -68,7 +68,7 @@ fork: the `Platform/EFI_Binaries` submodule points at
 `hmhmdcy/edk2-msm-binary` branch `samurai-blobs`, so a recursive clone is enough:
 
 ```bash
-git clone --recursive https://github.com/hmhmdcy/edk2-realme-x2-pro.git
+git clone --recursive https://github.com/hmhmdcy/realme-x2-pro-edk2.git
 ```
 
 They live in `Platform/EFI_Binaries/Drivers/Devices/samurai/`:
@@ -87,8 +87,8 @@ documents the sources and the required DEPEX patch.
 ## Building
 
 ```bash
-git clone --recursive https://github.com/hmhmdcy/edk2-realme-x2-pro.git
-cd edk2-realme-x2-pro
+git clone --recursive https://github.com/hmhmdcy/realme-x2-pro-edk2.git
+cd realme-x2-pro-edk2
 ./build.sh -d samurai --toolchain GCC5
 ```
 

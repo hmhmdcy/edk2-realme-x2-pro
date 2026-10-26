@@ -29,7 +29,7 @@
 
     222 commits ahead of upstream origin/master, as of the tip named above;
 
-    fork remote: https://github.com/hmhmdcy/edk2-realme-x2-pro
+    fork remote: https://github.com/hmhmdcy/realme-x2-pro-edk2
 
 此块不证明未提交改动已构建、已部署或已推送；状态由本地git与检查点核对。
 

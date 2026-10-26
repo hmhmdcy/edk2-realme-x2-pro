@@ -1,7 +1,7 @@
 #!/bin/bash
 D=/home/cy122/x2pro-linux/upstream
 mkdir -p "$D"; cd "$D"
-[ -d .git ] || { git init -q; git remote add origin https://github.com/hmhmdcy/linux.git; }
+[ -d .git ] || { git init -q; git remote add origin https://github.com/hmhmdcy/realme-x2-pro-linux.git; }
 echo "proxy: $(git config --get http.proxy)  $(git config --global --get http.proxy)"
 for i in 1 2 3 4 5; do
   echo "--- attempt $i ---"
