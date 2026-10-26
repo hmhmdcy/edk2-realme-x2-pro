@@ -19,6 +19,40 @@
 
 代码、包、补丁和证据均来自工作区已有内容；本次没有新增设备实机结论。充电仍处于调查和交接阶段，不表示充电控制、PD/APSD 或完整电源管理已经完成。
 
+## 正式源码归属与最终端点
+
+内核态、用户态和 EDK2 不再混用同一个“源码仓库”。本次核对结果如下：
+
+| 层 | 正式仓库与分支 | 最终远端端点 | 内容 |
+| --- | --- | --- | --- |
+| 内核 bring-up | [`hmhmdcy/linux@samurai-bringup`](https://github.com/hmhmdcy/linux/tree/samurai-bringup) | `04d4d4f93171574201db1837a1b195e3aeccde4e` | 早期完整 camera/PMIC bring-up 历史 |
+| 内核相机公共层 | [`hmhmdcy/linux@samurai-camera-common`](https://github.com/hmhmdcy/linux/tree/samurai-camera-common) | `1f5da50bbcba4fbe89917db7987429fdf078f257` | common driver、静态 DT 描述与后续相机基线 |
+| 内核 VFE175/GTM | [`hmhmdcy/linux@samurai-vfe175-gtm-reopen434`](https://github.com/hmhmdcy/linux/tree/samurai-vfe175-gtm-reopen434) | `9bc07e6339128ae8d3525c7d5c9bca5d0fbc46f3` | VFE175、GTM/LTM 与 PD10 相机处理 |
+| 内核当前端点 | [`hmhmdcy/linux@samurai-ipe-variable-pd10-441`](https://github.com/hmhmdcy/linux/tree/samurai-ipe-variable-pd10-441) | `5b0e7a9ac5b311a4c4fe17cf48b7ed4fc9a7b91d` | variable-size PD10、无 SOF 与 auxiliary restart 诊断 |
+| 用户态配方 | [`hmhmdcy/pmaports@samurai-userspace`](https://github.com/hmhmdcy/pmaports/tree/samurai-userspace) | `01dc099de635e1b8bccaa2a730d29117bea6cb1d` | APKBUILD、补丁、OpenRC/udev/桌面配置和服务脚本 |
+| 快照与证据 | [`hmhmdcy/edk2-realme-x2-pro@master`](https://github.com/hmhmdcy/edk2-realme-x2-pro/tree/master) | 本次发布索引提交之后的 `master` | EDK2、DTB、历史源码快照、发布索引和验证证据 |
+
+用户态分支在原有 6 个主题提交之后追加 5 个提交，未改写并普通推送：
+
+| 提交 | 内容 |
+| --- | --- |
+| `b2a62dd` | libcamera r33、52 个相机补丁、四摄 CAMSS/simple YAML 与源码锁 |
+| `2f51999` | GNSS 无 SIM 电源策略、14 项测试与 GeoClue ModemManager 生命周期修复 |
+| `7255bd2` | PipeWire r3 与 6 个相机缓冲生命周期补丁 |
+| `e4ea949` | SensorProxy 方向、PipeWire Bluetooth、USB `MaxPower`/重绑定与旧 PMIC lab 配置移除 |
+| `01dc099` | bootstrap、rootfs/source 检查、52 补丁重放和仓库归属文档 |
+
+该端点的 GitHub Actions 源码作业成功，且运行记录的 `headSha` 与上表一致：[run 40248159913](https://github.com/hmhmdcy/pmaports/actions/runs/40248159913)。该工作流本次只执行 `check-sources.py`，没有触发可选的全量 ARM64 包构建，更没有进行手机刷写或硬件验收。
+
+本地发布前检查还得到：16 个配方、149 个本地 SHA512、168 个源码/脚本/补丁文件和 1 个 pmbootstrap 工具补丁通过；libcamera 52 个补丁以 `--fuzz=0` 重放成功，最终树 SHA256 为 `ae7785b15bc1c9d7434e0804961a0a6713f737beade9668630b8541680587307`；GNSS 电源策略 14 项场景通过。以上均为离线结果，`hardware_tested=false`。
+
+## 尚未闭环
+
+- `libcamera 99990.7.2-r34` / `samurai-camera-config 0.1.0-r29` 只有离线打包、签名和缓存求解记录，不是已安装发布版本；当前证据端点仍为 r33/r28。
+- GNSS 仍为零 CNR、无 fix；新电源策略和 GeoClue 生命周期修复没有证明定位根因已经解决。
+- 相机 Manager 重开与 long-run、实屏色彩、编码录像/HDR、多摄同步和第五摄仍未闭环。
+- 最新 Linux 分支仍含实验 OF fixture、前摄 overlay、专用 trace 和历史 lab PMIC 机制。源码已进入正确内核仓库不等于已经纯化成可合入上游的驱动。
+
 ## 公开边界
 
 公开副本继续使用[同步清单](../../linux-port/scripts/docs-sync-manifest.json)生成。以下未完成且含测试构建产物的候选目录只保留在本地私人工作区，不进入公开镜像或仓库：
@@ -36,6 +70,7 @@
 - 相关 Python 编译检查、JSON 解析和 Shell `bash -n` 检查通过。
 - 更新后的 DTB 可由 `dtc -I dtb -O dts` 正常解析。
 - `reference/kernel259` 与 `reference/kernel260` 的 CRLF JSON 已统一为 LF。
+- 内核四个远端分支和用户态 `samurai-userspace` 端点均由 `git ls-remote` 重新读取；用户态 Actions 源码作业成功。
 - 本轮提交推送后，应以 `git ls-remote` 读取的分支端点作为最终公开状态。
 
 本次整理提交自身不重复列入上表；当前部署、未完成项与回退边界见[充电交接](../charging-management-20261023/charging-adaptation-handoff-20261025.md)及[检查点](../../NEXT-SESSION.md)。

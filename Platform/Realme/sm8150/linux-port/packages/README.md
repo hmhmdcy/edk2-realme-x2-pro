@@ -2,6 +2,10 @@
 
 本目录保存已在项目中公开的设备软件包、补丁和构建输入。安装状态与实机验收必须按各目录 README 和[当前检查点](../../NEXT-SESSION.md)核对；源码或成功构建不等于已经部署。
 
+> **归属提示：**本目录是 EDK2 中的公开快照和证据，不是用户态 APKBUILD/补丁的最终仓库。用户态正式源码位于 [`hmhmdcy/pmaports@samurai-userspace`](https://github.com/hmhmdcy/pmaports/tree/samurai-userspace)，本发布端点固定为 `01dc099de635e1b8bccaa2a730d29117bea6cb1d`。内核正式源码位于 [`hmhmdcy/linux`](https://github.com/hmhmdcy/linux)，当前相机端点为 `samurai-ipe-variable-pd10-441@5b0e7a9ac5b311a4c4fe17cf48b7ed4fc9a7b91d`。更新配方或内核时应提交到对应仓库；不要让本快照目录反向成为构建输入。
+
+当前正式用户态目录对应 `temp/libcamera`、`temp/geoclue`、`temp/pipewire` 和 `device/testing/samurai-*`。该端点通过 [Actions run 40248159913](https://github.com/hmhmdcy/pmaports/actions/runs/40248159913) 的源码哈希与语法作业；本次没有执行可选的全量 ARM64 构建或硬件验收。
+
 | 目录 | 内容 |
 | --- | --- |
 | [apk3](apk3/) | 固定版本 APK 构建、签名和仓库生成工具 |
@@ -14,6 +18,8 @@
 | [samurai-desktop](samurai-desktop/) | Phosh/greetd 桌面启动顺序配方 |
 | [samurai-gnss-assist](samurai-gnss-assist/) | GNSS 辅助数据与无 SIM 电源管理服务 |
 | [samurai-platform](samurai-platform/) | 音频、Wi-Fi、Modem、USB、蓝牙和桌面集成 |
+
+上表用于定位 EDK2 内已有快照；包版本、校验和与可重放补丁队列以正式 pmaports 端点的 APKBUILD 和 `samurai/*.json` 为准。当前候选为 libcamera `99990.7.2-r33`、camera config/stack `0.1.0-r28`、GeoClue `2.8.2-r1`、PipeWire `1.6.9-r3`、samurai-platform `5-r3`、samurai-desktop `3-r1` 和 samurai-gnss-assist `2-r1`。`r34/r29` 不是已安装版本，`hardware_tested=false`。
 
 ## GNSS 软件包
 
