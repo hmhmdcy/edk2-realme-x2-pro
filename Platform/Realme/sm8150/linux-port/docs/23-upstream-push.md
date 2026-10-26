@@ -99,5 +99,6 @@ timeout 60  git ls-remote origin samurai-bringup
 
 1. `git push -u origin samurai-bringup`（§23.2）；
 2. 成功后把 `samurai-bringup` 链接补进 §22/本节；
-3. **Revoke 那个泄露的 classic PAT**，新建只勾 `public_repo` 的，直接写进 `~/.git-credentials`（别贴到对话里）；
+3. 泄露的 classic PAT 已于 2026-10-26 撤销并验证返回 401；后续使用 `gh auth login`，
+   不要把 PAT 写入 `~/.git-credentials`、仓库或脚本；
 4. 回到主线任务：§21 的内核 EUD 改动（逐字节流控 + chunk 4）→ 然后 §20.6 的面板/触控。

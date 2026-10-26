@@ -62,6 +62,6 @@ Git 看不出服务器已经有 `a90ee4305`，于是把 `--depth=1` 的那一份
 |---|---|---|
 | 1 | `git push -u origin samurai-bringup` | ✅ 完成，`a89e94cd5`（2026-10-07 16:46） |
 | 2 | 把分支链接补进交接文档 | ✅ 本节 §24.0 |
-| 3 | **Revoke 泄露的 classic PAT**，新建只勾 `public_repo` 的、直接写进 `~/.git-credentials` | ⬜ 需要人在 GitHub 网页上操作 |
+| 3 | **撤销泄露的 classic PAT**，后续认证使用 `gh auth login`，不再写入 `~/.git-credentials` | ✅ 已撤销并验证返回 401（2026-10-26） |
 | 4 | §21 的内核 EUD 改动（逐字节流控 + `EUD_COM_CHUNK 4`）→ 重编内核 → 真机验证 | ⬜ 下一件主线任务 |
 | 5 | §20.6：面板 SOFEF03F_M、触控 S3706、WCN3990、充电、传感器 | ⬜ 主线继续 |

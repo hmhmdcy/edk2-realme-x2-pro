@@ -88,5 +88,6 @@ timeout 60 git ls-remote origin samurai-bringup
 调试时 `~/.git-credentials` 里的 **classic PAT 被明文打印到了会话记录里**（135 字节的文件里其实有**两条** GitHub 凭据，
 一条 `user:token@`、一条裸 `token@`）。它带 `repo` 权限的话等于账号下所有仓库的完整读写权。
 
-**待办：GitHub → Settings → Developer settings → PAT → Revoke 旧 token，新建只勾 `public_repo` 的即可，
-然后直接写进 `~/.git-credentials`（不要贴到任何对话里）。**
+**状态（2026-10-26）：该 classic PAT 已通过 GitHub 官方撤销接口撤销，并验证旧凭据返回 401；
+本机 `~/.git-credentials` 已删除。后续统一使用 `gh auth login` 或 Git Credential Manager，
+不要把 PAT 写入仓库、脚本、命令历史或对话。**

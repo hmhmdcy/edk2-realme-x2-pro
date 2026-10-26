@@ -1253,8 +1253,9 @@ timeout 60 git ls-remote origin samurai-bringup
 调试时 `~/.git-credentials` 里的 **classic PAT 被明文打印到了会话记录里**（135 字节的文件里其实有**两条** GitHub 凭据，
 一条 `user:token@`、一条裸 `token@`）。它带 `repo` 权限的话等于账号下所有仓库的完整读写权。
 
-**待办：GitHub → Settings → Developer settings → PAT → Revoke 旧 token，新建只勾 `public_repo` 的即可，
-然后直接写进 `~/.git-credentials`（不要贴到任何对话里）。**
+**状态（2026-10-26）：该 classic PAT 已通过 GitHub 官方撤销接口撤销，并验证旧凭据返回 401；
+本机 `~/.git-credentials` 已删除。后续统一使用 `gh auth login` 或 Git Credential Manager，
+不要把 PAT 写入仓库、脚本、命令历史或对话。**
 ---
 
 ## 23. 内核侧上 GitHub：完成 fetch 与分支，卡在 push（2026-10-07 16:3x）
@@ -1355,7 +1356,8 @@ timeout 60  git ls-remote origin samurai-bringup
 
 1. `git push -u origin samurai-bringup`（§23.2）；
 2. 成功后把 `samurai-bringup` 链接补进 §22/本节；
-3. **Revoke 那个泄露的 classic PAT**，新建只勾 `public_repo` 的，直接写进 `~/.git-credentials`（别贴到对话里）；
+3. 泄露的 classic PAT 已于 2026-10-26 撤销并验证返回 401；后续使用 `gh auth login`，
+   不要把 PAT 写入 `~/.git-credentials`、仓库或脚本；
 4. 回到主线任务：§21 的内核 EUD 改动（逐字节流控 + chunk 4）→ 然后 §20.6 的面板/触控。
 
 ---
@@ -1420,7 +1422,7 @@ Git 看不出服务器已经有 `a90ee4305`，于是把 `--depth=1` 的那一份
 |---|---|---|
 | 1 | `git push -u origin samurai-bringup` | ✅ 完成，`a89e94cd5`（2026-10-07 16:46） |
 | 2 | 把分支链接补进交接文档 | ✅ 本节 §24.0 |
-| 3 | **Revoke 泄露的 classic PAT**，新建只勾 `public_repo` 的、直接写进 `~/.git-credentials` | ⬜ 需要人在 GitHub 网页上操作 |
+| 3 | **撤销泄露的 classic PAT**，后续认证使用 `gh auth login`，不再写入 `~/.git-credentials` | ✅ 已撤销并验证返回 401（2026-10-26） |
 | 4 | §21 的内核 EUD 改动（逐字节流控 + `EUD_COM_CHUNK 4`）→ 重编内核 → 真机验证 | ⬜ 下一件主线任务 |
 | 5 | §20.6：面板 SOFEF03F_M、触控 S3706、WCN3990、充电、传感器 | ⬜ 主线继续 |
 
