@@ -13,10 +13,12 @@ Adding the GUID to the DEPEX makes the dispatcher guarantee the ordering.
 Usage:  python3 fix-buttons-depex.py [path/to/ButtonsDxe.depex]
 """
 import io, struct, sys
+from pathlib import Path
 
 OPPO_PROJECT_GUID = '903C579D-EBDE-19E0-39A7-43B95FA73F91'
 PUSH, AND, END = 0x02, 0x03, 0x08
-DEFAULT = 'Platform/EFI_Binaries/Drivers/Devices/samurai/ButtonsDxe/ButtonsDxe.depex'
+DEFAULT = str(Path(__file__).resolve().parents[3]
+              / 'Platform/EFI_Binaries/Drivers/Devices/samurai/ButtonsDxe/ButtonsDxe.depex')
 
 
 def guid_bytes(s):

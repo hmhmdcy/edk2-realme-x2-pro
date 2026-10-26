@@ -4,9 +4,13 @@
 # They are Qualcomm/OPPO firmware and are NOT part of this repository
 # (they belong in the Platform/EFI_Binaries submodule).
 #
-# Run from the repository root:   ./Platform/Realme/sm8150/fetch-binaries.sh
+# This script may be run from any directory.
 #
 set -euo pipefail
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+REPO_ROOT="$(cd -- "${SCRIPT_DIR}/../../.." && pwd -P)"
+cd "${REPO_ROOT}"
 
 FW="https://raw.githubusercontent.com/Project-Aloha/UEFIFirmwareBackup/main/realme-rmx1931/Binaries/QcomPkg/Drivers"
 MU="https://raw.githubusercontent.com/Project-Aloha/mu_aloha_platforms/main/Platforms/SurfaceDuo1Pkg/Device/realme-rmx2086/Binaries/QcomPkg/Drivers"
@@ -43,7 +47,7 @@ fetch "$MU/OcdtDxe/OppoProject.efi"   "$DEST/OcdtDxe/OppoProject.efi"
 fetch "$MU/OcdtDxe/OppoProject.depex" "$DEST/OcdtDxe/OppoProject.depex"
 
 echo "==> patching ButtonsDxe DEPEX"
-python3 "$(dirname "$0")/fix-buttons-depex.py" "$DEST/ButtonsDxe/ButtonsDxe.depex"
+python3 "${SCRIPT_DIR}/fix-buttons-depex.py" "$DEST/ButtonsDxe/ButtonsDxe.depex"
 
 echo
 echo "Done.  Build with:  ./build.sh -d samurai --toolchain GCC5"

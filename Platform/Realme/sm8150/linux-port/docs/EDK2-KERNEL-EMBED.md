@@ -73,12 +73,20 @@
 4. **30 MB 内核** 会让 BDS 的 `LoadImage` 拷贝 30 MB 到内存；若失败，退路是精简配置
    （把非必需驱动改成模块）重编。
 
-## 7. 复现
+## 7. 复现边界
+
+本节记录 2026-10-07 的历史流程，不是新克隆的一键复现。`reference/linux-port-scripts/`
+中的脚本依赖原开发机的内核目录、旧诊断配置、BusyBox 和私有中间产物；该目录已归档，
+不能作为新检出或编译入口，详见
+[归档说明](../../reference/linux-port-archive-README.md)。
+
+当前固件源码本身可从仓库根目录构建：
 
 ```bash
-# 内核侧（WSL）
-bash reference/linux-port-scripts/build-image.sh          # 配置 + initramfs + make Image
-# 固件侧（WSL）
-bash reference/linux-port-scripts/install-kernel-into-edk2.sh   # 换 DTB、装内核、注册启动项、改 FD 尺寸
-cd ~/edk2-samurai/repo && ./build.sh -d samurai --toolchain GCC5
+python3 Platform/Realme/sm8150/tools/check-portable-tree.py
+./build.sh -d samurai --toolchain GCC5
 ```
+
+内核 Image、DTB 和用户态分别由 `realme-x2-pro-linux` 与
+`realme-x2-pro-pmaports` 构建；只有在本机重新生成这些输入后，才需要按上面的历史
+嵌入设计替换对应产物。不要直接运行已归档脚本，也不要把它依赖的私人路径复制进活动树。
