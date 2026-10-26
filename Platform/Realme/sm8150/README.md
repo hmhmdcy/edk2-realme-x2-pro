@@ -91,9 +91,9 @@ DTB, without relying on local paths:
 
 Host notes (Ubuntu, no sudo needed):
 - On very new host GCC (e.g. GCC 15) BaseTools/Pccts fail with the default C23
-  standard: append `-std=gnu17` to `GCC_AARCH64_CC_FLAGS` in `tools/tools_def.txt`
-  (`build.sh` copies that file into `Common/edk2/Conf/`).
-- `BaseTools` must be built once: `make -C Common/edk2/BaseTools -j$(nproc) BUILD_CC="gcc -std=gnu17"`.
+  standard. `build.sh` now builds BaseTools with `BUILD_CC="gcc -std=gnu17"`
+  by default, and `tools/tools_def.txt` already carries `-std=gnu17` for the
+  AArch64 target compiler.
 - `uuid-dev` and `msgfmt` may have to be provided locally if you have no root.
 
 ---

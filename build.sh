@@ -50,7 +50,9 @@ function _build(){
 	source "${_EDK2}/edksetup.sh"
 	[ -d "${WORKSPACE}" ]||mkdir "${WORKSPACE}"
 	set -x
-	make -C "${_EDK2}/BaseTools"||exit "$?"
+	# Pccts still uses pre-ANSI function typing, which GCC 15 rejects under
+	# its C23 default. Keep BaseTools on gnu17 unless the caller overrides it.
+	make -C "${_EDK2}/BaseTools" BUILD_CC="${BUILD_CC:-gcc -std=gnu17}"||exit "$?"
 
 	SPLIT_DSDT=false
 	EXT=""
