@@ -1,30 +1,33 @@
 #!/bin/bash
-# 1) ????? v7.3-rc6 ?? tag?2) ?? API ? torvalds/linux fork ? hmhmdcy ??
-echo "=== ?? tag ==="
+# Historical helper: inspect Linux v7.3-rc6 and fork torvalds/linux into hmhmdcy.
+set -u
+
+if ! command -v gh >/dev/null 2>&1 || ! gh auth status >/dev/null 2>&1; then
+  echo "GitHub CLI login required: gh auth login" >&2
+  exit 1
+fi
+api_json="$(mktemp)"
+trap 'rm -f "$api_json"' EXIT
+
+echo "=== inspect tag ==="
 timeout 90 git ls-remote --tags https://github.com/torvalds/linux.git 'v7.3-rc6*' 2>&1 | head -5
-echo "=== ?? commit ??? a90ee4305c4a ==="
+echo "=== inspect commit a90ee4305c4a ==="
 timeout 90 git ls-remote https://github.com/torvalds/linux.git a90ee4305c4a5df72c11b31dacfdc76e00fcf78a 2>&1 | head -3
 
-TOKEN=$(grep -o 'ghp_[A-Za-z0-9]*' /home/cy122/.git-credentials | head -1)
-if [ -z "$TOKEN" ]; then echo "!! ??? token"; exit 1; fi
-echo "=== token: ${TOKEN:0:4}... (len ${#TOKEN}) ==="
+echo "=== check fork ==="
+gh api repos/hmhmdcy/realme-x2-pro-linux > "$api_json"
+python3 -c "import json,sys;d=json.load(open(sys.argv[1]));print('exist:',d.get('full_name') or d.get('message'))" "$api_json"
 
-echo "=== ???? fork ==="
-curl -s -o /tmp/f.json -w "http=%{http_code}\n" -H "Authorization: token $TOKEN" \
-     https://api.github.com/repos/hmhmdcy/realme-x2-pro-linux
-python3 -c "import json;d=json.load(open('/tmp/f.json'));print('exist:',d.get('full_name') or d.get('message'))"
+echo "=== create fork ==="
+gh api --method POST repos/torvalds/linux/forks > "$api_json"
+python3 -c "import json,sys;d=json.load(open(sys.argv[1]));print('fork:',d.get('full_name'),d.get('clone_url'),d.get('message'))" "$api_json"
 
-echo "=== ?? fork ==="
-curl -s -o /tmp/fork.json -w "http=%{http_code}\n" -X POST \
-     -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" \
-     https://api.github.com/repos/torvalds/linux/forks
-python3 -c "import json;d=json.load(open('/tmp/fork.json'));print('fork:',d.get('full_name'),d.get('clone_url'),d.get('message'))"
-
-echo "=== ?? fork ?? ==="
+echo "=== wait for fork ==="
 for i in $(seq 1 30); do
-  code=$(curl -s -o /tmp/f2.json -w "%{http_code}" -H "Authorization: token $TOKEN" \
-        https://api.github.com/repos/hmhmdcy/realme-x2-pro-linux)
-  if [ "$code" = "200" ]; then echo "ready after ${i}0s"; break; fi
+  if gh api repos/hmhmdcy/realme-x2-pro-linux > "$api_json" 2>/dev/null; then
+    echo "ready after ${i}0s"
+    break
+  fi
   sleep 10
 done
-python3 -c "import json;d=json.load(open('/tmp/f2.json'));print('status:',d.get('full_name'),d.get('size'),'KB')"
+python3 -c "import json,sys;d=json.load(open(sys.argv[1]));print('status:',d.get('full_name'),d.get('size'),'KB')" "$api_json"
