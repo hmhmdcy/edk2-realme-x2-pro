@@ -28,18 +28,28 @@ CHECKS = (
     ("developer home path", re.compile(r"/home/(?!user(?:/|$))[A-Za-z0-9._-]+/")),
     ("Windows mount path", re.compile(r"/mnt/[A-Za-z]/")),
     ("Windows absolute path", re.compile(r"\b[A-Za-z]:[\\/]", re.IGNORECASE)),
-    ("GitHub token", re.compile(r"\b(?:ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]+)\b")),
+    (
+        "GitHub token",
+        re.compile(r"\b(?:gh[pousr]_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{20,})\b"),
+    ),
     (
         "private key",
-        re.compile(r"-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----"),
+        re.compile(
+            r"-----BEGIN (?:RSA |DSA |EC |OPENSSH |ENCRYPTED )?PRIVATE KEY-----"
+            r"|-----BEGIN PGP PRIVATE KEY BLOCK-----|PuTTY-User-Key-File"
+        ),
     ),
 )
+SENSITIVE_LABELS = {"GitHub token", "private key"}
 
 
 def iter_active_files() -> list[Path]:
     files: list[Path] = []
+    script = Path(__file__).resolve()
     for path in ACTIVE_ROOT.rglob("*"):
         if not path.is_file() or path.is_symlink():
+            continue
+        if path.resolve() == script:
             continue
         relative = path.relative_to(ACTIVE_ROOT)
         if SKIP_DIRS.intersection(relative.parts):
@@ -64,9 +74,10 @@ def main() -> int:
         for label, pattern in CHECKS:
             for match in pattern.finditer(text):
                 line = text.count("\n", 0, match.start()) + 1
-                findings.append(
-                    f"{path.relative_to(ACTIVE_ROOT)}:{line}: {label}: {match.group(0)}"
-                )
+                finding = f"{path.relative_to(ACTIVE_ROOT)}:{line}: {label}"
+                if label not in SENSITIVE_LABELS:
+                    finding += f": {match.group(0)}"
+                findings.append(finding)
 
     if findings:
         print("Active-tree portability check failed:", file=sys.stderr)
